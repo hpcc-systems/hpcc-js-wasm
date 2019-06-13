@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "rootDir": "./src",
+        "outDir": "./lib-umd",
+        "declarationDir": "./types",
+        "composite": true,
+        "target": "es5",
+        "module": "umd",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "declaration": true,
+        "declarationMap": true,
+        "strict": true
+    },
+    "lib": [
+        "dom",
+        "es5",
+        "es2015.promise"
+    ],
+    "types": [],
+    "include": [
+        "./src/**/*"
+    ],
+    "references": []
+}
