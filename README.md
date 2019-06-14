@@ -55,6 +55,7 @@ _outputFormat_ supports the following options:
 * json
 * svg (default)
 * xdot_json
+
 See [Output Formats](https://graphviz.gitlab.io/_pages/doc/info/output.html) for more information.
 
 _layoutEngine_ supports the following options:
@@ -65,6 +66,7 @@ _layoutEngine_ supports the following options:
 * osage
 * patchwork
 * twopi
+
 See [Layout manual pages](https://www.graphviz.org/documentation/) for more information.
 
 ## Quick Example (CDN hosting courtesy of [unpkg.com](https://unpkg.com))
