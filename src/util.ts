@@ -1,6 +1,6 @@
-declare const window: any;
+const globalNS: any = new Function("return this;")();
 
-let _wasmFolder: string | undefined = window.__hpcc_wasmFolder || undefined;
+let _wasmFolder: string | undefined = globalNS.__hpcc_wasmFolder || undefined;
 export function wasmFolder(_?: string): string | undefined {
     if (_ === void 0) return _wasmFolder;
     const retVal: string | undefined = _wasmFolder;

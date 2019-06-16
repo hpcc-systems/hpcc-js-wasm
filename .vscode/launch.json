@@ -13,6 +13,17 @@
                 "--disable-web-security"
             ],
             "webRoot": "${workspaceRoot}"
+        },
+        {
+            "name": "test-chrome",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:8000/test.html",
+            "webRoot": "${workspaceRoot}",
+            "sourceMapPathOverrides": {
+                "webpack:///./*": "${workspaceRoot}/*",
+                "webpack:///*": "/*"
+            }
         }
     ]
 }
