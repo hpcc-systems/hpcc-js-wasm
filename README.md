@@ -1,5 +1,9 @@
 # @hpcc-js/wasm
-This repository contains a collection of useful c++ libraries compiled to WASM for (re)use in Node / Web Browsers / JavaScript Libraries.
+
+[![Build Status](https://travis-ci.org/hpcc-systems/hpcc-js-wasm.svg?branch=master)](https://travis-ci.org/hpcc-systems/hpcc-js-wasm)
+[![Coverage Status](https://coveralls.io/repos/github/hpcc-systems/hpcc-js-wasm/badge.svg?branch=master)](https://coveralls.io/github/hpcc-systems/hpcc-js-wasm?branch=master)
+
+This repository contains a collection of useful c++ libraries compiled to WASM for (re)use in Web Browsers and JavaScript Libraries.
 
 ## Installation 
 The simplest way to include this project is via NPM:
@@ -38,7 +42,7 @@ If _url_ is specified, sets the default location for all WASM files.  If _url_ i
 
 Global variable for setting default WASM location, this is an alternative to [wasmFolder](#wasmFolder)
 
-### GraphViz
+### GraphViz (namespace `graphviz`)
 GraphViz WASM library, see [graphviz.org](https://www.graphviz.org/) for c++ details.
 
 **Note**:  While this package is similar to [Viz.js](https://github.com/mdaines/viz.js), it employs a completely different build methodology taken from [GraphControl](https://github.com/hpcc-systems/GraphControl).
@@ -68,6 +72,35 @@ _layoutEngine_ supports the following options:
 * twopi
 
 See [Layout manual pages](https://www.graphviz.org/documentation/) for more information.
+
+<a name="circo" href="#circo">#</a> <b>circo</b>(<i>dotSource</i>[, <i>outputFormat</i>]) · [Source](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts)
+
+Convenience function that performs **circo** layout, is equivalent to `layout(dotSource, outputFormat, "circo");`
+
+<a name="dot" href="#dot">#</a> <b>dot</b>(<i>dotSource</i>[, <i>outputFormat</i>]) · [Source](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts)
+
+Convenience function that performs **dot** layout, is equivalent to `layout(dotSource, outputFormat, "dot");`
+
+<a name="fdp" href="#fdp">#</a> <b>fdp</b>(<i>dotSource</i>[, <i>outputFormat</i>]) · [Source](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts)
+
+Convenience function that performs **circo** layout, is equivalent to `layout(dotSource, outputFormat, "fdp");`
+
+<a name="neato" href="#neato">#</a> <b>neato</b>(<i>dotSource</i>[, <i>outputFormat</i>]) · [Source](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts)
+
+Convenience function that performs **neato** layout, is equivalent to `layout(dotSource, outputFormat, "neato");`
+
+<a name="osage" href="#osage">#</a> <b>osage</b>(<i>dotSource</i>[, <i>outputFormat</i>]) · [Source](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts)
+
+Convenience function that performs **osage** layout, is equivalent to `layout(dotSource, outputFormat, "osage");`
+
+<a name="patchwork" href="#patchwork">#</a> <b>patchwork</b>(<i>dotSource</i>[, <i>outputFormat</i>]) · [Source](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts)
+
+Convenience function that performs **patchwork** layout, is equivalent to `layout(dotSource, outputFormat, "patchwork");`
+
+<a name="twopi" href="#twopi">#</a> <b>twopi</b>(<i>dotSource</i>[, <i>outputFormat</i>]) · [Source](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts)
+
+Convenience function that performs **twopi** layout, is equivalent to `layout(dotSource, outputFormat, "twopi");`
+
 
 ## Quick Example (CDN hosting courtesy of [unpkg.com](https://unpkg.com))
 ```html

@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>HPCC Systems - Test</title>
+
+    <link rel="stylesheet" href="./node_modules/mocha/mocha.css" />
+    <script src="./node_modules/requirejs/require.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: ".",
+            paths: {
+                mocha: "./node_modules/mocha/mocha",
+                chai: "./node_modules/chai/chai"
+            },
+            shim: {
+                "mocha": {
+                    init: function () {
+                        this.mocha.setup("bdd");
+                        return this.mocha;
+                    }
+                }
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <div id="mocha"></div>
+    <div id="placeholder"></div>
+    <script>
+        require(["mocha", "./lib-umd/__tests__/index.spec"], function (mocha) {
+            mocha.run();
+        });
+    </script>
+</body>
+
+</html>

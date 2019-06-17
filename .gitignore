@@ -7,3 +7,5 @@ lib-*/
 node_modules/
 types/
 *.tsbuildinfo
+.nyc_output/
+coverage/
