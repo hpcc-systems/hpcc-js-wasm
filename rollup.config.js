@@ -1,11 +1,39 @@
 import alias from 'rollup-plugin-alias';
 import commonjs from 'rollup-plugin-commonjs';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import postcss from "rollup-plugin-postcss";
 
 const pkg = require("./package.json");
 
-export default {
+export default [{
+    input: "lib-es6/worker",
+    output: [{
+        file: "dist/worker.js",
+        format: "umd",
+        sourcemap: true,
+        name: pkg.name + "-worker"
+    }, {
+        file: "dist/worker.es6.js",
+        format: "es",
+        sourcemap: true,
+        name: pkg.name + "-worker"
+    }],
+    plugins: [
+        alias({
+        }),
+        nodeResolve({
+            preferBuiltins: true
+        }),
+        commonjs({
+        }),
+        sourcemaps(),
+        postcss({
+            extensions: [".css"],
+            minimize: true
+        })
+    ]
+}, {
     input: "lib-es6/index",
     output: [{
         file: pkg.main,
@@ -26,9 +54,10 @@ export default {
         }),
         commonjs({
         }),
+        sourcemaps(),
         postcss({
             extensions: [".css"],
             minimize: true
         })
     ]
-};
+}];

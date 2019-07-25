@@ -1,2 +1,2 @@
 export * from "./graphviz";
-export { wasmFolder } from "./util";
+// export { wasmFolder } from "./util";

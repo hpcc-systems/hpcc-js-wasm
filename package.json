@@ -21,7 +21,6 @@
     "install-graphviz": "run-script-os",
     "install-graphviz:linux": "./scripts/cpp-install-graphviz.sh",
     "install-graphviz:win32": "wsl -e ./scripts/cpp-install-graphviz.sh",
-    "postinstall": "run-s install-prerequisites install-emsdk install-graphviz",
     "update-emsdk": "wsl -e ./scripts/cpp-update-emsdk.sh",
     "clean": "rimraf coverage build dist lib* types *.tsbuildinfo",
     "compile-es6": "tsc --module es6 --outDir ./lib-es6",
@@ -32,8 +31,11 @@
     "compile-cpp:win32": "wsl -e ./scripts/cpp-build.sh",
     "bundle": "rollup -c",
     "bundle-watch": "npm run bundle -- -w",
-    "minimize": "terser dist/index.js -c -m --source-map -o dist/index.min.js",
-    "build": "npm run compile-cpp && npm run compile-es6 && npm run bundle",
+    "minimize-index": "terser dist/index.js -c -m --source-map -o dist/index.min.js",
+    "minimize-worker": "terser dist/worker.js -c -m --source-map -o dist/worker.min.js",
+    "minimize": "run-p minimize-index minimize-worker",
+    "build-deps-install": "run-s install-prerequisites install-emsdk install-graphviz",
+    "build": "run-s build-deps-install compile-cpp compile-es6 bundle minimize",
     "publish-version": "standard-version",
     "publish-push": "git push --follow-tags upstream",
     "prepublishOnly": "run-s clean build minimize publish-version publish-push",
@@ -44,7 +46,9 @@
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
     "docs": "typedoc --options tdoptions.json ."
   },
-  "dependencies": {},
+  "dependencies": {
+    "promise-worker": "2.0.1"
+  },
   "devDependencies": {
     "@types/chai": "4.1.7",
     "@types/mocha": "5.2.7",
@@ -67,6 +71,7 @@
     "rollup-plugin-commonjs": "10.0.0",
     "rollup-plugin-node-resolve": "5.0.2",
     "rollup-plugin-postcss": "2.0.3",
+    "rollup-plugin-sourcemaps": "0.4.2",
     "run-script-os": "1.0.3",
     "standard-version": "6.0.1",
     "terser": "4.0.0",
