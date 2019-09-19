@@ -5,7 +5,7 @@ then
 fi
 cd emsdk
 # Uncomment to update  ---
-# git pull
-./emsdk install latest
-./emsdk activate latest
+git pull
+./emsdk install 1.38.45-upstream
+./emsdk activate 1.38.45-upstream
 cd ..
