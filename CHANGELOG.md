@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1](https://github.com/GordonSmith/hpcc-js-wasm/compare/v0.3.0...v0.3.1) (2020-01-07)
+
+
+### Features
+
+* **emsdk:** Bump version to 1.5 ([9692fed](https://github.com/GordonSmith/hpcc-js-wasm/commit/9692fed8c37be9bc64de903681363df35d3f9742))
+* **GraphViz:** Bump version to 2.42.2 ([782dfdf](https://github.com/GordonSmith/hpcc-js-wasm/commit/782dfdfee46b9bc9962ed8d3b576247fe4588e8d))
+
 ## [0.3.0](https://github.com/GordonSmith/hpcc-js-wasm/compare/v0.1.3...v0.3.0) (2019-09-19)
 
 
