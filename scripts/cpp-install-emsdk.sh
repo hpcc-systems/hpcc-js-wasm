@@ -3,9 +3,10 @@ if [ ! -d "./emsdk" ]
 then
     git clone https://github.com/emscripten-core/emsdk.git
 fi
-cd emsdk
-# Uncomment to update  ---
+# List of current vertsion can be found in ./emsdk/emscripten-releases-tags.txt  ---
+cd ./emsdk
+git fetch
 git pull
-./emsdk install 1.38.45-upstream
-./emsdk activate 1.38.45-upstream
+./emsdk install 1.39.5-upstream
+./emsdk activate 1.39.5-upstream
 cd ..
