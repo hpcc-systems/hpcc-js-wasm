@@ -9,7 +9,7 @@ SET(SRCS
     ${GRAPHVIZSRC_DIRS}/lib/common/geom.c
     ${GRAPHVIZSRC_DIRS}/lib/common/globals.c
     ${GRAPHVIZSRC_DIRS}/lib/common/htmllex.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/htmlparse.c
+    ${GRAPHVIZSRC_DIRS}/build/lib/common/htmlparse.c
     ${GRAPHVIZSRC_DIRS}/lib/common/htmltable.c
     ${GRAPHVIZSRC_DIRS}/lib/common/input.c
     ${GRAPHVIZSRC_DIRS}/lib/common/intset.c
@@ -30,6 +30,7 @@ SET(SRCS
 )
     
 INCLUDE_DIRECTORIES(
+    ${GRAPHVIZSRC_DIRS}/build/lib/common
     ${GRAPHVIZSRC_DIRS}/lib/common
     ${GRAPHVIZSRC_DIRS}/lib/cdt
     ${GRAPHVIZSRC_DIRS}/lib/cgraph

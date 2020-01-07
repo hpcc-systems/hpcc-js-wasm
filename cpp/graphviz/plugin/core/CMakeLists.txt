@@ -17,6 +17,7 @@ SET(SRCS
 )
 
 INCLUDE_DIRECTORIES(
+    ${GRAPHVIZSRC_DIRS}/build/plugin/core
     ${GRAPHVIZSRC_DIRS}/plugin/core
     ${GRAPHVIZSRC_DIRS}/lib/vpsc
     ${GRAPHVIZSRC_DIRS}/lib/twopigen

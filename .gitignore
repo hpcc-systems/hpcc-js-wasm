@@ -2,7 +2,7 @@
 build/
 dist/
 emsdk/
-graphviz-2.40.1/
+src-graphviz/
 lib-*/
 node_modules/
 types/
