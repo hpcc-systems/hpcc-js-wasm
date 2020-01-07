@@ -1,15 +1,17 @@
-dist: xenial
+dist: bionic
 language: node_js
 node_js:
-  - '10'
+  - "12"
 addons:
   chrome: stable
-cache:
-  directories:
-    - "$HOME/.npm"
-    - "$HOME/.emscripten_cache/asmjs"
+env:
+  global:
+    # EM_USE_GLOBAL_CACHE=1 tells emscripten to use precompiled libraries from
+    # the emscripten-libs-asmjs package. This speeds up the build significantly.
+    - EM_USE_GLOBAL_CACHE=1
 install:
   - npm ci
+  - npm run install-build-deps
 before_script:
   - npm run lint;
   - npm run build;
