@@ -7,7 +7,7 @@ SET(SRCS
     ${GRAPHVIZSRC_DIRS}/lib/cgraph/attr.c
     ${GRAPHVIZSRC_DIRS}/lib/cgraph/edge.c
     ${GRAPHVIZSRC_DIRS}/lib/cgraph/flatten.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/grammar.c
+    ${GRAPHVIZSRC_DIRS}/build/lib/cgraph/grammar.c
     ${GRAPHVIZSRC_DIRS}/lib/cgraph/graph.c
     ${GRAPHVIZSRC_DIRS}/lib/cgraph/id.c
     ${GRAPHVIZSRC_DIRS}/lib/cgraph/imap.c
@@ -18,13 +18,14 @@ SET(SRCS
     ${GRAPHVIZSRC_DIRS}/lib/cgraph/pend.c
     ${GRAPHVIZSRC_DIRS}/lib/cgraph/rec.c
     ${GRAPHVIZSRC_DIRS}/lib/cgraph/refstr.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/scan.c
+    ${GRAPHVIZSRC_DIRS}/build/lib/cgraph/scan.c
     ${GRAPHVIZSRC_DIRS}/lib/cgraph/subg.c
     ${GRAPHVIZSRC_DIRS}/lib/cgraph/utils.c
     ${GRAPHVIZSRC_DIRS}/lib/cgraph/write.c
 )
 
 INCLUDE_DIRECTORIES(
+    ${GRAPHVIZSRC_DIRS}/build/lib/cgraph
     ${GRAPHVIZSRC_DIRS}/lib/cgraph
     ${GRAPHVIZSRC_DIRS}/lib/cdt
     ${GRAPHVIZSRC_DIRS}/lib/common

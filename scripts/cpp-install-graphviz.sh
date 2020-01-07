@@ -1,10 +1,22 @@
 #!/bin/bash
-if [ ! -d "graphviz-2.40.1" ] 
+if [ ! -d "src-graphviz" ] 
 then
-    wget -c https://graphviz.gitlab.io/pub/graphviz/stable/SOURCES/graphviz.tar.gz 
-    tar -xzf ./graphviz.tar.gz
-    cd ./graphviz-2.40.1
+    wget -c https://gitlab.com/graphviz/graphviz/-/archive/stable_release_2.42.2/graphviz-stable_release_2.42.2.tar.gz
+    mkdir ./src-graphviz
+    tar -xzf ./graphviz-stable_release_2.42.2.tar.gz -C ./src-graphviz --strip-components=1
+    rm ./graphviz-stable_release_2.42.2.tar.gz
+
+    #  Configure  ---
+    cd ./src-graphviz
+    ./autogen.sh
     ./configure
+
+    #  Generate grammar files (and others)  ---
+    mkdir ./build
+    cd ./build
+    cmake ..
+    cmake --build . -- -j7
     cd ..
-    rm ./graphviz.tar.gz
+
+    cd ..
 fi
