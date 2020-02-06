@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.2](https://github.com/GordonSmith/hpcc-js-wasm/compare/v0.3.1...v0.3.2) (2020-02-06)
+
+
+### Bug Fixes
+
+* **wasmFolder:** Remove trailing folder ([e4e0e0f](https://github.com/GordonSmith/hpcc-js-wasm/commit/e4e0e0f1ab2165bfd010cf951475a651f0834cff))
+
 ### [0.3.1](https://github.com/GordonSmith/hpcc-js-wasm/compare/v0.3.0...v0.3.1) (2020-01-07)
 
 
