@@ -15,7 +15,7 @@ export function loadWasm(_wasmLib: any): Promise<any> {
         wasmLib.__hpcc_promise = new Promise(resolve => {
             wasmLib({
                 locateFile: (path: string, prefix: string) => {
-                    return `${wasmFolder() || prefix}/${path}`;
+                    return `${wasmFolder() || prefix}${path ? "/" : ""}${path}`;
                 }
             }).then((instance: any) => {
                 //  Not a real promise, remove "then" to prevent infinite loop  ---

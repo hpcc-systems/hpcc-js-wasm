@@ -1,4 +1,5 @@
 #!/bin/bash
+
 source ./emsdk/emsdk_env.sh
 if [ ! -d "./build" ] 
 then

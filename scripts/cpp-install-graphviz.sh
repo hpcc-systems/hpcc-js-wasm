@@ -1,4 +1,5 @@
 #!/bin/bash
+
 if [ ! -d "src-graphviz" ] 
 then
     wget -c https://gitlab.com/graphviz/graphviz/-/archive/stable_release_2.42.2/graphviz-stable_release_2.42.2.tar.gz
