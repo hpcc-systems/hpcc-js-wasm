@@ -34,47 +34,91 @@ digraph G {
 `;
 
 describe("graphviz", function () {
-    const placeholder = document.getElementById("placeholder");
     it("circo", function () {
-        hpccWasm.graphviz.circo(dot, "svg").then(svg => {
-            expect(svg).to.exist;
+        return hpccWasm.graphviz.circo(dot, "svg").then(svg => {
+            expect(svg).to.be.a("string");
             expect(svg).to.not.be.empty;
         });
     });
     it("dot", function () {
         return hpccWasm.graphviz.dot(dot, "svg").then(svg => {
-            expect(svg).to.exist;
+            expect(svg).to.be.a("string");
             expect(svg).to.not.be.empty;
         });
     });
     it("fdp", function () {
         return hpccWasm.graphviz.fdp(dot, "svg").then(svg => {
-            expect(svg).to.exist;
+            expect(svg).to.be.a("string");
             expect(svg).to.not.be.empty;
         });
     });
     it("neato", function () {
         return hpccWasm.graphviz.neato(dot, "svg").then(svg => {
-            expect(svg).to.exist;
+            expect(svg).to.be.a("string");
             expect(svg).to.not.be.empty;
         });
     });
     it("osage", function () {
         return hpccWasm.graphviz.osage(dot, "svg").then(svg => {
-            expect(svg).to.exist;
+            expect(svg).to.be.a("string");
             expect(svg).to.not.be.empty;
         });
     });
     it("patchwork", function () {
         return hpccWasm.graphviz.patchwork(dot, "svg").then(svg => {
-            expect(svg).to.exist;
+            expect(svg).to.be.a("string");
             expect(svg).to.not.be.empty;
         });
     });
     it("twopi", function () {
         return hpccWasm.graphviz.twopi(dot, "svg").then(svg => {
-            expect(svg).to.exist;
+            expect(svg).to.be.a("string");
             expect(svg).to.not.be.empty;
         });
+    });
+});
+
+describe("graphvizSync", function () {
+    let graphviz;
+    it("create", function () {
+        return hpccWasm.graphvizSync().then(gv => {
+            graphviz = gv;
+            expect(graphviz).to.exist;
+        });
+    })
+    it("circo", function () {
+        const svg = graphviz.circo(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+    });
+    it("dot", function () {
+        const svg = graphviz.dot(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+    });
+    it("fdp", function () {
+        const svg = graphviz.fdp(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+    });
+    it("neato", function () {
+        const svg = graphviz.neato(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+    });
+    it("osage", function () {
+        const svg = graphviz.osage(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+    });
+    it("patchwork", function () {
+        const svg = graphviz.patchwork(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+    });
+    it("twopi", function () {
+        const svg = graphviz.twopi(dot, "svg")
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
     });
 });

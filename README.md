@@ -42,12 +42,16 @@ If _url_ is specified, sets the default location for all WASM files.  If _url_ i
 
 Global variable for setting default WASM location, this is an alternative to [wasmFolder](#wasmFolder)
 
-### GraphViz (namespace `graphviz`)
+### GraphViz (`graphvizlib.wasm`)
 GraphViz WASM library, see [graphviz.org](https://www.graphviz.org/) for c++ details.
 
-**Note**:  While this package is similar to [Viz.js](https://github.com/mdaines/viz.js), it employs a completely different build methodology taken from [GraphControl](https://github.com/hpcc-systems/GraphControl).
+**Note 1**:  While this package is similar to [Viz.js](https://github.com/mdaines/viz.js), it employs a completely different build methodology taken from [GraphControl](https://github.com/hpcc-systems/GraphControl).
 
-**Note 2**:  All API functions are namespaced in `graphviz`.
+**Note 2**:  The _GraphViz_ library comes in two flavours
+* An exported `graphviz` namespace, where each API function is **asynchrounous**.
+* A `graphvizSync` **asynchrounous** function which returns an instance of `graphviz`, where each API function is **synchrounous**.
+
+#### API
 
 <a name="layout" href="#layout">#</a> <b>layout</b>(<i>dotSource</i>[, <i>outputFormat</i>][, <i>layoutEngine</i>]) · [Source](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts)
 
@@ -101,7 +105,6 @@ Convenience function that performs **patchwork** layout, is equivalent to `layou
 
 Convenience function that performs **twopi** layout, is equivalent to `layout(dotSource, outputFormat, "twopi");`
 
-
 ## Quick Example (CDN hosting courtesy of [unpkg.com](https://unpkg.com))
 ```html
 <!DOCTYPE html>
@@ -118,6 +121,7 @@ Convenience function that performs **twopi** layout, is equivalent to `layout(do
 
 <body>
     <div id="placeholder"></div>
+    <div id="placeholder2"></div>
     <script>
         const dot = `
             digraph G {
@@ -154,6 +158,11 @@ Convenience function that performs **twopi** layout, is equivalent to `layout(do
         hpccWasm.graphviz.layout(dot, "svg", "dot").then(svg => {
             const div = document.getElementById("placeholder");
             div.innerHTML = svg;
+        });
+
+        hpccWasm.graphvizSync().then(graphviz => {
+            const div = document.getElementById("placeholder2");
+            div.innerHTML = graphviz.layout(dot, "svg", "dot"); // Synchronous
         });
     </script>
 

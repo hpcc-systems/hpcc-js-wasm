@@ -33,3 +33,45 @@ export const graphviz = {
         return this.layout(dotSource, outputFormat, "twopi");
     }
 };
+
+class GraphvizSync {
+
+    constructor(private _wasm: any) {
+    }
+
+    layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot"): string {
+        return this._wasm.Main.prototype.layout(dotSource, outputFormat, layoutEngine);
+    }
+
+    circo(dotSource: string, outputFormat: Format = "svg"): string {
+        return this.layout(dotSource, outputFormat, "circo");
+    }
+
+    dot(dotSource: string, outputFormat: Format = "svg"): string {
+        return this.layout(dotSource, outputFormat, "dot");
+    }
+
+    fdp(dotSource: string, outputFormat: Format = "svg"): string {
+        return this.layout(dotSource, outputFormat, "fdp");
+    }
+
+    neato(dotSource: string, outputFormat: Format = "svg"): string {
+        return this.layout(dotSource, outputFormat, "neato");
+    }
+
+    osage(dotSource: string, outputFormat: Format = "svg"): string {
+        return this.layout(dotSource, outputFormat, "osage");
+    }
+
+    patchwork(dotSource: string, outputFormat: Format = "svg"): string {
+        return this.layout(dotSource, outputFormat, "patchwork");
+    }
+
+    twopi(dotSource: string, outputFormat: Format = "svg"): string {
+        return this.layout(dotSource, outputFormat, "twopi");
+    }
+}
+
+export function graphvizSync(): Promise<GraphvizSync> {
+    return loadWasm(graphvizlib).then(wasm => new GraphvizSync(wasm));
+}
