@@ -8,6 +8,6 @@ fi
 cd ./emsdk
 git fetch
 git pull
-./emsdk install 1.39.5-upstream
-./emsdk activate 1.39.5-upstream
+./emsdk install 1.39.8-upstream
+./emsdk activate 1.39.8-upstream
 cd ..
