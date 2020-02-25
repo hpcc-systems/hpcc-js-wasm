@@ -21,7 +21,7 @@
     "install-graphviz": "run-script-os",
     "install-graphviz:linux": "./scripts/cpp-install-graphviz.sh",
     "install-graphviz:win32": "wsl -e ./scripts/cpp-install-graphviz.sh",
-    "install-build-deps": "run-s install-prerequisites install-emsdk install-graphviz",
+    "install-build-deps": "run-s install-emsdk install-graphviz",
     "update-emsdk": "run-script-os",
     "update-emsdk:linux": "./scripts/cpp-update-emsdk.sh",
     "update-emsdk:win32": "wsl -e ./scripts/cpp-update-emsdk.sh",
