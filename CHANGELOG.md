@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.4](https://github.com/GordonSmith/hpcc-js-wasm/compare/v0.3.3...v0.3.4) (2020-02-26)
+
+
+### Features
+
+* Add "Sync" version of Graphviz ([f80a626](https://github.com/GordonSmith/hpcc-js-wasm/commit/f80a6262bf4868f759bf4c64cdaec025e69858ac)), closes [#8](https://github.com/GordonSmith/hpcc-js-wasm/issues/8)
+
 ### [0.3.3](https://github.com/GordonSmith/hpcc-js-wasm/compare/v0.3.2...v0.3.3) (2020-02-20)
 
 ### [0.3.2](https://github.com/GordonSmith/hpcc-js-wasm/compare/v0.3.1...v0.3.2) (2020-02-06)
