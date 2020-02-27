@@ -1,38 +1,27 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <title>HPCC Systems - Test</title>
-
+    <meta charset="utf-8" />
+    <title>Mocha Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./node_modules/mocha/mocha.css" />
-    <script src="./node_modules/requirejs/require.js"></script>
-    <script>
-        requirejs.config({
-            baseUrl: ".",
-            paths: {
-                mocha: "./node_modules/mocha/mocha",
-                chai: "./node_modules/chai/chai"
-            },
-            shim: {
-                "mocha": {
-                    init: function () {
-                        this.mocha.setup("bdd");
-                        return this.mocha;
-                    }
-                }
-            }
-        });
-    </script>
+    <script src="./dist/index.js"></script>
 </head>
 
 <body>
     <div id="mocha"></div>
-    <div id="placeholder"></div>
-    <script>
-        require(["mocha", "./lib-umd/__tests__/index.spec"], function (mocha) {
-            mocha.run();
-        });
+
+    <script src="./node_modules/chai/chai.js"></script>
+    <script src="./node_modules/mocha/mocha.js"></script>
+
+    <script class="mocha-init">
+        mocha.setup('bdd');
+        mocha.checkLeaks();
+    </script>
+    <script src="./test/graphviz.spec.js"></script>
+    <script class="mocha-exec">
+        mocha.run();
     </script>
 </body>
 

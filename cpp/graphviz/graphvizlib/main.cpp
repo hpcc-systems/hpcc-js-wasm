@@ -21,6 +21,7 @@ char *vizLastErrorMessage()
 
 const char *Main::layout(const char *src, const char *format, const char *engine)
 {
+    errorMessage = NULL;
     char *result = NULL;
     GVC_t *context;
     Agraph_t *graph;
@@ -51,6 +52,11 @@ const char *Main::layout(const char *src, const char *format, const char *engine
     }
 
     return result;
+}
+
+const char *Main::lastError()
+{
+    return errorMessage;
 }
 
 //  Patch for invalid osage function  ---
