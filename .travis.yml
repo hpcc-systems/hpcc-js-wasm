@@ -14,5 +14,6 @@ install:
   - npm run install-prerequisites
   - npm run install-build-deps
 before_script:
-  - npm run lint;
-  - npm run build;
+  - npm run lint
+  - npm run dev-start &
+  - npm run build

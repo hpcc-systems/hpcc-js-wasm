@@ -7,8 +7,13 @@ type Engine = "circo" | "dot" | "fdp" | "neato" | "osage" | "patchwork" | "twopi
 
 export const graphviz = {
     layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot"): Promise<string> {
+        if (!dotSource) return Promise.resolve("");
         return loadWasm(graphvizlib).then(wasm => {
-            return wasm.Main.prototype.layout(dotSource, outputFormat, layoutEngine);
+            const retVal = wasm.Main.prototype.layout(dotSource, outputFormat, layoutEngine);
+            if (!retVal) {
+                throw new Error(wasm.Main.prototype.lastError());
+            }
+            return retVal;
         });
     },
     circo(dotSource: string, outputFormat: Format = "svg"): Promise<string> {
@@ -40,7 +45,12 @@ class GraphvizSync {
     }
 
     layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot"): string {
-        return this._wasm.Main.prototype.layout(dotSource, outputFormat, layoutEngine);
+        if (!dotSource) return "";
+        const retVal = this._wasm.Main.prototype.layout(dotSource, outputFormat, layoutEngine);
+        if (!retVal) {
+            throw new Error(this._wasm.Main.prototype.lastError());
+        }
+        return retVal;
     }
 
     circo(dotSource: string, outputFormat: Format = "svg"): string {

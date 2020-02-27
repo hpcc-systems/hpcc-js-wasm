@@ -60,16 +60,20 @@
         hpccWasm.graphviz.layout(dot, "svg", "dot").then(svg => {
             const div = document.getElementById("placeholder");
             div.innerHTML = svg;
-        });
+        }).catch(err => console.error(err.message));
 
         hpccWasm.graphviz.layout(dot, "svg", "dot").then(svg => {
             const div = document.getElementById("placeholder2");
             div.innerHTML = svg;
-        });
+        }).catch(err => console.error(err.message));
 
         hpccWasm.graphvizSync().then(graphviz => {
             const div = document.getElementById("placeholder3");
-            div.innerHTML = graphviz.layout(dot, "svg", "dot");
+            try {
+                div.innerHTML = graphviz.layout(dot, "svg", "dot");
+            } catch (e) {
+                div.innerHTML = e.message;
+            }
         });
     </script>
 
