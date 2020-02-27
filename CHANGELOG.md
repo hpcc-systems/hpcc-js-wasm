@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.5](https://github.com/GordonSmith/hpcc-js-wasm/compare/v0.3.4...v0.3.5) (2020-02-27)
+
+
+### Features
+
+* **GraphViz:** Add basic error handling ([5e58238](https://github.com/GordonSmith/hpcc-js-wasm/commit/5e5823860c8748731f143860bcac3631067b8784))
+
 ### [0.3.4](https://github.com/GordonSmith/hpcc-js-wasm/compare/v0.3.3...v0.3.4) (2020-02-26)
 
 
