@@ -62,7 +62,7 @@
             div.innerHTML = svg;
         }).catch(err => console.error(err.message));
 
-        hpccWasm.graphviz.layout(dot, "svg", "dot").then(svg => {
+        hpccWasm.graphviz.layout('digraph { a[image="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"]; }', "svg", "dot", { images: [{ path: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png", width: "272px", height: "92px" }] }).then(svg => {
             const div = document.getElementById("placeholder2");
             div.innerHTML = svg;
         }).catch(err => console.error(err.message));

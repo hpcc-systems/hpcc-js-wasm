@@ -1,4 +1,6 @@
 interface Main {
   [Const] static DOMString layout([Const] DOMString dot, [Const] DOMString format, [Const] DOMString engine);
   [Const] static DOMString lastError();
+  void createFile([Const] DOMString file, [Const] DOMString data);
 };
+
