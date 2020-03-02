@@ -118,7 +118,7 @@ The _GraphViz_ library comes in **two** flavours
 
 #### GraphViz API
 
-<a name="layout" href="#layout">#</a> **layout**(_dotSource_[, _outputFormat_][, _layoutEngine_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="layout" href="#layout">#</a> **layout**(_dotSource_[, _outputFormat_][, _layoutEngine_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
 
 Performs layout for the supplied _dotSource_, see [The DOT Language](https://graphviz.gitlab.io/_pages/doc/info/lang.html) for specification.  
 
@@ -142,31 +142,62 @@ _layoutEngine_ supports the following options:
 
 See [Layout manual pages](https://www.graphviz.org/documentation/) for more information.
 
-<a name="circo" href="#circo">#</a> **circo**(_dotSource_[, _outputFormat_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+_ext_ optional "extra params":
+
+* _images_: An optional array of 
+```JavaScript
+{
+    path: string;   //  The path for the image.
+    width: string;  //  Width of Image
+    height: string; //  Height of Image
+}
+```
+* _files_: An optional array of 
+```JavaScript
+{
+    path: string;   //  The path for the file.
+    data: string;   //  The data for the file.
+}
+```
+
+For example passing a web hosted Image to GraphViz:
+```JavaScript
+hpccWasm.graphviz.layout('digraph { a[image="https://.../image.png"]; }', "svg", "dot", { 
+    images: [{ 
+        path: "https://.../image.png", 
+        width: "272px", 
+        height: "92px" 
+    }] 
+}).then(svg => {
+    document.getElementById("placeholder").innerHTML = svg;
+}).catch(err => console.error(err.message));
+```
+
+<a name="circo" href="#circo">#</a> **circo**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
 
 Convenience function that performs **circo** layout, is equivalent to `layout(dotSource, outputFormat, "circo");`.
 
-<a name="dot" href="#dot">#</a> **dot**(_dotSource_[, _outputFormat_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="dot" href="#dot">#</a> **dot**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
 
 Convenience function that performs **dot** layout, is equivalent to `layout(dotSource, outputFormat, "dot");`.
 
-<a name="fdp" href="#fdp">#</a> **fdp**(_dotSource_[, _outputFormat_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="fdp" href="#fdp">#</a> **fdp**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
 
 Convenience function that performs **circo** layout, is equivalent to `layout(dotSource, outputFormat, "fdp");`.
 
-<a name="neato" href="#neato">#</a> **neato**(_dotSource_[, _outputFormat_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="neato" href="#neato">#</a> **neato**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
 
 Convenience function that performs **neato** layout, is equivalent to `layout(dotSource, outputFormat, "neato");`.
 
-<a name="osage" href="#osage">#</a> **osage**(_dotSource_[, _outputFormat_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="osage" href="#osage">#</a> **osage**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
 
 Convenience function that performs **osage** layout, is equivalent to `layout(dotSource, outputFormat, "osage");`.
 
-<a name="patchwork" href="#patchwork">#</a> **patchwork**(_dotSource_[, _outputFormat_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="patchwork" href="#patchwork">#</a> **patchwork**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
 
 Convenience function that performs **patchwork** layout, is equivalent to `layout(dotSource, outputFormat, "patchwork");`.
 
-<a name="twopi" href="#twopi">#</a> **twopi**(_dotSource_[, _outputFormat_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="twopi" href="#twopi">#</a> **twopi**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
 
 Convenience function that performs **twopi** layout, is equivalent to `layout(dotSource, outputFormat, "twopi");`.
 
