@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.6](https://github.com/GordonSmith/hpcc-js-wasm/compare/v0.3.5...v0.3.6) (2020-03-02)
+
+
+### Features
+
+* **Images:** Add Image Support ([b9c3015](https://github.com/GordonSmith/hpcc-js-wasm/commit/b9c3015a86040ca49168b07952a4b6973b47a521))
+
 ### [0.3.5](https://github.com/GordonSmith/hpcc-js-wasm/compare/v0.3.4...v0.3.5) (2020-02-27)
 
 
