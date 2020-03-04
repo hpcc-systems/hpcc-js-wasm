@@ -2,6 +2,7 @@
 build/
 dist/
 emsdk/
+src-expat/
 src-graphviz/
 lib-*/
 node_modules/

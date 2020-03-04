@@ -39,6 +39,7 @@ INCLUDE_DIRECTORIES(
     ${GRAPHVIZSRC_DIRS}/lib/gvc
     ${GRAPHVIZSRC_DIRS}/lib/xdot
     ${GRAPHVIZSRC_DIRS}/lib/label
+    ${EXPATSRC_DIRS}/expat/lib
 )
 
 ADD_LIBRARY(common STATIC
@@ -53,4 +54,5 @@ TARGET_LINK_LIBRARIES(common
     gvc
     xdot
     label
+    expat
 )
