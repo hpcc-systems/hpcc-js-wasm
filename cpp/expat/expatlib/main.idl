@@ -1,0 +1,21 @@
+interface CExpat
+{
+  void CExpat();
+  boolean create();
+  void destroy();
+  boolean parse([Const] DOMString xml);
+  [Const] DOMString tag();
+  [Const] DOMString attrs();
+  [Const] DOMString content();
+  void startElement();
+  void endElement();
+  void characterData();
+};
+
+[JSImplementation = "CExpat"] 
+interface CExpatJS {
+  void CExpatJS();
+  void startElement();
+  void endElement();
+  void characterData();
+};

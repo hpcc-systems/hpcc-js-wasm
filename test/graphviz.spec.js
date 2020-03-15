@@ -1,6 +1,3 @@
-const expect = chai.expect;
-const hpccWasm = window["@hpcc-js/wasm"];
-
 const dot = `
 digraph G {
     node [shape=rect];

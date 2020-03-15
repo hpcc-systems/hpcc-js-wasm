@@ -15,6 +15,7 @@ npm install --save @hpcc-js/wasm
 * `index.js` / `index.min.js` files:  Exposes _all_ the available APIs for all WASM files.
 * WASM Files:
     * `graphvizlib.wasm`
+    * `expatlib.wasm`
     * ...more to follow...
 
 **Important**:  WASM files are dynamically loaded at runtime (this is a browser / emscripten requirement), which has a few implications for the consumer:  
@@ -29,6 +30,7 @@ npm install --save @hpcc-js/wasm
 ## API Reference
 * [Common](#common)
 * [GraphViz](#graphviz)
+* [Expat](#expat)
 
 ### Common
 Utility functions relating to @hpcc-js/wasm as a package
@@ -200,6 +202,58 @@ Convenience function that performs **patchwork** layout, is equivalent to `layou
 <a name="twopi" href="#twopi">#</a> **twopi**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
 
 Convenience function that performs **twopi** layout, is equivalent to `layout(dotSource, outputFormat, "twopi");`.
+
+### Expat (`expatlib.wasm`)
+Expat WASM library, provides a simplified wrapper around the Expat XML Parser library, see [libexpat.github.io](https://libexpat.github.io/) for c++ details.
+
+#### Hello World
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>GraphViz WASM</title>
+    <script src="https://unpkg.com/@hpcc-js/wasm/dist/index.min.js"></script>
+    <script>
+        var hpccWasm = window["@hpcc-js/wasm"];
+    </script>
+</head>
+
+<body>
+    <script>
+        const xml = `
+            <root>
+                <child xxx="yyy">content</child>
+            </root>
+        `;
+
+        var callback = {
+            startElement(tag, attrs) { console.log("start", tag, attrs); },
+            endElement(tag) { console.log("end", tag); },
+            characterData(content) { console.log("characterData", content); }
+        };
+        hpccWasm.parse(xml, callback);
+    </script>
+
+</body>
+
+</html>
+```
+
+#### Expat API
+
+<a name="parse" href="#parse">#</a> **parse**(_xml_, _callback_) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/expat.ts "Source")
+
+* **_xml_**:  XML String.
+* **_callback_**:  Callback Object with the following methods:
+    * **startElement**(_tag_: string, _attrs_: {[key: string]: string]): void;
+    * **endElement**(_tag_: string): void;
+    * **characterData**(_content_: string): void;
+
+Parses the XML with suitable callbacks.
+
+**Note:** _characterData_ may get called several times for a single tag element.
 
 ## Building @hpcc-js/wasm
 _Building is supported on both Linux (tested with Ubuntu 18.04) and Windows with WSL enabled (Ubuntu-18.04).  Building in other environments should work, but may be missing certain prerequisites._
