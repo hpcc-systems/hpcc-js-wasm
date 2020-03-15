@@ -1,26 +1,16 @@
-PROJECT(label)
-
-SET(SRCS
-    ${GRAPHVIZSRC_DIRS}/lib/label/index.c
-    ${GRAPHVIZSRC_DIRS}/lib/label/node.c
-    ${GRAPHVIZSRC_DIRS}/lib/label/rectangle.c
-    ${GRAPHVIZSRC_DIRS}/lib/label/xlabels.c
-    ${GRAPHVIZSRC_DIRS}/lib/label/split.q.c
-)
-    
 INCLUDE_DIRECTORIES(
-    ${GRAPHVIZSRC_DIRS}/lib/label
-    ${GRAPHVIZSRC_DIRS}/lib/common
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph
-    ${GRAPHVIZSRC_DIRS}/lib/cdt
+    ${GRAPHVIZ_LIB_DIR}/label
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZ_LIB_DIR}/common
 )
 
 ADD_LIBRARY(label STATIC
-    ${SRCS}
+    # Source files
+    ${GRAPHVIZ_LIB_DIR}/label/index.c
+    ${GRAPHVIZ_LIB_DIR}/label/node.c
+    ${GRAPHVIZ_LIB_DIR}/label/rectangle.c
+    ${GRAPHVIZ_LIB_DIR}/label/split.q.c
+    ${GRAPHVIZ_LIB_DIR}/label/xlabels.c
 )
-
-TARGET_LINK_LIBRARIES(label
-    common
-    cgraph
-    cdt
-)
+    

@@ -1,0 +1,19 @@
+set(CMAKE_CXX_STANDARD 17)
+
+SET(EXPAT_LIB_DIR "${EXPATSRC_DIRS}/expat/lib")
+
+ADD_DEFINITIONS(-DXML_POOR_ENTROPY)
+
+INCLUDE_DIRECTORIES(
+    ${EXPAT_LIB_DIR}
+)
+
+ADD_LIBRARY(expat STATIC
+    ${EXPAT_LIB_DIR}/xmlparse.c
+    ${EXPAT_LIB_DIR}/xmlrole.c
+    ${EXPAT_LIB_DIR}/xmltok_impl.c
+    ${EXPAT_LIB_DIR}/xmltok_ns.c
+    ${EXPAT_LIB_DIR}/xmltok.c
+)
+
+ADD_SUBDIRECTORY(expatlib)

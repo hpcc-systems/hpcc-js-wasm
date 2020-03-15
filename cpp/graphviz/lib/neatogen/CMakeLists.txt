@@ -1,72 +1,77 @@
-PROJECT(neatogen)
+INCLUDE_DIRECTORIES(
+    ${GRAPHVIZ_LIB_DIR}/neatogen
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZ_LIB_DIR}/common
+    ${GRAPHVIZ_LIB_DIR}/gvc
+    ${GRAPHVIZ_LIB_DIR}/ortho
+    ${GRAPHVIZ_LIB_DIR}/pack
+    ${GRAPHVIZ_LIB_DIR}/pathplan
+    ${GRAPHVIZ_LIB_DIR}/rbtree
+    ${GRAPHVIZ_LIB_DIR}/sfdpgen
+    ${GRAPHVIZ_LIB_DIR}/sparse
 
-SET(SRCS
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/adjust.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/bfs.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/call_tri.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/circuit.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/closest.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/compute_hierarchy.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/conjgrad.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/constrained_majorization.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/constrained_majorization_ipsep.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/constraint.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/delaunay.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/dijkstra.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/edges.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/embed_graph.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/geometry.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/heap.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/hedges.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/info.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/kkutils.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/legal.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/lu.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/matinv.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/matrix_ops.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/memory.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/multispline.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/neatoinit.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/neatosplines.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/opt_arrangement.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/pca.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/poly.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/printvis.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/quad_prog_solve.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/site.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/smart_ini_x.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/solve.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/stress.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/stuff.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/voronoi.c
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen/quad_prog_vpsc.c
+    # with_ipsepcola
+    ${GRAPHVIZ_LIB_DIR}/vpsc
 )
 
-INCLUDE_DIRECTORIES(
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen
-    ${GRAPHVIZSRC_DIRS}/lib/common
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph
-    ${GRAPHVIZSRC_DIRS}/lib/pack
-    ${GRAPHVIZSRC_DIRS}/lib/gvc
-    ${GRAPHVIZSRC_DIRS}/lib/cdt
-    ${GRAPHVIZSRC_DIRS}/lib/pathplan
-    ${GRAPHVIZSRC_DIRS}/lib/sparse
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc
-    ${GRAPHVIZSRC_DIRS}/lib/ortho
-    ${GRAPHVIZSRC_DIRS}/lib/sfdpgen
+SET(sources
+    # Source files
+    ${GRAPHVIZ_LIB_DIR}/neatogen/adjust.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/bfs.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/call_tri.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/circuit.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/closest.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/compute_hierarchy.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/conjgrad.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/constrained_majorization.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/constraint.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/delaunay.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/dijkstra.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/edges.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/embed_graph.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/geometry.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/heap.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/hedges.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/info.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/kkutils.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/legal.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/lu.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/matinv.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/matrix_ops.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/memory.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/multispline.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/neatoinit.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/neatosplines.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/opt_arrangement.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/overlap.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/pca.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/poly.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/printvis.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/quad_prog_solve.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/site.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/smart_ini_x.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/solve.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/stuff.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/stress.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/voronoi.c
+
+    # with_ipsepcola
+    ${GRAPHVIZ_LIB_DIR}/neatogen/constrained_majorization_ipsep.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/mosek_quad_solve.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/mosek_quad_solve.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/quad_prog_vpsc.c
+
+
+
+
+#     ${GRAPHVIZ_LIB_DIR}/neatogen/quad_prog_vpsc.c
+#    ${GRAPHVIZ_LIB_DIR}/neatogen/constrained_majorization_ipsep.c
+
+
 )
 
 ADD_LIBRARY(neatogen STATIC
-    ${SRCS}
+    ${sources}
 )
-TARGET_LINK_LIBRARIES(neatogen
-    common
-    cgraph
-    pack
-    gvc
-    cdt
-    pathplan
-    sparse
-    vpsc
-    ortho
-)
+

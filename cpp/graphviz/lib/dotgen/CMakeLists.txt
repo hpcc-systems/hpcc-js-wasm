@@ -1,46 +1,31 @@
-PROJECT(dotgen)
-
-SET(SRCS
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/acyclic.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/aspect.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/class1.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/class2.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/cluster.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/compound.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/conc.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/decomp.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/dotinit.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/dotsplines.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/fastgr.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/flat.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/mincross.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/position.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/rank.c
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen/sameport.c
-)
-
 INCLUDE_DIRECTORIES(
-    ${GRAPHVIZSRC_DIRS}/lib/dotgen
-    ${GRAPHVIZSRC_DIRS}/lib/common
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph
-    ${GRAPHVIZSRC_DIRS}/lib/cdt
-    ${GRAPHVIZSRC_DIRS}/lib/pathplan
-    ${GRAPHVIZSRC_DIRS}/lib/gvc
-    ${GRAPHVIZSRC_DIRS}/lib/ortho
-    ${GRAPHVIZSRC_DIRS}/lib/pack
+    ${GRAPHVIZ_LIB_DIR}/dotgen
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZ_LIB_DIR}/common
+    ${GRAPHVIZ_LIB_DIR}/gvc
+    ${GRAPHVIZ_LIB_DIR}/ortho
+    ${GRAPHVIZ_LIB_DIR}/pack
+    ${GRAPHVIZ_LIB_DIR}/pathplan
 )
-
 
 ADD_LIBRARY(dotgen STATIC
-    ${SRCS}
+    # Source files
+    ${GRAPHVIZ_LIB_DIR}/dotgen/aspect.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/acyclic.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/class1.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/class2.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/cluster.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/compound.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/conc.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/decomp.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/dotinit.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/dotsplines.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/fastgr.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/flat.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/mincross.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/position.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/rank.c
+    ${GRAPHVIZ_LIB_DIR}/dotgen/sameport.c
 )
 
-TARGET_LINK_LIBRARIES(dotgen
-    common
-    cgraph
-    cdt
-    pathplan
-    gvc
-    ortho
-    pack
-)

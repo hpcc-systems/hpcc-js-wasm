@@ -1,16 +1,9 @@
-PROJECT(ingraphs)
-
-SET(SRCS
-    ${GRAPHVIZSRC_DIRS}/lib/ingraphs/ingraphs.c
-)
-
 INCLUDE_DIRECTORIES(
-    ${GRAPHVIZSRC_DIRS}/lib/ingraphs
+    ${GRAPHVIZ_LIB_DIR}/ingraphs
+    ${GRAPHVIZ_LIB_DIR}/cgraph
 )
 
 ADD_LIBRARY(ingraphs STATIC
-    ${SRCS}
-)
-
-TARGET_LINK_LIBRARIES(ingraphs
+    # Source files
+    ${GRAPHVIZ_LIB_DIR}/ingraphs/ingraphs.c
 )

@@ -1,4 +1,4 @@
-PROJECT(graphvizlib)
+PROJECT(expatlib)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s WASM=1 -s INVOKE_RUN=0 -s ENVIRONMENT=web -s ALLOW_MEMORY_GROWTH=1")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s MODULARIZE=1 -s EXPORT_NAME='${CMAKE_PROJECT_NAME}'")
@@ -13,34 +13,21 @@ SET_PROPERTY(SOURCE main.cpp APPEND PROPERTY OBJECT_DEPENDS ${CMAKE_CURRENT_BINA
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --post-js ${CMAKE_CURRENT_BINARY_DIR}/main_glue.js")
 #  ---  ---  ---
 
-SET(SRCS
-    main.cpp
-    fs.cpp
-)
-
 INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${GRAPHVIZ_LIB_DIR}/cdt
-    ${GRAPHVIZ_LIB_DIR}/cgraph
-    ${GRAPHVIZ_LIB_DIR}/common
-    ${GRAPHVIZ_LIB_DIR}/gvc
-    ${GRAPHVIZ_LIB_DIR}/pathplan
-    ${GRAPHVIZ_LIB_DIR}/sparse
+    ${EXPAT_LIB_DIR}
 )
 
-ADD_EXECUTABLE(graphvizlib
-    ${SRCS}
+ADD_EXECUTABLE(expatlib
+    main.cpp
 )
 
-TARGET_LINK_LIBRARIES(graphvizlib
-    gvplugin_core
-    gvplugin_dot_layout
-    gvplugin_neato_layout
-    ortho
+TARGET_LINK_LIBRARIES(expatlib
+    expat
 )
 
 INSTALL(FILES 
-    ${CMAKE_CURRENT_BINARY_DIR}/graphvizlib.wasm
+    ${CMAKE_CURRENT_BINARY_DIR}/expatlib.wasm
     DESTINATION dist
     COMPONENT runtime
 )

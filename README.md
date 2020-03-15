@@ -202,7 +202,7 @@ Convenience function that performs **patchwork** layout, is equivalent to `layou
 Convenience function that performs **twopi** layout, is equivalent to `layout(dotSource, outputFormat, "twopi");`.
 
 ## Building @hpcc-js/wasm
-_Building is supported on both Linux (tested with Ubuntu 18.04) and Windows (with WSL installed)_
+_Building is supported on both Linux (tested with Ubuntu 18.04) and Windows with WSL enabled (Ubuntu-18.04).  Building in other environments (docker) should work, but may be missing certain prerequisites, should you encounter any please open an issue with the details so that the pre-requisites file can be updated._
 
 There are several required OS dependencies which can be installed with:
 ```
@@ -219,5 +219,16 @@ npm run install-build-deps
 npm run build
 ```
 
-**Note**: The `install-build-deps` downloads both the Emscripten SDK and the GraphViz sources.  This has been made a manual step as the downloads are quite large and the auto-configuration can be time consuming.
+**Note**: The `install-build-deps` downloads the following dependencies:
+* [Emscripten SDK](https://emscripten.org/)
+* [GraphViz](https://www.graphviz.org/)
+* [Expat](https://libexpat.github.io/)
+
+This has been made a manual step as the downloads are quite large and the auto-configuration can be time consuming.
+
+### Clean dependencies: 
+_It is worth noting that `npm run clean` will only clean any artifacts associated with the build, but won't clean clean any of the third party dependencies_
+```
+npm run clean-build-deps
+```
 

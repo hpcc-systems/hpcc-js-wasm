@@ -1,0 +1,34 @@
+
+interface StackParser
+{
+  void StackParser();
+  boolean parse([Const] DOMString xml);
+  [Const] DOMString tag();
+  [Const] DOMString content();
+  [Const] DOMString attrs();
+  void startElement();
+  void endElement();
+};
+
+[JSImplementation = "StackParser"]
+interface StackParserJS {
+  void StackParserJS();
+  void startElement();
+  void endElement();
+};
+
+interface CTest
+{
+  void CTest();
+  void Create();
+  void Parse([Const] DOMString xml, unsigned long xmlLen);
+	//void OnStartElement([Const] DOMString pszName, [Const] DOMString[] papszAttrs);
+	//void OnStartElement2([Const] DOMString pszName, [Const] DOMString papszAttrs);
+};
+
+[JSImplementation = "CTest"]
+interface CTestJS {
+  void CTestJS();
+	//void OnStartElement([Const] DOMString pszName, [Const] DOMString[] papszAttrs);
+	//void OnStartElement2([Const] DOMString pszName, [Const] DOMString papszAttrs);
+};

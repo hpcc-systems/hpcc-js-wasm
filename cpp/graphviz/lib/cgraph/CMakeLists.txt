@@ -1,41 +1,34 @@
-PROJECT(cgraph) 
-
-SET(SRCS 
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/agerror.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/agxbuf.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/apply.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/attr.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/edge.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/flatten.c
-    ${GRAPHVIZSRC_DIRS}/build/lib/cgraph/grammar.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/graph.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/id.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/imap.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/io.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/mem.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/node.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/obj.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/pend.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/rec.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/refstr.c
-    ${GRAPHVIZSRC_DIRS}/build/lib/cgraph/scan.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/subg.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/utils.c
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph/write.c
-)
-
 INCLUDE_DIRECTORIES(
+    ${GRAPHVIZ_LIB_DIR}/cgraph
     ${GRAPHVIZSRC_DIRS}/build/lib/cgraph
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph
-    ${GRAPHVIZSRC_DIRS}/lib/cdt
-    ${GRAPHVIZSRC_DIRS}/lib/common
+    ${GRAPHVIZ_LIB_DIR}/cdt
 )
 
 ADD_LIBRARY(cgraph STATIC
-    ${SRCS} 
+    # Source files
+    ${GRAPHVIZ_LIB_DIR}/cgraph/agerror.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/agxbuf.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/apply.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/attr.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/edge.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/flatten.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/graph.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/id.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/imap.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/io.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/mem.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/node.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/obj.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/pend.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/rec.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/refstr.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/subg.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/utils.c
+    ${GRAPHVIZ_LIB_DIR}/cgraph/write.c
+
+    # Generated files
+    ${GRAPHVIZSRC_DIRS}/build/lib/cgraph/grammar.c
+    ${GRAPHVIZSRC_DIRS}/build/lib/cgraph/scan.c
 )
 
-TARGET_LINK_LIBRARIES(cgraph 
-    cdt
-    common
-)
+TARGET_LINK_LIBRARIES(cgraph cdt)
