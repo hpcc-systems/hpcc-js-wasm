@@ -1,40 +1,24 @@
-PROJECT(ortho)
-
-SET(SRCS
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/fPQ.c
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/fPQ.h
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/maze.c
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/maze.h
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/ortho.c
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/ortho.h
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/partition.c
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/partition.h
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/rawgraph.c
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/rawgraph.h
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/sgraph.c
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/sgraph.h
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/structures.h
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/trap.h
-    ${GRAPHVIZSRC_DIRS}/lib/ortho/trapezoid.c
-)
+ADD_DEFINITIONS(-D_BLD_gvc=1)
 
 INCLUDE_DIRECTORIES(
-    ${GRAPHVIZSRC_DIRS}/lib/ortho
-    ${GRAPHVIZSRC_DIRS}/lib/common
-    ${GRAPHVIZSRC_DIRS}/lib/gvc
-    ${GRAPHVIZSRC_DIRS}/lib/pathplan
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph
-    ${GRAPHVIZSRC_DIRS}/lib/cdt
+    ${GRAPHVIZ_LIB_DIR}/ortho
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZ_LIB_DIR}/common
+    ${GRAPHVIZ_LIB_DIR}/gvc
+    ${GRAPHVIZ_LIB_DIR}/neatogen
+    ${GRAPHVIZ_LIB_DIR}/pack
+    ${GRAPHVIZ_LIB_DIR}/pathplan
 )
 
 ADD_LIBRARY(ortho STATIC
-    ${SRCS}
+    # Source files
+    ${GRAPHVIZ_LIB_DIR}/ortho/fPQ.c
+    ${GRAPHVIZ_LIB_DIR}/ortho/maze.c
+    ${GRAPHVIZ_LIB_DIR}/ortho/ortho.c
+    ${GRAPHVIZ_LIB_DIR}/ortho/partition.c
+    ${GRAPHVIZ_LIB_DIR}/ortho/rawgraph.c
+    ${GRAPHVIZ_LIB_DIR}/ortho/sgraph.c
+    ${GRAPHVIZ_LIB_DIR}/ortho/trapezoid.c
 )
 
-TARGET_LINK_LIBRARIES(ortho
-    common
-    gvc
-    pathplan
-    cgraph
-    cdt
-)

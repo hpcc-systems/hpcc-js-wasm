@@ -1,31 +1,16 @@
-PROJECT(vpsc)
-
-SET(SRCS
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/block.cpp
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/block.h
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/blocks.cpp
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/blocks.h
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/constraint.cpp
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/constraint.h
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/csolve_VPSC.cpp
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/csolve_VPSC.h
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/generate-constraints.cpp
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/generate-constraints.h
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/remove_rectangle_overlap.cpp
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/remove_rectangle_overlap.h
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/solve_VPSC.cpp
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/solve_VPSC.h
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/variable.cpp
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc/variable.h
-)
-
 INCLUDE_DIRECTORIES(
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc
+    ${GRAPHVIZ_LIB_DIR}/vpsc
 )
 
 ADD_LIBRARY(vpsc STATIC
-    ${SRCS}
-)
-
-TARGET_LINK_LIBRARIES(vpsc
+    # Source files
+    ${GRAPHVIZ_LIB_DIR}/vpsc/block.cpp
+    ${GRAPHVIZ_LIB_DIR}/vpsc/blocks.cpp
+    ${GRAPHVIZ_LIB_DIR}/vpsc/constraint.cpp
+    ${GRAPHVIZ_LIB_DIR}/vpsc/csolve_VPSC.cpp
+    ${GRAPHVIZ_LIB_DIR}/vpsc/generate-constraints.cpp
+    ${GRAPHVIZ_LIB_DIR}/vpsc/pairingheap/PairingHeap.cpp
+    ${GRAPHVIZ_LIB_DIR}/vpsc/remove_rectangle_overlap.cpp
+    ${GRAPHVIZ_LIB_DIR}/vpsc/solve_VPSC.cpp
+    ${GRAPHVIZ_LIB_DIR}/vpsc/variable.cpp
 )

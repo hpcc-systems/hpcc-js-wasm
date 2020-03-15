@@ -1,22 +1,7 @@
-PROJECT(xdot) 
-
-SET(SRCS 
-    ${GRAPHVIZSRC_DIRS}/lib/xdot/xdot.c
-)
-
-INCLUDE_DIRECTORIES(
-    ${GRAPHVIZSRC_DIRS}/lib/xdot
-    ${GRAPHVIZSRC_DIRS}/lib/common
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph
-    ${GRAPHVIZSRC_DIRS}/lib/cdt
-)
+INCLUDE_DIRECTORIES(${GRAPHVIZ_LIB_DIR}/xdot)
 
 ADD_LIBRARY(xdot STATIC
-    ${SRCS} 
+    # Source files
+    ${GRAPHVIZ_LIB_DIR}/xdot/xdot.c
 )
 
-TARGET_LINK_LIBRARIES(xdot 
-    common
-    cgraph
-    cdt
-)

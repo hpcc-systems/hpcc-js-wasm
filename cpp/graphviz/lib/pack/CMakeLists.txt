@@ -1,29 +1,16 @@
-PROJECT(pack)
-
-SET(SRCS
-    ${GRAPHVIZSRC_DIRS}/lib/pack/ccomps.c
-    ${GRAPHVIZSRC_DIRS}/lib/pack/pack.c
-)
-
 INCLUDE_DIRECTORIES(
-    ${GRAPHVIZSRC_DIRS}/lib/pack
-    ${GRAPHVIZSRC_DIRS}/lib/common
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph
-    ${GRAPHVIZSRC_DIRS}/lib/pathplan
-    ${GRAPHVIZSRC_DIRS}/lib/cdt
-    ${GRAPHVIZSRC_DIRS}/lib/neatogen
-    ${GRAPHVIZSRC_DIRS}/lib/gvc
+    ${GRAPHVIZ_LIB_DIR}/pack
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZ_LIB_DIR}/common
+    ${GRAPHVIZ_LIB_DIR}/gvc
+    ${GRAPHVIZ_LIB_DIR}/neatogen
+    ${GRAPHVIZ_LIB_DIR}/pathplan
 )
 
 ADD_LIBRARY(pack STATIC
-    ${SRCS}
+    # Source files
+    ${GRAPHVIZ_LIB_DIR}/pack/ccomps.c
+    ${GRAPHVIZ_LIB_DIR}/pack/pack.c
 )
 
-TARGET_LINK_LIBRARIES(pack
-    common
-    cgraph
-    pathplan
-    cdt
-    neatogen
-    gvc
-)

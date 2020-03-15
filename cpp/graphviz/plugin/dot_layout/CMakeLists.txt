@@ -1,35 +1,23 @@
-PROJECT(gvplugin_dot_layout)
-
-SET(SRCS
-    ${GRAPHVIZSRC_DIRS}/plugin/dot_layout/gvlayout_dot_layout.c
-    ${GRAPHVIZSRC_DIRS}/plugin/dot_layout/gvplugin_dot_layout.c
-)
-
 INCLUDE_DIRECTORIES(
     ${GRAPHVIZSRC_DIRS}/plugin/dot_layout
-    ${GRAPHVIZSRC_DIRS}/lib/vpsc
-    ${GRAPHVIZSRC_DIRS}/lib/twopigen
-    ${GRAPHVIZSRC_DIRS}/lib/sparse
-    ${GRAPHVIZSRC_DIRS}/lib/sfdpgen
-    ${GRAPHVIZSRC_DIRS}/lib/pathplan
-    ${GRAPHVIZSRC_DIRS}/lib/common
-    ${GRAPHVIZSRC_DIRS}/lib/gvc
-    ${GRAPHVIZSRC_DIRS}/lib/cdt
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZ_LIB_DIR}/common
+    ${GRAPHVIZ_LIB_DIR}/gvc
+    ${GRAPHVIZ_LIB_DIR}/pathplan
 )
 
 ADD_LIBRARY(gvplugin_dot_layout STATIC
-    ${SRCS}
+    # Source files
+    ${GRAPHVIZSRC_DIRS}/plugin/dot_layout/gvplugin_dot_layout.c
+    ${GRAPHVIZSRC_DIRS}/plugin/dot_layout/gvlayout_dot_layout.c
 )
 
 TARGET_LINK_LIBRARIES(gvplugin_dot_layout
-    vpsc
-    twopigen
-    sparse
-    sfdpgen
-    pathplan
-    common
-    gvc
     cdt
     cgraph
+    dotgen
+    gvc
+    pathplan
 )
+

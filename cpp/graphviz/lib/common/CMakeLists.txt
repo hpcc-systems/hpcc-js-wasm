@@ -1,58 +1,48 @@
 PROJECT(common)
 
-SET(SRCS
-    ${GRAPHVIZSRC_DIRS}/lib/common/args.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/arrows.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/colxlate.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/emit.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/ellipse.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/geom.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/globals.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/htmllex.c
-    ${GRAPHVIZSRC_DIRS}/build/lib/common/htmlparse.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/htmltable.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/input.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/intset.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/labels.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/memory.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/ns.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/output.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/pointset.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/postproc.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/psusershape.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/routespl.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/shapes.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/splines.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/taper.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/textspan.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/timing.c
-    ${GRAPHVIZSRC_DIRS}/lib/common/utils.c
-)
-    
 INCLUDE_DIRECTORIES(
+    ${GRAPHVIZ_LIB_DIR}/common
     ${GRAPHVIZSRC_DIRS}/build/lib/common
-    ${GRAPHVIZSRC_DIRS}/lib/common
-    ${GRAPHVIZSRC_DIRS}/lib/cdt
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph
-    ${GRAPHVIZSRC_DIRS}/lib/fdpgen
-    ${GRAPHVIZSRC_DIRS}/lib/pathplan
-    ${GRAPHVIZSRC_DIRS}/lib/gvc
-    ${GRAPHVIZSRC_DIRS}/lib/xdot
-    ${GRAPHVIZSRC_DIRS}/lib/label
     ${EXPATSRC_DIRS}/expat/lib
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZ_LIB_DIR}/gvc
+    ${GRAPHVIZ_LIB_DIR}/label
+    ${GRAPHVIZ_LIB_DIR}/pack
+    ${GRAPHVIZ_LIB_DIR}/pathplan
+    ${GRAPHVIZ_LIB_DIR}/fdpgen
+    ${GRAPHVIZ_LIB_DIR}/xdot
 )
 
 ADD_LIBRARY(common STATIC
-    ${SRCS}
+    # Source files
+    ${GRAPHVIZ_LIB_DIR}/common/args.c
+    ${GRAPHVIZ_LIB_DIR}/common/arrows.c
+    ${GRAPHVIZ_LIB_DIR}/common/colxlate.c
+    ${GRAPHVIZ_LIB_DIR}/common/ellipse.c
+    ${GRAPHVIZ_LIB_DIR}/common/emit.c
+    ${GRAPHVIZ_LIB_DIR}/common/geom.c
+    ${GRAPHVIZ_LIB_DIR}/common/globals.c
+    ${GRAPHVIZ_LIB_DIR}/common/htmllex.c
+    ${GRAPHVIZ_LIB_DIR}/common/htmltable.c
+    ${GRAPHVIZ_LIB_DIR}/common/input.c
+    ${GRAPHVIZ_LIB_DIR}/common/intset.c
+    ${GRAPHVIZ_LIB_DIR}/common/labels.c
+    ${GRAPHVIZ_LIB_DIR}/common/ns.c
+    ${GRAPHVIZ_LIB_DIR}/common/memory.c
+    ${GRAPHVIZ_LIB_DIR}/common/output.c
+    ${GRAPHVIZ_LIB_DIR}/common/pointset.c
+    ${GRAPHVIZ_LIB_DIR}/common/postproc.c
+    ${GRAPHVIZ_LIB_DIR}/common/psusershape.c
+    ${GRAPHVIZ_LIB_DIR}/common/routespl.c
+    ${GRAPHVIZ_LIB_DIR}/common/shapes.c
+    ${GRAPHVIZ_LIB_DIR}/common/splines.c
+    ${GRAPHVIZ_LIB_DIR}/common/taper.c
+    ${GRAPHVIZ_LIB_DIR}/common/textspan.c
+    ${GRAPHVIZ_LIB_DIR}/common/timing.c
+    ${GRAPHVIZ_LIB_DIR}/common/utils.c
+    
+    # Generated files
+    ${GRAPHVIZSRC_DIRS}/build/lib/common/htmlparse.c
 )
 
-TARGET_LINK_LIBRARIES(common
-    cdt
-    cgraph
-    fdpgen
-    pathplan
-    gvc
-    xdot
-    label
-    expat
-)
