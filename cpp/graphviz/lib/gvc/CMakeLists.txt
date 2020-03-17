@@ -1,36 +1,37 @@
-PROJECT(gvc)
-
-SET(SRCS
-    ${GRAPHVIZSRC_DIRS}/lib/gvc/gvc.c
-    ${GRAPHVIZSRC_DIRS}/lib/gvc/gvconfig.c
-    ${GRAPHVIZSRC_DIRS}/lib/gvc/gvcontext.c
-    ${GRAPHVIZSRC_DIRS}/lib/gvc/gvdevice.c
-    ${GRAPHVIZSRC_DIRS}/lib/gvc/gvevent.c
-    ${GRAPHVIZSRC_DIRS}/lib/gvc/gvjobs.c
-    ${GRAPHVIZSRC_DIRS}/lib/gvc/gvlayout.c
-    ${GRAPHVIZSRC_DIRS}/lib/gvc/gvloadimage.c
-    ${GRAPHVIZSRC_DIRS}/lib/gvc/gvplugin.c
-    ${GRAPHVIZSRC_DIRS}/lib/gvc/gvrender.c
-    ${GRAPHVIZSRC_DIRS}/lib/gvc/gvtextlayout.c
-    ${GRAPHVIZSRC_DIRS}/lib/gvc/gvusershape.c
-)
-
 INCLUDE_DIRECTORIES(
-    ${GRAPHVIZSRC_DIRS}/lib/gvc
-    ${GRAPHVIZSRC_DIRS}/lib/common
-    ${GRAPHVIZSRC_DIRS}/lib/cdt
-    ${GRAPHVIZSRC_DIRS}/lib/cgraph
-    ${GRAPHVIZSRC_DIRS}/lib/pathplan
+    ${GRAPHVIZ_LIB_DIR}/gvc
     ${GRAPHVIZSRC_DIRS}
+    ${GRAPHVIZ_LIB_DIR}/ast
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZ_LIB_DIR}/common
+    ${GRAPHVIZ_LIB_DIR}/pathplan
 )
 
 ADD_LIBRARY(gvc STATIC
-    ${SRCS}
+    # Source files
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvc.c
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvconfig.c
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvcontext.c
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvdevice.c
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvevent.c
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvjobs.c
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvlayout.c
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvloadimage.c
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvplugin.c
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvrender.c
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvtextlayout.c
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvtool_tred.c
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvusershape.c
 )
 
 TARGET_LINK_LIBRARIES(gvc
-    common
     cdt
     cgraph
+    common
+    label
+    pack
     pathplan
+    xdot
+    expat
 )
