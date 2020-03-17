@@ -202,13 +202,19 @@ Convenience function that performs **patchwork** layout, is equivalent to `layou
 Convenience function that performs **twopi** layout, is equivalent to `layout(dotSource, outputFormat, "twopi");`.
 
 ## Building @hpcc-js/wasm
-_Building is supported on both Linux (tested with Ubuntu 18.04) and Windows with WSL enabled (Ubuntu-18.04).  Building in other environments (docker) should work, but may be missing certain prerequisites, should you encounter any please open an issue with the details so that the pre-requisites file can be updated._
+_Building is supported on both Linux (tested with Ubuntu 18.04) and Windows with WSL enabled (Ubuntu-18.04).  Building in other environments should work, but may be missing certain prerequisites._
 
-There are several required OS dependencies which can be installed with:
+These are then known required OS dependencies:
 ```
-sudo ./scripts/cpp-install-prerequisites.sh
+sudo apt-get install -y curl
+sudo curl --silent --location https://deb.nodesource.com/setup_12.x | sudo bash -
+sudo apt-get install -y nodejs
+sudo apt-get install -y build-essential
+
+sudo apt-get install -y git cmake wget
+sudo apt-get install -y gcc-multilib g++-multilib pkg-config autoconf bison libtool flex zlib1g-dev 
+sudo apt-get install -y python2.7 python-pip
 ```
-(See [./scripts/cpp-install-prerequisites.sh](./scripts/cpp-install-prerequisites.sh) for details)
 
 ### Build steps:
 ```
@@ -231,4 +237,3 @@ _It is worth noting that `npm run clean` will only clean any artifacts associate
 ```
 npm run clean-build-deps
 ```
-
