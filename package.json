@@ -29,6 +29,7 @@
     "update-emsdk:linux": "./scripts/cpp-update-emsdk.sh",
     "update-emsdk:win32": "wsl -e ./scripts/cpp-update-emsdk.sh",
     "clean": "rimraf coverage build dist lib* types *.tsbuildinfo",
+    "clean-build-deps": "rimraf ./emsdk ./src-graphviz ./src-expat",
     "compile-es6": "tsc --module es6 --outDir ./lib-es6",
     "compile-es6-watch": "npm run compile-es6 -- -w",
     "compile-umd": "tsc --module umd --outDir ./lib-umd",
@@ -49,36 +50,36 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/chai": "^4.2.9",
-    "@types/mocha": "^7.0.1",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
     "local-web-server": "^3.0.7",
     "mocha": "^7.1.0",
     "mocha-chrome": "^2.2.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^2.7.1",
-    "rollup": "^1.31.1",
-    "rollup-plugin-alias": "^1.5.2",
+    "rollup": "^2.0.6",
+    "rollup-plugin-alias": "^2.2.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-postcss": "^2.1.1",
-    "rollup-plugin-sourcemaps": "^0.4.2",
-    "run-script-os": "^1.0.7",
+    "rollup-plugin-postcss": "^2.4.1",
+    "rollup-plugin-sourcemaps": "^0.5.0",
+    "run-script-os": "^1.1.1",
     "standard-version": "^7.1.0",
-    "terser": "^4.6.4",
+    "terser": "^4.6.6",
     "tslib": "^1.11.1",
-    "tslint": "^5.20.1",
+    "tslint": "^6.1.0",
     "typescript": "~3.6.5"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GordonSmith/hpcc-js-wasm.git"
+    "url": "git+https://github.com/hpcc-systems/hpcc-js-wasm.git"
   },
   "author": "Gordon Smith <gordonjsmith@gmail.com>",
   "contributors": [],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/GordonSmith/hpcc-js-wasm/issues"
+    "url": "https://github.com/hpcc-systems/hpcc-js-wasm/issues"
   },
-  "homepage": "https://github.com/GordonSmith/hpcc-js-wasm#readme"
+  "homepage": "https://github.com/hpcc-systems/hpcc-js-wasm#readme"
 }
