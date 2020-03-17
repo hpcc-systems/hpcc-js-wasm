@@ -12,9 +12,6 @@
     "src/*.css"
   ],
   "scripts": {
-    "install-prerequisites": "run-script-os",
-    "install-prerequisites:linux": "echo nop",
-    "install-prerequisites:win32": "wsl -u root -e ./scripts/cpp-install-prerequisites.sh",
     "install-emsdk": "run-script-os",
     "install-emsdk:linux": "./scripts/cpp-install-emsdk.sh",
     "install-emsdk:win32": "wsl -e ./scripts/cpp-install-emsdk.sh",
@@ -40,13 +37,15 @@
     "bundle-watch": "npm run bundle -- -w",
     "minimize": "terser dist/index.js -c -m --source-map -o dist/index.min.js",
     "build": "run-s compile-cpp compile-es6 bundle minimize",
+    "build-ubuntu-dev": "docker build --rm -f \"./test/ubuntu-dev.dockerfile\" -t ubuntu-dev:latest \".\"",
     "publish-version": "standard-version",
     "publish-push": "git push --follow-tags upstream",
     "prepublishOnly": "run-s clean build publish-version publish-push",
     "watch": "run-p compile-es6-watch bundle-watch",
     "dev-start": "ws",
     "lint": "tslint --project . src/**/*.ts",
-    "test": "mocha-chrome http://localhost:8000/test.html"
+    "mocha-test": "mocha-chrome http://localhost:8000/test.html",
+    "test": "run-p -r dev-start mocha-test"
   },
   "dependencies": {},
   "devDependencies": {
