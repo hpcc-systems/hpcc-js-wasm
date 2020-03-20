@@ -9,16 +9,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [12.x]
-
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: "12.x"
+          registry-url: "https://registry.npmjs.org"
+          scope: "@hpcc-js"
       - run: npm ci
       - run: npm run lint
       - run: sudo apt-get install -y git cmake wget
@@ -27,7 +24,7 @@ jobs:
       - run: npm run install-build-deps
       - run: npm run build;
       - run: npm run test;
-      - run: npm publish --access public
+      - run: npm publish
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
