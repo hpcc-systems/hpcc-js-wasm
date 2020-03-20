@@ -1,6 +1,6 @@
 # @hpcc-js/wasm
 
-[![Build Status](https://travis-ci.org/hpcc-systems/hpcc-js-wasm.svg?branch=master)](https://travis-ci.org/hpcc-systems/hpcc-js-wasm)
+![Test PR](https://github.com/hpcc-systems/hpcc-js-wasm/workflows/Test%20PR/badge.svg)
 
 This repository contains a collection of useful c++ libraries compiled to WASM for (re)use in Web Browsers and JavaScript Libraries.
 
