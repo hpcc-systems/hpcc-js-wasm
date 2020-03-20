@@ -38,14 +38,14 @@
     "minimize": "terser dist/index.js -c -m --source-map -o dist/index.min.js",
     "build": "run-s compile-cpp compile-es6 bundle minimize",
     "build-ubuntu-dev": "docker build --rm -f \"./test/ubuntu-dev.dockerfile\" -t ubuntu-dev:latest \".\"",
-    "publish-version": "standard-version",
-    "publish-push": "git push --follow-tags upstream",
-    "prepublishOnly": "run-s clean build publish-version publish-push",
+    "standard-version": "standard-version",
+    "git-push": "git push --follow-tags upstream master",
     "watch": "run-p compile-es6-watch bundle-watch",
     "dev-start": "ws",
     "lint": "tslint --project . src/**/*.ts",
     "mocha-test": "mocha-chrome http://localhost:8000/test.html",
-    "test": "run-p -r dev-start mocha-test"
+    "test": "run-p -r dev-start mocha-test",
+    "tag": "run-s standard-version git-push"
   },
   "dependencies": {},
   "devDependencies": {
