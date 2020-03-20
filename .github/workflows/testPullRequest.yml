@@ -22,13 +22,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm run lint
-      - name: Install prerequisites
       - run: sudo apt-get install -y git cmake wget
       - run: sudo apt-get install -y gcc-multilib g++-multilib pkg-config autoconf bison libtool flex zlib1g-dev
       - run: sudo apt-get install -y python2.7 python-pip
-      - name: Install dependencies
       - run: npm run install-build-deps
-      - name: Build and test
       - run: npm run build;
       - run: npm run test;
         env:
