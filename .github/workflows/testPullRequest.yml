@@ -1,0 +1,35 @@
+name: Test PR
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run lint
+      - name: Install prerequisites
+      - run: sudo apt-get install -y git cmake wget
+      - run: sudo apt-get install -y gcc-multilib g++-multilib pkg-config autoconf bison libtool flex zlib1g-dev
+      - run: sudo apt-get install -y python2.7 python-pip
+      - name: Install dependencies
+      - run: npm run install-build-deps
+      - name: Build and test
+      - run: npm run build;
+      - run: npm run test;
+        env:
+          CI: true
