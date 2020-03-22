@@ -15,3 +15,5 @@ ADD_LIBRARY(expat STATIC
     ${EXPAT_LIB_DIR}/xmltok_ns.c
     ${EXPAT_LIB_DIR}/xmltok.c
 )
+
+ADD_SUBDIRECTORY(expatlib)
