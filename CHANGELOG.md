@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.11](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v0.3.10...v0.3.11) (2020-04-06)
+
+
+### Features
+
+* **xml:** Add simple XML parser based on expat ([cafb0f6](https://github.com/hpcc-systems/hpcc-js-wasm/commit/cafb0f6d0ffdbbba78e655e76073868785ab596c))
+
 ### [0.3.10](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v0.3.9...v0.3.10) (2020-03-20)
 
 ### [0.3.9](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v0.3.8...v0.3.9) (2020-03-20)
