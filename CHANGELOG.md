@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.12](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v0.3.11...v0.3.12) (2020-04-10)
+
+
+### Bug Fixes
+
+* __hpcc_wasmFolder override has erroneous "/" char. ([1e4f67e](https://github.com/hpcc-systems/hpcc-js-wasm/commit/1e4f67e26a94f9de6f6b1a7b9ceed85bceed3007))
+
 ### [0.3.11](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v0.3.10...v0.3.11) (2020-04-06)
 
 
