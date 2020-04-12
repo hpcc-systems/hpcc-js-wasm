@@ -55,6 +55,8 @@ SET(sources
     ${GRAPHVIZ_LIB_DIR}/neatogen/stuff.c
     ${GRAPHVIZ_LIB_DIR}/neatogen/stress.c
     ${GRAPHVIZ_LIB_DIR}/neatogen/voronoi.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/sgd.c
+    ${GRAPHVIZ_LIB_DIR}/neatogen/randomkit.c
 
     # with_ipsepcola
     ${GRAPHVIZ_LIB_DIR}/neatogen/constrained_majorization_ipsep.c
