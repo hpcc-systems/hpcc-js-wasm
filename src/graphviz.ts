@@ -19,6 +19,7 @@ interface File {
 interface Ext {
     images?: Image[];
     files?: File[];
+    wasmFolder?: string;
 }
 
 function imageToFile(image: Image): File {
@@ -46,7 +47,7 @@ function createFiles(wasm: any, _ext?: Ext) {
 export const graphviz = {
     layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot", ext?: Ext): Promise<string> {
         if (!dotSource) return Promise.resolve("");
-        return loadWasm(graphvizlib).then(wasm => {
+        return loadWasm(graphvizlib, ext?.wasmFolder).then(wasm => {
             createFiles(wasm, ext);
             const retVal = wasm.Main.prototype.layout(dotSource, outputFormat, layoutEngine);
             if (!retVal) {
@@ -122,6 +123,6 @@ class GraphvizSync {
     }
 }
 
-export function graphvizSync(): Promise<GraphvizSync> {
-    return loadWasm(graphvizlib).then(wasm => new GraphvizSync(wasm));
+export function graphvizSync(wasmFolder?: string): Promise<GraphvizSync> {
+    return loadWasm(graphvizlib, wasmFolder).then(wasm => new GraphvizSync(wasm));
 }
