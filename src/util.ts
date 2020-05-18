@@ -22,14 +22,14 @@ function trimStart(str: string, charToRemove: string) {
     return str;
 }
 
-export function loadWasm(_wasmLib: any): Promise<any> {
+export function loadWasm(_wasmLib: any, wf?: string): Promise<any> {
     const wasmLib = _wasmLib.default || _wasmLib;
     //  Prevent double load ---
     if (!wasmLib.__hpcc_promise) {
         wasmLib.__hpcc_promise = new Promise(resolve => {
             wasmLib({
                 locateFile: (path: string, prefix: string) => {
-                    return `${trimEnd(wasmFolder() || prefix, "/")}/${trimStart(path, "/")}`;
+                    return `${trimEnd(wf || wasmFolder() || prefix || ".", "/")}/${trimStart(path, "/")}`;
                 }
             }).then((instance: any) => {
                 //  Not a real promise, remove "then" to prevent infinite loop  ---

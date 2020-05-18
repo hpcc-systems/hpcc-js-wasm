@@ -43,6 +43,7 @@ If _url_ is specified, sets the default location for all WASM files.  If _url_ i
 
 Global variable for setting default WASM location, this is an alternative to [wasmFolder](#wasmFolder)
 
+---
 ### GraphViz (`graphvizlib.wasm`)
 GraphViz WASM library, see [graphviz.org](https://www.graphviz.org/) for c++ details.  While this package is similar to [Viz.js](https://github.com/mdaines/viz.js), it employs a completely different build methodology taken from [GraphControl](https://github.com/hpcc-systems/GraphControl).
 
@@ -146,7 +147,7 @@ See [Layout manual pages](https://www.graphviz.org/documentation/) for more info
 
 _ext_ optional "extra params":
 
-* _images_: An optional array of 
+* _images_: An optional `array` of 
 ```JavaScript
 {
     path: string;   //  The path for the image.
@@ -154,13 +155,14 @@ _ext_ optional "extra params":
     height: string; //  Height of Image
 }
 ```
-* _files_: An optional array of 
+* _files_: An optional `array` of 
 ```JavaScript
 {
     path: string;   //  The path for the file.
     data: string;   //  The data for the file.
 }
 ```
+* _wasmFolder_: An optional `string` specifying the location of wasm file.
 
 For example passing a web hosted Image to GraphViz:
 ```JavaScript
@@ -202,6 +204,12 @@ Convenience function that performs **patchwork** layout, is equivalent to `layou
 <a name="twopi" href="#twopi">#</a> **twopi**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
 
 Convenience function that performs **twopi** layout, is equivalent to `layout(dotSource, outputFormat, "twopi");`.
+
+<a name="graphvizSync" href="#graphvizSync">#</a> **graphvizSync**([_wasmFolder_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+
+Returns a `Promise<GraphvizSync>`, once resolved provides a synchronous variant of the above methods.  Has an optional `wasmFolder` argument to override the default wasmFolder location.
+
+---
 
 ### Expat (`expatlib.wasm`)
 Expat WASM library, provides a simplified wrapper around the Expat XML Parser library, see [libexpat.github.io](https://libexpat.github.io/) for c++ details.
@@ -254,6 +262,8 @@ Expat WASM library, provides a simplified wrapper around the Expat XML Parser li
 Parses the XML with suitable callbacks.
 
 **Note:** _characterData_ may get called several times for a single tag element.
+
+---
 
 ## Building @hpcc-js/wasm
 _Building is supported on both Linux (tested with Ubuntu 18.04) and Windows with WSL enabled (Ubuntu-18.04).  Building in other environments should work, but may be missing certain prerequisites._
