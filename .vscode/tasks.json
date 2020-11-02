@@ -39,7 +39,10 @@
                 "Bundle Watch",
                 "Web Server"
             ],
-            "group": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "problemMatcher": []
         }
     ]

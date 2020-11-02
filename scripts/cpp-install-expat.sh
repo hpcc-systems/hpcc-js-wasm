@@ -2,10 +2,10 @@
 
 if [ ! -d "src-expat" ] 
 then
-    wget -c https://github.com/libexpat/libexpat/archive/R_2_2_9.tar.gz
+    wget -c https://github.com/libexpat/libexpat/archive/R_2_2_10.tar.gz
     mkdir ./src-expat
-    tar -xzf ./R_2_2_9.tar.gz -C ./src-expat --strip-components=1
-    rm ./R_2_2_9.tar.gz
+    tar -xzf ./R_2_2_10.tar.gz -C ./src-expat --strip-components=1
+    rm ./R_2_2_10.tar.gz
 
     #  Configure  ---
     cd ./src-expat/expat

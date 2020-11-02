@@ -1,14 +1,5 @@
-INCLUDE_DIRECTORIES(
-    ${GRAPHVIZ_LIB_DIR}/gvc
-    ${GRAPHVIZSRC_DIRS}
-    ${GRAPHVIZ_LIB_DIR}/ast
-    ${GRAPHVIZ_LIB_DIR}/cdt
-    ${GRAPHVIZ_LIB_DIR}/cgraph
-    ${GRAPHVIZ_LIB_DIR}/common
-    ${GRAPHVIZ_LIB_DIR}/pathplan
-)
-
-ADD_LIBRARY(gvc STATIC
+add_library(gvc STATIC
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvcext.h
     # Source files
     ${GRAPHVIZ_LIB_DIR}/gvc/gvc.c
     ${GRAPHVIZ_LIB_DIR}/gvc/gvconfig.c
@@ -25,12 +16,21 @@ ADD_LIBRARY(gvc STATIC
     ${GRAPHVIZ_LIB_DIR}/gvc/gvusershape.c
 )
 
-TARGET_LINK_LIBRARIES(gvc
+include_directories(
+    ${GRAPHVIZ_LIB_DIR}
+    ${GRAPHVIZ_LIB_DIR}/gvc
+    ${TOP_SOURCE_DIR}
+    ${GRAPHVIZ_LIB_DIR}/ast
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZ_LIB_DIR}/common
+    ${GRAPHVIZ_LIB_DIR}/pathplan
+)
+
+target_link_libraries(gvc
     cdt
     cgraph
-    common
     label
-    pack
     pathplan
     xdot
     expat

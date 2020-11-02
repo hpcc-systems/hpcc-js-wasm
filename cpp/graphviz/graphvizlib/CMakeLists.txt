@@ -18,6 +18,7 @@ SET(SRCS
 
 INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZ_LIB_DIR}/cdt
     ${GRAPHVIZ_LIB_DIR}/cgraph
     ${GRAPHVIZ_LIB_DIR}/common
@@ -36,7 +37,9 @@ TARGET_LINK_LIBRARIES(graphvizlib
     gvplugin_core
     gvplugin_dot_layout
     gvplugin_neato_layout
+    common
     ortho
+    pack
 )
 
 ADD_EXECUTABLE(graphvizlib.node
@@ -49,7 +52,9 @@ TARGET_LINK_LIBRARIES(graphvizlib.node
     gvplugin_core
     gvplugin_dot_layout
     gvplugin_neato_layout
+    common
     ortho
+    pack
 )
 
 INSTALL(FILES 

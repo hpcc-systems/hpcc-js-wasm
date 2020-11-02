@@ -1,8 +1,4 @@
-INCLUDE_DIRECTORIES(
-    ${GRAPHVIZ_LIB_DIR}/vpsc
-)
-
-ADD_LIBRARY(vpsc STATIC
+add_library(vpsc STATIC
     # Source files
     ${GRAPHVIZ_LIB_DIR}/vpsc/block.cpp
     ${GRAPHVIZ_LIB_DIR}/vpsc/blocks.cpp
@@ -14,3 +10,8 @@ ADD_LIBRARY(vpsc STATIC
     ${GRAPHVIZ_LIB_DIR}/vpsc/solve_VPSC.cpp
     ${GRAPHVIZ_LIB_DIR}/vpsc/variable.cpp
 )
+
+include_directories(
+    ${GRAPHVIZ_LIB_DIR}
+)
+

@@ -1,4 +1,11 @@
-INCLUDE_DIRECTORIES(
+add_library(gvplugin_neato_layout STATIC
+    # Source files
+    ${GRAPHVIZSRC_DIRS}/plugin/neato_layout/gvplugin_neato_layout.c
+    ${GRAPHVIZSRC_DIRS}/plugin/neato_layout/gvlayout_neato_layout.c
+)
+
+include_directories(
+    ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZSRC_DIRS}/plugin/neato_layout
     ${GRAPHVIZ_LIB_DIR}/cdt
     ${GRAPHVIZ_LIB_DIR}/cgraph
@@ -7,13 +14,7 @@ INCLUDE_DIRECTORIES(
     ${GRAPHVIZ_LIB_DIR}/pathplan
 )
 
-ADD_LIBRARY(gvplugin_neato_layout STATIC
-    # Source files
-    ${GRAPHVIZSRC_DIRS}/plugin/neato_layout/gvplugin_neato_layout.c
-    ${GRAPHVIZSRC_DIRS}/plugin/neato_layout/gvlayout_neato_layout.c
-)
-
-TARGET_LINK_LIBRARIES(gvplugin_neato_layout
+target_link_libraries(gvplugin_neato_layout
     cdt
     cgraph
     circogen

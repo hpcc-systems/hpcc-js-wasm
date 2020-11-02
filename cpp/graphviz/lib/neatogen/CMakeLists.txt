@@ -1,21 +1,4 @@
-INCLUDE_DIRECTORIES(
-    ${GRAPHVIZ_LIB_DIR}/neatogen
-    ${GRAPHVIZ_LIB_DIR}/cdt
-    ${GRAPHVIZ_LIB_DIR}/cgraph
-    ${GRAPHVIZ_LIB_DIR}/common
-    ${GRAPHVIZ_LIB_DIR}/gvc
-    ${GRAPHVIZ_LIB_DIR}/ortho
-    ${GRAPHVIZ_LIB_DIR}/pack
-    ${GRAPHVIZ_LIB_DIR}/pathplan
-    ${GRAPHVIZ_LIB_DIR}/rbtree
-    ${GRAPHVIZ_LIB_DIR}/sfdpgen
-    ${GRAPHVIZ_LIB_DIR}/sparse
-
-    # with_ipsepcola
-    ${GRAPHVIZ_LIB_DIR}/vpsc
-)
-
-SET(sources
+set(sources
     # Source files
     ${GRAPHVIZ_LIB_DIR}/neatogen/adjust.c
     ${GRAPHVIZ_LIB_DIR}/neatogen/bfs.c
@@ -65,7 +48,17 @@ SET(sources
     ${GRAPHVIZ_LIB_DIR}/neatogen/quad_prog_vpsc.c
 )
 
-ADD_LIBRARY(neatogen STATIC
+add_library(neatogen STATIC
     ${sources}
+)
+
+include_directories(
+    ${GRAPHVIZ_LIB_DIR}
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZ_LIB_DIR}/common
+    ${GRAPHVIZ_LIB_DIR}/gvc
+    ${GRAPHVIZ_LIB_DIR}/pack
+    ${GRAPHVIZ_LIB_DIR}/pathplan
 )
 

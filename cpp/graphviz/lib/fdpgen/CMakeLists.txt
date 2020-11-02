@@ -1,16 +1,4 @@
-INCLUDE_DIRECTORIES(
-    ${GRAPHVIZ_LIB_DIR}/fdpgen
-    ${GRAPHVIZ_LIB_DIR}/cdt
-    ${GRAPHVIZ_LIB_DIR}/cgraph
-    ${GRAPHVIZ_LIB_DIR}/common
-    ${GRAPHVIZ_LIB_DIR}/gvc
-    ${GRAPHVIZ_LIB_DIR}/neatogen
-    ${GRAPHVIZ_LIB_DIR}/pack
-    ${GRAPHVIZ_LIB_DIR}/pathplan
-    ${GRAPHVIZ_LIB_DIR}/sparse
-)
-
-ADD_LIBRARY(fdpgen STATIC
+add_library(fdpgen STATIC
     # Source files
     ${GRAPHVIZ_LIB_DIR}/fdpgen/clusteredges.c
     ${GRAPHVIZ_LIB_DIR}/fdpgen/comp.c
@@ -22,3 +10,12 @@ ADD_LIBRARY(fdpgen STATIC
     ${GRAPHVIZ_LIB_DIR}/fdpgen/xlayout.c
 )
 
+include_directories(
+    ${GRAPHVIZ_LIB_DIR}
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZ_LIB_DIR}/common
+    ${GRAPHVIZ_LIB_DIR}/gvc
+    ${GRAPHVIZ_LIB_DIR}/pack
+    ${GRAPHVIZ_LIB_DIR}/pathplan
+)

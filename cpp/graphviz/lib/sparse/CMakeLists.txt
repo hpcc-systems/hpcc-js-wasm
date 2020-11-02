@@ -1,12 +1,4 @@
-INCLUDE_DIRECTORIES(
-    ${GRAPHVIZ_LIB_DIR}/sparse
-    ${GRAPHVIZ_LIB_DIR}/cdt
-    ${GRAPHVIZ_LIB_DIR}/cgraph
-    ${GRAPHVIZ_LIB_DIR}/common
-    ${GRAPHVIZ_LIB_DIR}/sfdpgen
-)
-
-ADD_LIBRARY(sparse STATIC
+add_library(sparse STATIC
     # Source files
     ${GRAPHVIZ_LIB_DIR}/sparse/BinaryHeap.c
     ${GRAPHVIZ_LIB_DIR}/sparse/clustering.c
@@ -20,5 +12,12 @@ ADD_LIBRARY(sparse STATIC
     ${GRAPHVIZ_LIB_DIR}/sparse/QuadTree.c
     ${GRAPHVIZ_LIB_DIR}/sparse/SparseMatrix.c
     ${GRAPHVIZ_LIB_DIR}/sparse/vector.c
+)
+
+include_directories(
+    ${GRAPHVIZ_LIB_DIR}
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZ_LIB_DIR}/common
 )
 
