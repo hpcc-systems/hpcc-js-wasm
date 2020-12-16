@@ -37,7 +37,6 @@ export function loadWasm(_wasmLib: any, wf?: string): Promise<any> {
                 resolve(instance);
             });
         });
-
     }
     return wasmLib.__hpcc_promise;
 }
