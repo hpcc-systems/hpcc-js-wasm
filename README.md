@@ -163,6 +163,8 @@ _ext_ optional "extra params":
 }
 ```
 * _wasmFolder_: An optional `string` specifying the location of wasm file.
+* _yInvert_: An optional boolean flag to invert the y coordinate in generic output formats (dot, xdot, plain, plain-ext).  This is equivalent to specifying -y when invoking Graphviz from the command-line. 
+* _nop_: An optional number to specify "No layout" mode for the neato engine.  This is equivalent to specifying the -n option when invoking Graphviz from the command-line.
 
 For example passing a web hosted Image to GraphViz:
 ```JavaScript

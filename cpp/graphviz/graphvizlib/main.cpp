@@ -1,6 +1,7 @@
 #include "main.hpp"
 
 #include <gvc.h>
+#include <globals.h>
 
 extern gvplugin_library_t gvplugin_core_LTX_library;
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
@@ -57,6 +58,17 @@ const char *Main::layout(const char *src, const char *format, const char *engine
 const char *Main::lastError()
 {
     return errorMessage;
+}
+
+void Main::setYInvert(int yInvert)
+{
+    Y_invert = yInvert;
+}
+
+void Main::setNop(int nop)
+{
+    if (nop != 0)
+        Nop = nop;
 }
 
 //  Patch for invalid osage function  ---
