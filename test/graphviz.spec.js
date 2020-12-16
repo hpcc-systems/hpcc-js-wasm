@@ -136,7 +136,7 @@ describe("graphvizSync", function () {
             graphviz = gv;
             expect(graphviz).to.exist;
         });
-    })
+    });
     it("circo", function () {
         const svg = graphviz.circo(dot, "svg");
         expect(svg).to.be.a("string");
@@ -207,5 +207,24 @@ describe("bad dot", function () {
             expect(e.message).to.not.be.empty;
         }
         expect(success).to.be.false;
+    });
+});
+
+describe("yInvert", function () {
+    let graphviz;
+    let plain1;
+    let plain2;
+    it("create", function () {
+        return hpccWasm.graphvizSync().then(gv => {
+            graphviz = gv;
+            expect(graphviz).to.exist;
+        });
+    });
+    it("compare", function () {
+        const plain1 = graphviz.dot(dot, "plain");
+        const plain2 = graphviz.dot(dot, "plain", { yInvert: false });
+        const plain3 = graphviz.dot(dot, "plain", { yInvert: true });
+        expect(plain1).to.equal(plain2);
+        expect(plain1).to.not.equal(plain3);
     });
 });

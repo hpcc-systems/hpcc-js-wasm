@@ -20,6 +20,8 @@ interface Ext {
     images?: Image[];
     files?: File[];
     wasmFolder?: string;
+    yInvert?: boolean;
+    nop?: number;
 }
 
 function imageToFile(image: Image): File {
@@ -49,6 +51,8 @@ export const graphviz = {
         if (!dotSource) return Promise.resolve("");
         return loadWasm(graphvizlib, ext?.wasmFolder).then(wasm => {
             createFiles(wasm, ext);
+            wasm.Main.prototype.setYInvert(ext?.yInvert ? 1 : 0);
+            wasm.Main.prototype.setNop(ext?.nop ? ext?.nop : 0);
             const retVal = wasm.Main.prototype.layout(dotSource, outputFormat, layoutEngine);
             if (!retVal) {
                 throw new Error(wasm.Main.prototype.lastError());
@@ -87,6 +91,8 @@ class GraphvizSync {
     layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot", ext?: Ext): string {
         if (!dotSource) return "";
         createFiles(this._wasm, ext);
+        this._wasm.Main.prototype.setYInvert(ext?.yInvert ? 1 : 0);
+        this._wasm.Main.prototype.setNop(ext?.nop ? ext?.nop : 0);
         const retVal = this._wasm.Main.prototype.layout(dotSource, outputFormat, layoutEngine);
         if (!retVal) {
             throw new Error(this._wasm.Main.prototype.lastError());
