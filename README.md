@@ -35,11 +35,11 @@ npm install --save @hpcc-js/wasm
 ### Common
 Utility functions relating to @hpcc-js/wasm as a package
 
-<a name="wasmFolder" href="#wasmFolder">#</a> **wasmFolder**([_url_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/util.ts "Source")
+<a name="wasmFolder" href="#wasmFolder">#</a> **wasmFolder**([_url_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/util.ts "Source")
 
 If _url_ is specified, sets the default location for all WASM files.  If _url_ is not specified it returns the current _url_ (defaults to `undefined`).
 
-<a name="__hpcc_wasmFolder" href="#__hpcc_wasmFolder">#</a> **__hpcc_wasmFolder** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/util.ts "Source")
+<a name="__hpcc_wasmFolder" href="#__hpcc_wasmFolder">#</a> **__hpcc_wasmFolder** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/util.ts "Source")
 
 Global variable for setting default WASM location, this is an alternative to [wasmFolder](#wasmFolder)
 
@@ -121,7 +121,7 @@ The _GraphViz_ library comes in **two** flavours
 
 #### GraphViz API
 
-<a name="layout" href="#layout">#</a> **layout**(_dotSource_[, _outputFormat_][, _layoutEngine_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="layout" href="#layout">#</a> **layout**(_dotSource_[, _outputFormat_][, _layoutEngine_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
 
 Performs layout for the supplied _dotSource_, see [The DOT Language](https://graphviz.gitlab.io/_pages/doc/info/lang.html) for specification.  
 
@@ -179,35 +179,35 @@ hpccWasm.graphviz.layout('digraph { a[image="https://.../image.png"]; }', "svg",
 }).catch(err => console.error(err.message));
 ```
 
-<a name="circo" href="#circo">#</a> **circo**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="circo" href="#circo">#</a> **circo**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
 
 Convenience function that performs **circo** layout, is equivalent to `layout(dotSource, outputFormat, "circo");`.
 
-<a name="dot" href="#dot">#</a> **dot**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="dot" href="#dot">#</a> **dot**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
 
 Convenience function that performs **dot** layout, is equivalent to `layout(dotSource, outputFormat, "dot");`.
 
-<a name="fdp" href="#fdp">#</a> **fdp**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="fdp" href="#fdp">#</a> **fdp**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
 
 Convenience function that performs **circo** layout, is equivalent to `layout(dotSource, outputFormat, "fdp");`.
 
-<a name="neato" href="#neato">#</a> **neato**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="neato" href="#neato">#</a> **neato**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
 
 Convenience function that performs **neato** layout, is equivalent to `layout(dotSource, outputFormat, "neato");`.
 
-<a name="osage" href="#osage">#</a> **osage**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="osage" href="#osage">#</a> **osage**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
 
 Convenience function that performs **osage** layout, is equivalent to `layout(dotSource, outputFormat, "osage");`.
 
-<a name="patchwork" href="#patchwork">#</a> **patchwork**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="patchwork" href="#patchwork">#</a> **patchwork**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
 
 Convenience function that performs **patchwork** layout, is equivalent to `layout(dotSource, outputFormat, "patchwork");`.
 
-<a name="twopi" href="#twopi">#</a> **twopi**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="twopi" href="#twopi">#</a> **twopi**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
 
 Convenience function that performs **twopi** layout, is equivalent to `layout(dotSource, outputFormat, "twopi");`.
 
-<a name="graphvizSync" href="#graphvizSync">#</a> **graphvizSync**([_wasmFolder_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/graphviz.ts "Source")
+<a name="graphvizSync" href="#graphvizSync">#</a> **graphvizSync**([_wasmFolder_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
 
 Returns a `Promise<GraphvizSync>`, once resolved provides a synchronous variant of the above methods.  Has an optional `wasmFolder` argument to override the default wasmFolder location.
 
@@ -253,7 +253,7 @@ Expat WASM library, provides a simplified wrapper around the Expat XML Parser li
 
 #### Expat API
 
-<a name="parse" href="#parse">#</a> **parse**(_xml_, _callback_) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/master/src/expat.ts "Source")
+<a name="parse" href="#parse">#</a> **parse**(_xml_, _callback_) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/expat.ts "Source")
 
 * **_xml_**:  XML String.
 * **_callback_**:  Callback Object with the following methods:

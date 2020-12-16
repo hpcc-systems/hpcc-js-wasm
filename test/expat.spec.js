@@ -44,7 +44,6 @@ describe("expat", function () {
     it("parse", function () {
         const callback = new KeywordParser();
         return hpccWasm.parse(encodedXml(), callback).then(response => {
-            console.log(response, callback._json);
             expect(response).to.be.true;
         });
     });
