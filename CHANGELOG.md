@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.15](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v0.3.14...v0.3.15) (2020-12-16)
+
+
+### Features
+
+*  Add support for yInvert and nop ([2e34ce5](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2e34ce5c32134ceb2fdc6f305138107e952f5adf))
+
 ### [0.3.14](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v0.3.13...v0.3.14) (2020-05-18)
 
 
