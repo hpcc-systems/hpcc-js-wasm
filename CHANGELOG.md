@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.0.0...v1.0.1) (2020-12-17)
+
+
+### Bug Fixes
+
+*  Separate NodeJS module from Browser module ([932dba5](https://github.com/hpcc-systems/hpcc-js-wasm/commit/932dba54c8d261b4dc78abcea3ea0e80ed614964))
+
 ## [1.0.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v0.3.15...v1.0.0) (2020-12-17)
 
 
