@@ -59,7 +59,7 @@ The _GraphViz_ library comes in **two** flavours
 <head>
     <meta charset="UTF-8">
     <title>GraphViz WASM</title>
-    <script src="https://unpkg.com/@hpcc-js/wasm/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.min.js"></script>
     <script>
         var hpccWasm = window["@hpcc-js/wasm"];
     </script>
@@ -268,7 +268,7 @@ Parses the XML with suitable callbacks.
 ---
 
 ## Building @hpcc-js/wasm
-_Building is supported on both Linux (tested with Ubuntu 18.04) and Windows with WSL enabled (Ubuntu-18.04).  Building in other environments should work, but may be missing certain prerequisites._
+_Building is supported on both Linux (tested with Ubuntu 20.04) and Windows with WSL enabled (Ubuntu-20.04).  Building in other environments should work, but may be missing certain prerequisites._
 
 These are then known required OS dependencies:
 ```
