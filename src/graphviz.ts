@@ -2,7 +2,7 @@
 import * as graphvizlib from "../build/graphviz/graphvizlib/graphvizlib";
 import { loadWasm } from "./util";
 
-type Format = "svg" | "dot" | "json" | "dot_json" | "xdot_json";
+type Format = "svg" | "dot" | "json" | "dot_json" | "xdot_json" | "plain" | "plain-ext";
 type Engine = "circo" | "dot" | "fdp" | "neato" | "osage" | "patchwork" | "twopi";
 
 interface Image {
@@ -83,7 +83,7 @@ export const graphviz = {
     }
 };
 
-class GraphvizSync {
+export class GraphvizSync {
 
     constructor(private _wasm: any) {
     }

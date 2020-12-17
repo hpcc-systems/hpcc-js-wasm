@@ -1,3 +1,6 @@
+import { expect } from "chai";
+import { graphviz, graphvizSync, GraphvizSync } from "../graphviz";
+
 const dot = `
 digraph G {
     node [shape=rect];
@@ -64,7 +67,7 @@ digraph G {
 
 describe("graphviz", function () {
     it("circo", function () {
-        return hpccWasm.graphviz.circo(dot, "svg").then(svg => {
+        return graphviz.circo(dot, "svg").then(svg => {
             expect(svg).to.be.a("string");
             expect(svg).to.not.be.empty;
         }).catch(e => {
@@ -72,7 +75,7 @@ describe("graphviz", function () {
         });
     });
     it("dot", function () {
-        return hpccWasm.graphviz.dot(dot, "svg").then(svg => {
+        return graphviz.dot(dot, "svg").then(svg => {
             expect(svg).to.be.a("string");
             expect(svg).to.not.be.empty;
         }).catch(e => {
@@ -80,7 +83,7 @@ describe("graphviz", function () {
         });
     });
     it("blank-dot", function () {
-        return hpccWasm.graphviz.dot("", "svg").then(svg => {
+        return graphviz.dot("", "svg").then(svg => {
             expect(svg).to.be.a("string");
             expect(svg).to.be.empty;
         }).catch(e => {
@@ -88,7 +91,7 @@ describe("graphviz", function () {
         });
     });
     it("fdp", function () {
-        return hpccWasm.graphviz.fdp(dot, "svg").then(svg => {
+        return graphviz.fdp(dot, "svg").then(svg => {
             expect(svg).to.be.a("string");
             expect(svg).to.not.be.empty;
         }).catch(e => {
@@ -96,7 +99,7 @@ describe("graphviz", function () {
         });
     });
     it("neato", function () {
-        return hpccWasm.graphviz.neato(dot, "svg").then(svg => {
+        return graphviz.neato(dot, "svg").then(svg => {
             expect(svg).to.be.a("string");
             expect(svg).to.not.be.empty;
         }).catch(e => {
@@ -104,7 +107,7 @@ describe("graphviz", function () {
         });
     });
     it("osage", function () {
-        return hpccWasm.graphviz.osage(dot, "svg").then(svg => {
+        return graphviz.osage(dot, "svg").then(svg => {
             expect(svg).to.be.a("string");
             expect(svg).to.not.be.empty;
         }).catch(e => {
@@ -112,7 +115,7 @@ describe("graphviz", function () {
         });
     });
     it("patchwork", function () {
-        return hpccWasm.graphviz.patchwork(dot, "svg").then(svg => {
+        return graphviz.patchwork(dot, "svg").then(svg => {
             expect(svg).to.be.a("string");
             expect(svg).to.not.be.empty;
         }).catch(e => {
@@ -120,7 +123,7 @@ describe("graphviz", function () {
         });
     });
     it("twopi", function () {
-        return hpccWasm.graphviz.twopi(dot, "svg").then(svg => {
+        return graphviz.twopi(dot, "svg").then(svg => {
             expect(svg).to.be.a("string");
             expect(svg).to.not.be.empty;
         }).catch(e => {
@@ -130,50 +133,50 @@ describe("graphviz", function () {
 });
 
 describe("graphvizSync", function () {
-    let graphviz;
+    let gvSync: GraphvizSync;
     it("create", function () {
-        return hpccWasm.graphvizSync().then(gv => {
-            graphviz = gv;
-            expect(graphviz).to.exist;
+        return graphvizSync().then(gv => {
+            gvSync = gv;
+            expect(gvSync).to.exist;
         });
     });
     it("circo", function () {
-        const svg = graphviz.circo(dot, "svg");
+        const svg = gvSync.circo(dot, "svg");
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
     });
     it("dot", function () {
-        const svg = graphviz.dot(dot, "svg");
+        const svg = gvSync.dot(dot, "svg");
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
     });
     it("dot-blank", function () {
-        const svg = graphviz.dot("", "svg");
+        const svg = gvSync.dot("", "svg");
         expect(svg).to.be.a("string");
         expect(svg).to.be.empty;
     });
     it("fdp", function () {
-        const svg = graphviz.fdp(dot, "svg");
+        const svg = gvSync.fdp(dot, "svg");
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
     });
     it("neato", function () {
-        const svg = graphviz.neato(dot, "svg");
+        const svg = gvSync.neato(dot, "svg");
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
     });
     it("osage", function () {
-        const svg = graphviz.osage(dot, "svg");
+        const svg = gvSync.osage(dot, "svg");
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
     });
     it("patchwork", function () {
-        const svg = graphviz.patchwork(dot, "svg");
+        const svg = gvSync.patchwork(dot, "svg");
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
     });
     it("twopi", function () {
-        const svg = graphviz.twopi(dot, "svg")
+        const svg = gvSync.twopi(dot, "svg");
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
     });
@@ -181,29 +184,29 @@ describe("graphvizSync", function () {
 
 describe("bad dot", function () {
     it("dot", function () {
-        return hpccWasm.graphviz.dot(badDot, "svg").then(svg => {
+        return graphviz.dot(badDot, "svg").then(svg => {
             expect(true).to.be.false;
         }).catch(e => {
-            expect(e.message).to.be.a.string;
+            expect(typeof e.message).to.equal("string");
             expect(e.message).to.not.be.empty;
         });
     });
 
-    let graphviz;
+    let gvSync: GraphvizSync;
     it("create", function () {
-        return hpccWasm.graphvizSync().then(gv => {
-            graphviz = gv;
-            expect(graphviz).to.exist;
+        return graphvizSync().then(gv => {
+            gvSync = gv;
+            expect(gvSync).to.exist;
         });
-    })
+    });
     it("dotSync", function () {
         let success;
         try {
-            const svg = graphviz.dot(badDot, "svg");
+            const svg = gvSync.dot(badDot, "svg");
             success = true;
         } catch (e) {
             success = false;
-            expect(e.message).to.be.a.string;
+            expect(typeof e.message).to.equal("string");
             expect(e.message).to.not.be.empty;
         }
         expect(success).to.be.false;
@@ -211,19 +214,19 @@ describe("bad dot", function () {
 });
 
 describe("yInvert", function () {
-    let graphviz;
-    let plain1;
-    let plain2;
+    let gvSync: GraphvizSync;
+
     it("create", function () {
-        return hpccWasm.graphvizSync().then(gv => {
-            graphviz = gv;
-            expect(graphviz).to.exist;
+        return graphvizSync().then(gv => {
+            gvSync = gv;
+            expect(gvSync).to.exist;
         });
     });
+
     it("compare", function () {
-        const plain1 = graphviz.dot(dot, "plain");
-        const plain2 = graphviz.dot(dot, "plain", { yInvert: false });
-        const plain3 = graphviz.dot(dot, "plain", { yInvert: true });
+        const plain1 = gvSync.dot(dot, "plain");
+        const plain2 = gvSync.dot(dot, "plain", { yInvert: false });
+        const plain3 = gvSync.dot(dot, "plain", { yInvert: true });
         expect(plain1).to.equal(plain2);
         expect(plain1).to.not.equal(plain3);
     });
