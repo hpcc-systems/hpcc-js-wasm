@@ -37,7 +37,7 @@
     "bundle-watch": "npm run bundle -- -w",
     "minimize": "terser dist/index.js -c -m --source-map -o dist/index.min.js",
     "build": "run-s compile-cpp compile-es6 bundle minimize",
-    "build-ubuntu-dev": "docker build --rm -f \"./test/ubuntu-dev.dockerfile\" -t ubuntu-dev:latest \".\"",
+    "build-ubuntu-dev": "docker build --rm -f \"./docker/ubuntu-dev.dockerfile\" -t ubuntu-dev:latest \".\"",
     "standard-version": "standard-version",
     "standard-version-dryrun": "standard-version --dry-run",
     "git-push": "git push --follow-tags upstream trunk",
