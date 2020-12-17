@@ -2,8 +2,10 @@
   "name": "@hpcc-js/wasm",
   "version": "1.0.0",
   "description": "hpcc-js - WASM Libraries",
-  "main": "dist/index.js",
+  "main": "dist/index.node.js",
   "module": "dist/index.es6",
+  "module-node": "dist/index.node.es6",
+  "browser": "dist/index.js",
   "unpkg": "dist/index.min.js",
   "types": "types/index.d.ts",
   "files": [
@@ -46,7 +48,7 @@
     "lint": "tslint --project . src/**/*.ts",
     "mocha-test": "mocha-chrome http://localhost:8000/test.html",
     "test-chrome": "run-p -r dev-start mocha-test",
-    "test-node": "./node_modules/.bin/mocha ./dist/test.js --reporter spec",
+    "test-node": "./node_modules/.bin/mocha ./dist/test.node.js --reporter spec",
     "test": "run-p test-chrome test-node",
     "tag": "run-s standard-version git-push"
   },
@@ -55,6 +57,7 @@
     "@rollup/plugin-alias": "^3.1.1",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.1",
+    "@rollup/plugin-replace": "^2.3.4",
     "@types/chai": "^4.2.14",
     "@types/mocha": "^8.2.0",
     "chai": "^4.2.0",

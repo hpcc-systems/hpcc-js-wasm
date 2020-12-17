@@ -1,7 +1,6 @@
 PROJECT(graphvizlib)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s WASM=1 -s INVOKE_RUN=0 -s ENVIRONMENT=node,web -s ALLOW_MEMORY_GROWTH=1")
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s MODULARIZE=1 -s EXPORT_NAME='${CMAKE_PROJECT_NAME}'")
+SET(EM_FLAGS "-s WASM=1 -s INVOKE_RUN=0 -s ALLOW_MEMORY_GROWTH=1 -s MODULARIZE=1 -s EXPORT_NAME='${CMAKE_PROJECT_NAME}' --post-js ${CMAKE_CURRENT_BINARY_DIR}/main_glue.js")
 
 #  Generate Glue from IDL file  ---
 ADD_CUSTOM_COMMAND(
@@ -10,7 +9,6 @@ ADD_CUSTOM_COMMAND(
     COMMAND python ${CMAKE_BINARY_DIR}/../emsdk/upstream/emscripten/tools/webidl_binder.py ${CMAKE_CURRENT_SOURCE_DIR}/main.idl ${CMAKE_CURRENT_BINARY_DIR}/main_glue
 )
 SET_PROPERTY(SOURCE main.cpp APPEND PROPERTY OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/main_glue.cpp)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --post-js ${CMAKE_CURRENT_BINARY_DIR}/main_glue.js")
 #  ---  ---  ---
 
 SET(SRCS
@@ -32,7 +30,22 @@ ADD_EXECUTABLE(graphvizlib
     ${SRCS}
 )
 
+SET_TARGET_PROPERTIES(graphvizlib PROPERTIES LINK_FLAGS "-s ENVIRONMENT=web ${EM_FLAGS}")
+
 TARGET_LINK_LIBRARIES(graphvizlib
+    gvplugin_core
+    gvplugin_dot_layout
+    gvplugin_neato_layout
+    ortho
+)
+
+ADD_EXECUTABLE(graphvizlib.node
+    ${SRCS}
+)
+
+SET_TARGET_PROPERTIES(graphvizlib.node PROPERTIES LINK_FLAGS "-s ENVIRONMENT=node ${EM_FLAGS}")
+
+TARGET_LINK_LIBRARIES(graphvizlib.node
     gvplugin_core
     gvplugin_dot_layout
     gvplugin_neato_layout
