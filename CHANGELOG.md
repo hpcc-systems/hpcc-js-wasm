@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v0.3.15...v1.0.0) (2020-12-17)
+
+
+### Features
+
+* **graphviz:**  Bump version to 2.44.1 ([e07624b](https://github.com/hpcc-systems/hpcc-js-wasm/commit/e07624b56d54004d3b3de5bc9ee60ad399b13daa))
+*  Add support for Node JS ([d558687](https://github.com/hpcc-systems/hpcc-js-wasm/commit/d558687cca672df2fe8715b17da65025c7f96b2a))
+
+
+### Bug Fixes
+
+*  Dock path typo ([9b217c8](https://github.com/hpcc-systems/hpcc-js-wasm/commit/9b217c870486f5afe2ff7523adb8db0e94e5aa0f))
+
 ### [0.3.15](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v0.3.14...v0.3.15) (2020-12-16)
 
 
