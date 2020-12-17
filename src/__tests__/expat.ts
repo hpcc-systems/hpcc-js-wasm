@@ -1,21 +1,28 @@
+import { expect } from "chai";
+import { Attributes, parse, StackParser } from "../expat";
+
 class Cat {
 
-    constructor(groupID) {
+    _groupID: string;
+    _keywords: string[];
+
+    constructor(groupID: string) {
         this._groupID = groupID;
         this._keywords = [];
     }
 
-    appendKeyword(keyword) {
+    appendKeyword(keyword: string) {
         this._keywords.push(keyword);
     }
 }
 
-class KeywordParser extends hpccWasm.StackParser {
-    currCat;
-    _json = {};
+class KeywordParser extends StackParser {
 
-    startElement(tag, attrs) {
-        super.startElement(tag, attrs);
+    currCat: any;
+    _json: any = {};
+
+    startElement(tag: string, attrs: Attributes) {
+        const retVal = super.startElement(tag, attrs);
         switch (tag) {
             case "cat":
                 this.currCat = `keyword_${attrs["group"]}`;
@@ -25,31 +32,32 @@ class KeywordParser extends hpccWasm.StackParser {
                 this._json[this.currCat].push(attrs["name"]);
                 break;
         }
+        return retVal;
     }
 }
 
 describe("expat", function () {
     it("simple", function () {
         const xml = "<root><child xxx=\"yyy\">content</child></root>";
-        var callback = {
-            startElement(tag, attrs) { console.log("start", tag, attrs); },
-            endElement(tag) { console.log("end", tag); },
-            characterData(content) { console.log("characterData", content); }
+        const callback = {
+            startElement(tag: string, attrs: Attributes) { console.log("start", tag, attrs); },
+            endElement(tag: string) { console.log("end", tag); },
+            characterData(content: string) { console.log("characterData", content); }
         };
-        return hpccWasm.parse(xml, callback).then(response => {
+        return parse(xml, callback).then(response => {
             expect(response).to.be.true;
         });
     });
 
     it("parse", function () {
         const callback = new KeywordParser();
-        return hpccWasm.parse(encodedXml(), callback).then(response => {
+        return parse(encodedXml(), callback).then(response => {
             expect(response).to.be.true;
         });
     });
 });
 
-function encodedXml(str) {
+function encodedXml() {
     return xml()
         .split("&").join("&amp;")
         .split("\"<").join("\"&lt;")

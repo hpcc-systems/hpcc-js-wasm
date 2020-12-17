@@ -5,7 +5,7 @@ import sourcemaps from 'rollup-plugin-sourcemaps';
 
 const pkg = require("./package.json");
 
-export default {
+export default [{
     input: "lib-es6/index",
     output: [{
         file: pkg.main,
@@ -28,4 +28,22 @@ export default {
         }),
         sourcemaps()
     ]
-};
+}, {
+    input: "lib-es6/__tests__/index",
+    output: [{
+        file: "dist/test.js",
+        format: "umd",
+        sourcemap: true,
+        name: pkg.name
+    }],
+    plugins: [
+        alias({
+        }),
+        nodeResolve({
+            preferBuiltins: true
+        }),
+        commonjs({
+        }),
+        sourcemaps()
+    ]
+}];
