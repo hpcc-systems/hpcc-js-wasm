@@ -6,7 +6,7 @@ SET(EM_FLAGS "-s WASM=1 -s INVOKE_RUN=0 -s ALLOW_MEMORY_GROWTH=1 -s MODULARIZE=1
 ADD_CUSTOM_COMMAND(
     MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/main.idl
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/main_glue.js ${CMAKE_CURRENT_BINARY_DIR}/main_glue.cpp
-    COMMAND python ${CMAKE_BINARY_DIR}/../emsdk/upstream/emscripten/tools/webidl_binder.py ${CMAKE_CURRENT_SOURCE_DIR}/main.idl ${CMAKE_CURRENT_BINARY_DIR}/main_glue
+    COMMAND python3 ${CMAKE_BINARY_DIR}/../emsdk/upstream/emscripten/tools/webidl_binder.py ${CMAKE_CURRENT_SOURCE_DIR}/main.idl ${CMAKE_CURRENT_BINARY_DIR}/main_glue
 )
 SET_PROPERTY(SOURCE main.cpp APPEND PROPERTY OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/main_glue.cpp)
 #  ---  ---  ---
