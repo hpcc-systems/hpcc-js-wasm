@@ -257,7 +257,7 @@ Expat WASM library, provides a simplified wrapper around the Expat XML Parser li
 
 * **_xml_**:  XML String.
 * **_callback_**:  Callback Object with the following methods:
-    * **startElement**(_tag_: string, _attrs_: {[key: string]: string]): void;
+    * **startElement**(_tag_: string, _attrs_: {[key: string]: string}): void;
     * **endElement**(_tag_: string): void;
     * **characterData**(_content_: string): void;
 
