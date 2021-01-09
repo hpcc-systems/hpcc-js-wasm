@@ -1,9 +1,10 @@
-import alias from '@rollup/plugin-alias';
-import commonjs from '@rollup/plugin-commonjs';
-import nodeResolve from '@rollup/plugin-node-resolve';
-import sourcemaps from 'rollup-plugin-sourcemaps';
-import replace from '@rollup/plugin-replace';
+import alias from "@rollup/plugin-alias";
+import commonjs from "@rollup/plugin-commonjs";
+import nodeResolve from "@rollup/plugin-node-resolve";
+import sourcemaps from "rollup-plugin-sourcemaps";
+import replace from "@rollup/plugin-replace";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const pkg = require("./package.json");
 
 export default [{
@@ -19,13 +20,11 @@ export default [{
         sourcemap: true
     }],
     plugins: [
-        alias({
-        }),
+        alias({}),
         nodeResolve({
             preferBuiltins: true
         }),
-        commonjs({
-        }),
+        commonjs({}),
         sourcemaps()
     ]
 }, {
@@ -54,8 +53,7 @@ export default [{
         nodeResolve({
             preferBuiltins: true
         }),
-        commonjs({
-        }),
+        commonjs({}),
         sourcemaps()
     ]
 }, {
@@ -67,13 +65,11 @@ export default [{
         name: pkg.name
     },
     plugins: [
-        alias({
-        }),
+        alias({}),
         nodeResolve({
             preferBuiltins: true
         }),
-        commonjs({
-        }),
+        commonjs({}),
         sourcemaps()
     ]
 }, {
@@ -98,8 +94,7 @@ export default [{
         nodeResolve({
             preferBuiltins: true
         }),
-        commonjs({
-        }),
+        commonjs({}),
         sourcemaps()
     ]
 }];

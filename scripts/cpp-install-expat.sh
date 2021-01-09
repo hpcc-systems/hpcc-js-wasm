@@ -16,7 +16,7 @@ then
     mkdir ./build
     cd ./build
     cmake ..
-    cmake --build . -- -j7
+    cmake --build . -- -j
     cd ..
 
     cd ../..
