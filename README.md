@@ -270,16 +270,16 @@ Parses the XML with suitable callbacks.
 ## Building @hpcc-js/wasm
 _Building is supported on both Linux (tested with Ubuntu 20.04) and Windows with WSL enabled (Ubuntu-20.04).  Building in other environments should work, but may be missing certain prerequisites._
 
-These are then known required OS dependencies:
+These are then known required OS dependencies (see [./docker/ubuntu-dev.dockerfile](./docker/ubuntu-dev.dockerfile) for test script):
 ```
 sudo apt-get install -y curl
-sudo curl --silent --location https://deb.nodesource.com/setup_12.x | sudo bash -
+sudo curl --silent --location https://deb.nodesource.com/setup_14.x | sudo bash -
 sudo apt-get install -y nodejs
 sudo apt-get install -y build-essential
 
 sudo apt-get install -y git cmake wget
 sudo apt-get install -y gcc-multilib g++-multilib pkg-config autoconf bison libtool flex zlib1g-dev 
-sudo apt-get install -y python2.7 python-pip
+sudo apt-get install -y python3 python3-pip
 ```
 
 ### Build steps:
