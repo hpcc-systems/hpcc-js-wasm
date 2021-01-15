@@ -15,7 +15,7 @@ RUN apt-get install -y build-essential
 ## Other
 RUN apt-get install -y git cmake wget
 RUN apt-get install -y gcc-multilib g++-multilib pkg-config autoconf bison libtool flex zlib1g-dev 
-RUN apt-get install -y python3 python3-pip
+RUN apt-get install -y python2.7 python3 python3-pip
 
 # Set the working directory
 WORKDIR /usr/src/app
