@@ -1,10 +1,5 @@
-INCLUDE_DIRECTORIES(
-    ${GRAPHVIZ_LIB_DIR}/cgraph
-    ${GRAPHVIZSRC_DIRS}/build/lib/cgraph
-    ${GRAPHVIZ_LIB_DIR}/cdt
-)
 
-ADD_LIBRARY(cgraph STATIC
+add_library(cgraph STATIC
     # Source files
     ${GRAPHVIZ_LIB_DIR}/cgraph/agerror.c
     ${GRAPHVIZ_LIB_DIR}/cgraph/agxbuf.c
@@ -31,4 +26,12 @@ ADD_LIBRARY(cgraph STATIC
     ${GRAPHVIZSRC_DIRS}/build/lib/cgraph/scan.c
 )
 
-TARGET_LINK_LIBRARIES(cgraph cdt)
+include_directories(
+    ${GRAPHVIZ_LIB_DIR}
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZSRC_DIRS}/build/lib/cgraph
+)
+
+target_link_libraries(cgraph cdt)
+

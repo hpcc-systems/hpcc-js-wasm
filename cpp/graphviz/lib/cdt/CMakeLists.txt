@@ -1,6 +1,5 @@
-INCLUDE_DIRECTORIES(${GRAPHVIZ_LIB_DIR}/cdt)
 
-ADD_LIBRARY(cdt STATIC
+add_library(cdt STATIC
     # Source files
     ${GRAPHVIZ_LIB_DIR}/cdt/dtclose.c
     ${GRAPHVIZ_LIB_DIR}/cdt/dtdisc.c
@@ -20,3 +19,7 @@ ADD_LIBRARY(cdt STATIC
     ${GRAPHVIZ_LIB_DIR}/cdt/dtwalk.c
 )
 
+include_directories(cdt
+    ${GRAPHVIZ_LIB_DIR}
+    ${GRAPHVIZ_LIB_DIR}/cdt
+)

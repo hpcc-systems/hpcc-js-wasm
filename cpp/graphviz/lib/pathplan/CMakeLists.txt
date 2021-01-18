@@ -1,8 +1,4 @@
-ADD_DEFINITIONS(-D_BLD_pathplan -DPATHPLAN_EXPORTS)
-
-INCLUDE_DIRECTORIES(${GRAPHVIZ_LIB_DIR}/pathplan)
-
-ADD_LIBRARY(pathplan STATIC
+add_library(pathplan STATIC
     # Source files
     ${GRAPHVIZ_LIB_DIR}/pathplan/cvt.c
     ${GRAPHVIZ_LIB_DIR}/pathplan/inpoly.c
@@ -15,3 +11,7 @@ ADD_LIBRARY(pathplan STATIC
     ${GRAPHVIZ_LIB_DIR}/pathplan/visibility.c
 )
 
+include_directories(
+    ${GRAPHVIZ_LIB_DIR}
+    ${GRAPHVIZ_LIB_DIR}/pathplan
+)

@@ -1,20 +1,6 @@
 PROJECT(common)
 
-INCLUDE_DIRECTORIES(
-    ${GRAPHVIZ_LIB_DIR}/common
-    ${GRAPHVIZSRC_DIRS}/build/lib/common
-    ${EXPATSRC_DIRS}/expat/lib
-    ${GRAPHVIZ_LIB_DIR}/cdt
-    ${GRAPHVIZ_LIB_DIR}/cgraph
-    ${GRAPHVIZ_LIB_DIR}/gvc
-    ${GRAPHVIZ_LIB_DIR}/label
-    ${GRAPHVIZ_LIB_DIR}/pack
-    ${GRAPHVIZ_LIB_DIR}/pathplan
-    ${GRAPHVIZ_LIB_DIR}/fdpgen
-    ${GRAPHVIZ_LIB_DIR}/xdot
-)
-
-ADD_LIBRARY(common STATIC
+add_library(common STATIC
     # Source files
     ${GRAPHVIZ_LIB_DIR}/common/args.c
     ${GRAPHVIZ_LIB_DIR}/common/arrows.c
@@ -41,8 +27,21 @@ ADD_LIBRARY(common STATIC
     ${GRAPHVIZ_LIB_DIR}/common/textspan.c
     ${GRAPHVIZ_LIB_DIR}/common/timing.c
     ${GRAPHVIZ_LIB_DIR}/common/utils.c
-    
+
     # Generated files
     ${GRAPHVIZSRC_DIRS}/build/lib/common/htmlparse.c
+)
+
+include_directories(
+    ${GRAPHVIZ_LIB_DIR}
+    ${GRAPHVIZ_LIB_DIR}/common
+    ${GRAPHVIZ_BIN_DIR}/common
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZ_LIB_DIR}/gvc
+    ${GRAPHVIZ_LIB_DIR}/pack
+    ${GRAPHVIZ_LIB_DIR}/pathplan
+    ${GRAPHVIZ_LIB_DIR}/xdot
+    ${EXPATSRC_DIRS}/expat/lib
 )
 

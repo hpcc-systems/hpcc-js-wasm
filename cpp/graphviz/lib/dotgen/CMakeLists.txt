@@ -1,15 +1,5 @@
-INCLUDE_DIRECTORIES(
-    ${GRAPHVIZ_LIB_DIR}/dotgen
-    ${GRAPHVIZ_LIB_DIR}/cdt
-    ${GRAPHVIZ_LIB_DIR}/cgraph
-    ${GRAPHVIZ_LIB_DIR}/common
-    ${GRAPHVIZ_LIB_DIR}/gvc
-    ${GRAPHVIZ_LIB_DIR}/ortho
-    ${GRAPHVIZ_LIB_DIR}/pack
-    ${GRAPHVIZ_LIB_DIR}/pathplan
-)
 
-ADD_LIBRARY(dotgen STATIC
+add_library(dotgen STATIC
     # Source files
     ${GRAPHVIZ_LIB_DIR}/dotgen/aspect.c
     ${GRAPHVIZ_LIB_DIR}/dotgen/acyclic.c
@@ -29,3 +19,12 @@ ADD_LIBRARY(dotgen STATIC
     ${GRAPHVIZ_LIB_DIR}/dotgen/sameport.c
 )
 
+include_directories(
+    ${GRAPHVIZ_LIB_DIR}
+    ${GRAPHVIZ_LIB_DIR}/cdt
+    ${GRAPHVIZ_LIB_DIR}/cgraph
+    ${GRAPHVIZ_LIB_DIR}/common
+    ${GRAPHVIZ_LIB_DIR}/gvc
+    ${GRAPHVIZ_LIB_DIR}/pack
+    ${GRAPHVIZ_LIB_DIR}/pathplan
+)
