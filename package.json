@@ -64,7 +64,8 @@
     "test-chrome": "run-p -r dev-start mocha-test",
     "test-node": "./node_modules/.bin/mocha ./dist/test.node.js --reporter spec",
     "test": "run-p test-chrome test-node",
-    "tag": "run-s standard-version git-push"
+    "tag": "run-s standard-version git-push",
+    "purge-jsdelivr": "node ./utils/purge-jsdelivr.js"
   },
   "dependencies": {},
   "devDependencies": {
