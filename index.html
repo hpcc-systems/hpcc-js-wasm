@@ -4,11 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <title>GraphViz WASM</title>
-    <script src="./dist/index.js"></script>
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.min.js"></script>
-    <script src="./dist/index.js"></script>
-    -->
+
+    <script>
+        switch (window.location.hostname) {
+            case "localhost":
+                document.write('<script type="text/javascript" src="./dist/index.js"><' + '/script>');
+                break;
+            default:
+                document.write('<script src="https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.min.js"><' + '/script>');
+                break;
+        }
+    </script>
+
     <script>
         var hpccWasm = window["@hpcc-js/wasm"];
     </script>
