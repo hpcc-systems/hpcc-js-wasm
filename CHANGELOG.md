@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.1.0...v1.2.0) (2021-01-24)
+
+
+### Features
+
+* **sfdp:**  Add SFDP support ([c829af0](https://github.com/hpcc-systems/hpcc-js-wasm/commit/c829af08073959d458c972edf37380b2f17a7572))
+
 ## [1.1.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.0.2...v1.1.0) (2021-01-18)
 
 
