@@ -6,6 +6,10 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 * [graphviz](https://www.graphviz.org/) - v2.46.0
 * [expat](https://libexpat.github.io/) - v2.2.10
 
+## Quick GraphViz Demos
+* https://raw.githack.com/hpcc-systems/hpcc-js-wasm/trunk/index.html
+* https://observablehq.com/@gordonsmith/graphviz
+
 ## Installation 
 The simplest way to include this project is via NPM:
 ```
