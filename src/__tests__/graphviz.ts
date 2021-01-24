@@ -98,6 +98,14 @@ describe("graphviz", function () {
             expect(true).to.be.false;
         });
     });
+    it("sfdp", function () {
+        return graphviz.sfdp(dot, "svg").then(svg => {
+            expect(svg).to.be.a("string");
+            expect(svg).to.not.be.empty;
+        }).catch(e => {
+            expect(true).to.be.false;
+        });
+    });
     it("neato", function () {
         return graphviz.neato(dot, "svg").then(svg => {
             expect(svg).to.be.a("string");
@@ -159,6 +167,13 @@ describe("graphvizSync", function () {
         const svg = gvSync.fdp(dot, "svg");
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
+    });
+    it("sfdp", function () {
+        const svg = gvSync.sfdp(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+        const svg2 = gvSync.fdp(dot, "svg");
+        expect(svg).to.not.equal(svg2);
     });
     it("neato", function () {
         const svg = gvSync.neato(dot, "svg");

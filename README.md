@@ -140,6 +140,7 @@ _layoutEngine_ supports the following options:
 * circo
 * dot (default)
 * fdp
+* sfdp
 * neato
 * osage
 * patchwork
@@ -191,7 +192,11 @@ Convenience function that performs **dot** layout, is equivalent to `layout(dotS
 
 <a name="fdp" href="#fdp">#</a> **fdp**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
 
-Convenience function that performs **circo** layout, is equivalent to `layout(dotSource, outputFormat, "fdp");`.
+Convenience function that performs **fdp** layout, is equivalent to `layout(dotSource, outputFormat, "fdp");`.
+
+<a name="sfdp" href="#sfdp">#</a> **sfdp**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
+
+Convenience function that performs **sfdp** layout, is equivalent to `layout(dotSource, outputFormat, "sfdp");`.
 
 <a name="neato" href="#neato">#</a> **neato**(_dotSource_[, _outputFormat_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
 

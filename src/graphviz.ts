@@ -3,7 +3,7 @@ import * as graphvizlib from "../build/graphviz/graphvizlib/graphvizlib";
 import { loadWasm } from "./util";
 
 type Format = "svg" | "dot" | "json" | "dot_json" | "xdot_json" | "plain" | "plain-ext";
-type Engine = "circo" | "dot" | "fdp" | "neato" | "osage" | "patchwork" | "twopi";
+type Engine = "circo" | "dot" | "fdp" | "sfdp" | "neato" | "osage" | "patchwork" | "twopi";
 
 interface Image {
     path: string;
@@ -69,6 +69,9 @@ export const graphviz = {
     fdp(dotSource: string, outputFormat: Format = "svg", ext?: Ext): Promise<string> {
         return this.layout(dotSource, outputFormat, "fdp", ext);
     },
+    sfdp(dotSource: string, outputFormat: Format = "svg", ext?: Ext): Promise<string> {
+        return this.layout(dotSource, outputFormat, "sfdp", ext);
+    },
     neato(dotSource: string, outputFormat: Format = "svg", ext?: Ext): Promise<string> {
         return this.layout(dotSource, outputFormat, "neato", ext);
     },
@@ -110,6 +113,10 @@ export class GraphvizSync {
 
     fdp(dotSource: string, outputFormat: Format = "svg", ext?: Ext): string {
         return this.layout(dotSource, outputFormat, "fdp", ext);
+    }
+
+    sfdp(dotSource: string, outputFormat: Format = "svg", ext?: Ext): string {
+        return this.layout(dotSource, outputFormat, "sfdp", ext);
     }
 
     neato(dotSource: string, outputFormat: Format = "svg", ext?: Ext): string {
