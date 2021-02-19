@@ -60,7 +60,7 @@ export const graphviz = {
             return retVal;
         });
     },
-    circo(dotSource: string, outputFormat: Format = "svg", ext?: Ext): Promise<string> {
+    circo(dotSource: string, outputFormat: Format = 'svg', ext?: Ext): Promise<string> {
         return this.layout(dotSource, outputFormat, "circo", ext);
     },
     dot(dotSource: string, outputFormat: Format = "svg", ext?: Ext): Promise<string> {
@@ -86,12 +86,16 @@ export const graphviz = {
     }
 };
 
+
+
+
+
 export class GraphvizSync {
 
     constructor(private _wasm: any) {
     }
 
-    layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot", ext?: Ext): string {
+    layout            (dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot", ext?: Ext): string {
         if (!dotSource) return "";
         createFiles(this._wasm, ext);
         this._wasm.Main.prototype.setYInvert(ext?.yInvert ? 1 : 0);
