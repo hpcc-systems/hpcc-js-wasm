@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ["javascript"]
+        language: ["javascript", "cpp"]
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python' ]
         # Learn more:
         # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
@@ -36,6 +36,20 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
+          registry-url: "https://registry.npmjs.org"
+          scope: "@hpcc-js"
+      - run: npm ci
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y build-essential
+      - run: sudo apt-get install -y git cmake wget
+      - run: sudo apt-get install -y gcc-multilib g++-multilib pkg-config autoconf bison libtool flex zlib1g-dev
+      - run: sudo apt-get install -y python3 python3-pip
+      - run: npm run install-build-deps
+      - run: npm run build;
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
