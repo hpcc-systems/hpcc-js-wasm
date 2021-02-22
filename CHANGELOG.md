@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.2.1...v1.3.0) (2021-02-22)
+
+
+### Features
+
+* **wasmBinary:**  Allow pre-fetching of wasmBinary ([c86bdd0](https://github.com/hpcc-systems/hpcc-js-wasm/commit/c86bdd0db2211d265e4337fd5640e908819125fe)), closes [#53](https://github.com/hpcc-systems/hpcc-js-wasm/issues/53)
+
 ### [1.2.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.2.0...v1.2.1) (2021-02-14)
 
 ## [1.2.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.1.0...v1.2.0) (2021-01-24)
