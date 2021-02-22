@@ -20,6 +20,7 @@ interface Ext {
     images?: Image[];
     files?: File[];
     wasmFolder?: string;
+    wasmBinary?: Uint8Array;
     yInvert?: boolean;
     nop?: number;
 }
@@ -49,7 +50,7 @@ function createFiles(wasm: any, _ext?: Ext) {
 export const graphviz = {
     layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot", ext?: Ext): Promise<string> {
         if (!dotSource) return Promise.resolve("");
-        return loadWasm(graphvizlib, ext?.wasmFolder).then(wasm => {
+        return loadWasm(graphvizlib, ext?.wasmFolder, ext?.wasmBinary).then(wasm => {
             createFiles(wasm, ext);
             wasm.Main.prototype.setYInvert(ext?.yInvert ? 1 : 0);
             wasm.Main.prototype.setNop(ext?.nop ? ext?.nop : 0);
@@ -136,6 +137,6 @@ export class GraphvizSync {
     }
 }
 
-export function graphvizSync(wasmFolder?: string): Promise<GraphvizSync> {
-    return loadWasm(graphvizlib, wasmFolder).then(wasm => new GraphvizSync(wasm));
+export function graphvizSync(wasmFolder?: string, wasmBinary?: Uint8Array): Promise<GraphvizSync> {
+    return loadWasm(graphvizlib, wasmFolder, wasmBinary).then(wasm => new GraphvizSync(wasm));
 }

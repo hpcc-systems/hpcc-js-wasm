@@ -6,12 +6,15 @@
     <title>GraphViz WASM</title>
 
     <script>
+        var wasmBinaryFile;
         switch (window.location.hostname) {
             case "localhost":
                 document.write('<script type="text/javascript" src="./dist/index.js"><' + '/script>');
+                wasmBinaryFile = "./dist/graphvizlib.wasm";
                 break;
             default:
                 document.write('<script src="https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.min.js"><' + '/script>');
+                wasmBinaryFile = "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphvizlib.wasm";
                 break;
         }
     </script>
@@ -22,14 +25,16 @@
 </head>
 
 <body>
-    <h3>One</h3>
+    <h3>Async DOT</h3>
     <div id="placeholder"></div>
     <br>
     <h3>Two</h3>
     <div id="placeholder2"></div>
     <br>
-    <h3>Three</h3>
+    <h3>Sync DOT</h3>
     <div id="placeholder3"></div>
+    <h3>Cached wasmBinary</h3>
+    <div id="placeholder4"></div>
     <h3>End</h3>
     <script>
         const dot = `
@@ -96,6 +101,18 @@
             } catch (e) {
                 div.innerHTML = e.message;
             }
+        });
+
+        fetch(wasmBinaryFile, { credentials: 'same-origin' }).then(response => {
+            if (!response.ok) {
+                throw "failed to load wasm binary file at '" + wasmBinaryFile + "'";
+            }
+            return response.arrayBuffer();
+        }).then(wasmBinary => {
+            hpccWasm.graphviz.layout(dot, "svg", "dot", { wasmBinary: wasmBinary }).then(svg => {
+                const div = document.getElementById("placeholder4");
+                div.innerHTML = svg;
+            }).catch(err => console.error(err.message));
         });
     </script>
 

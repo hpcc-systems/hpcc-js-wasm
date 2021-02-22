@@ -170,6 +170,7 @@ _ext_ optional "extra params":
 }
 ```
 * _wasmFolder_: An optional `string` specifying the location of wasm file.
+* _wasmBinary_: An optional "pre-fetched" copy of the wasm binary as returned from `XHR` or `fetch`.
 * _yInvert_: An optional boolean flag to invert the y coordinate in generic output formats (dot, xdot, plain, plain-ext).  This is equivalent to specifying -y when invoking Graphviz from the command-line. 
 * _nop_: An optional number to specify "No layout" mode for the neato engine.  This is equivalent to specifying the -n option when invoking Graphviz from the command-line.
 
@@ -218,9 +219,9 @@ Convenience function that performs **patchwork** layout, is equivalent to `layou
 
 Convenience function that performs **twopi** layout, is equivalent to `layout(dotSource, outputFormat, "twopi");`.
 
-<a name="graphvizSync" href="#graphvizSync">#</a> **graphvizSync**([_wasmFolder_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
+<a name="graphvizSync" href="#graphvizSync">#</a> **graphvizSync**([_wasmFolder_], [_wasmBinary_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
 
-Returns a `Promise<GraphvizSync>`, once resolved provides a synchronous variant of the above methods.  Has an optional `wasmFolder` argument to override the default wasmFolder location.
+Returns a `Promise<GraphvizSync>`, once resolved provides a synchronous variant of the above methods.  Has an optional `wasmFolder` argument to override the default wasmFolder location and optional `wasmBinary` to short circuit the wasm downloading process.
 
 ---
 

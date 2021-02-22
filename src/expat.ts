@@ -62,8 +62,8 @@ function parseAttrs(attrs: string): Attributes {
     return retVal;
 }
 
-export function parse(xml: string, callback: IParser, wasmFolder?: string): Promise<boolean> {
-    return loadWasm(expatlib, wasmFolder).then(module => {
+export function parse(xml: string, callback: IParser, wasmFolder?: string, wasmBinary?: Uint8Array): Promise<boolean> {
+    return loadWasm(expatlib, wasmFolder, wasmBinary).then(module => {
         const parser = new module.CExpatJS();
         parser.startElement = function () {
             callback.startElement(this.tag(), parseAttrs(this.attrs()));
