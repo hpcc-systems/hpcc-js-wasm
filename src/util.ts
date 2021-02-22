@@ -22,12 +22,13 @@ function trimStart(str: string, charToRemove: string) {
     return str;
 }
 
-export function loadWasm(_wasmLib: any, wf?: string): Promise<any> {
+export function loadWasm(_wasmLib: any, wf?: string, wasmBinary?: Uint8Array): Promise<any> {
     const wasmLib = _wasmLib.default || _wasmLib;
     //  Prevent double load ---
     if (!wasmLib.__hpcc_promise) {
         wasmLib.__hpcc_promise = new Promise(resolve => {
             wasmLib({
+                wasmBinary,
                 locateFile: (path: string, prefix: string) => {
                     return `${trimEnd(wf || wasmFolder() || prefix || ".", "/")}/${trimStart(path, "/")}`;
                 }
