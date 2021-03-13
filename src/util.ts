@@ -1,8 +1,15 @@
-const globalNS: any = new Function("return this;")();
+function getGlobal() {
+    if (typeof self !== "undefined") { return self; }
+    if (typeof window !== "undefined") { return window; }
+    if (typeof global !== "undefined") { return global; }
+    throw new Error("unable to locate global object");
+}
 
+const globalNS: any = getGlobal();
+  
 let _wasmFolder: string | undefined = globalNS.__hpcc_wasmFolder || undefined;
 export function wasmFolder(_?: string): string | undefined {
-    if (_ === void 0) return _wasmFolder;
+    if (!arguments.length) return _wasmFolder;
     const retVal: string | undefined = _wasmFolder;
     _wasmFolder = _;
     return retVal;
