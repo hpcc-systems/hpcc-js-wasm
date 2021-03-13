@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { wasmFolder } from "..";
 import { graphviz, graphvizSync, GraphvizSync } from "../graphviz";
 
 const dot = `
@@ -244,5 +245,23 @@ describe("yInvert", function () {
         const plain3 = gvSync.dot(dot, "plain", { yInvert: true });
         expect(plain1).to.equal(plain2);
         expect(plain1).to.not.equal(plain3);
+    });
+});
+
+describe("wasmFolder", function () {
+    it("default", function () {
+        expect((globalThis as any).__hpcc_wasmFolder).to.be.undefined;
+        expect(wasmFolder()).to.be.undefined;
+    });
+
+    it("wasmFolder", function () {
+        const mol = "42";
+        expect((globalThis as any).__hpcc_wasmFolder).to.be.undefined;
+        expect(wasmFolder(mol)).to.be.undefined;
+        expect(wasmFolder()).to.equal(mol);
+        expect((globalThis as any).__hpcc_wasmFolder).to.be.undefined;
+        expect(wasmFolder(undefined)).to.equal(mol);
+        expect(wasmFolder()).to.be.undefined;
+        expect((globalThis as any).__hpcc_wasmFolder).to.be.undefined;
     });
 });
