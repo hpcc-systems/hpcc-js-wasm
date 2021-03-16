@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.3.0...v1.4.0) (2021-03-16)
+
+
+### Features
+
+* **graphviz:**  Bump version to 2.47.0 ([d4157aa](https://github.com/hpcc-systems/hpcc-js-wasm/commit/d4157aaa2f97fd43467baa4d61854f9028a3f3d9))
+
+
+### Bug Fixes
+
+*  Remove "eval" code ([4d5a0ee](https://github.com/hpcc-systems/hpcc-js-wasm/commit/4d5a0ee8a9331dceb38bfc49028ecc2ab684f470)), closes [#56](https://github.com/hpcc-systems/hpcc-js-wasm/issues/56)
+
 ## [1.3.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.2.1...v1.3.0) (2021-02-22)
 
 
