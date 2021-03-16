@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.4.0...v1.4.1) (2021-03-16)
+
+
+### Bug Fixes
+
+* "Last error" contains corrupt string ([cc69093](https://github.com/hpcc-systems/hpcc-js-wasm/commit/cc6909316c7f52f2e5cd7205d682ef8c5b1db1d2)), closes [#59](https://github.com/hpcc-systems/hpcc-js-wasm/issues/59)
+
 ## [1.4.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.3.0...v1.4.0) (2021-03-16)
 
 
