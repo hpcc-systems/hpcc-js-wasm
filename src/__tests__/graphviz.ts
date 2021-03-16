@@ -204,7 +204,7 @@ describe("bad dot", function () {
             expect(true).to.be.false;
         }).catch(e => {
             expect(typeof e.message).to.equal("string");
-            expect(e.message).to.not.be.empty;
+            expect(e.message).to.equal("syntax error in line 11 near ']'\n");
         });
     });
 

@@ -2,12 +2,13 @@
 
 #include <gvc.h>
 #include <globals.h>
+#include <string>
 
 extern gvplugin_library_t gvplugin_core_LTX_library;
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
 extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
 
-char *errorMessage = NULL;
+std::string errorMessage = "";
 
 int vizErrorf(char *buf)
 {
@@ -15,14 +16,9 @@ int vizErrorf(char *buf)
     return 0;
 }
 
-char *vizLastErrorMessage()
-{
-    return errorMessage;
-}
-
 const char *Main::layout(const char *src, const char *format, const char *engine)
 {
-    errorMessage = NULL;
+    errorMessage = "";
     char *result = NULL;
     GVC_t *context;
     Agraph_t *graph;
@@ -57,7 +53,7 @@ const char *Main::layout(const char *src, const char *format, const char *engine
 
 const char *Main::lastError()
 {
-    return errorMessage;
+    return errorMessage.c_str();
 }
 
 void Main::setYInvert(int yInvert)
