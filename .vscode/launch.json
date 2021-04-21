@@ -15,6 +15,13 @@
             "webRoot": "${workspaceRoot}"
         },
         {
+            "name": "helloworld.html",
+            "type": "chrome",
+            "request": "launch",
+            "url": "file://${workspaceRoot}/helloworld.html",
+            "webRoot": "${workspaceRoot}"
+        },
+        {
             "name": "test-chrome",
             "type": "chrome",
             "request": "launch",
