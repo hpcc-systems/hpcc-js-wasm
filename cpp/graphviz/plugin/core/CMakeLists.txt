@@ -1,4 +1,7 @@
 add_library(gvplugin_core STATIC
+    # Header files
+    ${GRAPHVIZSRC_DIRS}/build/plugin/core/ps.h
+
     # Source files
     ${GRAPHVIZSRC_DIRS}/plugin/core/gvloadimage_core.c
     ${GRAPHVIZSRC_DIRS}/plugin/core/gvplugin_core.c
