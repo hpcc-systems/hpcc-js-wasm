@@ -1,4 +1,39 @@
 set(sources
+    # Header files
+    ${GRAPHVIZ_LIB_DIR}/neatogen/adjust.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/bfs.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/call_tri.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/closest.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/conjgrad.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/defs.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/delaunay.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/digcola.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/dijkstra.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/edges.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/embed_graph.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/fPQ.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/geometry.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/heap.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/hedges.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/info.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/kkutils.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/matrix_ops.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/mem.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/multispline.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/neato.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/neatoprocs.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/overlap.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/pca.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/poly.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/quad_prog_solver.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/quad_prog_vpsc.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/site.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/sparsegraph.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/stress.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/voronoi.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/sgd.h
+    ${GRAPHVIZ_LIB_DIR}/neatogen/randomkit.h
+
     # Source files
     ${GRAPHVIZ_LIB_DIR}/neatogen/adjust.c
     ${GRAPHVIZ_LIB_DIR}/neatogen/bfs.c
@@ -52,7 +87,7 @@ add_library(neatogen STATIC
     ${sources}
 )
 
-include_directories(
+target_include_directories(neatogen PRIVATE
     ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZ_LIB_DIR}/cdt
     ${GRAPHVIZ_LIB_DIR}/cgraph
@@ -61,4 +96,3 @@ include_directories(
     ${GRAPHVIZ_LIB_DIR}/pack
     ${GRAPHVIZ_LIB_DIR}/pathplan
 )
-

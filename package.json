@@ -63,6 +63,7 @@
     "mocha-test": "mocha-chrome http://localhost:8000/test.html",
     "test-chrome": "run-p -r dev-start mocha-test",
     "test-node": "./node_modules/.bin/mocha ./dist/test.node.js --reporter spec",
+    "test-ci": "run-p test-node",
     "test": "run-p test-chrome test-node",
     "tag": "run-s standard-version git-push",
     "purge-jsdelivr": "node ./utils/purge-jsdelivr.js"

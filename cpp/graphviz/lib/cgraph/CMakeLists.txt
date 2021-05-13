@@ -1,5 +1,11 @@
 
 add_library(cgraph STATIC
+    # Header files
+    ${GRAPHVIZ_LIB_DIR}/cgraph/agxbuf.h
+    ${GRAPHVIZ_LIB_DIR}/cgraph/cghdr.h
+    ${GRAPHVIZ_LIB_DIR}/cgraph/cgraph.h
+    ${GRAPHVIZ_LIB_DIR}/cgraph/strcasecmp.h
+
     # Source files
     ${GRAPHVIZ_LIB_DIR}/cgraph/agerror.c
     ${GRAPHVIZ_LIB_DIR}/cgraph/agxbuf.c
@@ -26,7 +32,7 @@ add_library(cgraph STATIC
     ${GRAPHVIZSRC_DIRS}/build/lib/cgraph/scan.c
 )
 
-include_directories(
+target_include_directories(cgraph PRIVATE
     ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZ_LIB_DIR}/cdt
     ${GRAPHVIZ_LIB_DIR}/cgraph

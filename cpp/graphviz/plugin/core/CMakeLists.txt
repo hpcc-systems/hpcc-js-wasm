@@ -18,7 +18,7 @@ add_library(gvplugin_core STATIC
     ${GRAPHVIZSRC_DIRS}/plugin/core/gvrender_core_vml.c
 )
 
-include_directories(
+target_include_directories(gvplugin_core PRIVATE
     ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZSRC_DIRS}/plugin/core
     ${GRAPHVIZSRC_DIRS}/build/plugin/core

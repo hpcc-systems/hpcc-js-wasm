@@ -1,4 +1,13 @@
 add_library(pathplan STATIC
+    # Header files
+    ${GRAPHVIZ_LIB_DIR}/pathplan/pathgeom.h
+    ${GRAPHVIZ_LIB_DIR}/pathplan/pathplan.h
+    ${GRAPHVIZ_LIB_DIR}/pathplan/pathutil.h
+    ${GRAPHVIZ_LIB_DIR}/pathplan/solvers.h
+    ${GRAPHVIZ_LIB_DIR}/pathplan/tri.h
+    ${GRAPHVIZ_LIB_DIR}/pathplan/vis.h
+    ${GRAPHVIZ_LIB_DIR}/pathplan/vispath.h
+
     # Source files
     ${GRAPHVIZ_LIB_DIR}/pathplan/cvt.c
     ${GRAPHVIZ_LIB_DIR}/pathplan/inpoly.c
@@ -11,7 +20,7 @@ add_library(pathplan STATIC
     ${GRAPHVIZ_LIB_DIR}/pathplan/visibility.c
 )
 
-include_directories(
+target_include_directories(pathplan PRIVATE
     ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZ_LIB_DIR}/pathplan
 )
