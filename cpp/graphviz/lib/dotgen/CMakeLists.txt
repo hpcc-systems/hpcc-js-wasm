@@ -1,5 +1,10 @@
 
 add_library(dotgen STATIC
+    # Header files
+    ${GRAPHVIZ_LIB_DIR}/dotgen/aspect.h
+    ${GRAPHVIZ_LIB_DIR}/dotgen/dot.h
+    ${GRAPHVIZ_LIB_DIR}/dotgen/dotprocs.h
+
     # Source files
     ${GRAPHVIZ_LIB_DIR}/dotgen/aspect.c
     ${GRAPHVIZ_LIB_DIR}/dotgen/acyclic.c
@@ -19,7 +24,7 @@ add_library(dotgen STATIC
     ${GRAPHVIZ_LIB_DIR}/dotgen/sameport.c
 )
 
-include_directories(
+target_include_directories(dotgen PRIVATE
     ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZ_LIB_DIR}/cdt
     ${GRAPHVIZ_LIB_DIR}/cgraph

@@ -1,9 +1,12 @@
 add_library(osage STATIC
+    # Header files
+    ${GRAPHVIZ_LIB_DIR}/osage/osage.h
+
     # Source files
     ${GRAPHVIZ_LIB_DIR}/osage/osageinit.c
 )
 
-include_directories(
+target_include_directories(osage PRIVATE
     ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZ_LIB_DIR}/cdt
     ${GRAPHVIZ_LIB_DIR}/cgraph
@@ -12,4 +15,3 @@ include_directories(
     ${GRAPHVIZ_LIB_DIR}/pack
     ${GRAPHVIZ_LIB_DIR}/pathplan
 )
-

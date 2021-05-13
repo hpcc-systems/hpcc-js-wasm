@@ -1,6 +1,30 @@
 PROJECT(common)
 
 add_library(common STATIC
+    # Header files
+    ${GRAPHVIZ_LIB_DIR}/common/arith.h
+    ${GRAPHVIZ_LIB_DIR}/common/color.h
+    ${GRAPHVIZ_LIB_DIR}/common/colorprocs.h
+    ${GRAPHVIZSRC_DIRS}/build/lib/common/common/colortbl.h
+    ${GRAPHVIZ_LIB_DIR}/common/const.h
+    ${GRAPHVIZ_LIB_DIR}/common/entities.h
+    ${GRAPHVIZ_LIB_DIR}/common/geom.h
+    ${GRAPHVIZ_LIB_DIR}/common/geomprocs.h
+    ${GRAPHVIZ_LIB_DIR}/common/globals.h
+    ${GRAPHVIZ_LIB_DIR}/common/intset.h
+    ${GRAPHVIZ_LIB_DIR}/common/htmllex.h
+    ${GRAPHVIZ_LIB_DIR}/common/htmltable.h
+    ${GRAPHVIZ_LIB_DIR}/common/logic.h
+    ${GRAPHVIZ_LIB_DIR}/common/macros.h
+    ${GRAPHVIZ_LIB_DIR}/common/memory.h
+    ${GRAPHVIZ_LIB_DIR}/common/pointset.h
+    ${GRAPHVIZSRC_DIRS}/build/lib/common/ps_font_equiv.h
+    ${GRAPHVIZ_LIB_DIR}/common/render.h
+    ${GRAPHVIZ_LIB_DIR}/common/textspan.h
+    ${GRAPHVIZ_LIB_DIR}/common/types.h
+    ${GRAPHVIZ_LIB_DIR}/common/usershape.h
+    ${GRAPHVIZ_LIB_DIR}/common/utils.h
+
     # Source files
     ${GRAPHVIZ_LIB_DIR}/common/args.c
     ${GRAPHVIZ_LIB_DIR}/common/arrows.c
@@ -32,7 +56,7 @@ add_library(common STATIC
     ${GRAPHVIZSRC_DIRS}/build/lib/common/htmlparse.c
 )
 
-include_directories(
+target_include_directories(common PRIVATE
     ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZ_LIB_DIR}/common
     ${GRAPHVIZ_BIN_DIR}/common

@@ -4,7 +4,7 @@ add_library(gvplugin_neato_layout STATIC
     ${GRAPHVIZSRC_DIRS}/plugin/neato_layout/gvlayout_neato_layout.c
 )
 
-include_directories(
+target_include_directories(gvplugin_neato_layout PRIVATE
     ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZSRC_DIRS}/plugin/neato_layout
     ${GRAPHVIZ_LIB_DIR}/cdt

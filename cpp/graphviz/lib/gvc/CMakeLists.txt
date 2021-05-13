@@ -1,5 +1,20 @@
 add_library(gvc STATIC
+    # Header files
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvc.h
     ${GRAPHVIZ_LIB_DIR}/gvc/gvcext.h
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvcint.h
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvcjob.h
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvconfig.h
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvcommon.h
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvcproc.h
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvio.h
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvplugin.h
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvplugin_device.h
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvplugin_layout.h
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvplugin_loadimage.h
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvplugin_render.h
+    ${GRAPHVIZ_LIB_DIR}/gvc/gvplugin_textlayout.h
+
     # Source files
     ${GRAPHVIZ_LIB_DIR}/gvc/gvc.c
     ${GRAPHVIZ_LIB_DIR}/gvc/gvconfig.c
@@ -16,7 +31,7 @@ add_library(gvc STATIC
     ${GRAPHVIZ_LIB_DIR}/gvc/gvusershape.c
 )
 
-include_directories(
+target_include_directories(gvc PRIVATE
     ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZ_LIB_DIR}/gvc
     ${TOP_SOURCE_DIR}
