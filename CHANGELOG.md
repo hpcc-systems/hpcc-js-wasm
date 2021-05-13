@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.5.1...v1.5.2) (2021-05-13)
+
+
+### Bug Fixes
+
+* **security:**  Bump versions for latest security updates ([caf6f1f](https://github.com/hpcc-systems/hpcc-js-wasm/commit/caf6f1f55f4fd7742014060510f7d0f12f160561))
+* **test:**  Add helloworld.html example ([7a0257a](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7a0257a89b7c1e2cc78de2dc21e63198ad84dccb))
+
 ### [1.5.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.5.0...v1.5.1) (2021-04-18)
 
 ## [1.5.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.4.1...v1.5.0) (2021-04-18)
