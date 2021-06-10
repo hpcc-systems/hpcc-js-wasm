@@ -1,0 +1,5 @@
+scripts/cpp-build.sh eol=lf
+scripts/cpp-install-emsdk.sh eol=lf
+scripts/cpp-install-expat.sh eol=lf
+scripts/cpp-install-graphviz.sh eol=lf
+scripts/cpp-update-emsdk.sh eol=lf
