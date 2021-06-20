@@ -4,6 +4,8 @@ add_library(cgraph STATIC
     ${GRAPHVIZ_LIB_DIR}/cgraph/agxbuf.h
     ${GRAPHVIZ_LIB_DIR}/cgraph/cghdr.h
     ${GRAPHVIZ_LIB_DIR}/cgraph/cgraph.h
+    ${GRAPHVIZ_LIB_DIR}/cgraph/itos.h
+    ${GRAPHVIZ_LIB_DIR}/cgraph/sprint.h
     ${GRAPHVIZ_LIB_DIR}/cgraph/strcasecmp.h
 
     # Source files

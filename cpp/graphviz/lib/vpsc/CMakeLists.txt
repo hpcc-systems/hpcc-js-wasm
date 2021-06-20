@@ -7,7 +7,6 @@ add_library(vpsc STATIC
     ${GRAPHVIZ_LIB_DIR}/vpsc/generate-constraints.h
     ${GRAPHVIZ_LIB_DIR}/vpsc/pairingheap/PairingHeap.h
     ${GRAPHVIZ_LIB_DIR}/vpsc/pairingheap/dsexceptions.h
-    ${GRAPHVIZ_LIB_DIR}/vpsc/remove_rectangle_overlap.h
     ${GRAPHVIZ_LIB_DIR}/vpsc/solve_VPSC.h
     ${GRAPHVIZ_LIB_DIR}/vpsc/variable.h
 
