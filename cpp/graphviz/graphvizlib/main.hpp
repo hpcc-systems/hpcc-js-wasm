@@ -1,9 +1,12 @@
-class Main
+class Graphviz
 {
+protected:
 public:
-    static const char *layout(const char *dot, const char *format, const char *engine);
+    static const char *version();
     static const char *lastError();
-    static void createFile(const char *path, const char *data);
-    static void setYInvert(int yInvert);
-    static void setNop(int nop);
+
+    Graphviz(bool yInvert = false, int nop = 0);
+    ~Graphviz();
+    const char *layout(const char *dot, const char *format, const char *engine);
+    void createFile(const char *path, const char *data);
 };

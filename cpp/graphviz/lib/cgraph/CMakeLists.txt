@@ -30,15 +30,15 @@ add_library(cgraph STATIC
     ${GRAPHVIZ_LIB_DIR}/cgraph/write.c
 
     # Generated files
-    ${GRAPHVIZSRC_DIRS}/build/lib/cgraph/grammar.c
-    ${GRAPHVIZSRC_DIRS}/build/lib/cgraph/scan.c
+    ${GRAPHVIZ_BUILD_DIR}/lib/cgraph/grammar.c
+    ${GRAPHVIZ_BUILD_DIR}/lib/cgraph/scan.c
 )
 
 target_include_directories(cgraph PRIVATE
     ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZ_LIB_DIR}/cdt
     ${GRAPHVIZ_LIB_DIR}/cgraph
-    ${GRAPHVIZSRC_DIRS}/build/lib/cgraph
+    ${GRAPHVIZ_BUILD_DIR}/lib/cgraph
 )
 
 target_link_libraries(cgraph cdt)

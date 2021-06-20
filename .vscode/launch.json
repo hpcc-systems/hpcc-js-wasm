@@ -6,24 +6,22 @@
     "configurations": [
         {
             "name": "index.html",
-            "type": "chrome",
+            "type": "pwa-msedge",
             "request": "launch",
             "url": "http://localhost:8000/index.html",
-            "runtimeArgs": [
-                "--disable-web-security"
-            ],
+            "runtimeArgs": [],
             "webRoot": "${workspaceRoot}"
         },
         {
             "name": "helloworld.html",
-            "type": "chrome",
+            "type": "pwa-msedge",
             "request": "launch",
             "url": "file://${workspaceRoot}/helloworld.html",
             "webRoot": "${workspaceRoot}"
         },
         {
-            "name": "test-chrome",
-            "type": "chrome",
+            "name": "test-browser",
+            "type": "pwa-msedge",
             "request": "launch",
             "url": "http://localhost:8000/test.html",
             "webRoot": "${workspaceRoot}",

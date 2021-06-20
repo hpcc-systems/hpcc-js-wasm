@@ -2,6 +2,7 @@
 
 if [ ! -d "src-graphviz" ] 
 then
+    #  https://gitlab.com/graphviz/graphviz/-/tags
     wget -c https://gitlab.com/graphviz/graphviz/-/archive/2.47.3/graphviz-2.47.3.tar.gz
     mkdir ./src-graphviz
     tar -xzf ./graphviz-2.47.3.tar.gz -C ./src-graphviz --strip-components=1
@@ -16,7 +17,7 @@ then
     mkdir ./build
     cd ./build
     cmake ..
-    cmake --build . -- -j
+    cmake --build . # -- -j  (See https://gitlab.com/graphviz/graphviz/-/issues/2098)
     cd ..
 
     cd ..

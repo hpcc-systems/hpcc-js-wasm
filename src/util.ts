@@ -33,17 +33,11 @@ export function loadWasm(_wasmLib: any, wf?: string, wasmBinary?: Uint8Array): P
     const wasmLib = _wasmLib.default || _wasmLib;
     //  Prevent double load ---
     if (!wasmLib.__hpcc_promise) {
-        wasmLib.__hpcc_promise = new Promise(resolve => {
-            wasmLib({
+        wasmLib.__hpcc_promise = wasmLib({
                 wasmBinary,
                 locateFile: (path: string, prefix: string) => {
                     return `${trimEnd(wf || wasmFolder() || prefix || ".", "/")}/${trimStart(path, "/")}`;
                 }
-            }).then((instance: any) => {
-                //  Not a real promise, remove "then" to prevent infinite loop  ---
-                delete instance.then;
-                resolve(instance);
-            });
         });
     }
     return wasmLib.__hpcc_promise;

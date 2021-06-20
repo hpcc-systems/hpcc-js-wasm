@@ -1,30 +1,51 @@
 #include "main.hpp"
 
+#include "../config.h"
 #include <gvc.h>
 #include <globals.h>
-#include <string>
+
+#include <emscripten.h>
 
 extern gvplugin_library_t gvplugin_core_LTX_library;
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
 extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
 
-std::string errorMessage = "";
+char lastErrorStr[1024];
 
 int vizErrorf(char *buf)
 {
-    errorMessage = buf;
+    strncpy(lastErrorStr, buf, sizeof(lastErrorStr) - 1);
     return 0;
 }
 
-const char *Main::layout(const char *src, const char *format, const char *engine)
+const char *Graphviz::version()
 {
-    errorMessage = "";
-    char *result = NULL;
-    GVC_t *context;
-    Agraph_t *graph;
-    unsigned int length;
+    return PACKAGE_VERSION;
+}
 
-    context = gvContext();
+const char *Graphviz::lastError()
+{
+    return lastErrorStr;
+}
+
+int origYInvert = Y_invert;
+int origNop = Nop;
+
+Graphviz::Graphviz(bool yInvert, int nop)
+{
+    Y_invert = yInvert == true ? 1 : origYInvert;
+    Nop = nop > 0 ? nop : origNop;
+}
+
+Graphviz::~Graphviz()
+{
+}
+
+const char *Graphviz::layout(const char *src, const char *format, const char *engine)
+{
+    lastErrorStr[0] = '\0';
+
+    GVC_t *context = gvContext();
     gvAddLibrary(context, &gvplugin_core_LTX_library);
     gvAddLibrary(context, &gvplugin_dot_layout_LTX_library);
     gvAddLibrary(context, &gvplugin_neato_layout_LTX_library);
@@ -34,6 +55,9 @@ const char *Main::layout(const char *src, const char *format, const char *engine
 
     agreadline(1);
 
+    Agraph_t *graph;
+    char *result = NULL;
+    unsigned int length;
     while ((graph = agmemread(src)))
     {
         if (result == NULL)
@@ -51,38 +75,17 @@ const char *Main::layout(const char *src, const char *format, const char *engine
     return result;
 }
 
-const char *Main::lastError()
+void Graphviz::createFile(const char *path, const char *data)
 {
-    return errorMessage.c_str();
-}
-
-void Main::setYInvert(int yInvert)
-{
-    Y_invert = yInvert;
-}
-
-void Main::setNop(int nop)
-{
-    if (nop != 0)
-        Nop = nop;
-}
-
-//  Patch for invalid osage function  ---
-//  https://gitlab.com/graphviz/graphviz/issues/1544
-#include "types.h"
-#include "SparseMatrix.h"
-extern "C"
-{
-    void remove_overlap(int dim, SparseMatrix A, double *x, double *label_sizes, int ntry, double initial_scaling, int edge_labeling_scheme, int n_constr_nodes, int *constr_nodes, SparseMatrix A_constr, int do_shrinking, int *flag)
-    {
-        static int once;
-
-        if (once == 0)
+    EM_ASM(
         {
-            once = 1;
-            agerr(AGERR, "remove_overlap: Graphviz not built with triangulation library\n");
-        }
-    }
+            var path = UTF8ToString($0);
+            var data = UTF8ToString($1);
+
+            FS.createPath("/", PATH.dirname(path));
+            FS.writeFile(PATH.join("/", path), data);
+        },
+        path, data);
 }
 
 //  Include JS Glue  ---

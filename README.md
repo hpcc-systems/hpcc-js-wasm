@@ -7,7 +7,7 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 * [expat](https://libexpat.github.io/) - v2.4.1
 
 Built with:
-* [emsdk](https://github.com/emscripten-core/emsdk) - v2.0.24
+* [emsdk](https://github.com/emscripten-core/emsdk) - v2.0.25
 
 ## Quick GraphViz Demos
 * https://raw.githack.com/hpcc-systems/hpcc-js-wasm/trunk/index.html
@@ -129,6 +129,10 @@ The _GraphViz_ library comes in **two** flavours
 ```
 
 #### GraphViz API
+
+<a name="graphvizVersion" href="#graphvizVersion">#</a> **graphvizVersion**() · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
+
+Returns the Graphviz Version.
 
 <a name="layout" href="#layout">#</a> **layout**(_dotSource_[, _outputFormat_][, _layoutEngine_][, _ext_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
 
@@ -267,6 +271,10 @@ Expat WASM library, provides a simplified wrapper around the Expat XML Parser li
 ```
 
 #### Expat API
+
+<a name="expatVersion" href="#expatVersion">#</a> **expatVersion**() · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/expat.ts "Source")
+
+Returns the Expat Version.
 
 <a name="parse" href="#parse">#</a> **parse**(_xml_, _callback_) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/expat.ts "Source")
 

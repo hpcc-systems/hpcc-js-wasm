@@ -1,27 +1,27 @@
 add_library(gvplugin_core STATIC
     # Header files
-    ${GRAPHVIZSRC_DIRS}/build/plugin/core/ps.h
+    ${GRAPHVIZ_BUILD_DIR}/plugin/core/ps.h
 
     # Source files
-    ${GRAPHVIZSRC_DIRS}/plugin/core/gvloadimage_core.c
-    ${GRAPHVIZSRC_DIRS}/plugin/core/gvplugin_core.c
-    ${GRAPHVIZSRC_DIRS}/plugin/core/gvrender_core_dot.c
-    ${GRAPHVIZSRC_DIRS}/plugin/core/gvrender_core_json.c
-    ${GRAPHVIZSRC_DIRS}/plugin/core/gvrender_core_fig.c
-    ${GRAPHVIZSRC_DIRS}/plugin/core/gvrender_core_map.c
-    ${GRAPHVIZSRC_DIRS}/plugin/core/gvrender_core_mp.c
-    ${GRAPHVIZSRC_DIRS}/plugin/core/gvrender_core_pic.c
-    ${GRAPHVIZSRC_DIRS}/plugin/core/gvrender_core_pov.c
-    ${GRAPHVIZSRC_DIRS}/plugin/core/gvrender_core_ps.c
-    ${GRAPHVIZSRC_DIRS}/plugin/core/gvrender_core_svg.c
-    ${GRAPHVIZSRC_DIRS}/plugin/core/gvrender_core_tk.c
-    ${GRAPHVIZSRC_DIRS}/plugin/core/gvrender_core_vml.c
+    ${GRAPHVIZ_PLUGIN_DIR}/core/gvloadimage_core.c
+    ${GRAPHVIZ_PLUGIN_DIR}/core/gvplugin_core.c
+    ${GRAPHVIZ_PLUGIN_DIR}/core/gvrender_core_dot.c
+    ${GRAPHVIZ_PLUGIN_DIR}/core/gvrender_core_json.c
+    ${GRAPHVIZ_PLUGIN_DIR}/core/gvrender_core_fig.c
+    ${GRAPHVIZ_PLUGIN_DIR}/core/gvrender_core_map.c
+    ${GRAPHVIZ_PLUGIN_DIR}/core/gvrender_core_mp.c
+    ${GRAPHVIZ_PLUGIN_DIR}/core/gvrender_core_pic.c
+    ${GRAPHVIZ_PLUGIN_DIR}/core/gvrender_core_pov.c
+    ${GRAPHVIZ_PLUGIN_DIR}/core/gvrender_core_ps.c
+    ${GRAPHVIZ_PLUGIN_DIR}/core/gvrender_core_svg.c
+    ${GRAPHVIZ_PLUGIN_DIR}/core/gvrender_core_tk.c
+    ${GRAPHVIZ_PLUGIN_DIR}/core/gvrender_core_vml.c
 )
 
 target_include_directories(gvplugin_core PRIVATE
     ${GRAPHVIZ_LIB_DIR}
-    ${GRAPHVIZSRC_DIRS}/plugin/core
-    ${GRAPHVIZSRC_DIRS}/build/plugin/core
+    ${GRAPHVIZ_PLUGIN_DIR}/core
+    ${GRAPHVIZ_BUILD_DIR}/plugin/core
     ${GRAPHVIZ_LIB_DIR}/cdt
     ${GRAPHVIZ_LIB_DIR}/cgraph
     ${GRAPHVIZ_LIB_DIR}/common

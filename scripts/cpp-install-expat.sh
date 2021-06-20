@@ -2,6 +2,7 @@
 
 if [ ! -d "src-expat" ] 
 then
+    #  https://github.com/libexpat/libexpat/tags
     wget -c https://github.com/libexpat/libexpat/archive/R_2_4_1.tar.gz
     mkdir ./src-expat
     tar -xzf ./R_2_4_1.tar.gz -C ./src-expat --strip-components=1

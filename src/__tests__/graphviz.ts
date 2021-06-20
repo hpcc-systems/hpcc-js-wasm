@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { wasmFolder } from "..";
-import { graphviz, graphvizSync, GraphvizSync } from "../graphviz";
+import { graphviz, graphvizSync, GraphvizSync, graphvizVersion } from "../graphviz";
 
 const dot = `
 digraph G {
@@ -67,6 +67,12 @@ digraph G {
 `;
 
 describe("graphviz", function () {
+    it("version", async function () {
+        const v = await graphvizVersion();
+        expect(v).to.be.a.string;
+        expect(v).to.not.be.empty;
+    });
+
     it("circo", function () {
         return graphviz.circo(dot, "svg").then(svg => {
             expect(svg).to.be.a("string");
@@ -199,8 +205,18 @@ describe("graphvizSync", function () {
 });
 
 describe("bad dot", function () {
-    it("dot", function () {
-        return graphviz.dot(badDot, "svg").then(svg => {
+    it("dot", async () => {
+        await graphviz.dot(badDot, "svg").then(svg => {
+            expect(true).to.be.false;
+        }).catch(e => {
+            expect(typeof e.message).to.equal("string");
+            expect(e.message).to.equal("syntax error in line 11 near ']'\n");
+        });
+        await graphviz.dot(dot, "svg").then(svg => {
+            expect(svg).to.be.a("string");
+            expect(svg).to.not.be.empty;
+        });
+        await graphviz.dot(badDot, "svg").then(svg => {
             expect(true).to.be.false;
         }).catch(e => {
             expect(typeof e.message).to.equal("string");
@@ -229,7 +245,7 @@ describe("bad dot", function () {
     });
 });
 
-describe("yInvert", function () {
+describe("options", function () {
     let gvSync: GraphvizSync;
 
     it("create", function () {
@@ -239,12 +255,26 @@ describe("yInvert", function () {
         });
     });
 
-    it("compare", function () {
+    it("yInvert", function () {
         const plain1 = gvSync.dot(dot, "plain");
         const plain2 = gvSync.dot(dot, "plain", { yInvert: false });
         const plain3 = gvSync.dot(dot, "plain", { yInvert: true });
+        const plain4 = gvSync.dot(dot, "plain", { yInvert: false });
+        const plain5 = gvSync.dot(dot, "plain", { yInvert: true });
         expect(plain1).to.equal(plain2);
         expect(plain1).to.not.equal(plain3);
+        expect(plain1).to.equal(plain4);
+        expect(plain1).to.not.equal(plain5);
+    });
+
+    it("nop", function () {
+        const plain1 = gvSync.dot(dot, "svg");
+        const plain2 = gvSync.dot(dot, "svg", { nop: 0 });
+        const plain3 = gvSync.dot(dot, "svg", { nop: 1 });
+        const plain4 = gvSync.dot(dot, "svg", { nop: 2 });
+        expect(plain1).to.equal(plain2);
+        expect(plain1).to.equal(plain3);
+        expect(plain1).to.equal(plain4);
     });
 });
 
