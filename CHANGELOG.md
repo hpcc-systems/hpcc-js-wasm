@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.5.3...v1.6.0) (2021-06-21)
+
+
+### Features
+
+*  Bump Versions ([abe5230](https://github.com/hpcc-systems/hpcc-js-wasm/commit/abe52305ccf04f5853c83553bd956fd4b5e33b7d))
+
+
+### Bug Fixes
+
+* **build:**  Force scripts to have \n line endings ([04e07ae](https://github.com/hpcc-systems/hpcc-js-wasm/commit/04e07ae5ef12531216ffc7f1a4fa6554e09a4b34))
+
 ### [1.5.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.5.2...v1.5.3) (2021-06-04)
 
 ### [1.5.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.5.1...v1.5.2) (2021-05-13)
