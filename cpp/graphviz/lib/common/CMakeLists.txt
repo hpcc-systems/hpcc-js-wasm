@@ -18,7 +18,7 @@ add_library(common STATIC
     ${GRAPHVIZ_LIB_DIR}/common/macros.h
     ${GRAPHVIZ_LIB_DIR}/common/memory.h
     ${GRAPHVIZ_LIB_DIR}/common/pointset.h
-    ${GRAPHVIZSRC_DIRS}/build/lib/common/ps_font_equiv.h
+    ${GRAPHVIZ_LIB_DIR}/common/ps_font_equiv.h
     ${GRAPHVIZ_LIB_DIR}/common/render.h
     ${GRAPHVIZ_LIB_DIR}/common/textspan.h
     ${GRAPHVIZ_LIB_DIR}/common/types.h

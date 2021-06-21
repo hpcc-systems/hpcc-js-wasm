@@ -2,10 +2,10 @@
 
 if [ ! -d "src-graphviz" ] 
 then
-    wget -c https://gitlab.com/graphviz/graphviz/-/archive/2.47.2/graphviz-2.47.2.tar.gz
+    wget -c https://gitlab.com/graphviz/graphviz/-/archive/2.47.3/graphviz-2.47.3.tar.gz
     mkdir ./src-graphviz
-    tar -xzf ./graphviz-2.47.2.tar.gz -C ./src-graphviz --strip-components=1
-    rm ./graphviz-2.47.2.tar.gz
+    tar -xzf ./graphviz-2.47.3.tar.gz -C ./src-graphviz --strip-components=1
+    rm ./graphviz-2.47.3.tar.gz
 
     #  Configure  ---
     cd ./src-graphviz
