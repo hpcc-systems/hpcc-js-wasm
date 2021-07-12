@@ -34,7 +34,7 @@ add_library(gvc STATIC
 target_include_directories(gvc PRIVATE
     ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZ_LIB_DIR}/gvc
-    ${GRAPHVIZ_DIR}
+    ${GRAPHVIZ_BUILD_DIR}
     ${GRAPHVIZ_LIB_DIR}/ast
     ${GRAPHVIZ_LIB_DIR}/cdt
     ${GRAPHVIZ_LIB_DIR}/cgraph

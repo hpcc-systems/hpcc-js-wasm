@@ -8,16 +8,12 @@ then
     tar -xzf ./graphviz-2.47.3.tar.gz -C ./src-graphviz --strip-components=1
     rm ./graphviz-2.47.3.tar.gz
 
-    #  Configure  ---
-    cd ./src-graphviz
-    ./autogen.sh
-    ./configure
-
     #  Generate grammar files (and others)  ---
+    cd ./src-graphviz
     mkdir ./build
     cd ./build
     cmake ..
-    cmake --build . # -- -j  (See https://gitlab.com/graphviz/graphviz/-/issues/2098)
+    cmake --build . #  -- -j (See https://gitlab.com/graphviz/graphviz/-/issues/2098)
     cd ..
 
     cd ..
