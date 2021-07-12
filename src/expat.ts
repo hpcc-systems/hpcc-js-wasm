@@ -62,6 +62,12 @@ function parseAttrs(attrs: string): Attributes {
     return retVal;
 }
 
+export function expatVersion(wasmFolder?: string, wasmBinary?: Uint8Array) {
+    return loadWasm(expatlib, wasmFolder, wasmBinary).then(module => {
+        return module.CExpat.prototype.version();
+    });
+}
+
 export function parse(xml: string, callback: IParser, wasmFolder?: string, wasmBinary?: Uint8Array): Promise<boolean> {
     return loadWasm(expatlib, wasmFolder, wasmBinary).then(module => {
         const parser = new module.CExpatJS();

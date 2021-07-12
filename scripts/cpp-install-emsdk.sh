@@ -8,6 +8,6 @@ fi
 cd ./emsdk
 git fetch
 git pull
-./emsdk install 2.0.24-upstream
-./emsdk activate 2.0.24-upstream
+./emsdk install 2.0.25-upstream
+./emsdk activate 2.0.25-upstream
 cd ..

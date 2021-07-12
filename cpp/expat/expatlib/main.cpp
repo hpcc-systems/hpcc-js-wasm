@@ -1,3 +1,4 @@
+#include "../config.h"
 #include "stack_parser.h"
 
 #include <string>
@@ -13,6 +14,11 @@ protected:
     std::string m_content;
 
 public:
+    static const char *version()
+    {
+        return PACKAGE_VERSION;
+    }
+
     CExpat()
     {
     }

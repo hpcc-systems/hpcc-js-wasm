@@ -5,7 +5,7 @@ add_library(common STATIC
     ${GRAPHVIZ_LIB_DIR}/common/arith.h
     ${GRAPHVIZ_LIB_DIR}/common/color.h
     ${GRAPHVIZ_LIB_DIR}/common/colorprocs.h
-    ${GRAPHVIZSRC_DIRS}/build/lib/common/common/colortbl.h
+    ${GRAPHVIZ_BUILD_DIR}/lib/common/common/colortbl.h
     ${GRAPHVIZ_LIB_DIR}/common/const.h
     ${GRAPHVIZ_LIB_DIR}/common/entities.h
     ${GRAPHVIZ_LIB_DIR}/common/geom.h
@@ -53,19 +53,19 @@ add_library(common STATIC
     ${GRAPHVIZ_LIB_DIR}/common/utils.c
 
     # Generated files
-    ${GRAPHVIZSRC_DIRS}/build/lib/common/htmlparse.c
+    ${GRAPHVIZ_BUILD_DIR}/lib/common/htmlparse.c
 )
 
 target_include_directories(common PRIVATE
     ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZ_LIB_DIR}/common
-    ${GRAPHVIZ_BIN_DIR}/common
+    ${GRAPHVIZ_BUILD_DIR}/lib/common
     ${GRAPHVIZ_LIB_DIR}/cdt
     ${GRAPHVIZ_LIB_DIR}/cgraph
     ${GRAPHVIZ_LIB_DIR}/gvc
     ${GRAPHVIZ_LIB_DIR}/pack
     ${GRAPHVIZ_LIB_DIR}/pathplan
     ${GRAPHVIZ_LIB_DIR}/xdot
-    ${EXPATSRC_DIRS}/expat/lib
+    ${EXPAT_DIR}/lib
 )
 

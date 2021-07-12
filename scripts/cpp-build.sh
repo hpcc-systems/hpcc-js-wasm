@@ -9,4 +9,5 @@ then
 else
     cd ./build
 fi
+# cmake ../cpp -DCMAKE_TOOLCHAIN_FILE="../emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake" -DCMAKE_BUILD_TYPE=Debug
 cmake --build . --target install -- -j

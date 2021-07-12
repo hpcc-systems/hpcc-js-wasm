@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Attributes, parse, StackParser } from "../expat";
+import { Attributes, parse, StackParser, expatVersion } from "../expat";
 
 class Cat {
 
@@ -37,6 +37,12 @@ class KeywordParser extends StackParser {
 }
 
 describe("expat", function () {
+    it("version", async function () {
+        const v = await expatVersion();
+        expect(v).to.be.a.string;
+        expect(v).to.not.be.empty;
+    });
+
     it("simple", function () {
         const xml = "<root><child xxx=\"yyy\">content</child></root>";
         const callback = {

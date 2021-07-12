@@ -38,25 +38,30 @@ function imagesToFiles(images: Image[]) {
     return images.map(imageToFile);
 }
 
-function createFiles(wasm: any, _ext?: Ext) {
+function createFiles(graphviz: any, _ext?: Ext) {
     const ext = {
         images: [],
         files: [],
         ..._ext
     };
-    [...ext.files, ...imagesToFiles(ext.images)].forEach(file => wasm.Main.prototype.createFile(file.path, file.data));
+    [...ext.files, ...imagesToFiles(ext.images)].forEach(file => graphviz.createFile(file.path, file.data));
 }
 
+export function graphvizVersion(wasmFolder?: string, wasmBinary?: Uint8Array) {
+    return loadWasm(graphvizlib, wasmFolder, wasmBinary).then(module => {
+        return module.Graphviz.prototype.version();
+    });
+}
 export const graphviz = {
     layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot", ext?: Ext): Promise<string> {
         if (!dotSource) return Promise.resolve("");
-        return loadWasm(graphvizlib, ext?.wasmFolder, ext?.wasmBinary).then(wasm => {
-            createFiles(wasm, ext);
-            wasm.Main.prototype.setYInvert(ext?.yInvert ? 1 : 0);
-            wasm.Main.prototype.setNop(ext?.nop ? ext?.nop : 0);
-            const retVal = wasm.Main.prototype.layout(dotSource, outputFormat, layoutEngine);
+        return loadWasm(graphvizlib, ext?.wasmFolder, ext?.wasmBinary).then(module => {
+            const graphViz = new module.Graphviz(ext?.yInvert !== undefined ? ext?.yInvert : false, ext?.nop !== undefined ? ext?.nop : 0);
+            createFiles(graphViz, ext);
+            const retVal = graphViz.layout(dotSource, outputFormat, layoutEngine);
+            module.destroy(graphViz);
             if (!retVal) {
-                throw new Error(wasm.Main.prototype.lastError());
+                throw new Error(module.Graphviz.prototype.lastError());
             }
             return retVal;
         });
@@ -94,12 +99,12 @@ export class GraphvizSync {
 
     layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot", ext?: Ext): string {
         if (!dotSource) return "";
-        createFiles(this._wasm, ext);
-        this._wasm.Main.prototype.setYInvert(ext?.yInvert ? 1 : 0);
-        this._wasm.Main.prototype.setNop(ext?.nop ? ext?.nop : 0);
-        const retVal = this._wasm.Main.prototype.layout(dotSource, outputFormat, layoutEngine);
+        const graphViz = new this._wasm.Graphviz(ext?.yInvert ? 1 : 0, ext?.nop ? ext?.nop : 0);
+        createFiles(graphViz, ext);
+        const retVal = graphViz.layout(dotSource, outputFormat, layoutEngine);
+        this._wasm.destroy(graphViz);
         if (!retVal) {
-            throw new Error(this._wasm.Main.prototype.lastError());
+            throw new Error(this._wasm.Graphviz.prototype.lastError());
         }
         return retVal;
     }

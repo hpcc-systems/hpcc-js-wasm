@@ -1,8 +1,8 @@
-interface Main {
-  [Const] static DOMString layout([Const] DOMString dot, [Const] DOMString format, [Const] DOMString engine);
+interface Graphviz
+{
+  void Graphviz(long yInvert, long nop);
+  [Const] static DOMString version();
   [Const] static DOMString lastError();
+  [Const] DOMString layout([Const] DOMString dot, [Const] DOMString format, [Const] DOMString engine);
   void createFile([Const] DOMString file, [Const] DOMString data);
-  void setYInvert(long yInvert);
-  void setNop(long nop);
 };
-

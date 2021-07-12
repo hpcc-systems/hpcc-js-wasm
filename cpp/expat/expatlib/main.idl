@@ -1,6 +1,7 @@
 interface CExpat
 {
   void CExpat();
+  [Const] static DOMString version();
   boolean create();
   void destroy();
   boolean parse([Const] DOMString xml);
@@ -12,8 +13,8 @@ interface CExpat
   void characterData();
 };
 
-[JSImplementation = "CExpat"] 
-interface CExpatJS {
+[JSImplementation = "CExpat"] interface CExpatJS
+{
   void CExpatJS();
   void startElement();
   void endElement();
