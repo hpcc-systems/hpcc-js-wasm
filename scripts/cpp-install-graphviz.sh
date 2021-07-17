@@ -3,10 +3,10 @@
 if [ ! -d "src-graphviz" ] 
 then
     #  https://gitlab.com/graphviz/graphviz/-/tags
-    wget -c https://gitlab.com/graphviz/graphviz/-/archive/2.47.3/graphviz-2.47.3.tar.gz
+    wget -c https://gitlab.com/graphviz/graphviz/-/archive/2.48.0/graphviz-2.48.0.tar.gz
     mkdir ./src-graphviz
-    tar -xzf ./graphviz-2.47.3.tar.gz -C ./src-graphviz --strip-components=1
-    rm ./graphviz-2.47.3.tar.gz
+    tar -xzf ./graphviz-2.48.0.tar.gz -C ./src-graphviz --strip-components=1
+    rm ./graphviz-2.48.0.tar.gz
 
     #  Generate grammar files (and others)  ---
     cd ./src-graphviz
