@@ -5,8 +5,10 @@ add_library(cgraph STATIC
     ${GRAPHVIZ_LIB_DIR}/cgraph/cghdr.h
     ${GRAPHVIZ_LIB_DIR}/cgraph/cgraph.h
     ${GRAPHVIZ_LIB_DIR}/cgraph/itos.h
+    ${GRAPHVIZ_LIB_DIR}/cgraph/likely.h
     ${GRAPHVIZ_LIB_DIR}/cgraph/sprint.h
     ${GRAPHVIZ_LIB_DIR}/cgraph/strcasecmp.h
+    ${GRAPHVIZ_LIB_DIR}/cgraph/unreachable.h
 
     # Source files
     ${GRAPHVIZ_LIB_DIR}/cgraph/agerror.c
