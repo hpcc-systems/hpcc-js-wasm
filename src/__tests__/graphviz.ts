@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { wasmFolder } from "..";
+import { wasmFolder } from "../util";
 import { graphviz, graphvizSync, GraphvizSync, graphvizVersion } from "../graphviz";
 
 const dot = `
