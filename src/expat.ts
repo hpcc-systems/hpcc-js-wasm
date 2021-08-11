@@ -9,7 +9,7 @@ export interface IParser {
     characterData(content: string): void;
 }
 
-class StackElement {
+export class StackElement {
 
     private _content = "";
     get content(): string {
