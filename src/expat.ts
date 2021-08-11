@@ -27,8 +27,8 @@ export class StackElement {
 export class StackParser implements IParser {
     private _stack: StackElement[] = [];
 
-    parse(xml: string): Promise<boolean> {
-        return parse(xml, this);
+    parse(xml: string, wasmFolder?: string, wasmBinary?: Uint8Array): Promise<boolean> {
+        return parse(xml, this, wasmFolder, wasmBinary);
     }
 
     top(): StackElement {

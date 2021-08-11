@@ -15,11 +15,11 @@
     "patchwork",
     "xml"
   ],
-  "main": "dist/index.node.js",
+  "main": "dist/index.js",
   "module": "dist/index.es6",
-  "module-node": "dist/index.node.es6",
   "browser": "dist/index.js",
   "unpkg": "dist/index.min.js",
+  "jsdelivr": "dist/index.min.js",
   "types": "types/index.d.ts",
   "files": [
     "dist/index*.*",
@@ -60,7 +60,7 @@
     "lint": "eslint src/**/*.ts",
     "lint-fix": "npm run lint -- --fix",
     "test-karma": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
-    "test-node": "./node_modules/.bin/mocha ./dist/test.node.js --reporter spec",
+    "test-node": "./node_modules/.bin/mocha ./dist/test.js --reporter spec",
     "test": "run-p test-karma test-node",
     "tag": "run-s standard-version git-push",
     "purge-jsdelivr": "node ./utils/purge-jsdelivr.js"
