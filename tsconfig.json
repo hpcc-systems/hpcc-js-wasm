@@ -4,7 +4,7 @@
         "outDir": "./lib-umd",
         "declarationDir": "./types",
         "composite": true,
-        "target": "es6",
+        "target": "es5",
         "module": "umd",
         "moduleResolution": "node",
         "strict": true,
@@ -15,7 +15,8 @@
     },
     "lib": [
         "dom",
-        "es6"
+        "es5",
+        "es6.Promise"
     ],
     "types": [],
     "include": [
