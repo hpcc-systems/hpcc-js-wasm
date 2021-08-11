@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.10.1...v1.10.2) (2021-08-11)
+
+
+### Bug Fixes
+
+*  Rollback merging of NodeJS and Web builds ([7c2c294](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7c2c29441792a78db5fd7af8326072ae4cb6a6eb))
+
 ### [1.10.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.10.0...v1.10.1) (2021-08-11)
 
 ## [1.10.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.9.1...v1.10.0) (2021-08-11)
