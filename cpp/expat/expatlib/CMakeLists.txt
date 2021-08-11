@@ -1,5 +1,7 @@
 PROJECT(expatlib)
 
+SET(EM_FLAGS "-s WASM=1 -s INVOKE_RUN=0 -s ALLOW_MEMORY_GROWTH=1 -s MODULARIZE=2 -s EXPORT_NAME='${CMAKE_PROJECT_NAME}' -s EXPORTED_FUNCTIONS=\"['_malloc']\" --post-js ${CMAKE_CURRENT_BINARY_DIR}/main_glue.js")
+
 #  Generate Glue from IDL file  ---
 ADD_CUSTOM_COMMAND(
     MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/main.idl
@@ -18,9 +20,19 @@ ADD_EXECUTABLE(expatlib
     main.cpp
 )
 
-SET_TARGET_PROPERTIES(expatlib PROPERTIES LINK_FLAGS "${EM_FLAGS} -s EXPORT_NAME='${CMAKE_PROJECT_NAME}' -s EXPORTED_FUNCTIONS=\"['_malloc']\" --post-js ${CMAKE_CURRENT_BINARY_DIR}/main_glue.js")
+SET_TARGET_PROPERTIES(expatlib PROPERTIES LINK_FLAGS "-s ENVIRONMENT=web ${EM_FLAGS}")
 
 TARGET_LINK_LIBRARIES(expatlib
+    expat
+)
+
+ADD_EXECUTABLE(expatlib.node
+    main.cpp
+)
+
+SET_TARGET_PROPERTIES(expatlib.node PROPERTIES LINK_FLAGS "-s ENVIRONMENT=node ${EM_FLAGS}")
+
+TARGET_LINK_LIBRARIES(expatlib.node
     expat
 )
 
