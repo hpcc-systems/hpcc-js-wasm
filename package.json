@@ -22,7 +22,9 @@
   "unpkg": "dist/index.min.js",
   "types": "types/index.d.ts",
   "files": [
-    "dist/*",
+    "dist/index*.*",
+    "dist/expat*.*",
+    "dist/graphviz*.*",
     "types/*",
     "src/*.css"
   ],
