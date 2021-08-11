@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.10.2...v1.10.3) (2021-08-11)
+
+
+### Bug Fixes
+
+*  Revert to es5 code generation ([e29f5f4](https://github.com/hpcc-systems/hpcc-js-wasm/commit/e29f5f4aa479f98e0e27b0f95cec2e9bee2d9be7))
+
 ### [1.10.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.10.1...v1.10.2) (2021-08-11)
 
 
