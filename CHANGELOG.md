@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.9.0...v1.9.1) (2021-08-11)
+
+
+### Bug Fixes
+
+*  Add missing export StackElement ([d786b2a](https://github.com/hpcc-systems/hpcc-js-wasm/commit/d786b2abffdafec9bf6b46b214a42d1704aeecfd))
+
 ## [1.9.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.8.1...v1.9.0) (2021-08-11)
 
 
