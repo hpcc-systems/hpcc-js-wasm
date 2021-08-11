@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.9.1...v1.10.0) (2021-08-11)
+
+
+### Features
+
+*  Common up Node.js and Browser module code ([48a6aff](https://github.com/hpcc-systems/hpcc-js-wasm/commit/48a6affd1139eff106a34694778c7ebb5d542e98))
+
 ### [1.9.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.9.0...v1.9.1) (2021-08-11)
 
 
