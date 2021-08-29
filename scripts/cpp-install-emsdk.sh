@@ -4,10 +4,10 @@ if [ ! -d "./emsdk" ]
 then
     git clone https://github.com/emscripten-core/emsdk.git
 fi
-# List of current vertsion can be found in https://github.com/emscripten-core/emsdk/blob/main/emscripten-releases-tags.txt  ---
+# List of current vertsion can be found in https://github.com/emscripten-core/emsdk/releases  ---
 cd ./emsdk
 git fetch
 git pull
-./emsdk install 2.0.25-upstream
-./emsdk activate 2.0.25-upstream
+./emsdk install 2.0.29-upstream
+./emsdk activate 2.0.29-upstream
 cd ..

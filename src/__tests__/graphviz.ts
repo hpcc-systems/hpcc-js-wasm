@@ -236,7 +236,7 @@ describe("bad dot", function () {
         try {
             const svg = gvSync.dot(badDot, "svg");
             success = true;
-        } catch (e) {
+        } catch (e: any) {
             success = false;
             expect(typeof e.message).to.equal("string");
             expect(e.message).to.not.be.empty;
