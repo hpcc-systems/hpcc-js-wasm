@@ -1,70 +1,8 @@
 import { expect } from "chai";
 import { wasmFolder } from "../util";
 import { graphviz, graphvizSync, GraphvizSync, graphvizVersion } from "../graphviz";
-
-const dot = `
-digraph G {
-    node [shape=rect];
-
-    subgraph cluster_0 {
-        style=filled;
-        color=lightgrey;
-        node [style=filled,color=white];
-        a0 -> a1 -> a2 -> a3;
-        label = "process #1";
-    }
-
-    subgraph cluster_1 {
-        node [style=filled];
-        b0 -> b1 -> b2 -> b3;
-        label = "process #2";
-        color=blue
-    }
-
-    start -> a0;
-    start -> b0;
-    a1 -> b3;
-    b2 -> a3;
-    a3 -> a0;
-    a3 -> end;
-    b3 -> end;
-
-    start [shape=Mdiamond];
-    end [shape=Msquare];
-}
-`;
-
-const badDot = `
-digraph G {
-    node [shape=rect];
-
-    subgraph cluster_0 {
-        style=filled;
-        color=lightgrey;
-        node [style=filled,color=white];
-        a0 -> a1 -> a2 -> a3;
-        label = "process #1";
-    ]
-
-    subgraph cluster_1 {
-        node [style=filled];
-        b0 -> b1 -> b2 -> b3;
-        label = "process #2";
-        color=blue
-    }
-
-    start -> a0;
-    start -> b0;
-    a1 -> b3;
-    b2 -> a3;
-    a3 -> a0;
-    a3 -> end;
-    b3 -> end;
-
-    start [shape=Mdiamond];
-    end [shape=Msquare];
-}
-`;
+import { badDot, dot } from "./dot001";
+import { ortho } from "./dot002";
 
 describe("graphviz", function () {
     it("version", async function () {
@@ -242,6 +180,18 @@ describe("bad dot", function () {
             expect(e.message).to.not.be.empty;
         }
         expect(success).to.be.false;
+    });
+    it("ortho", function () {
+        let success;
+        try {
+            const svg = gvSync.dot(ortho, "svg");
+            success = true;
+        } catch (e: any) {
+            success = false;
+            expect(typeof e.message).to.equal("string");
+            expect(e.message).to.not.be.empty;
+        }
+        expect(success).to.be.true;
     });
 });
 
