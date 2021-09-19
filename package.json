@@ -26,6 +26,7 @@
   },
   "types": "types/index.d.ts",
   "files": [
+    "bin/cli.js",
     "dist/index*.*",
     "dist/expat*.*",
     "dist/graphviz*.*",
