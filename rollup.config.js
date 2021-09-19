@@ -66,6 +66,7 @@ export default [
     nodeTpl("lib-es6/index", pkg.main, pkg["module-node"]),
     nodeTpl("lib-es6/graphviz", "dist/graphviz.node.js", "dist/graphviz.node.es6"),
     nodeTpl("lib-es6/expat", "dist/expat.node.js", "dist/expat.node.es6"),
+
     browserTpl("lib-es6/__tests__/index", "dist/test.js", "dist/test.es6"),
     nodeTpl("lib-es6/__tests__/index", "dist/test.node.js", "dist/test.node.es6")
 ];
