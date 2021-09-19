@@ -1,4 +1,5 @@
 .vscode/ipch
+bin/
 build/
 dist/
 emsdk/

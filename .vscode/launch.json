@@ -45,7 +45,7 @@
         },
         {
             "name": "CLI",
-            "program": "${workspaceFolder}/bin/cli.js",
+            "program": "${workspaceFolder}/src/cli.js",
             "request": "launch",
             "args": [
                 "./input.dot"
