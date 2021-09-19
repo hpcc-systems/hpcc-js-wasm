@@ -22,11 +22,11 @@
   "unpkg": "dist/index.min.js",
   "jsdelivr": "dist/index.min.js",
   "bin": {
-    "dot-wasm": "bin/index.js"
+    "dot-wasm": "bin/cli.js"
   },
   "types": "types/index.d.ts",
   "files": [
-    "bin/index.js",
+    "bin/cli.js",
     "dist/index*.*",
     "dist/expat*.*",
     "dist/graphviz*.*",
@@ -44,7 +44,7 @@
     "install-expat:linux": "./scripts/cpp-install-expat.sh",
     "install-expat:win32": "wsl -e ./scripts/cpp-install-expat.sh",
     "install-build-deps": "run-s install-emsdk install-graphviz install-expat",
-    "clean": "rimraf coverage bin build dist lib* types *.tsbuildinfo",
+    "clean": "rimraf coverage build dist lib* types *.tsbuildinfo",
     "clean-build-deps": "rimraf ./emsdk ./src-graphviz ./src-expat",
     "compile-es6": "tsc --module es6 --outDir ./lib-es6",
     "compile-es6-watch": "npm run compile-es6 -- -w",
@@ -53,10 +53,9 @@
     "compile-cpp:linux": "./scripts/cpp-build.sh",
     "compile-cpp:win32": "wsl -e ./scripts/cpp-build.sh",
     "bundle": "rollup -c",
-    "bundle-cli": "ncc build -e ../dist/graphviz.node.js -m ./src/cli.js -o ./bin",
     "bundle-watch": "npm run bundle -- -w",
     "minimize": "terser dist/index.js -c -m --source-map -o dist/index.min.js",
-    "build": "run-s compile-cpp compile-es6 bundle bundle-cli minimize",
+    "build": "run-s compile-cpp compile-es6 bundle minimize",
     "build-ubuntu-dev": "docker build --rm -f \"./docker/ubuntu-dev.dockerfile\" -t ubuntu-dev:latest \".\"",
     "standard-version": "standard-version",
     "standard-version-dryrun": "standard-version --dry-run",
@@ -71,6 +70,9 @@
     "tag": "run-s standard-version git-push",
     "purge-jsdelivr": "node ./utils/purge-jsdelivr.js"
   },
+  "dependencies": {
+    "yargs": "^17.1.1"
+  },
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.5",
     "@rollup/plugin-commonjs": "^19.0.0",
@@ -80,7 +82,6 @@
     "@types/mocha": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
-    "@vercel/ncc": "^0.31.1",
     "chai": "^4.3.4",
     "eslint": "^7.32.0",
     "karma": "^6.3.4",
@@ -98,8 +99,7 @@
     "standard-version": "^9.3.1",
     "terser": "^5.8.0",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.3",
-    "yargs": "^17.1.1"
+    "typescript": "^4.4.3"
   },
   "repository": {
     "type": "git",
