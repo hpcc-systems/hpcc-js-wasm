@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.11.1...v1.12.0) (2021-09-19)
+
+
+### Features
+
+*  Add Command Line Interface ([caa0b11](https://github.com/hpcc-systems/hpcc-js-wasm/commit/caa0b119100a3fa915cedd9bc4ed567fc16b2f2a))
+
 ### [1.11.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.11.0...v1.11.1) (2021-09-18)
 
 
