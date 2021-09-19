@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.12.0...v1.12.1) (2021-09-19)
+
+
+### Bug Fixes
+
+*  Add cli to "files" section ([189ba5a](https://github.com/hpcc-systems/hpcc-js-wasm/commit/189ba5a1ac0b83be3c47af30fef369913409cbe9))
+
 ## [1.12.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.11.1...v1.12.0) (2021-09-19)
 
 
