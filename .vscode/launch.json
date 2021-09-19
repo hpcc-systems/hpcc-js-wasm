@@ -42,6 +42,18 @@
                 "<node_internals>/**"
             ],
             "type": "pwa-node"
+        },
+        {
+            "name": "CLI",
+            "program": "${workspaceFolder}/bin/cli.js",
+            "request": "launch",
+            "args": [
+                "./input.dot"
+            ],
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
         }
     ]
 }

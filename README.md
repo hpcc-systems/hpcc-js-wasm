@@ -19,6 +19,35 @@ The simplest way to include this project is via NPM:
 npm install --save @hpcc-js/wasm
 ```
 
+## CLI 
+To call `dot-wasm` without installing:
+```
+npx -p @hpcc-js/wasm dot-wasm [file | 'dot']
+```
+
+To install the global command `dot-wasm` via NPM:
+```
+npm install --global @hpcc-js/wasm
+```
+
+### Usage:
+```
+Usage: dot-wasm [options] fileOrDot
+
+Options:
+      --version  Show version number                                   [boolean]
+  -K, --layout   Set layout engine (circo | dot | fdp | sfdp | neato | osage |
+                 patchwork | twopi). By default, dot is used.
+  -T, --format   Set output language to one of the supported formats (svg, dot,
+                 json, dot_json, xdot_json, plain, plain-ext). By default, svg
+                 is produced.
+  -h, --help     Show help                                             [boolean]
+
+Examples:
+  dot-wasm -K neato -T xdot ./input.dot  Execute NEATO layout and outputs XDOT
+                                         format.
+```
+
 ## Contents
 @hpcc-js/wasm includes the following files in its `dist` folder:
 * `index.js` / `index.min.js` files:  Exposes _all_ the available APIs for all WASM files.
