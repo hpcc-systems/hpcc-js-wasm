@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.12.1...v1.12.2) (2021-09-19)
+
+
+### Bug Fixes
+
+* Bundle yargs into cli.js ([92dc2ba](https://github.com/hpcc-systems/hpcc-js-wasm/commit/92dc2ba0440204687f590f0b05047140c7e1d3cf))
+
 ### [1.12.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.12.0...v1.12.1) (2021-09-19)
 
 
