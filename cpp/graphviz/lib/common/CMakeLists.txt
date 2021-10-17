@@ -51,6 +51,7 @@ add_library(common STATIC
     ${GRAPHVIZ_LIB_DIR}/common/textspan.c
     ${GRAPHVIZ_LIB_DIR}/common/timing.c
     ${GRAPHVIZ_LIB_DIR}/common/utils.c
+    ${GRAPHVIZ_LIB_DIR}/common/xml.c
 
     # Generated files
     ${GRAPHVIZ_BUILD_DIR}/lib/common/htmlparse.c
