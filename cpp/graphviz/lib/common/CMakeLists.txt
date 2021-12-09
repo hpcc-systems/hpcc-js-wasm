@@ -21,6 +21,7 @@ add_library(common STATIC
     ${GRAPHVIZ_LIB_DIR}/common/ps_font_equiv.h
     ${GRAPHVIZ_LIB_DIR}/common/render.h
     ${GRAPHVIZ_LIB_DIR}/common/textspan.h
+    ${GRAPHVIZ_LIB_DIR}/common/textspan_lut.h
     ${GRAPHVIZ_LIB_DIR}/common/types.h
     ${GRAPHVIZ_LIB_DIR}/common/usershape.h
     ${GRAPHVIZ_LIB_DIR}/common/utils.h
@@ -49,6 +50,7 @@ add_library(common STATIC
     ${GRAPHVIZ_LIB_DIR}/common/splines.c
     ${GRAPHVIZ_LIB_DIR}/common/taper.c
     ${GRAPHVIZ_LIB_DIR}/common/textspan.c
+    ${GRAPHVIZ_LIB_DIR}/common/textspan_lut.c
     ${GRAPHVIZ_LIB_DIR}/common/timing.c
     ${GRAPHVIZ_LIB_DIR}/common/utils.c
     ${GRAPHVIZ_LIB_DIR}/common/xml.c
