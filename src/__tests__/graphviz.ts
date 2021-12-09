@@ -217,7 +217,7 @@ describe("options", function () {
         expect(plain1).to.not.equal(plain5);
     });
 
-    it("nop", function () {
+    it.skip("nop", function () {
         const plain1 = gvSync.dot(dot, "svg");
         const plain2 = gvSync.dot(dot, "svg", { nop: 0 });
         const plain3 = gvSync.dot(dot, "svg", { nop: 1 });
