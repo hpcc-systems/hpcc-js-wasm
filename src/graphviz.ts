@@ -52,6 +52,7 @@ export function graphvizVersion(wasmFolder?: string, wasmBinary?: Uint8Array) {
         return module.Graphviz.prototype.version();
     });
 }
+
 export const graphviz = {
     layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot", ext?: Ext): Promise<string> {
         if (!dotSource) return Promise.resolve("");
