@@ -31,3 +31,7 @@ jobs:
           CI: true
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - run: npm run purge-jsdelivr
+      - name: Create a Release
+        uses: elgohr/Github-Release-Action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
