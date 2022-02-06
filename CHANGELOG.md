@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.9](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.12.8...v1.12.9) (2022-02-06)
+
+
+### Bug Fixes
+
+* **graphviz:**  Add additional exports for Graphviz params ([9d96281](https://github.com/hpcc-systems/hpcc-js-wasm/commit/9d96281d591f19297cb5b59c9f61d00779b6062b)), closes [#92](https://github.com/hpcc-systems/hpcc-js-wasm/issues/92)
+
 ### [1.12.8](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.12.7...v1.12.8) (2022-01-17)
 
 ### [1.12.7](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.12.6...v1.12.7) (2021-12-09)
