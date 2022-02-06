@@ -2,21 +2,21 @@
 import * as graphvizlib from "../build/graphviz/graphvizlib/graphvizlib";
 import { loadWasm } from "./util";
 
-type Format = "svg" | "dot" | "json" | "dot_json" | "xdot_json" | "plain" | "plain-ext";
-type Engine = "circo" | "dot" | "fdp" | "sfdp" | "neato" | "osage" | "patchwork" | "twopi";
+export type Format = "svg" | "dot" | "json" | "dot_json" | "xdot_json" | "plain" | "plain-ext";
+export type Engine = "circo" | "dot" | "fdp" | "sfdp" | "neato" | "osage" | "patchwork" | "twopi";
 
-interface Image {
+export interface Image {
     path: string;
     width: string;
     height: string;
 }
 
-interface File {
+export interface File {
     path: string;
     data: string;
 }
 
-interface Ext {
+export interface Ext {
     images?: Image[];
     files?: File[];
     wasmFolder?: string;
