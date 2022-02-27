@@ -37,6 +37,7 @@ TARGET_LINK_LIBRARIES(graphvizlib
     gvplugin_dot_layout
     gvplugin_neato_layout
     common
+    label
     ortho
     pack
 )
@@ -52,6 +53,7 @@ TARGET_LINK_LIBRARIES(graphvizlib.node
     gvplugin_dot_layout
     gvplugin_neato_layout
     common
+    label
     ortho
     pack
 )
