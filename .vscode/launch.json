@@ -45,9 +45,11 @@
         },
         {
             "name": "CLI",
-            "program": "${workspaceFolder}/src/cli.js",
+            "program": "${workspaceFolder}/bin/cli.js",
             "request": "launch",
             "args": [
+                "-K neato",
+                "-n 2",
                 "./input.dot"
             ],
             "skipFiles": [
