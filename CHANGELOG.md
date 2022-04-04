@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.14.0...v1.14.1) (2022-04-04)
+
+
+### Bug Fixes
+
+* **publish:** Auto releasing fails in GH Action ([6af6f60](https://github.com/hpcc-systems/hpcc-js-wasm/commit/6af6f60ae24d62afa5a39e4d8980b91c56c0d06a))
+
 ## [1.14.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.13.0...v1.14.0) (2022-04-04)
 
 
