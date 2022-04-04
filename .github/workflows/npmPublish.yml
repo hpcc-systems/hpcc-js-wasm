@@ -3,7 +3,7 @@ name: Publish Package
 on:
   push:
     tags:
-      - "*"
+      - "v*"
 
 jobs:
   build:
@@ -31,7 +31,8 @@ jobs:
           CI: true
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - run: npm run purge-jsdelivr
-      - name: Create a Release
-        uses: elgohr/Github-Release-Action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+      - name: Create Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
