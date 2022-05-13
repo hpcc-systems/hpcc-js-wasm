@@ -1,5 +1,5 @@
 // @ts-ignore
-import * as graphvizlib from "../build/graphviz/graphvizlib/graphvizlib";
+import * as graphvizlib from "../build/cpp/graphviz/graphvizlib/graphvizlib";
 import { loadWasm } from "./util";
 
 export type Format = "svg" | "dot" | "json" | "dot_json" | "xdot_json" | "plain" | "plain-ext";
@@ -48,7 +48,7 @@ function createFiles(graphviz: any, _ext?: Ext) {
 }
 
 export function graphvizVersion(wasmFolder?: string, wasmBinary?: ArrayBuffer) {
-    return loadWasm(graphvizlib, wasmFolder, wasmBinary).then(module => {
+    return loadWasm(graphvizlib, "graphvizlib", wasmFolder, wasmBinary).then(module => {
         return module.Graphviz.prototype.version();
     });
 }
@@ -56,8 +56,8 @@ export function graphvizVersion(wasmFolder?: string, wasmBinary?: ArrayBuffer) {
 export const graphviz = {
     layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot", ext?: Ext): Promise<string> {
         if (!dotSource) return Promise.resolve("");
-        return loadWasm(graphvizlib, ext?.wasmFolder, ext?.wasmBinary).then(module => {
-            const graphViz = new module.Graphviz(ext?.yInvert !== undefined ? ext?.yInvert : false, ext?.nop !== undefined ? ext?.nop : 0);
+        return loadWasm(graphvizlib, "graphvizlib", ext?.wasmFolder, ext?.wasmBinary).then(module => {
+            const graphViz = new module.Graphviz(ext?.yInvert ? 1 : 0, ext?.nop ? ext?.nop : 0);
             createFiles(graphViz, ext);
             const retVal = graphViz.layout(dotSource, outputFormat, layoutEngine);
             module.destroy(graphViz);
@@ -144,5 +144,5 @@ export class GraphvizSync {
 }
 
 export function graphvizSync(wasmFolder?: string, wasmBinary?: ArrayBuffer): Promise<GraphvizSync> {
-    return loadWasm(graphvizlib, wasmFolder, wasmBinary).then(wasm => new GraphvizSync(wasm));
+    return loadWasm(graphvizlib, "graphvizlib", wasmFolder, wasmBinary).then(wasm => new GraphvizSync(wasm));
 }

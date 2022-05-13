@@ -16,7 +16,7 @@
             "name": "helloworld.html",
             "type": "pwa-msedge",
             "request": "launch",
-            "url": "file://${workspaceRoot}/helloworld.html",
+            "url": "http://localhost:8000/helloworld.html",
             "webRoot": "${workspaceRoot}"
         },
         {

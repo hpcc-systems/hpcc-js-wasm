@@ -1,3 +1,5 @@
+add_definitions(-DGVC_EXPORTS -DGVLIBDIR="${LIBRARY_INSTALL_DIR}/graphviz")
+
 add_library(gvc STATIC
   # Header files
   ${GRAPHVIZ_LIB_DIR}/gvc/gvc.h
@@ -35,19 +37,38 @@ target_include_directories(gvc
   PUBLIC
     ${GRAPHVIZ_LIB_DIR}
     ${GRAPHVIZ_LIB_DIR}/gvc
-    ${GRAPHVIZ_BUILD_DIR}
     ${GRAPHVIZ_LIB_DIR}/cdt
     ${GRAPHVIZ_LIB_DIR}/cgraph
     ${GRAPHVIZ_LIB_DIR}/common
     ${GRAPHVIZ_LIB_DIR}/pathplan
+  PRIVATE
+    ${GRAPHVIZ_BUILD_DIR}
 )
 
-target_link_libraries(gvc
+target_link_libraries(gvc PRIVATE
+  $<TARGET_OBJECTS:common_obj>
+  $<TARGET_OBJECTS:pack_obj>
+)
+
+target_link_libraries(gvc PRIVATE
   cdt
   cgraph
   common
   pack
-  pathplan
-  xdot
-  expat
 )
+
+target_link_libraries(gvc PUBLIC
+  ${MATH_LIB}
+)
+
+if(LTDL_FOUND)
+  target_include_directories(gvc SYSTEM PRIVATE ${LTDL_INCLUDE_DIRS})
+  if(NOT WIN32 OR MINGW)
+    target_link_libraries(gvc PUBLIC ${LTDL_LIBRARIES})
+  endif()
+endif()
+
+if(ZLIB_FOUND)
+  target_link_libraries(gvc PUBLIC ${ZLIB_LIBRARIES})
+endif()
+

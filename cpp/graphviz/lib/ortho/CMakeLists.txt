@@ -1,6 +1,6 @@
-add_definitions(-D_BLD_gvc=1)
+add_definitions(-DGVC_EXPORTS)
 
-add_library(ortho STATIC
+add_library(ortho_obj OBJECT
   # Header files
   ${GRAPHVIZ_LIB_DIR}/ortho/fPQ.h
   ${GRAPHVIZ_LIB_DIR}/ortho/maze.h
@@ -21,7 +21,7 @@ add_library(ortho STATIC
   ${GRAPHVIZ_LIB_DIR}/ortho/trapezoid.c
 )
 
-target_include_directories(ortho PRIVATE
+target_include_directories(ortho_obj PRIVATE
   ${GRAPHVIZ_LIB_DIR}
   ${GRAPHVIZ_LIB_DIR}/cdt
   ${GRAPHVIZ_LIB_DIR}/cgraph
@@ -29,5 +29,9 @@ target_include_directories(ortho PRIVATE
   ${GRAPHVIZ_LIB_DIR}/gvc
   ${GRAPHVIZ_LIB_DIR}/pack
   ${GRAPHVIZ_LIB_DIR}/pathplan
+)
+
+add_library(ortho STATIC
+  $<TARGET_OBJECTS:ortho_obj>
 )
 

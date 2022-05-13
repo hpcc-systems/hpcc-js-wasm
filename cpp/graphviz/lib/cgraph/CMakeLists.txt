@@ -1,7 +1,9 @@
+add_definitions(-DEXPORT_CGRAPH -DEXPORT_CGHDR)
 
 add_library(cgraph STATIC
   # Header files
   ${GRAPHVIZ_LIB_DIR}/cgraph/agxbuf.h
+  ${GRAPHVIZ_LIB_DIR}/cgraph/alloc.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/bitarray.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/cghdr.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/cgraph.h
@@ -9,13 +11,12 @@ add_library(cgraph STATIC
   ${GRAPHVIZ_LIB_DIR}/cgraph/itos.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/likely.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/prisize_t.h
-  ${GRAPHVIZ_LIB_DIR}/cgraph/sprint.h
+  ${GRAPHVIZ_LIB_DIR}/cgraph/stack.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/strcasecmp.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/unreachable.h
 
   # Source files
   ${GRAPHVIZ_LIB_DIR}/cgraph/agerror.c
-  ${GRAPHVIZ_LIB_DIR}/cgraph/agxbuf.c
   ${GRAPHVIZ_LIB_DIR}/cgraph/apply.c
   ${GRAPHVIZ_LIB_DIR}/cgraph/attr.c
   ${GRAPHVIZ_LIB_DIR}/cgraph/edge.c

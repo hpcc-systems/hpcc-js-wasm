@@ -1,4 +1,6 @@
-set(sources
+add_definitions(-DNEATOGEN_EXPORTS)
+
+set(SOURCES
   # Header files
   ${GRAPHVIZ_LIB_DIR}/neatogen/adjust.h
   ${GRAPHVIZ_LIB_DIR}/neatogen/bfs.h
@@ -84,7 +86,7 @@ set(sources
 )
 
 add_library(neatogen STATIC
-  ${sources}
+  ${SOURCES}
 )
 
 target_include_directories(neatogen PRIVATE
@@ -95,4 +97,11 @@ target_include_directories(neatogen PRIVATE
   ${GRAPHVIZ_LIB_DIR}/gvc
   ${GRAPHVIZ_LIB_DIR}/pack
   ${GRAPHVIZ_LIB_DIR}/pathplan
+)
+
+target_link_libraries(neatogen PRIVATE
+  cgraph
+  gvc
+  pathplan
+  sparse
 )

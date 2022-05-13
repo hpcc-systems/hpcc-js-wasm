@@ -1,6 +1,17 @@
 PROJECT(expatlib)
 
-SET(EM_FLAGS "-s WASM=1 -s INVOKE_RUN=0 -s ALLOW_MEMORY_GROWTH=1 -s MODULARIZE=2 -s EXPORT_NAME='${CMAKE_PROJECT_NAME}' -s EXPORTED_FUNCTIONS=\"['_malloc']\" --post-js ${CMAKE_CURRENT_BINARY_DIR}/main_glue.js")
+find_package(expat CONFIG REQUIRED)
+
+# See:  https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
+SET(EM_FLAGS 
+    ${EM_FLAGS}
+    "-s FILESYSTEM=1"
+    "-s EXPORT_NAME='${CMAKE_PROJECT_NAME}'"
+    "-s EXPORTED_FUNCTIONS=\"['_malloc']\""
+    "-s EXPORTED_RUNTIME_METHODS=\"[]\""
+    "--post-js ${CMAKE_CURRENT_BINARY_DIR}/main_glue.js"
+)
+STRING(REPLACE ";" " " LINK_FLAGS "${EM_FLAGS}")
 
 #  Generate Glue from IDL file  ---
 ADD_CUSTOM_COMMAND(
@@ -12,32 +23,22 @@ SET_PROPERTY(SOURCE main.cpp APPEND PROPERTY OBJECT_DEPENDS ${CMAKE_CURRENT_BINA
 #  ---  ---  ---
 
 INCLUDE_DIRECTORIES(
+    ${VCPKG_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${EXPAT_LIB_DIR}
 )
 
 ADD_EXECUTABLE(expatlib
     main.cpp
 )
 
-SET_TARGET_PROPERTIES(expatlib PROPERTIES LINK_FLAGS "-s ENVIRONMENT=web ${EM_FLAGS}")
+SET_TARGET_PROPERTIES(expatlib PROPERTIES LINK_FLAGS ${LINK_FLAGS})
 
 TARGET_LINK_LIBRARIES(expatlib
-    expat
+    expat::expat
 )
 
-ADD_EXECUTABLE(expatlib.node
-    main.cpp
-)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/expatlib.wasm DESTINATION dist COMPONENT runtime)
 
-SET_TARGET_PROPERTIES(expatlib.node PROPERTIES LINK_FLAGS "-s ENVIRONMENT=node ${EM_FLAGS}")
-
-TARGET_LINK_LIBRARIES(expatlib.node
-    expat
-)
-
-INSTALL(FILES 
-    ${CMAKE_CURRENT_BINARY_DIR}/expatlib.wasm
-    DESTINATION dist
-    COMPONENT runtime
-)
+IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/expatlib.wasm.map DESTINATION dist COMPONENT runtime)
+ENDIF ()

@@ -3,12 +3,38 @@
 #include "../config.h"
 #include <gvc.h>
 #include <globals.h>
+#include <gvc/gvplugin.h>
 
 #include <emscripten.h>
 
-extern gvplugin_library_t gvplugin_core_LTX_library;
+
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
 extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
+#ifdef HAVE_LIBGD
+extern gvplugin_library_t gvplugin_gd_LTX_library;
+#endif
+#ifdef HAVE_PANGOCAIRO
+extern gvplugin_library_t gvplugin_pango_LTX_library;
+#ifdef HAVE_WEBP
+extern gvplugin_library_t gvplugin_webp_LTX_library;
+#endif
+#endif
+extern gvplugin_library_t gvplugin_core_LTX_library;
+
+lt_symlist_t lt_preloaded_symbols[] = {
+    {"gvplugin_dot_layout_LTX_library", &gvplugin_dot_layout_LTX_library},
+    {"gvplugin_neato_layout_LTX_library", &gvplugin_neato_layout_LTX_library},
+#ifdef HAVE_PANGOCAIRO
+    {"gvplugin_pango_LTX_library", &gvplugin_pango_LTX_library},
+#ifdef HAVE_WEBP
+    {"gvplugin_webp_LTX_library", &gvplugin_webp_LTX_library},
+#endif
+#endif
+#ifdef HAVE_LIBGD
+    {"gvplugin_gd_LTX_library", &gvplugin_gd_LTX_library},
+#endif
+    {"gvplugin_core_LTX_library", &gvplugin_core_LTX_library},
+    {0, 0}};
 
 char lastErrorStr[1024];
 
@@ -31,9 +57,9 @@ const char *Graphviz::lastError()
 int origYInvert = Y_invert;
 int origNop = Nop;
 
-Graphviz::Graphviz(bool yInvert, int nop)
+Graphviz::Graphviz(int yInvert, int nop)
 {
-    Y_invert = yInvert == true ? 1 : origYInvert;
+    Y_invert = yInvert > 0 ? yInvert : origYInvert;
     Nop = nop > 0 ? nop : origNop;
 }
 
@@ -45,10 +71,7 @@ const char *Graphviz::layout(const char *src, const char *format, const char *en
 {
     lastErrorStr[0] = '\0';
 
-    GVC_t *context = gvContext();
-    gvAddLibrary(context, &gvplugin_core_LTX_library);
-    gvAddLibrary(context, &gvplugin_dot_layout_LTX_library);
-    gvAddLibrary(context, &gvplugin_neato_layout_LTX_library);
+    GVC_t *gvc = gvContextPlugins(lt_preloaded_symbols, true);
 
     agseterr(AGERR);
     agseterrf(vizErrorf);
@@ -56,15 +79,15 @@ const char *Graphviz::layout(const char *src, const char *format, const char *en
     agreadline(1);
 
     Agraph_t *graph;
-    char *result = NULL;
+    char *data = NULL;
     unsigned int length;
     while ((graph = agmemread(src)))
     {
-        if (result == NULL)
+        if (data == NULL)
         {
-            gvLayout(context, graph, engine);
-            gvRenderData(context, graph, format, &result, &length);
-            gvFreeLayout(context, graph);
+            gvLayout(gvc, graph, engine);
+            gvRenderData(gvc, graph, format, &data, &length);
+            gvFreeLayout(gvc, graph);
         }
 
         agclose(graph);
@@ -72,7 +95,13 @@ const char *Graphviz::layout(const char *src, const char *format, const char *en
         src = "";
     }
 
-    return result;
+    m_result = data;
+    gvFreeRenderData(data);
+
+    gvFinalize(gvc);
+    gvFreeContext(gvc);
+
+    return m_result.c_str();
 }
 
 void Graphviz::createFile(const char *path, const char *data)

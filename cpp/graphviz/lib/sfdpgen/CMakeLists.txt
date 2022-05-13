@@ -1,3 +1,5 @@
+add_definitions(-DNEATOGEN_EXPORTS)
+
 add_library(sfdpgen STATIC
   # Header files
   ${GRAPHVIZ_LIB_DIR}/sfdpgen/Multilevel.h
@@ -29,5 +31,11 @@ target_include_directories(sfdpgen PRIVATE
   ${GRAPHVIZ_LIB_DIR}/gvc
   ${GRAPHVIZ_LIB_DIR}/pack
   ${GRAPHVIZ_LIB_DIR}/pathplan
+)
+
+target_link_libraries(sfdpgen PRIVATE
+  gvc
+  neatogen
+  sparse
 )
 

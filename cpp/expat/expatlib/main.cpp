@@ -1,7 +1,7 @@
-#include "../config.h"
 #include "stack_parser.h"
 
 #include <string>
+#include <expat.h>
 
 class CExpat : public CExpatImpl<CExpat>
 {
@@ -16,7 +16,7 @@ protected:
 public:
     static const char *version()
     {
-        return PACKAGE_VERSION;
+        return XML_ExpatVersion();
     }
 
     CExpat()

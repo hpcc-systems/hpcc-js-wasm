@@ -11,3 +11,7 @@ target_include_directories(ingraphs PRIVATE
   ${GRAPHVIZ_LIB_DIR}/cdt
   ${GRAPHVIZ_LIB_DIR}/cgraph
 )
+
+target_link_libraries(ingraphs PRIVATE
+  cgraph
+)

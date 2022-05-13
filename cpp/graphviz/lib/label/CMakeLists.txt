@@ -1,3 +1,5 @@
+add_definitions(-DGVC_EXPORTS)
+
 add_library(label STATIC
   # Header files
   ${GRAPHVIZ_LIB_DIR}/label/index.h
@@ -19,4 +21,8 @@ target_include_directories(label PRIVATE
   ${GRAPHVIZ_LIB_DIR}/cdt
   ${GRAPHVIZ_LIB_DIR}/cgraph
   ${GRAPHVIZ_LIB_DIR}/common
+)
+
+target_link_libraries(label PRIVATE
+  cdt
 )

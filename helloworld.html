@@ -11,7 +11,22 @@
 </head>
 
 <body>
-    <div id="placeholder"></div>
+    <div id="placeholder0"></div>
+    <script>
+        const test = `\
+digraph {
+    layout = neato
+    splines = true
+    edge [len = 2]
+    a -> b
+    b -> a
+}`;
+        hpccWasm.graphviz.layout(test, "svg", "dot").then(svg => {
+            const div = document.getElementById("placeholder0");
+            div.innerHTML = svg;
+        });
+    </script>
+    <div id="placeholder1"></div>
     <div id="placeholder2"></div>
     <script>
         const dot = `
@@ -48,7 +63,7 @@
 
         // Asynchronous call to layout
         hpccWasm.graphviz.layout(dot, "svg", "dot").then(svg => {
-            const div = document.getElementById("placeholder");
+            const div = document.getElementById("placeholder1");
             div.innerHTML = svg;
         });
 

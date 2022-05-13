@@ -1,3 +1,5 @@
+add_definitions(-DGVC_EXPORTS)
+
 add_library(pack_obj OBJECT
   # Header files
   ${GRAPHVIZ_LIB_DIR}/pack/pack.h
