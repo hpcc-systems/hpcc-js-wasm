@@ -27,7 +27,7 @@ export class StackElement {
 export class StackParser implements IParser {
     private _stack: StackElement[] = [];
 
-    parse(xml: string, wasmFolder?: string, wasmBinary?: Uint8Array): Promise<boolean> {
+    parse(xml: string, wasmFolder?: string, wasmBinary?: ArrayBuffer): Promise<boolean> {
         return parse(xml, this, wasmFolder, wasmBinary);
     }
 
@@ -62,13 +62,13 @@ function parseAttrs(attrs: string): Attributes {
     return retVal;
 }
 
-export function expatVersion(wasmFolder?: string, wasmBinary?: Uint8Array) {
+export function expatVersion(wasmFolder?: string, wasmBinary?: ArrayBuffer) {
     return loadWasm(expatlib, wasmFolder, wasmBinary).then(module => {
         return module.CExpat.prototype.version();
     });
 }
 
-export function parse(xml: string, callback: IParser, wasmFolder?: string, wasmBinary?: Uint8Array): Promise<boolean> {
+export function parse(xml: string, callback: IParser, wasmFolder?: string, wasmBinary?: ArrayBuffer): Promise<boolean> {
     return loadWasm(expatlib, wasmFolder, wasmBinary).then(module => {
         const parser = new module.CExpatJS();
         parser.startElement = function () {
