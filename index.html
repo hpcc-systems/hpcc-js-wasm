@@ -37,6 +37,7 @@
     <div id="placeholder4"></div>
     <h3>End</h3>
     <script>
+        hpccWasm.expatVersion().then(v => alert(v));
         const dot = `
             digraph G {
                 node [shape=rect];

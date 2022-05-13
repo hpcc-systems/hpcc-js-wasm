@@ -33,3 +33,7 @@ target_include_directories(dotgen PRIVATE
   ${GRAPHVIZ_LIB_DIR}/pack
   ${GRAPHVIZ_LIB_DIR}/pathplan
 )
+
+target_link_libraries(dotgen PRIVATE
+  cgraph
+)

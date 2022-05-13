@@ -1,6 +1,7 @@
-PROJECT(common)
 
-add_library(common STATIC
+add_definitions(-DGVC_EXPORTS)
+
+add_library(common_obj OBJECT
   # Header files
   ${GRAPHVIZ_LIB_DIR}/common/arith.h
   ${GRAPHVIZ_LIB_DIR}/common/color.h
@@ -59,7 +60,7 @@ add_library(common STATIC
   ${GRAPHVIZ_BUILD_DIR}/lib/common/htmlparse.c
 )
 
-target_include_directories(common PRIVATE
+target_include_directories(common_obj PRIVATE
   ${GRAPHVIZ_LIB_DIR}
   ${GRAPHVIZ_LIB_DIR}/common
   ${GRAPHVIZ_BUILD_DIR}/lib/common
@@ -69,6 +70,25 @@ target_include_directories(common PRIVATE
   ${GRAPHVIZ_LIB_DIR}/pack
   ${GRAPHVIZ_LIB_DIR}/pathplan
   ${GRAPHVIZ_LIB_DIR}/xdot
+)
+
+target_include_directories(common_obj SYSTEM PRIVATE
   ${EXPAT_DIR}/lib
 )
+add_library(common STATIC
+  $<TARGET_OBJECTS:common_obj>
+)
+
+target_link_libraries(common PRIVATE
+  cgraph
+  pathplan
+  label
+  xdot
+)
+
+if(EXPAT_FOUND)
+  target_link_libraries(common PRIVATE
+    ${EXPAT_LIBRARIES}
+  )
+endif()
 

@@ -31,3 +31,9 @@ add_subdirectory(cgraph)
 
 # Multiple dependencies
 add_subdirectory(gvc)
+
+# C++ API libraries
+if(with_cxx_api)
+  add_subdirectory(cgraph++)
+  add_subdirectory(gvc++)
+endif()

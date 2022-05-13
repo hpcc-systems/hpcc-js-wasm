@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"cmake.cmakePath": "${workspaceFolder}/scripts/cmake.sh",
+		"cmake.generator": "Unix Makefiles",
+		"cmake.configureArgs": [
+			"-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/vcpkg/scripts/buildsystems/vcpkg.cmake",
+			"-DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=${workspaceFolder}/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+			"-DVCPKG_MANIFEST_DIR=${workspaceFolder}",
+			"-DVCPKG_OVERLAY_PORTS=${workspaceFolder}/vcpkg-overlays",
+			"-DVCPKG_TARGET_TRIPLET=wasm32-emscripten"
+		],
+	}
+}

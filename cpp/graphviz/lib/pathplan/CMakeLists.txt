@@ -1,3 +1,5 @@
+add_definitions(-DPATHPLAN_EXPORTS)
+
 add_library(pathplan STATIC
   # Header files
   ${GRAPHVIZ_LIB_DIR}/pathplan/pathgeom.h
@@ -23,4 +25,9 @@ add_library(pathplan STATIC
 target_include_directories(pathplan PRIVATE
   ${GRAPHVIZ_LIB_DIR}
   ${GRAPHVIZ_LIB_DIR}/pathplan
+)
+
+target_link_libraries(
+  pathplan
+  ${MATH_LIB}
 )

@@ -1,5 +1,5 @@
 // @ts-ignore
-import * as expatlib from "../build/expat/expatlib/expatlib";
+import * as expatlib from "../build/cpp/expat/expatlib/expatlib";
 import { loadWasm } from "./util";
 
 export type Attributes = { [key: string]: string };
@@ -63,13 +63,13 @@ function parseAttrs(attrs: string): Attributes {
 }
 
 export function expatVersion(wasmFolder?: string, wasmBinary?: ArrayBuffer) {
-    return loadWasm(expatlib, wasmFolder, wasmBinary).then(module => {
+    return loadWasm(expatlib, "expatlib", wasmFolder, wasmBinary).then(module => {
         return module.CExpat.prototype.version();
     });
 }
 
 export function parse(xml: string, callback: IParser, wasmFolder?: string, wasmBinary?: ArrayBuffer): Promise<boolean> {
-    return loadWasm(expatlib, wasmFolder, wasmBinary).then(module => {
+    return loadWasm(expatlib, "expatlib", wasmFolder, wasmBinary).then(module => {
         const parser = new module.CExpatJS();
         parser.startElement = function () {
             callback.startElement(this.tag(), parseAttrs(this.attrs()));
