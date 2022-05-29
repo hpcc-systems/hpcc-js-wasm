@@ -20,7 +20,7 @@ export interface Ext {
     images?: Image[];
     files?: File[];
     wasmFolder?: string;
-    wasmBinary?: Uint8Array;
+    wasmBinary?: ArrayBuffer;
     yInvert?: boolean;
     nop?: number;
 }
@@ -47,7 +47,7 @@ function createFiles(graphviz: any, _ext?: Ext) {
     [...ext.files, ...imagesToFiles(ext.images)].forEach(file => graphviz.createFile(file.path, file.data));
 }
 
-export function graphvizVersion(wasmFolder?: string, wasmBinary?: Uint8Array) {
+export function graphvizVersion(wasmFolder?: string, wasmBinary?: ArrayBuffer) {
     return loadWasm(graphvizlib, wasmFolder, wasmBinary).then(module => {
         return module.Graphviz.prototype.version();
     });
@@ -143,6 +143,6 @@ export class GraphvizSync {
     }
 }
 
-export function graphvizSync(wasmFolder?: string, wasmBinary?: Uint8Array): Promise<GraphvizSync> {
+export function graphvizSync(wasmFolder?: string, wasmBinary?: ArrayBuffer): Promise<GraphvizSync> {
     return loadWasm(graphvizlib, wasmFolder, wasmBinary).then(wasm => new GraphvizSync(wasm));
 }
