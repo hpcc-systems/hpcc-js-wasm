@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.15.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.14.1...v1.15.0) (2022-07-07)
+
+
+### Features
+
+*  Bump versions to latest ([ee76b82](https://github.com/hpcc-systems/hpcc-js-wasm/commit/ee76b8255505ab62afba07340679b45496c7b163))
+
+
+### Bug Fixes
+
+*  wasmBinary should be an ArrayBuffer ([4b18e61](https://github.com/hpcc-systems/hpcc-js-wasm/commit/4b18e616386e3b1702717ad4ccf1f82f2d08d0c9))
+
 ### [1.14.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.14.0...v1.14.1) (2022-04-04)
 
 
