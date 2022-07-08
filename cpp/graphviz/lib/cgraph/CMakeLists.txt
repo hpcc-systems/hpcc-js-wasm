@@ -1,3 +1,4 @@
+add_definitions(-DEXPORT_CGRAPH -DEXPORT_CGHDR)
 
 add_library(cgraph STATIC
   # Header files

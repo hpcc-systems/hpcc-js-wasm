@@ -1,3 +1,5 @@
+add_definitions(-DEXPORT_XDOT)
+
 add_library(xdot STATIC
   # Header files
   ${GRAPHVIZ_LIB_DIR}/xdot/xdot.h

@@ -374,5 +374,5 @@ This has been made a manual step as the downloads are quite large and the auto-c
 ### Clean dependencies: 
 _It is worth noting that `npm run clean` will only clean any artifacts associated with the build, but won't clean clean any of the third party dependencies.  To remove those for a "full clean", run:_
 ```
-npm run clean-build-deps
+npm run uninstall-build-deps
 ```

@@ -1,0 +1,11 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+    "name": "hpccjswasm",
+    "version": "1",
+    "dependencies": [
+        "base91",
+        "expat",
+        "triangle",
+        "zlib"
+    ]
+}

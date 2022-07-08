@@ -13,8 +13,7 @@ then
     mkdir ./build
     cd ./build
     cmake ..
-    cmake --build . #  -- -j (See https://gitlab.com/graphviz/graphviz/-/issues/2098)
+    cmake --build . -- -j -k #  see https://gitlab.com/graphviz/graphviz/-/issues/2098
     cd ..
-
     cd ..
 fi

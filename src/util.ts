@@ -29,7 +29,49 @@ function trimStart(str: string, charToRemove: string) {
     return str;
 }
 
-export function loadWasm(_wasmLib: any, wf?: string, wasmBinary?: ArrayBuffer): Promise<any> {
+let scriptDir = typeof document !== 'undefined' && document.currentScript ? (document.currentScript as any).src :
+    typeof __filename !== 'undefined' ? __filename :
+        typeof document !== 'undefined' && document.currentScript ? (document.currentScript as any).src :
+            "";
+scriptDir = scriptDir.substr(0, scriptDir.replace(/[?#].*/, "").lastIndexOf('/') + 1);
+
+async function browserFetch(wasmUrl: string): Promise<ArrayBuffer> {
+    return fetch(wasmUrl, { credentials: 'same-origin' }).then(response => {
+        if (!response.ok) {
+            throw "failed to load wasm binary file at '" + wasmUrl + "'";
+        }
+        return response.arrayBuffer();
+    }).catch(e => {
+        throw e;
+    });
+}
+
+async function nodeFetch(wasmUrl: string): Promise<ArrayBuffer> {
+    const fs = require("fs/promises");
+    return fs.readFile(wasmUrl, undefined);
+}
+
+const g_wasmCache = {} as { [key: string]: Promise<any> };
+
+export async function loadWasm(_wasmLib: any, filename: string, wf?: string, wasmBinary?: ArrayBuffer): Promise<any> {
+    if (!g_wasmCache[filename]) {
+        g_wasmCache[filename] = _loadWasm(_wasmLib, filename, wf, wasmBinary);
+    }
+    return g_wasmCache[filename];
+}
+
+export async function _loadWasm(_wasmLib: any, filename: string, wf?: string, wasmBinary?: ArrayBuffer): Promise<any> {
+    const wasmLib = _wasmLib.default || _wasmLib;
+    const wasmUrl = `${trimEnd(wf || wasmFolder() || scriptDir || ".", "/")}/${trimStart(`${filename}.wasm`, "/")}`;
+    if (!wasmBinary) {
+        wasmBinary = await ((typeof process == 'object' && typeof require == 'function') ? nodeFetch(wasmUrl) : browserFetch(wasmUrl));
+    }
+    return await wasmLib({
+        "wasm": wasmBinary
+    });
+}
+
+export function loadWasmOld(_wasmLib: any, filename: string, wf?: string, wasmBinary?: Uint8Array): Promise<any> {
     const wasmLib = _wasmLib.default || _wasmLib;
     //  Prevent double load ---
     if (!wasmLib.__hpcc_promise) {

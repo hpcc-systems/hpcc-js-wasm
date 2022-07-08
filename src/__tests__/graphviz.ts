@@ -1,10 +1,109 @@
 import { expect } from "chai";
 import { wasmFolder } from "../util";
-import { graphviz, graphvizSync, GraphvizSync, graphvizVersion } from "../graphviz";
+import { Engine, Format, graphviz, graphvizSync, GraphvizSync, graphvizVersion } from "../graphviz";
 import { badDot, dot } from "./dot001";
 import { ortho } from "./dot002";
 
+export const formats: Format[] = ["svg", "dot", "json", "dot_json", "xdot_json", "plain", "plain-ext"];
+export const engines: Engine[] = ["circo", "dot", "fdp", "sfdp", "neato", "osage", "patchwork", "twopi"];
+
 describe("graphviz", function () {
+    it("version", async function () {
+        const v = await graphvizVersion();
+        expect(v).to.be.a.string;
+        expect(v).to.not.be.empty;
+    });
+
+    describe("all combos", function () {
+        for (const engine of engines) {
+            for (const format of formats) {
+                it(`${engine}-${format}`, function () {
+                    return graphviz.layout(dot, format, engine).then(result => {
+                        expect(result).to.be.a("string");
+                        expect(result).to.not.be.empty;
+                    }).catch(e => {
+                        expect(true).to.be.false;
+                    });
+                });
+            }
+        }
+    });
+
+    it("circo", function () {
+        return graphviz.circo(dot, "svg").then(svg => {
+            expect(svg).to.be.a("string");
+            expect(svg).to.not.be.empty;
+        }).catch(e => {
+            expect(true).to.be.false;
+        });
+    });
+    it("dot", function () {
+        return graphviz.dot(dot, "svg").then(svg => {
+            expect(svg).to.be.a("string");
+            expect(svg).to.not.be.empty;
+        }).catch(e => {
+            expect(true).to.be.false;
+        });
+    });
+    it("blank-dot", function () {
+        return graphviz.dot("", "svg").then(svg => {
+            expect(svg).to.be.a("string");
+            expect(svg).to.be.empty;
+        }).catch(e => {
+            expect(true).to.be.false;
+        });
+    });
+    it("fdp", function () {
+        return graphviz.fdp(dot, "svg").then(svg => {
+            expect(svg).to.be.a("string");
+            expect(svg).to.not.be.empty;
+        }).catch(e => {
+            expect(true).to.be.false;
+        });
+    });
+    it("sfdp", function () {
+        return graphviz.sfdp(dot, "svg").then(svg => {
+            expect(svg).to.be.a("string");
+            expect(svg).to.not.be.empty;
+        }).catch(e => {
+            expect(true).to.be.false;
+        });
+    });
+    it("neato", function () {
+        return graphviz.neato(dot, "svg").then(svg => {
+            expect(svg).to.be.a("string");
+            expect(svg).to.not.be.empty;
+        }).catch(e => {
+            expect(true).to.be.false;
+        });
+    });
+    it("osage", function () {
+        return graphviz.osage(dot, "svg").then(svg => {
+            expect(svg).to.be.a("string");
+            expect(svg).to.not.be.empty;
+        }).catch(e => {
+            expect(true).to.be.false;
+        });
+    });
+    it("patchwork", function () {
+        return graphviz.patchwork(dot, "svg").then(svg => {
+            expect(svg).to.be.a("string");
+            expect(svg).to.not.be.empty;
+        }).catch(e => {
+            expect(true).to.be.false;
+        });
+    });
+    it("twopi", function () {
+        return graphviz.twopi(dot, "svg").then(svg => {
+            expect(svg).to.be.a("string");
+            expect(svg).to.not.be.empty;
+        }).catch(e => {
+            expect(true).to.be.false;
+        });
+    });
+});
+
+describe("graphviz API", function () {
     it("version", async function () {
         const v = await graphvizVersion();
         expect(v).to.be.a.string;
@@ -140,6 +239,21 @@ describe("graphvizSync", function () {
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
     });
+    this.timeout(5000);
+    it("ortho", function () {
+        let success;
+        try {
+            const svg = gvSync.dot(ortho, "svg");
+            success = true;
+        } catch (e: any) {
+            success = false;
+            expect(typeof e.message).to.equal("string");
+            expect(e.message).to.not.be.empty;
+            console.error(e.message);
+        }
+        expect(success).to.be.true;
+    });
+
 });
 
 describe("bad dot", function () {
@@ -181,17 +295,23 @@ describe("bad dot", function () {
         }
         expect(success).to.be.false;
     });
-    it("ortho", function () {
+    it("create", function () {
+        return graphvizSync().then(gv => {
+            gvSync = gv;
+            expect(gvSync).to.exist;
+        });
+    });
+    it("dotSync", function () {
         let success;
         try {
-            const svg = gvSync.dot(ortho, "svg");
+            const svg = gvSync.dot(badDot, "svg");
             success = true;
         } catch (e: any) {
             success = false;
             expect(typeof e.message).to.equal("string");
             expect(e.message).to.not.be.empty;
         }
-        expect(success).to.be.true;
+        expect(success).to.be.false;
     });
 });
 
@@ -203,6 +323,16 @@ describe("options", function () {
             gvSync = gv;
             expect(gvSync).to.exist;
         });
+    });
+
+    it("nop", function () {
+        const plain1 = gvSync.dot(dot, "svg");
+        const plain2 = gvSync.dot(dot, "svg", { nop: 0 });
+        const plain3 = gvSync.dot(dot, "svg", { nop: 1 });
+        const plain4 = gvSync.dot(dot, "svg", { nop: 2 });
+        expect(plain1).to.equal(plain2);
+        expect(plain1).to.equal(plain3);
+        expect(plain1).to.equal(plain4);
     });
 
     it("yInvert", function () {
@@ -217,15 +347,6 @@ describe("options", function () {
         expect(plain1).to.not.equal(plain5);
     });
 
-    it.skip("nop", function () {
-        const plain1 = gvSync.dot(dot, "svg");
-        const plain2 = gvSync.dot(dot, "svg", { nop: 0 });
-        const plain3 = gvSync.dot(dot, "svg", { nop: 1 });
-        const plain4 = gvSync.dot(dot, "svg", { nop: 2 });
-        expect(plain1).to.equal(plain2);
-        expect(plain1).to.equal(plain3);
-        expect(plain1).to.equal(plain4);
-    });
 });
 
 describe("wasmFolder", function () {

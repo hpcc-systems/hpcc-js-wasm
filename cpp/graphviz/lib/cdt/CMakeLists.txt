@@ -1,3 +1,4 @@
+add_definitions(-DEXPORT_CDT)
 
 add_library(cdt STATIC
   # Header files
