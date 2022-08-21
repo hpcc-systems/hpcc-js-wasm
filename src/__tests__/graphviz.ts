@@ -182,6 +182,15 @@ describe("graphviz API", function () {
             expect(true).to.be.false;
         });
     });
+
+    it("images", function () {
+        return graphviz.layout('digraph { a[image="./resources/hpcc-logo.png"]; }', "svg", "dot", { images: [{ path: "./resources/hpcc-logo.png", width: "272px", height: "92px" }] }).then(svg => {
+            expect(svg).to.be.a("string");
+            expect(svg).to.contain('<image xlink:href="./resources/hpcc-logo.png" width="204px" height="69px" preserveAspectRatio="xMinYMin meet"');
+        }).catch(e => {
+            expect(true).to.be.false;
+        });
+    });
 });
 
 describe("graphvizSync", function () {
@@ -326,10 +335,10 @@ describe("options", function () {
     });
 
     it("nop", function () {
-        const plain1 = gvSync.dot(dot, "svg");
-        const plain2 = gvSync.dot(dot, "svg", { nop: 0 });
-        const plain3 = gvSync.dot(dot, "svg", { nop: 1 });
-        const plain4 = gvSync.dot(dot, "svg", { nop: 2 });
+        const plain1 = gvSync.dot(dot, "plain");
+        const plain2 = gvSync.dot(dot, "plain", { nop: 0 });
+        const plain3 = gvSync.dot(dot, "plain", { nop: 1 });
+        const plain4 = gvSync.dot(dot, "plain", { nop: 2 });
         expect(plain1).to.equal(plain2);
         expect(plain1).to.equal(plain3);
         expect(plain1).to.equal(plain4);
@@ -346,7 +355,6 @@ describe("options", function () {
         expect(plain1).to.equal(plain4);
         expect(plain1).to.not.equal(plain5);
     });
-
 });
 
 describe("wasmFolder", function () {

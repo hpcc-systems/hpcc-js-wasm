@@ -3,6 +3,7 @@ PROJECT(graphvizlib)
 # See:  https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
 SET(EM_FLAGS 
     ${EM_FLAGS}
+    "-s FILESYSTEM=1"
     "-s EXPORT_NAME='${CMAKE_PROJECT_NAME}'"
     "-s EXPORTED_FUNCTIONS=\"[_free]\""
     "-s EXPORTED_RUNTIME_METHODS=\"[]\""
