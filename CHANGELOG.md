@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.15.2...v1.15.3) (2022-08-21)
+
+
+### Bug Fixes
+
+*  Fix load cache II ([98f2fcd](https://github.com/hpcc-systems/hpcc-js-wasm/commit/98f2fcd2b810f4cb2329f3e235995adcc21b27a4))
+
 ### [1.15.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.15.1...v1.15.2) (2022-08-21)
 
 
