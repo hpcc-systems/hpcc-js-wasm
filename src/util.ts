@@ -67,11 +67,11 @@ async function _loadWasm(_wasmLib: any, wasmUrl: string, wasmBinary?: ArrayBuffe
         wasmBinary = await ((typeof process == 'object' && typeof require == 'function') ? nodeFetch(wasmUrl) : browserFetch(wasmUrl));
     }
     return await wasmLib({
-        "wasm": wasmBinary
+        "wasmBinary": wasmBinary
     });
 }
 
-function loadWasmOld(_wasmLib: any, filename: string, wf?: string, wasmBinary?: Uint8Array): Promise<any> {
+export function loadWasmOld(_wasmLib: any, filename: string, wf?: string, wasmBinary?: Uint8Array): Promise<any> {
     const wasmLib = _wasmLib.default || _wasmLib;
     //  Prevent double load ---
     if (!wasmLib.__hpcc_promise) {
