@@ -23,7 +23,7 @@ option(use_sanitizers  "enables using address and undefined behavior sanitizer" 
 option(use_coverage    "enables analyzing code coverage" OFF)
 option(with_cxx_api    "enables building the C++ API" ON)
 option(with_cxx_tests  "enables building the C++ tests" OFF)
-option(use_win_pre_inst_libs "enables building using pre-installed Windows libraries" ON)
+option(use_win_pre_inst_libs "enables building using pre-installed Windows libraries" OFF)
 
 if(with_digcola)
   add_definitions(-DDIGCOLA)

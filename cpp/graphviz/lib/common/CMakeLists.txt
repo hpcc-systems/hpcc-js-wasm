@@ -15,7 +15,6 @@ add_library(common_obj OBJECT
   ${GRAPHVIZ_LIB_DIR}/common/intset.h
   ${GRAPHVIZ_LIB_DIR}/common/htmllex.h
   ${GRAPHVIZ_LIB_DIR}/common/htmltable.h
-  ${GRAPHVIZ_LIB_DIR}/common/logic.h
   ${GRAPHVIZ_LIB_DIR}/common/macros.h
   ${GRAPHVIZ_LIB_DIR}/common/memory.h
   ${GRAPHVIZ_LIB_DIR}/common/pointset.h

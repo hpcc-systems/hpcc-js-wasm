@@ -27,15 +27,17 @@
 <body>
     <h3>Async DOT</h3>
     <div id="placeholder"></div>
-    <br>
+    <hr>
     <h3>Two</h3>
     <div id="placeholder2"></div>
-    <br>
+    <div id="placeholder2b"></div>
+    <hr>
     <h3>Sync DOT</h3>
     <div id="placeholder3"></div>
+    <hr>
     <h3>Cached wasmBinary</h3>
     <div id="placeholder4"></div>
-    <h3>End</h3>
+    <hr>
     <script>
         hpccWasm.expatVersion().then(v => alert(v));
         const dot = `
@@ -92,6 +94,11 @@
 
         hpccWasm.graphviz.layout('digraph { a[image="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"]; }', "svg", "dot", { images: [{ path: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png", width: "272px", height: "92px" }] }).then(svg => {
             const div = document.getElementById("placeholder2");
+            div.innerHTML = svg;
+        }).catch(err => console.error(err.message));
+
+        hpccWasm.graphviz.layout('digraph { a[image="./resources/hpcc-logo.png"]; }', "svg", "dot", { images: [{ path: "./resources/hpcc-logo.png", width: "272px", height: "92px" }] }).then(svg => {
+            const div = document.getElementById("placeholder2b");
             div.innerHTML = svg;
         }).catch(err => console.error(err.message));
 
