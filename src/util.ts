@@ -54,15 +54,15 @@ async function nodeFetch(wasmUrl: string): Promise<ArrayBuffer> {
 const g_wasmCache = {} as { [key: string]: Promise<any> };
 
 export async function loadWasm(_wasmLib: any, filename: string, wf?: string, wasmBinary?: ArrayBuffer): Promise<any> {
-    if (!g_wasmCache[filename]) {
-        g_wasmCache[filename] = _loadWasm(_wasmLib, filename, wf, wasmBinary);
+    const wasmUrl = `${trimEnd(wf || wasmFolder() || scriptDir || ".", "/")}/${trimStart(`${filename}.wasm`, "/")}`;
+    if (!g_wasmCache[wasmUrl]) {
+        g_wasmCache[wasmUrl] = _loadWasm(_wasmLib, wasmUrl, wasmBinary);
     }
-    return g_wasmCache[filename];
+    return g_wasmCache[wasmUrl];
 }
 
-export async function _loadWasm(_wasmLib: any, filename: string, wf?: string, wasmBinary?: ArrayBuffer): Promise<any> {
+async function _loadWasm(_wasmLib: any, wasmUrl: string, wasmBinary?: ArrayBuffer): Promise<any> {
     const wasmLib = _wasmLib.default || _wasmLib;
-    const wasmUrl = `${trimEnd(wf || wasmFolder() || scriptDir || ".", "/")}/${trimStart(`${filename}.wasm`, "/")}`;
     if (!wasmBinary) {
         wasmBinary = await ((typeof process == 'object' && typeof require == 'function') ? nodeFetch(wasmUrl) : browserFetch(wasmUrl));
     }
@@ -71,7 +71,7 @@ export async function _loadWasm(_wasmLib: any, filename: string, wf?: string, wa
     });
 }
 
-export function loadWasmOld(_wasmLib: any, filename: string, wf?: string, wasmBinary?: Uint8Array): Promise<any> {
+function loadWasmOld(_wasmLib: any, filename: string, wf?: string, wasmBinary?: Uint8Array): Promise<any> {
     const wasmLib = _wasmLib.default || _wasmLib;
     //  Prevent double load ---
     if (!wasmLib.__hpcc_promise) {
