@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.15.1...v1.15.2) (2022-08-21)
+
+
+### Bug Fixes
+
+* wasmFolder caching issue ([5e51fb5](https://github.com/hpcc-systems/hpcc-js-wasm/commit/5e51fb5c34fc568633a37ff90f1041c047ca2f02))
+
 ### [1.15.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.14.2...v1.15.1) (2022-08-21)
 
 ### [1.14.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.15.0...v1.14.2) (2022-08-21)
