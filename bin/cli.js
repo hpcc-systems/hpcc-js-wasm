@@ -3,11 +3,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const fs = require("fs");
-const gvMod = require("../dist/graphviz.node.js");
+const { exit } = require("process");
+const gvMod = require("../dist/graphviz.js");
 
 const yargs = require("yargs/yargs")(process.argv.slice(2))
     .usage("Usage: dot-wasm [options] fileOrDot")
-    .demandCommand(1, 1)
+    .demandCommand(0, 1)
     .example("dot-wasm -K neato -T xdot ./input.dot", "Execute NEATO layout and outputs XDOT format.")
     .alias("K", "layout")
     .nargs("K", 1)
@@ -21,6 +22,8 @@ const yargs = require("yargs/yargs")(process.argv.slice(2))
     .alias("y", "invert-y")
     .nargs("y", 0)
     .describe("y", "By default, the coordinate system used in generic output formats, such as attributed dot, extended dot, plain and plain-ext, is the standard cartesian system with the origin in the lower left corner, and with increasing y coordinates as points move from bottom to top. If the -y flag is used, the coordinate system is inverted, so that increasing values of y correspond to movement from top to bottom.")
+    .nargs("v", 0)
+    .describe("v", "Echo GraphViz library version")
     .help("h")
     .alias("h", "help")
     .epilog("https://github.com/hpcc-systems/hpcc-js-wasm")
@@ -36,24 +39,35 @@ try {
         dot = argv._[0];
     }
 
-    if (argv.n && argv.layout.trim() !== "neato") {
-        throw new Error("-n option is only supported with -T neato");
-    }
+    if (argv.v) {
+        gvMod.graphvizVersion().then(version => {
+            console.log(`GraphViz version:  ${version}`);
+        }).catch(e => {
+            console.error(e.message);
+            exit(1);
+        })
+    } else {
 
-    const ext = {
-    };
-    if (argv.n) {
-        ext.nop = parseInt(argv.n);
-    }
-    if (argv.y) {
-        ext.yInvert = true;
-    }
+        if (argv.n && argv.layout.trim() !== "neato") {
+            throw new Error("-n option is only supported with -T neato");
+        }
 
-    gvMod.graphviz.layout(dot, argv.format?.trim() ?? "svg", argv.layout?.trim() ?? "dot", ext).then(response => {
-        console.log(response);
-    }).catch(e => {
-        console.error(e.message);
-    });
+        const ext = {
+        };
+        if (argv.n) {
+            ext.nop = parseInt(argv.n);
+        }
+        if (argv.y) {
+            ext.yInvert = true;
+        }
+
+        gvMod.graphviz.layout(dot, argv.format?.trim() ?? "svg", argv.layout?.trim() ?? "dot", ext).then(response => {
+            console.log(response);
+        }).catch(e => {
+            console.error(e.message);
+            exit(1);
+        });
+    }
 } catch (e) {
     console.error(`Error:  ${e.message}\n`);
     yargs.showHelp();

@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "index.html",
-            "type": "pwa-msedge",
+            "type": "msedge",
             "request": "launch",
             "url": "http://localhost:8000/index.html",
             "runtimeArgs": [],
@@ -14,14 +14,14 @@
         },
         {
             "name": "helloworld.html",
-            "type": "pwa-msedge",
+            "type": "msedge",
             "request": "launch",
             "url": "http://localhost:8000/helloworld.html",
             "webRoot": "${workspaceRoot}"
         },
         {
             "name": "test-browser",
-            "type": "pwa-msedge",
+            "type": "msedge",
             "request": "launch",
             "url": "http://localhost:8000/test.html",
             "webRoot": "${workspaceRoot}",
@@ -41,7 +41,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "type": "pwa-node"
+            "type": "node"
         },
         {
             "name": "CLI",
@@ -50,12 +50,12 @@
             "args": [
                 "-K neato",
                 "-n 2",
-                "./input.dot"
+                "./src/__tests__/simple.dot"
             ],
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "type": "pwa-node"
+            "type": "node"
         }
     ]
 }
