@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.4](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.15.3...v1.15.4) (2022-08-28)
+
+
+### Bug Fixes
+
+* **package:**  main points to non existant package ([0128401](https://github.com/hpcc-systems/hpcc-js-wasm/commit/01284016fa5f8296677800f35921dcef671e96a4)), closes [#114](https://github.com/hpcc-systems/hpcc-js-wasm/issues/114)
+
 ### [1.15.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.15.2...v1.15.3) (2022-08-21)
 
 
