@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.15.4...v1.15.5) (2022-09-07)
+
+
+### Bug Fixes
+
+*  Expose specific node/browser packages ([cb36fac](https://github.com/hpcc-systems/hpcc-js-wasm/commit/cb36fac7107b1b5ad1cffe383eaf7a6146aed6ed)), closes [#115](https://github.com/hpcc-systems/hpcc-js-wasm/issues/115)
+
 ### [1.15.4](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.15.3...v1.15.4) (2022-08-28)
 
 
