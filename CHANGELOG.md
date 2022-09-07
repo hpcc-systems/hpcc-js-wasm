@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.6](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.15.5...v1.15.6) (2022-09-07)
+
+
+### Bug Fixes
+
+* Env detection fails in next.js ([7889083](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7889083f629b31bed03ffd1add51dbb23bba81b2))
+
 ### [1.15.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.15.4...v1.15.5) (2022-09-07)
 
 
