@@ -22,7 +22,17 @@ const browserTpl = (input, umdOutput, esOutput) => ({
             preventAssignment: true,
             include: ["lib-es6/**/*.js", "build/**/*.js"],
             values: {
-                "require": "__require__"
+                "require": "__require__",
+            }
+        }),
+        replace({
+            preventAssignment: true,
+            include: ["build/**/*.js"],
+            delimiters: ['', ''],
+            values: {
+                "var ENVIRONMENT_IS_NODE=": "var ENVIRONMENT_IS_NODE=false&&",
+                "var ENVIRONMENT_IS_WEB=": "var ENVIRONMENT_IS_WEB=true||",
+                "var ENVIRONMENT_IS_WORKER=": "var ENVIRONMENT_IS_WORKER=false&&"
             }
         }),
         nodeResolve({
@@ -47,6 +57,16 @@ const nodeTpl = (input, cjsOutput, esOutput) => ({
         sourcemap: true
     }],
     plugins: [
+        replace({
+            preventAssignment: true,
+            include: ["build/**/*.js"],
+            delimiters: ['', ''],
+            values: {
+                "var ENVIRONMENT_IS_NODE=": "var ENVIRONMENT_IS_NODE=true||",
+                "var ENVIRONMENT_IS_WEB=": "var ENVIRONMENT_IS_WEB=false&&",
+                "var ENVIRONMENT_IS_WORKER=": "var ENVIRONMENT_IS_WORKER=false&&"
+            }
+        }),
         nodeResolve({
             preferBuiltins: true
         }),
