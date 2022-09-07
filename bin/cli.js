@@ -4,7 +4,7 @@
 
 const fs = require("fs");
 const { exit } = require("process");
-const gvMod = require("../dist/graphviz.js");
+const gvMod = require("../dist/index.node.js");
 
 const yargs = require("yargs/yargs")(process.argv.slice(2))
     .usage("Usage: dot-wasm [options] fileOrDot")

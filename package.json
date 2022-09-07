@@ -15,8 +15,19 @@
     "patchwork",
     "xml"
   ],
-  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "node": {
+        "import": "./dist/index.node.es6.js",
+        "require": "./dist/index.node.js"
+      },
+      "default": "./dist/index.es6.js"
+    }
+  },
+  "main": "dist/index.node.js",
   "module": "dist/index.es6",
+  "module-node": "dist/index.node.es6",
   "browser": "dist/index.js",
   "unpkg": "dist/index.min.js",
   "jsdelivr": "dist/index.min.js",
@@ -44,7 +55,7 @@
     "install-vcpkg:win32": "wsl -e ./scripts/cpp-install-vcpkg.sh",
     "install-build-deps": "run-p install-emsdk install-graphviz install-vcpkg",
     "uninstall-build-deps": "rimraf ./emsdk ./src-graphviz ./vcpkg ./src-expat ./src-vcpkg",
-    "clean": "rimraf coverage build dist lib* types *.tsbuildinfo",
+    "clean": "rimraf build coverage dist lib* tmp types *.tsbuildinfo",
     "compile-es6": "tsc --module es6 --outDir ./lib-es6",
     "compile-es6-watch": "npm run compile-es6 -- -w",
     "compile-umd": "tsc --module umd --outDir ./lib-umd",
@@ -64,10 +75,12 @@
     "lint": "eslint src/**/*.ts",
     "lint-fix": "npm run lint -- --fix",
     "test-cli": "node ./bin/cli.js -v",
+    "test-bundle": "npx -y esbuild --bundle ./dist/index.js --bundle ./dist/index.es6.js --outdir=tmp",
+    "test-bundle-node": "npx -y esbuild --bundle --platform=node --bundle ./dist/index.node.js ./dist/index.node.es6.js --outdir=tmp",
     "test-chrome": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
     "test-firefox": "karma start --single-run --browsers Firefox karma.conf.js",
-    "test-node": "node ./bin/cli.js -v && mocha ./dist/test.js --reporter spec",
-    "test": "run-p test-chrome test-node",
+    "test-node": "node ./bin/cli.js -v && mocha ./dist/test.node.js --reporter spec",
+    "test": "run-s test-bundle test-bundle-node test-chrome test-node",
     "tag": "run-s standard-version git-push",
     "purge-jsdelivr": "node ./utils/purge-jsdelivr.js",
     "update-major": "npx npm-check-updates -u",
@@ -84,10 +97,10 @@
     "@types/chai": "4.3.3",
     "@types/mocha": "9.1.1",
     "@types/emscripten": "1.39.6",
-    "@typescript-eslint/eslint-plugin": "5.33.1",
-    "@typescript-eslint/parser": "5.33.1",
+    "@typescript-eslint/eslint-plugin": "5.36.2",
+    "@typescript-eslint/parser": "5.36.2",
     "chai": "4.3.6",
-    "eslint": "8.22.0",
+    "eslint": "8.23.0",
     "karma": "6.4.0",
     "karma-chai": "0.1.0",
     "karma-chrome-launcher": "3.1.1",
@@ -98,13 +111,13 @@
     "mocha": "10.0.0",
     "npm-run-all": "4.1.5",
     "rimraf": "3.0.2",
-    "rollup": "2.78.1",
+    "rollup": "2.79.0",
     "rollup-plugin-sourcemaps": "0.6.3",
     "run-script-os": "1.1.6",
     "standard-version": "9.5.0",
-    "terser": "5.14.2",
+    "terser": "5.15.0",
     "tslib": "2.4.0",
-    "typescript": "4.7.4"
+    "typescript": "4.8.2"
   },
   "repository": {
     "type": "git",

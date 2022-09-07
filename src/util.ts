@@ -46,6 +46,10 @@ async function browserFetch(wasmUrl: string): Promise<ArrayBuffer> {
     });
 }
 
+export function __require__(filePath: string) {
+    throw new Error("require call inside web environment???");
+}
+
 async function nodeFetch(wasmUrl: string): Promise<ArrayBuffer> {
     const fs = require("fs/promises");
     return fs.readFile(wasmUrl, undefined);

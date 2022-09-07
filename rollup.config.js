@@ -1,16 +1,7 @@
-import alias from "@rollup/plugin-alias";
 import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import sourcemaps from "rollup-plugin-sourcemaps";
 import replace from "@rollup/plugin-replace";
-
-const initRuntime = "initRuntime(asm);"
-const initRuntimePatched = `\
-initRuntime(asm) ;\
-var _malloc=_malloc,_free=_free;\
-Module['_malloc']=_malloc;\
-Module['_free']=_free;\
-`;
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const pkg = require("./package.json");
@@ -27,12 +18,11 @@ const browserTpl = (input, umdOutput, esOutput) => ({
         sourcemap: true
     }],
     plugins: [
-        alias({}),
         replace({
             preventAssignment: true,
-            delimiters: ['', ''],
+            include: ["lib-es6/**/*.js", "build/**/*.js"],
             values: {
-                [initRuntime]: initRuntimePatched
+                "require": "__require__"
             }
         }),
         nodeResolve({
@@ -57,17 +47,6 @@ const nodeTpl = (input, cjsOutput, esOutput) => ({
         sourcemap: true
     }],
     plugins: [
-        alias({
-            entries: [
-                { find: "../build/cpp/graphviz/graphvizlib/graphvizlib", replacement: "../build/cpp/graphviz/graphvizlib/graphvizlib.node" },
-                { find: "../build/cpp/expat/expatlib/expatlib", replacement: "../build/cpp/expat/expatlib/expatlib.node" }
-            ]
-        }),
-        replace({
-            preventAssignment: true,
-
-            ".node.wasm": ".wasm"
-        }),
         nodeResolve({
             preferBuiltins: true
         }),
@@ -78,8 +57,11 @@ const nodeTpl = (input, cjsOutput, esOutput) => ({
 
 export default [
     browserTpl("lib-es6/index", pkg.browser, pkg.module),
+    nodeTpl("lib-es6/index", pkg.browser.split("index").join("index.node"), pkg.module.split("index").join("index.node")),
+
     browserTpl("lib-es6/graphviz", "dist/graphviz.js", "dist/graphviz.es6"),
     browserTpl("lib-es6/expat", "dist/expat.js", "dist/expat.es6"),
 
     browserTpl("lib-es6/__tests__/index", "dist/test.js", "dist/test.es6"),
+    nodeTpl("lib-es6/__tests__/index", "dist/test.node.js", "dist/test.node.es6"),
 ];

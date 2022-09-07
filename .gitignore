@@ -8,6 +8,7 @@
 /src-graphviz
 /lib-*
 /node_modules
+/tmp
 /types
 /vcpkg
 *.tsbuildinfo
