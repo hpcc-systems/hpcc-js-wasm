@@ -46,10 +46,7 @@ async function browserFetch(wasmUrl: string): Promise<ArrayBuffer> {
     });
 }
 
-export function __require__(filePath: string) {
-    throw new Error("require call inside web environment???");
-}
-
+//  Do not delete:  Rollup uses this function for NodeJS builds  ---
 async function nodeFetch(wasmUrl: string): Promise<ArrayBuffer> {
     const fs = require("fs/promises");
     return fs.readFile(wasmUrl, undefined);
@@ -57,22 +54,22 @@ async function nodeFetch(wasmUrl: string): Promise<ArrayBuffer> {
 
 const g_wasmCache = {} as { [key: string]: Promise<any> };
 
+async function _loadWasm(_wasmLib: any, wasmUrl: string, wasmBinary?: ArrayBuffer): Promise<any> {
+    const wasmLib = _wasmLib.default || _wasmLib;
+    if (!wasmBinary) {
+        wasmBinary = await browserFetch(wasmUrl);
+    }
+    return await wasmLib({
+        "wasmBinary": wasmBinary
+    });
+}
+
 export async function loadWasm(_wasmLib: any, filename: string, wf?: string, wasmBinary?: ArrayBuffer): Promise<any> {
     const wasmUrl = `${trimEnd(wf || wasmFolder() || scriptDir || ".", "/")}/${trimStart(`${filename}.wasm`, "/")}`;
     if (!g_wasmCache[wasmUrl]) {
         g_wasmCache[wasmUrl] = _loadWasm(_wasmLib, wasmUrl, wasmBinary);
     }
     return g_wasmCache[wasmUrl];
-}
-
-async function _loadWasm(_wasmLib: any, wasmUrl: string, wasmBinary?: ArrayBuffer): Promise<any> {
-    const wasmLib = _wasmLib.default || _wasmLib;
-    if (!wasmBinary) {
-        wasmBinary = await ((typeof process == 'object' && typeof require == 'function') ? nodeFetch(wasmUrl) : browserFetch(wasmUrl));
-    }
-    return await wasmLib({
-        "wasmBinary": wasmBinary
-    });
 }
 
 export function loadWasmOld(_wasmLib: any, filename: string, wf?: string, wasmBinary?: Uint8Array): Promise<any> {

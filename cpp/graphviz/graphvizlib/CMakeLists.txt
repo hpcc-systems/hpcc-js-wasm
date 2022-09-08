@@ -41,10 +41,22 @@ ADD_EXECUTABLE(graphvizlib
     ${SRCS}
 )
 
-message("EM_FLAGS:  ${EM_FLAGS}")
-SET_TARGET_PROPERTIES(graphvizlib PROPERTIES LINK_FLAGS ${LINK_FLAGS})
+SET_TARGET_PROPERTIES(graphvizlib PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=web")
 
 TARGET_LINK_LIBRARIES(graphvizlib PRIVATE
+    gvplugin_core
+    gvplugin_dot_layout
+    gvplugin_neato_layout
+    ortho
+)
+
+ADD_EXECUTABLE(graphvizlib_node
+    ${SRCS}
+)
+
+SET_TARGET_PROPERTIES(graphvizlib_node PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=node")
+
+TARGET_LINK_LIBRARIES(graphvizlib_node PRIVATE
     gvplugin_core
     gvplugin_dot_layout
     gvplugin_neato_layout

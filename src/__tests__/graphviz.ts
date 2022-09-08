@@ -191,6 +191,20 @@ describe("graphviz API", function () {
             expect(true).to.be.false;
         });
     });
+
+    this.timeout(5000);
+    it("ortho", function () {
+        // try {
+        return graphviz.dot(ortho, "svg").then(svg => {
+            expect(svg).to.be.not.empty;
+        });
+        // } catch (e: any) {
+        //     expect(typeof e.message).to.equal("string");
+        //     expect(e.message).to.not.be.empty;
+        //     console.error(e.message);
+        //     expect(false, e.message).to.be.true;
+        // }
+    });
 });
 
 describe("graphvizSync", function () {
@@ -250,19 +264,16 @@ describe("graphvizSync", function () {
     });
     this.timeout(5000);
     it("ortho", function () {
-        let success;
-        try {
-            const svg = gvSync.dot(ortho, "svg");
-            success = true;
-        } catch (e: any) {
-            success = false;
-            expect(typeof e.message).to.equal("string");
-            expect(e.message).to.not.be.empty;
-            console.error(e.message);
-        }
-        expect(success).to.be.true;
+        // try {
+        const svg = gvSync.dot(ortho, "svg");
+        expect(svg).to.be.not.empty;
+        // } catch (e: any) {
+        //     expect(typeof e.message).to.equal("string");
+        //     expect(e.message).to.not.be.empty;
+        //     console.error(e.message);
+        //     expect(false, e.message).to.be.true;
+        // }
     });
-
 });
 
 describe("bad dot", function () {
@@ -271,7 +282,7 @@ describe("bad dot", function () {
             expect(true).to.be.false;
         }).catch(e => {
             expect(typeof e.message).to.equal("string");
-            expect(e.message).to.equal("syntax error in line 11 near ']'\n");
+            expect(e.message).to.contain("syntax error in line");
         });
         await graphviz.dot(dot, "svg").then(svg => {
             expect(svg).to.be.a("string");
@@ -281,7 +292,7 @@ describe("bad dot", function () {
             expect(true).to.be.false;
         }).catch(e => {
             expect(typeof e.message).to.equal("string");
-            expect(e.message).to.equal("syntax error in line 11 near ']'\n");
+            expect(e.message).to.contain("syntax error in line");
         });
     });
 

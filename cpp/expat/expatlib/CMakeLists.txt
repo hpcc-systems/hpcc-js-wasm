@@ -30,9 +30,19 @@ ADD_EXECUTABLE(expatlib
     main.cpp
 )
 
-SET_TARGET_PROPERTIES(expatlib PROPERTIES LINK_FLAGS ${LINK_FLAGS})
+SET_TARGET_PROPERTIES(expatlib PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=web")
 
 TARGET_LINK_LIBRARIES(expatlib
+    expat::expat
+)
+
+ADD_EXECUTABLE(expatlib_node
+    main.cpp
+)
+
+SET_TARGET_PROPERTIES(expatlib_node PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=node")
+
+TARGET_LINK_LIBRARIES(expatlib_node
     expat::expat
 )
 

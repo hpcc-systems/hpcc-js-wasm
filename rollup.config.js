@@ -3,7 +3,6 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import sourcemaps from "rollup-plugin-sourcemaps";
 import replace from "@rollup/plugin-replace";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const pkg = require("./package.json");
 const browserTpl = (input, umdOutput, esOutput) => ({
     input: input,
@@ -18,23 +17,6 @@ const browserTpl = (input, umdOutput, esOutput) => ({
         sourcemap: true
     }],
     plugins: [
-        replace({
-            preventAssignment: true,
-            include: ["lib-es6/**/*.js", "build/**/*.js"],
-            values: {
-                "require": "__require__",
-            }
-        }),
-        replace({
-            preventAssignment: true,
-            include: ["build/**/*.js"],
-            delimiters: ['', ''],
-            values: {
-                "var ENVIRONMENT_IS_NODE=": "var ENVIRONMENT_IS_NODE=false&&",
-                "var ENVIRONMENT_IS_WEB=": "var ENVIRONMENT_IS_WEB=true||",
-                "var ENVIRONMENT_IS_WORKER=": "var ENVIRONMENT_IS_WORKER=false&&"
-            }
-        }),
         nodeResolve({
             preferBuiltins: true
         }),
@@ -59,12 +41,12 @@ const nodeTpl = (input, cjsOutput, esOutput) => ({
     plugins: [
         replace({
             preventAssignment: true,
-            include: ["build/**/*.js"],
+            include: ["build/**/*.js", "lib-es6/**/*.js"],
             delimiters: ['', ''],
             values: {
-                "var ENVIRONMENT_IS_NODE=": "var ENVIRONMENT_IS_NODE=true||",
-                "var ENVIRONMENT_IS_WEB=": "var ENVIRONMENT_IS_WEB=false&&",
-                "var ENVIRONMENT_IS_WORKER=": "var ENVIRONMENT_IS_WORKER=false&&"
+                "graphvizlib/graphvizlib": "graphvizlib/graphvizlib_node",
+                "expatlib/expatlib": "expatlib/expatlib_node",
+                "await browserFetch(wasmUrl)": "await nodeFetch(wasmUrl)"
             }
         }),
         nodeResolve({
