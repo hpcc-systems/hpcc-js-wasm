@@ -1,5 +1,7 @@
 #!/bin/bash
 
+VERSION=3.1.20
+
 if [ ! -d "./emsdk" ] 
 then
     git clone https://github.com/emscripten-core/emsdk.git
@@ -8,6 +10,6 @@ fi
 cd ./emsdk
 git fetch
 git pull
-./emsdk install 3.1.20-upstream
-./emsdk activate 3.1.20-upstream
+./emsdk install $VERSION-upstream
+./emsdk activate $VERSION-upstream
 cd ..

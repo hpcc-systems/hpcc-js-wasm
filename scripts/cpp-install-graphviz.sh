@@ -1,12 +1,14 @@
 #!/bin/bash
 
+VERSION=6.0.1
+
 if [ ! -d "src-graphviz" ] 
 then
     #  https://gitlab.com/graphviz/graphviz/-/tags
-    wget -c https://gitlab.com/graphviz/graphviz/-/archive/6.0.0/graphviz-6.0.0.tar.gz
+    wget -c https://gitlab.com/graphviz/graphviz/-/archive/$VERSION/graphviz-$VERSION.tar.gz
     mkdir ./src-graphviz
-    tar -xzf ./graphviz-6.0.0.tar.gz -C ./src-graphviz --strip-components=1
-    rm ./graphviz-6.0.0.tar.gz
+    tar -xzf ./graphviz-$VERSION.tar.gz -C ./src-graphviz --strip-components=1
+    rm ./graphviz-$VERSION.tar.gz
 
     #  Generate grammar files (and others)  ---
     cd ./src-graphviz
