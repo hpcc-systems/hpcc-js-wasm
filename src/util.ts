@@ -29,7 +29,7 @@ function trimStart(str: string, charToRemove: string) {
     return str;
 }
 
-let scriptDir = (globalThis?.document?.currentScript as HTMLScriptElement)?.src ?? globalThis?.__filename ?? "./dummy.js";
+let scriptDir = (globalThis?.document?.currentScript as HTMLScriptElement)?.src ?? __filename ?? "./dummy.js";
 scriptDir = scriptDir.substring(0, scriptDir.replace(/[?#].*/, "").lastIndexOf('/') + 1);
 
 async function browserFetch(wasmUrl: string): Promise<ArrayBuffer> {

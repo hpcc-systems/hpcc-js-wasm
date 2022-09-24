@@ -56,6 +56,18 @@
                 "<node_internals>/**"
             ],
             "type": "node"
+        },
+        {
+            "name": "CLI Version",
+            "program": "${workspaceFolder}/bin/cli.js",
+            "request": "launch",
+            "args": [
+                "-v"
+            ],
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
         }
     ]
 }

@@ -17,6 +17,14 @@ const browserTpl = (input, umdOutput, esOutput) => ({
         sourcemap: true
     }],
     plugins: [
+        replace({
+            preventAssignment: true,
+            include: ["build/**/*.js", "lib-es6/**/*.js"],
+            delimiters: ['', ''],
+            values: {
+                "__filename": "undefined"
+            }
+        }),
         nodeResolve({
             preferBuiltins: true
         }),
