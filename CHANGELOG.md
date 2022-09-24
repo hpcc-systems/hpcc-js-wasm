@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.16.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.16.4...v1.16.5) (2022-09-24)
+
+
+### Bug Fixes
+
+*  Rollback wasmFolder heuristics ([4f3d380](https://github.com/hpcc-systems/hpcc-js-wasm/commit/4f3d380a57e25faecbcbddda6431a3df0c575d02))
+
 ### [1.16.4](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.16.3...v1.16.4) (2022-09-24)
 
 
