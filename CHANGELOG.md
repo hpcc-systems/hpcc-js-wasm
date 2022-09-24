@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.16.4](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.16.3...v1.16.4) (2022-09-24)
+
+
+### Bug Fixes
+
+*  __filename and es6 modules ([3d80a39](https://github.com/hpcc-systems/hpcc-js-wasm/commit/3d80a391779a3464ed8d7d0844293fa3eecf0df8))
+
 ### [1.16.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.16.2...v1.16.3) (2022-09-24)
 
 
