@@ -29,8 +29,11 @@ function trimStart(str: string, charToRemove: string) {
     return str;
 }
 
-let scriptDir = (globalThis?.document?.currentScript as HTMLScriptElement)?.src ?? __filename ?? "./dummy.js";
-scriptDir = scriptDir.substring(0, scriptDir.replace(/[?#].*/, "").lastIndexOf('/') + 1);
+let scriptDir = typeof document !== 'undefined' && document.currentScript ? (document.currentScript as any).src :
+    typeof __filename !== 'undefined' ? __filename :
+        typeof document !== 'undefined' && document.currentScript ? (document.currentScript as any).src :
+            "";
+scriptDir = scriptDir.substr(0, scriptDir.replace(/[?#].*/, "").lastIndexOf('/') + 1);
 
 async function browserFetch(wasmUrl: string): Promise<ArrayBuffer> {
     return fetch(wasmUrl, { credentials: 'same-origin' }).then(response => {
@@ -62,9 +65,7 @@ async function _loadWasm(_wasmLib: any, wasmUrl: string, wasmBinary?: ArrayBuffe
 }
 
 export async function loadWasm(_wasmLib: any, filename: string, wf?: string, wasmBinary?: ArrayBuffer): Promise<any> {
-    let wasmUrl = `${trimEnd(wf || wasmFolder() || scriptDir, "/")}/${trimStart(`${filename}.wasm`, "/")}`;
-    wasmUrl = URL && globalThis.document ? new URL(wasmUrl, document.baseURI).href : wasmUrl;
-
+    const wasmUrl = `${trimEnd(wf || wasmFolder() || scriptDir || ".", "/")}/${trimStart(`${filename}.wasm`, "/")}`;
     if (!g_wasmCache[wasmUrl]) {
         g_wasmCache[wasmUrl] = _loadWasm(_wasmLib, wasmUrl, wasmBinary);
     }
