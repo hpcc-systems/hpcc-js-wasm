@@ -30,7 +30,7 @@
     }
   },
   "main": "dist/index.node.js",
-  "module": "dist/index.node.es6.js",
+  "module": "dist/index.node.es6.mjs",
   "browser": "dist/index.js",
   "unpkg": "dist/index.min.js",
   "jsdelivr": "dist/index.min.js",
