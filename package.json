@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm",
-  "version": "1.17.0",
+  "version": "1.17.1",
   "description": "hpcc-js - WASM Libraries",
   "keywords": [
     "graphviz",
