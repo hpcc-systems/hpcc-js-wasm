@@ -1,11 +1,11 @@
 {
     "compilerOptions": {
         "rootDir": "./src",
-        "outDir": "./lib-umd",
+        "outDir": "./lib-es6",
         "declarationDir": "./types",
         "composite": true,
-        "target": "ES2019",
-        "module": "umd",
+        "target": "ES2020",
+        "module": "ES2020",
         "moduleResolution": "node",
         "strict": true,
         "esModuleInterop": true,
@@ -15,7 +15,7 @@
     },
     "lib": [
         "dom",
-        "es2019"
+        "ES2020"
     ],
     "types": [],
     "include": [

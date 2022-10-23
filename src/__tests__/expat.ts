@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Attributes, parse, StackParser, expatVersion } from "../expat";
+import { Attributes, parse, StackParser, expatVersion } from "../index";
 
 class Cat {
 

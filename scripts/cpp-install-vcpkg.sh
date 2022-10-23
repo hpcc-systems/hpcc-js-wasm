@@ -1,10 +1,11 @@
 #!/bin/bash
 
-VERSION=2022.08.15
+# List of current vertsion can be found in https://github.com/microsoft/vcpkg/releases  ---
+# UPDATE README.md
+VERSION=2022.09.27
 
 if [ ! -d "./vcpkg" ] 
 then
-    # https://github.com/microsoft/vcpkg/releases
     git clone https://github.com/microsoft/vcpkg.git
     cd ./vcpkg
     git checkout $VERSION

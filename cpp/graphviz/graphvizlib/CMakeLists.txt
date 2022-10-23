@@ -50,19 +50,6 @@ TARGET_LINK_LIBRARIES(graphvizlib PRIVATE
     ortho
 )
 
-ADD_EXECUTABLE(graphvizlib_node
-    ${SRCS}
-)
-
-SET_TARGET_PROPERTIES(graphvizlib_node PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=node")
-
-TARGET_LINK_LIBRARIES(graphvizlib_node PRIVATE
-    gvplugin_core
-    gvplugin_dot_layout
-    gvplugin_neato_layout
-    ortho
-)
-
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/graphvizlib.wasm DESTINATION dist COMPONENT runtime)
 
 IF (CMAKE_BUILD_TYPE STREQUAL "Debug")

@@ -7,7 +7,6 @@
 
 #include <emscripten.h>
 
-
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
 extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
 #ifdef HAVE_LIBGD
@@ -94,7 +93,6 @@ const char *Graphviz::layout(const char *src, const char *format, const char *en
 
         src = "";
     }
-
     m_result = data;
     gvFreeRenderData(data);
 

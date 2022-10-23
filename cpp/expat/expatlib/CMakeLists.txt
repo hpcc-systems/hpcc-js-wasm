@@ -36,16 +36,6 @@ TARGET_LINK_LIBRARIES(expatlib
     expat::expat
 )
 
-ADD_EXECUTABLE(expatlib_node
-    main.cpp
-)
-
-SET_TARGET_PROPERTIES(expatlib_node PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=node")
-
-TARGET_LINK_LIBRARIES(expatlib_node
-    expat::expat
-)
-
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/expatlib.wasm DESTINATION dist COMPONENT runtime)
 
 IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
