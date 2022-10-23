@@ -59,7 +59,11 @@ export const graphviz = {
         return loadWasm(graphvizlib, "graphvizlib", ext?.wasmFolder, ext?.wasmBinary).then(module => {
             const graphViz = new module.Graphviz(ext?.yInvert ? 1 : 0, ext?.nop ? ext?.nop : 0);
             createFiles(graphViz, ext);
-            const retVal = graphViz.layout(dotSource, outputFormat, layoutEngine);
+            let retVal;
+            try {
+                retVal = graphViz.layout(dotSource, outputFormat, layoutEngine);
+            } catch (e) {
+            };
             module.destroy(graphViz);
             if (!retVal) {
                 throw new Error(module.Graphviz.prototype.lastError());

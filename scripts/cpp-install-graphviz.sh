@@ -1,10 +1,11 @@
 #!/bin/bash
 
-VERSION=6.0.1
+# List of current vertsion can be found in https://gitlab.com/graphviz/graphviz/-/tags  ---
+# UPDATE README.md
+VERSION=6.0.2
 
 if [ ! -d "src-graphviz" ] 
 then
-    #  https://gitlab.com/graphviz/graphviz/-/tags
     wget -c https://gitlab.com/graphviz/graphviz/-/archive/$VERSION/graphviz-$VERSION.tar.gz
     mkdir ./src-graphviz
     tar -xzf ./graphviz-$VERSION.tar.gz -C ./src-graphviz --strip-components=1

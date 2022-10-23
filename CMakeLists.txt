@@ -12,7 +12,7 @@ SET(EM_FLAGS
     "-s ALLOW_MEMORY_GROWTH=1"
     "-s WASM=1"
     "-s MODULARIZE"
-    "-s ENVIRONMENT=web,node"
+    "-s ENVIRONMENT=web"
     "-s FILESYSTEM=0"
     # "-s MINIMAL_RUNTIME=1"
     "-s MODULARIZE=1" 

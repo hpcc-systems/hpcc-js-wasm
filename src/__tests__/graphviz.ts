@@ -1,6 +1,5 @@
 import { expect } from "chai";
-import { wasmFolder } from "../util";
-import { Engine, Format, graphviz, graphvizSync, GraphvizSync, graphvizVersion } from "../graphviz";
+import { wasmFolder, Engine, Format, graphviz, graphvizSync, GraphvizSync, graphvizVersion } from "../index";
 import { badDot, dot } from "./dot001";
 import { ortho } from "./dot002";
 
