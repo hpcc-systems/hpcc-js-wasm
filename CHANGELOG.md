@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.18.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.17.1...v1.18.0) (2022-10-24)
+
+
+### Features
+
+*  Bump GraphViz and Expat versions ([763ed49](https://github.com/hpcc-systems/hpcc-js-wasm/commit/763ed49200f959991aeaf94fe47ca0f70111fbb6))
+
 ### [1.17.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.17.0...v1.17.1) (2022-10-23)
 
 
