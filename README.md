@@ -3,8 +3,8 @@
 ![Test PR](https://github.com/hpcc-systems/hpcc-js-wasm/workflows/Test%20PR/badge.svg)
 
 This repository contains a collection of useful c++ libraries compiled to WASM for (re)use in Node JS, Web Browsers and JavaScript Libraries:
-* [graphviz](https://www.graphviz.org/) - v6.0.2
-* [expat](https://libexpat.github.io/) - v2.4.8
+* [graphviz](https://www.graphviz.org/) - v7.0.0
+* [expat](https://libexpat.github.io/) - v2.4.9
 
 Built with:
 * [emsdk](https://github.com/emscripten-core/emsdk) - v3.1.24

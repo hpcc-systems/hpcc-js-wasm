@@ -24,11 +24,13 @@ target_link_libraries(gvplugin_neato_layout
   rbtree
   sparse
   twopigen
-  
-  #  with_ipsepcola
-  vpsc
-
-  #  with_sfdp
-  sfdpgen
 )
+
+if(with_ipsepcola)
+  target_link_libraries(gvplugin_neato_layout vpsc)
+endif()
+
+if(with_sfdp)
+  target_link_libraries(gvplugin_neato_layout sfdpgen)
+endif()
 

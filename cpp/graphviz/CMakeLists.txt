@@ -11,15 +11,15 @@ INCLUDE_DIRECTORIES(
     ${VCPKG_INCLUDE_DIR}
 )
 
+# =============================== Build options ================================
 option(enable_ltdl     "Support on-demand plugin loading" OFF)
 option(with_expat      "Support HTML-like labels through expat" ON )
 option(with_digcola    "DIGCOLA features in neato layout engine" ON )
-option(with_ipsepcola  "IPSEPCOLA features in neato layout engine (disabled by default - C++ portability issues)." OFF )
+option(with_ipsepcola  "IPSEPCOLA features in neato layout engine (disabled by default - C++ portability issues)." ON )
 option(with_ortho      "ORTHO features in neato layout engine." ON )
 option(with_sfdp       "sfdp layout engine." ON )
 option(with_smyrna     "SMYRNA large graph viewer (disabled by default - experimental)" OFF)
 option(with_zlib       "Support raster image compression through zlib" OFF)
-option(use_sanitizers  "enables using address and undefined behavior sanitizer" OFF)
 option(use_coverage    "enables analyzing code coverage" OFF)
 option(with_cxx_api    "enables building the C++ API" ON)
 option(with_cxx_tests  "enables building the C++ tests" OFF)
@@ -69,6 +69,7 @@ endif()
 
 # if(UNIX)
 #   find_library(MATH_LIB m)
+#  link_libraries(${MATH_LIB})
 # endif()
 add_subdirectory(lib)
 add_subdirectory(plugin)

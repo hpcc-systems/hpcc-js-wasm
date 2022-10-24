@@ -1,3 +1,5 @@
+if(with_ortho)
+
 add_definitions(-DGVC_EXPORTS)
 
 add_library(ortho_obj OBJECT
@@ -35,3 +37,4 @@ add_library(ortho STATIC
   $<TARGET_OBJECTS:ortho_obj>
 )
 
+endif()

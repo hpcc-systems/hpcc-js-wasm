@@ -80,8 +80,6 @@ set(SOURCES
 
   # with_ipsepcola
   ${GRAPHVIZ_LIB_DIR}/neatogen/constrained_majorization_ipsep.c
-  ${GRAPHVIZ_LIB_DIR}/neatogen/mosek_quad_solve.c
-  ${GRAPHVIZ_LIB_DIR}/neatogen/mosek_quad_solve.h
   ${GRAPHVIZ_LIB_DIR}/neatogen/quad_prog_vpsc.c
 )
 
