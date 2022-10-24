@@ -1,3 +1,5 @@
+if(with_sfdp)
+
 add_definitions(-DNEATOGEN_EXPORTS)
 
 add_library(sfdpgen STATIC
@@ -39,3 +41,4 @@ target_link_libraries(sfdpgen PRIVATE
   sparse
 )
 
+endif()

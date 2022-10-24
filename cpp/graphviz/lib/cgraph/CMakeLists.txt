@@ -12,8 +12,10 @@ add_library(cgraph STATIC
   ${GRAPHVIZ_LIB_DIR}/cgraph/likely.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/prisize_t.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/stack.h
+  ${GRAPHVIZ_LIB_DIR}/cgraph/startswith.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/strcasecmp.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/strview.h
+  ${GRAPHVIZ_LIB_DIR}/cgraph/tokenize.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/unreachable.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/unused.h
 
