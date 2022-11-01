@@ -3,26 +3,112 @@
 ![Test PR](https://github.com/hpcc-systems/hpcc-js-wasm/workflows/Test%20PR/badge.svg)
 
 This repository contains a collection of useful c++ libraries compiled to WASM for (re)use in Node JS, Web Browsers and JavaScript Libraries:
-* [graphviz](https://www.graphviz.org/) - v7.0.0
-* [expat](https://libexpat.github.io/) - v2.4.9
+- [graphviz](https://www.graphviz.org/) - v7.0.0
+- [expat](https://libexpat.github.io/) - v2.4.9
+- [zstd](https://github.com/facebook/zstd) - v1.5.2
+- ...more to follow...
 
 Built with:
-* [emsdk](https://github.com/emscripten-core/emsdk) - v3.1.24
+- [emsdk](https://github.com/emscripten-core/emsdk) - v3.1.24
 
-## Quick GraphViz Demos
-* https://raw.githack.com/hpcc-systems/hpcc-js-wasm/trunk/index.html
-* https://observablehq.com/@gordonsmith/graphviz
+---
 
-## Installation 
+## Contents
+
+- [Installation](#installation)
+    - [NPM](#npm)
+    - [Vanilla HTML](#vanilla-html)
+- [GraphViz](#graphviz)
+    - [Online Demos](#online-demos)
+    - [Command Line Interface](#command-line-interface)
+    - [Hello World](#graphviz-hello-world)
+    - [API](#graphviz-api)
+- [Expat](#expat)
+    - [Hello World](#expat-hello-world)
+    - [API](#expat-api)
+- [Zstandard (zstd)](#zstandard)
+    - [Hello World](#zstandard-hello-world)
+    - [API](#zstandard-api)
+- [Utilities](#utility)
+- [Building @hpcc-js/wasm](#building-hpcc-js-wasm)
+
+---
+
+## Installation
+
+### NPM
+
 The simplest way to include this project is via NPM:
 ```
 npm install --save @hpcc-js/wasm
 ```
 
-## CLI 
+The @hpcc-js/wasm package includes the following files in its `dist` folder:
+- `index.js` / `index.min.js`:  Browser UMD Package for all APIs.
+- `index.es6.js`:  Browser ESM Package for all APIs.
+- `index.node.js`:  Node CJS Package for all APIs.
+- `index.node.es6.js`:  Node ESM Package for all APIs.
+- `graphviz.js`:  Browser UMD Package for graphviz APIs.
+- `graphviz.es6.js`:  Browser ESM Package for graphviz APIs.
+- `graphvizlib.wasm`:  graphviz wasm file (loaded on demand). 
+- `expat.js`:  Browser UMD Package for expat API.
+- `expat.es6.js`:  Browser ESM Package for expat API.
+- `expatlib.wasm`:  expat wasm file (loaded on demand).
+- `expat.js`:  Browser UMD Package for zstd API.
+- `zstd.es6.js`:  Browser ESM Package for zstd API.
+- `zstdlib.wasm`:  zstd wasm file (loaded on demand).
+
+**Important**:  WASM files are dynamically loaded at runtime (this is a browser / emscripten requirement), which has a few implications for the consumer:  
+
+**Pros**:
+* While this package has potentially many large WASM files, only the ones being used will ever be downloaded from your CDN / Web Server.
+
+**Cons**:
+* Most browsers don't support `fetch` and loading pages via `file://` URN, so for testing / development work you will need to run a test web server.
+* Bundlers (RollupJS / WebPack) will ignore the WASM files, so you will need to manually ensure they are present in your final distribution (typically they are placed in the same folder as the bundled JS)
+
+### Vanilla HTML
+
+Alternatively the @hpcc-js/wasm package can be imported directly within the html page, using a NPM CDN server like [unpkg](https://www.unpkg.com/), [jsdelivr](https://www.jsdelivr.com/).  For modern browsers and `import`:
+
+```html
+<script type="module">
+    import { graphvizSync } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.es6.js";
+
+    graphvizSync().then(graphviz => {
+        const div = document.getElementById("placeholder2");
+        div.innerHTML = graphviz.layout(dot, "svg", "dot");
+    });
+</script>
+```
+
+For legacy environments you can load the UMD packages:
+```html
+<script src="https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.min.js"></script>
+<script>
+    var hpccWasm = window["@hpcc-js/wasm"];
+
+    hpccWasm.graphvizSync().then(graphviz => {
+        var div = document.getElementById("placeholder2");
+        div.innerHTML = graphviz.layout(dot, "svg", "dot");
+    });
+</script>
+```
+
+## GraphViz 
+
+GraphViz WASM library, see [graphviz.org](https://www.graphviz.org/) for c++ details.  While this package is similar to [Viz.js](https://github.com/mdaines/viz.js), it employs a completely different build methodology derived from [GraphControl](https://github.com/hpcc-systems/GraphControl).
+
+
+### Online Demos
+* https://raw.githack.com/hpcc-systems/hpcc-js-wasm/trunk/index.html
+* https://observablehq.com/@gordonsmith/graphviz
+
+### Command Line Interface
+
 To call `dot-wasm` without installing:
 ```
-npx -p @hpcc-js/wasm dot-wasm [file | 'dot']
+npx @hpcc-js/wasm [options] fileOrDot
 ```
 
 To install the global command `dot-wasm` via NPM:
@@ -30,7 +116,7 @@ To install the global command `dot-wasm` via NPM:
 npm install --global @hpcc-js/wasm
 ```
 
-### Usage:
+Usage:
 ```
 Usage: dot-wasm [options] fileOrDot
 
@@ -69,48 +155,7 @@ Examples:
                                          format.
 ```
 
-## Contents
-@hpcc-js/wasm includes the following files in its `dist` folder:
-* `index.js` / `index.min.js` files:  Exposes _all_ the available APIs for all WASM files.
-* WASM Files:
-    * `graphvizlib.wasm`
-    * `expatlib.wasm`
-    * ...more to follow...
-
-**Important**:  WASM files are dynamically loaded at runtime (this is a browser / emscripten requirement), which has a few implications for the consumer:  
-
-**Pros**:
-* While this package has potentially many large WASM files, only the ones being used will ever be downloaded from your CDN / Web Server.
-
-**Cons**:
-* Most browsers don't support `fetch` and loading pages via `file://` URN, so for testing / development work you will need to run a test web server.
-* Bundlers (RollupJS / WebPack) will ignore the WASM files, so you will need to manually ensure they are present in your final distribution (typically they are placed in the same folder as the bundled JS)
-
-## API Reference
-* [Common](#common)
-* [GraphViz](#graphviz)
-* [Expat](#expat)
-
-### Common
-Utility functions relating to @hpcc-js/wasm as a package
-
-<a name="wasmFolder" href="#wasmFolder">#</a> **wasmFolder**([_url_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/util.ts "Source")
-
-If _url_ is specified, sets the default location for all WASM files.  If _url_ is not specified it returns the current _url_ (defaults to `undefined`).
-
-<a name="__hpcc_wasmFolder" href="#__hpcc_wasmFolder">#</a> **__hpcc_wasmFolder** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/util.ts "Source")
-
-Global variable for setting default WASM location, this is an alternative to [wasmFolder](#wasmFolder)
-
----
-### GraphViz (`graphvizlib.wasm`)
-GraphViz WASM library, see [graphviz.org](https://www.graphviz.org/) for c++ details.  While this package is similar to [Viz.js](https://github.com/mdaines/viz.js), it employs a completely different build methodology taken from [GraphControl](https://github.com/hpcc-systems/GraphControl).
-
-The _GraphViz_ library comes in **two** flavours
-* An exported `graphviz` namespace, where each API function is **asynchrounous** and returns a `Promise<string>`.
-* A `graphvizSync` **asynchrounous** function which returns a `Promise<GraphvizSync>` which is a mirror instance of `graphviz`, where each API function is **synchrounous** and returns a `string`.
-
-#### Hello World
+### GraphViz Hello World
 ```html
 <!DOCTYPE html>
 <html>
@@ -125,7 +170,22 @@ The _GraphViz_ library comes in **two** flavours
 </head>
 
 <body>
-    <div id="placeholder"></div>
+    <div id="placeholder0"></div>
+    <script>
+        const test = `\
+digraph {
+    layout = neato
+    splines = true
+    edge [len = 2]
+    a -> b
+    b -> a
+}`;
+        hpccWasm.graphviz.layout(test, "svg", "dot").then(svg => {
+            const div = document.getElementById("placeholder0");
+            div.innerHTML = svg;
+        });
+    </script>
+    <div id="placeholder1"></div>
     <div id="placeholder2"></div>
     <script>
         const dot = `
@@ -162,11 +222,15 @@ The _GraphViz_ library comes in **two** flavours
 
         // Asynchronous call to layout
         hpccWasm.graphviz.layout(dot, "svg", "dot").then(svg => {
-            const div = document.getElementById("placeholder");
+            const div = document.getElementById("placeholder1");
             div.innerHTML = svg;
         });
+    </script>
 
-        hpccWasm.graphvizSync().then(graphviz => {
+    <script type="module">
+        import { graphvizSync } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.es6.js";
+
+        graphvizSync().then(graphviz => {
             const div = document.getElementById("placeholder2");
             // Synchronous call to layout
             div.innerHTML = graphviz.layout(dot, "svg", "dot");
@@ -178,7 +242,11 @@ The _GraphViz_ library comes in **two** flavours
 </html>
 ```
 
-#### GraphViz API
+### GraphViz API
+
+The _GraphViz_ library comes in **two** flavours
+* An exported `graphviz` namespace, where each API function is **asynchrounous** and returns a `Promise<string>`.
+* A `graphvizSync` **asynchrounous** function which returns a `Promise<GraphvizSync>` which is a mirror instance of `graphviz`, where each API function is **synchrounous** and returns a `string`.
 
 <a name="graphvizVersion" href="#graphvizVersion">#</a> **graphvizVersion**() · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/graphviz.ts "Source")
 
@@ -282,10 +350,11 @@ Returns a `Promise<GraphvizSync>`, once resolved provides a synchronous variant 
 
 ---
 
-### Expat (`expatlib.wasm`)
+## Expat
+
 Expat WASM library, provides a simplified wrapper around the Expat XML Parser library, see [libexpat.github.io](https://libexpat.github.io/) for c++ details.
 
-#### Hello World
+### Expat Hello World
 ```html
 <!DOCTYPE html>
 <html>
@@ -320,7 +389,7 @@ Expat WASM library, provides a simplified wrapper around the Expat XML Parser li
 </html>
 ```
 
-#### Expat API
+### Expat API
 
 <a name="expatVersion" href="#expatVersion">#</a> **expatVersion**() · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/expat.ts "Source")
 
@@ -340,13 +409,133 @@ Parses the XML with suitable callbacks.
 
 ---
 
+## Zstandard
+_zstd for short_
+
+Zstandard WASM library, provides a simplified wrapper around the Zstandard c++ library, see [Zstandard](https://facebook.github.io/zstd/) for more details.
+
+### Zstandard Hello World
+
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Zstandard WASM</title>
+</head>
+
+<body>
+    <div id="placeholder"></div>
+    <script type="module">
+        import { Zstd } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.es6.js";
+
+        const zstd = await Zstd.load();
+        const data = new Uint8Array(Array.from({ length: 100000 }, (_, i) => i % 256));
+        const compressed_data = await zstd.compress(data);
+        const decompressed_data = await zstd.decompress(compressed_data);
+        document.getElementById("placeholder").innerHTML = `\
+        <ul>
+            <li>Default Compression Level:  ${await zstd.defaultCLevel()}</li>
+            <li>Decompressed Size (bytes):  ${decompressed_data.byteLength}</li>
+            <li>Data Size (bytes):  ${data.byteLength}</li>
+            <li>Compressed Size (bytes):  ${compressed_data.byteLength}</li>
+            <li>Decompressed Size (bytes):  ${decompressed_data.byteLength}</li>
+        </ul>
+        `;
+    </script>
+
+</body>
+
+</html>
+```
+
+### Zstandard API
+
+#### Interfaces
+
+<a name="Options" href="#ZstandardOptions">#</a> **Options** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/zstd.ts "Source")
+
+Options structure for advanced loading.
+
+```typescript
+interface Options {
+    wasmFolder?: string;
+    wasmBinary?: ArrayBuffer;
+}
+```
+
+* _wasmFolder_: An optional `string` specifying the location of wasm file.
+* _wasmBinary_: An optional "pre-fetched" copy of the wasm binary as returned from `XHR` or `fetch`.
+
+<a name="Zstd" href="#Zstd">#</a> **Zstd** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/zstd.ts "Source")
+
+Conceptual interface for TypeScript/JavaScript wrapper API
+
+```typescript
+interface Zstd {
+    static load(options?: Options): Promise<Zstd>;
+    version(): string;
+
+    compress(data: Uint8Array, compressionLevel: number = this.defaultCLevel()): Uint8Array;
+    decompress(array: Uint8Array): Uint8Array;
+    defaultCLevel(): number;
+}
+```
+
+<a name="zstdLoad" href="#zstdLoad">#</a> **Zstd.load**(_options_?: **Options**): **Promise\<Zstd\>** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/zstd.ts "Source")
+
+Loads and initializes the Zstandard wasm library, returns a Promise to `Zstd`:
+```typescript
+const zstd = await Zstd.load();
+...dostuff...
+```
+or
+```typescript
+Zstd.load().then(zstd => {...dostuff...});
+```
+
+<a name="zstdVersion" href="#zstdVersion">#</a> **zstd.version**(): **string** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/zstd.ts "Source")
+
+* **_returns_**:  The Zstandard library Version.
+
+<a name="zstdCompress" href="#zstdCompress">#</a> **zstd.compress**(_data_: **Uint8Array**, _compressionLevel_?: **number**): **Uint8Array** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/zstd.ts "Source")
+
+* **_data_**:  Raw data to compress.
+* **_compressionLevel_**:  Compression v Speed tradeoff, when omitted it will default to `zstd.defaultCLevel()` which is currently 3.
+* **_returns_**:  Compressed data.
+
+Compresses raw data.  
+
+A note on compressionLevel:  The library supports regular compression levels from 1 up 22. Levels >= 20, should be used with caution, as they require more memory. The library also offers negative compression levels, which extend the range of speed vs. ratio preferences.  The lower the level, the faster the speed (at the cost of compression).
+
+<a name="zstdDefaultCLevel" href="#zstdDefaultCLevel">#</a> **zstd.defaultCLevel**(): **number** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/zstd.ts "Source")
+
+* **_returns_**:  Default compression level (see above).
+
+---
+
+## Utility
+
+Utility functions unrelated to any specific wasm APIs
+
+<a name="wasmFolder" href="#wasmFolder">#</a> **wasmFolder**([_url_]) · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/util.ts "Source")
+
+If _url_ is specified, sets the default location for all WASM files.  If _url_ is not specified it returns the current _url_ (defaults to `undefined`).
+
+<a name="__hpcc_wasmFolder" href="#__hpcc_wasmFolder">#</a> **__hpcc_wasmFolder** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/util.ts "Source")
+
+Global variable for setting default WASM location, this is an alternative to [wasmFolder](#wasmFolder)
+
+---
+
 ## Building @hpcc-js/wasm
 _Building is supported on both Linux (tested with Ubuntu 20.04) and Windows with WSL enabled (Ubuntu-20.04).  Building in other environments should work, but may be missing certain prerequisites._
 
 These are then known required OS dependencies (see [./docker/ubuntu-dev.dockerfile](./docker/ubuntu-dev.dockerfile) for test script):
 ```
 sudo apt-get install -y curl
-sudo curl --silent --location https://deb.nodesource.com/setup_14.x | sudo bash -
+sudo curl --silent --location https://deb.nodesource.com/setup_16.x | sudo bash -
 sudo apt-get install -y nodejs
 sudo apt-get install -y build-essential
 

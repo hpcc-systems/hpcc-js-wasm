@@ -1,12 +1,12 @@
-PROJECT(expatlib)
+PROJECT(zstdlib)
 
-find_package(expat CONFIG REQUIRED)
+find_package(zstd CONFIG REQUIRED)
 
 # See:  https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
 SET(EM_FLAGS 
     ${EM_FLAGS}
     "-s EXPORT_NAME='${CMAKE_PROJECT_NAME}'"
-    "-s EXPORTED_FUNCTIONS=\"['_malloc']\""
+    "-s EXPORTED_FUNCTIONS=\"[]\""
     "-s EXPORTED_RUNTIME_METHODS=\"[]\""
     "--post-js ${CMAKE_CURRENT_BINARY_DIR}/main_glue.js"
 )
@@ -26,18 +26,18 @@ INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-ADD_EXECUTABLE(expatlib
+ADD_EXECUTABLE(zstdlib
     main.cpp
 )
 
-SET_TARGET_PROPERTIES(expatlib PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=webview")
+SET_TARGET_PROPERTIES(zstdlib PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=webview")
 
-TARGET_LINK_LIBRARIES(expatlib
-    expat::expat
+TARGET_LINK_LIBRARIES(zstdlib
+    PRIVATE $<IF:$<TARGET_EXISTS:zstd::libzstd_shared>,zstd::libzstd_shared,zstd::libzstd_static>
 )
 
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/expatlib.wasm DESTINATION dist COMPONENT runtime)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/zstdlib.wasm DESTINATION dist COMPONENT runtime)
 
 IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/expatlib.wasm.map DESTINATION dist COMPONENT runtime)
+    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/zstdlib.wasm.map DESTINATION dist COMPONENT runtime)
 ENDIF ()

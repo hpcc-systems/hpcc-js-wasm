@@ -13,10 +13,17 @@
             "webRoot": "${workspaceRoot}"
         },
         {
-            "name": "helloworld.html",
+            "name": "hw-graphviz.html",
             "type": "msedge",
             "request": "launch",
-            "url": "http://localhost:8000/helloworld.html",
+            "url": "http://localhost:8000/hw-graphviz.html",
+            "webRoot": "${workspaceRoot}"
+        },
+        {
+            "name": "hw-zstd.html",
+            "type": "msedge",
+            "request": "launch",
+            "url": "http://localhost:8000/hw-zstd.html",
             "webRoot": "${workspaceRoot}"
         },
         {

@@ -6,7 +6,7 @@
         {
             "type": "npm",
             "label": "Compile Watch",
-            "script": "compile-es6-watch",
+            "script": "compile-watch",
             "problemMatcher": [
                 "$tsc-watch"
             ],

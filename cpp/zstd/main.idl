@@ -1,0 +1,20 @@
+interface zstd
+{
+    [Const] static DOMString version();
+
+    static any malloc(unsigned long size);
+    static void free(any ptr);
+    static any memcpy(any dest, [Const] any src, unsigned long n);
+
+    static unsigned long compress(any dst, unsigned long dstCapacity, [Const] any src, unsigned long srcSize, long compressionLevel);
+    static unsigned long decompress(any dst, unsigned long dstCapacity, [Const] any src, unsigned long compressedSize);
+    static unsigned long long getFrameContentSize([Const] any src, unsigned long srcSize);
+    static unsigned long findFrameCompressedSize([Const] any src, unsigned long srcSize);
+
+    static unsigned long compressBound(unsigned long srcSize);
+    static unsigned long isError(unsigned long code);
+    [Const] static DOMString getErrorName(unsigned long code);
+    static long minCLevel();
+    static long maxCLevel();
+    static long defaultCLevel();
+};

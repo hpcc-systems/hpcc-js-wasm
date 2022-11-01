@@ -370,17 +370,16 @@ describe("options", function () {
 describe("wasmFolder", function () {
     it("default", function () {
         expect((globalThis as any).__hpcc_wasmFolder).to.be.undefined;
-        expect(wasmFolder()).to.be.undefined;
+        expect(wasmFolder()).to.equal("dist");
     });
 
     it("wasmFolder", function () {
         const mol = "42";
-        expect((globalThis as any).__hpcc_wasmFolder).to.be.undefined;
-        expect(wasmFolder(mol)).to.be.undefined;
+        expect(wasmFolder(mol)).to.equal("dist");
         expect(wasmFolder()).to.equal(mol);
         expect((globalThis as any).__hpcc_wasmFolder).to.be.undefined;
-        expect(wasmFolder(undefined)).to.equal(mol);
-        expect(wasmFolder()).to.be.undefined;
+        expect(wasmFolder("dist")).to.equal(mol);
+        expect(wasmFolder()).to.equal("dist");
         expect((globalThis as any).__hpcc_wasmFolder).to.be.undefined;
     });
 });

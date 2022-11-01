@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Zstandard WASM</title>
+</head>
+
+<body>
+    <div id="placeholder"></div>
+    <script type="module">
+        import { Zstd } from "./dist/index.es6.js";
+        //import { Zstd } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.es6.js";
+
+        const zstd = await Zstd.load();
+        const data = new Uint8Array(Array.from({ length: 100000 }, (_, i) => i % 256));
+        const compressed_data = await zstd.compress(data);
+        const decompressed_data = await zstd.decompress(compressed_data);
+        document.getElementById("placeholder").innerHTML = `\
+        <ul>
+            <li>Default Compression Level:  ${await zstd.defaultCLevel()}</li>
+            <li>Decompressed Size (bytes):  ${decompressed_data.byteLength}</li>
+            <li>Data Size (bytes):  ${data.byteLength}</li>
+            <li>Compressed Size (bytes):  ${compressed_data.byteLength}</li>
+            <li>Decompressed Size (bytes):  ${decompressed_data.byteLength}</li>
+        </ul>
+        `;
+    </script>
+
+</body>
+
+</html>
