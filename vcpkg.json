@@ -6,6 +6,6 @@
         "base91",
         "expat",
         "triangle",
-        "zlib"
+        "zstd"
     ]
 }

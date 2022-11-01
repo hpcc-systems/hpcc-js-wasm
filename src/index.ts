@@ -3,6 +3,7 @@ import { doFetch, scriptDir } from "./fetch-browser";
 interop.doFetch = doFetch;
 interop.scriptDir = scriptDir;
 
+export { wasmFolder } from "./util";
 export * from "./expat";
 export * from "./graphviz";
-export { wasmFolder } from "./util";
+export * from "./zstd";

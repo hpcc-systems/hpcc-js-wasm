@@ -41,7 +41,7 @@ ADD_EXECUTABLE(graphvizlib
     ${SRCS}
 )
 
-SET_TARGET_PROPERTIES(graphvizlib PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=web")
+SET_TARGET_PROPERTIES(graphvizlib PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=webview")
 
 TARGET_LINK_LIBRARIES(graphvizlib PRIVATE
     gvplugin_core
@@ -49,6 +49,45 @@ TARGET_LINK_LIBRARIES(graphvizlib PRIVATE
     gvplugin_neato_layout
     ortho
 )
+
+# ADD_EXECUTABLE(graphvizlib-web
+#     ${SRCS}
+# )
+
+# SET_TARGET_PROPERTIES(graphvizlib-web PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=web")
+
+# TARGET_LINK_LIBRARIES(graphvizlib-web PRIVATE
+#     gvplugin_core
+#     gvplugin_dot_layout
+#     gvplugin_neato_layout
+#     ortho
+# )
+
+# ADD_EXECUTABLE(graphvizlib-worker
+#     ${SRCS}
+# )
+
+# SET_TARGET_PROPERTIES(graphvizlib-worker PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=worker")
+
+# TARGET_LINK_LIBRARIES(graphvizlib-worker PRIVATE
+#     gvplugin_core
+#     gvplugin_dot_layout
+#     gvplugin_neato_layout
+#     ortho
+# )
+
+# ADD_EXECUTABLE(graphvizlib-node
+#     ${SRCS}
+# )
+
+# SET_TARGET_PROPERTIES(graphvizlib-node PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=node")
+
+# TARGET_LINK_LIBRARIES(graphvizlib-node PRIVATE
+#     gvplugin_core
+#     gvplugin_dot_layout
+#     gvplugin_neato_layout
+#     ortho
+# )
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/graphvizlib.wasm DESTINATION dist COMPONENT runtime)
 

@@ -37,7 +37,10 @@ async function _loadWasm(_wasmLib: any, wasmUrl: string, wasmBinary?: ArrayBuffe
         wasmBinary = await interop.doFetch(wasmUrl);
     }
     return await wasmLib({
-        "wasmBinary": wasmBinary
+        "wasmBinary": wasmBinary,
+        locateFile: (path: string, scriptDirectory: string) => {
+            return wasmUrl;
+        }
     });
 }
 
@@ -47,18 +50,4 @@ export async function loadWasm(_wasmLib: any, filename: string, wf?: string, was
         g_wasmCache[wasmUrl] = _loadWasm(_wasmLib, wasmUrl, wasmBinary);
     }
     return g_wasmCache[wasmUrl];
-}
-
-export function loadWasmOld(_wasmLib: any, filename: string, wf?: string, wasmBinary?: Uint8Array): Promise<any> {
-    const wasmLib = _wasmLib.default || _wasmLib;
-    //  Prevent double load ---
-    if (!wasmLib.__hpcc_promise) {
-        wasmLib.__hpcc_promise = wasmLib({
-            wasmBinary,
-            locateFile: (path: string, prefix: string) => {
-                return `${trimEnd(wf || wasmFolder() || prefix || ".", "/")}/${trimStart(path, "/")}`;
-            }
-        });
-    }
-    return wasmLib.__hpcc_promise;
 }
