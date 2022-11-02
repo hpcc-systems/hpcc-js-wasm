@@ -61,6 +61,34 @@ const nodeTpl = (input, cjsOutput, esOutput) => ({
     ]
 });
 
+const binTpl = (input, esOutput) => ({
+    input,
+    external: id => {
+        if (id.indexOf("./") !== 0 && id.indexOf("__bin__") < 0) {
+            console.log(id);
+            return true;
+        }
+        return false;
+    },
+    output: [{
+        file: esOutput,
+        format: "es",
+        sourcemap: true,
+        name: pkg.name
+    }],
+    plugins: [
+        replace({
+            preventAssignment: true,
+            include: ["lib-es6/__bin__/*.mjs"],
+            delimiters: ["", ""],
+            values: {
+                "../index-node": "../dist/index.node.es6.mjs"
+            }
+        }),
+        sourcemaps(),
+    ]
+});
+
 export default [
     browserTpl("lib-es6/index", "dist/index", "dist/index.es6"),
     nodeTpl("lib-es6/index-node", "dist/index.node", "dist/index.node.es6"),
@@ -68,9 +96,13 @@ export default [
     browserTpl("lib-es6/graphviz", "dist/graphviz", "dist/graphviz.es6"),
     browserTpl("lib-es6/expat", "dist/expat", "dist/expat.es6"),
     browserTpl("lib-es6/zstd", "dist/zstd", "dist/zstd.es6"),
+    browserTpl("lib-es6/extract", "dist/extract", "dist/extract.es6"),
 
     browserTpl("lib-es6/__tests__/index", "dist-test/index", "dist-test/index.es6"),
     nodeTpl("lib-es6/__tests__/index", "dist-test/index.node", "dist-test/index.node.es6"),
+
+    binTpl("lib-es6/__bin__/dot-wasm", "bin/dot-wasm.mjs"),
+    binTpl("lib-es6/__bin__/sfx-wasm", "bin/sfx-wasm.mjs"),
     // {
     //     input: 'lib-es6/test-wasm.js',
     //     output: [{

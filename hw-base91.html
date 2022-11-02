@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Zstandard WASM</title>
+</head>
+
+<body>
+    <div id="placeholder"></div>
+    <script type="module">
+        import { Base91 } from "./dist/index.es6.js";
+        //import { Base91 } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.es6.js";
+
+        const base91 = await Base91.load();
+        const data = new Uint8Array(Array.from({ length: 100 }, (_, i) => Math.random() * 100));
+        const encoded_data = await base91.encode(data);
+        const decoded_data = await base91.decode(encoded_data);
+        document.getElementById("placeholder").innerHTML = `\
+        <ul>
+            <li>Data Size (bytes):  ${data.byteLength}</li>
+            <li>Endoded Size (bytes):  ${encoded_data.length}</li>
+            <li>Decoded Size (bytes):  ${decoded_data.byteLength}</li>
+        </ul>
+        <h4>Data:  </h4>
+        <code>
+            ${data}
+        </code>
+        <h4>Base 91:  </h4>
+        <code id="base91">
+        </code>
+        <h4>Decoded:  </h4>
+        <code>
+            ${decoded_data}
+        </code>
+        `;
+        document.getElementById("base91").innerText = encoded_data;
+    </script>
+
+</body>
+
+</html>

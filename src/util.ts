@@ -33,7 +33,7 @@ const g_wasmCache = {} as { [key: string]: Promise<any> };
 
 async function _loadWasm(_wasmLib: any, wasmUrl: string, wasmBinary?: ArrayBuffer): Promise<any> {
     const wasmLib = _wasmLib.default || _wasmLib;
-    if (!wasmBinary) {
+    if (!wasmBinary && interop.doFetch) {
         wasmBinary = await interop.doFetch(wasmUrl);
     }
     return await wasmLib({

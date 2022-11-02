@@ -4,7 +4,6 @@ interface zstd
 
     static any malloc(unsigned long size);
     static void free(any ptr);
-    static any memcpy(any dest, [Const] any src, unsigned long n);
 
     static unsigned long compress(any dst, unsigned long dstCapacity, [Const] any src, unsigned long srcSize, long compressionLevel);
     static unsigned long decompress(any dst, unsigned long dstCapacity, [Const] any src, unsigned long compressedSize);

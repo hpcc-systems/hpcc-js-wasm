@@ -29,6 +29,9 @@ Built with:
 - [Zstandard (zstd)](#zstandard)
     - [Hello World](#zstandard-hello-world)
     - [API](#zstandard-api)
+- [Base91](#base91)
+    - [Hello World](#base91-hello-world)
+    - [API](#base91-api)
 - [Utilities](#utility)
 - [Building @hpcc-js/wasm](#building-hpcc-js-wasm)
 
@@ -108,7 +111,7 @@ GraphViz WASM library, see [graphviz.org](https://www.graphviz.org/) for c++ det
 
 To call `dot-wasm` without installing:
 ```
-npx @hpcc-js/wasm [options] fileOrDot
+npx -p @hpcc-js/wasm dot-wasm [options] fileOrDot
 ```
 
 To install the global command `dot-wasm` via NPM:
@@ -121,38 +124,35 @@ Usage:
 Usage: dot-wasm [options] fileOrDot
 
 Options:
-      --version      Show version number                               [boolean]
-  -K, --layout       Set layout engine (circo | dot | fdp | sfdp | neato | osage
-                     | patchwork | twopi). By default, dot is used.
-  -T, --format       Set output language to one of the supported formats (svg,
-                     dot, json, dot_json, xdot_json, plain, plain-ext). By
-                     default, svg is produced.
+      --version      Show version number                                         [boolean]
+  -K, --layout       Set layout engine (circo | dot | fdp | sfdp | neato | osage | patchwo
+                     rk | twopi). By default, dot is used.
+  -T, --format       Set output language to one of the supported formats (svg | dot | json
+                      | dot_json | xdot_json | plain | plain-ext). By default, svg is prod
+                     uced.
   -n, --neato-no-op  Sets no-op flag in neato.
-                     "-n 1" assumes neato nodes have already been positioned and
-                     all nodes have a pos attribute giving the positions. It
-                     then performs an optional adjustment to remove node-node
-                     overlap, depending on the value of the overlap attribute,
-                     computes the edge layouts, depending on the value of the
-                     splines attribute, and emits the graph in the appropriate
-                     format.
-                     "-n 2" Use node positions as specified, with no adjustment
-                     to remove node-node overlaps, and use any edge layouts
-                     already specified by the pos attribute. neato computes an
-                     edge layout for any edge that does not have a pos
-                     attribute. As usual, edge layout is guided by the splines
-                     attribute.
-  -y, --invert-y     By default, the coordinate system used in generic output
-                     formats, such as attributed dot, extended dot, plain and
-                     plain-ext, is the standard cartesian system with the origin
-                     in the lower left corner, and with increasing y coordinates
-                     as points move from bottom to top. If the -y flag is used,
-                     the coordinate system is inverted, so that increasing
-                     values of y correspond to movement from top to bottom.
-  -h, --help         Show help                                         [boolean]
+                     "-n 1" assumes neato nodes have already bee
+                     n positioned and all nodes have a pos attribute giving the positions.
+                      It then performs an optional adjustment to remove node-node overlap,
+                      depending on the value of the overlap attribute, computes the edge l
+                     ayouts, depending on the value of the splines attribute, and emits th
+                     e graph in the appropriate format.
+                     "-n 2" Use node positions as speci
+                     fied, with no adjustment to remove node-node overlaps, and use any ed
+                     ge layouts already specified by the pos attribute. neato computes an
+                     edge layout for any edge that does not have a pos attribute. As usual
+                     , edge layout is guided by the splines attribute.
+  -y, --invert-y     By default, the coordinate system used in generic output formats, suc
+                     h as attributed dot, extended dot, plain and plain-ext, is the standa
+                     rd cartesian system with the origin in the lower left corner, and wit
+                     h increasing y coordinates as points move from bottom to top. If the
+                     -y flag is used, the coordinate system is inverted, so that increasin
+                     g values of y correspond to movement from top to bottom.
+  -v                 Echo GraphViz library version
+  -h, --help         Show help                                                   [boolean]
 
 Examples:
-  dot-wasm -K neato -T xdot ./input.dot  Execute NEATO layout and outputs XDOT
-                                         format.
+  dot-wasm -K neato -T xdot ./input.dot  Execute NEATO layout and outputs XDOT format.
 ```
 
 ### GraphViz Hello World
@@ -512,6 +512,122 @@ A note on compressionLevel:  The library supports regular compression levels fro
 <a name="zstdDefaultCLevel" href="#zstdDefaultCLevel">#</a> **zstd.defaultCLevel**(): **number** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/zstd.ts "Source")
 
 * **_returns_**:  Default compression level (see above).
+
+---
+
+## Base91
+_Similar to Base 64, but uses more characters resulting in smaller strings._
+
+Base 91 WASM library, similar to Base 64 but uses more characters resulting in smaller strings, see [Base91](https://base91.sourceforge.net/) for more details.
+
+### Base91 Hello World
+
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Base91 WASM</title>
+</head>
+
+<body>
+    <div id="placeholder"></div>
+    <script type="module">
+        import { Base91 } from "./dist/index.es6.js";
+        //import { Base91 } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.es6.js";
+
+        const base91 = await Base91.load();
+        const data = new Uint8Array(Array.from({ length: 100 }, (_, i) => Math.random() * 100));
+        const encoded_data = await base91.encode(data);
+        const decoded_data = await base91.decode(encoded_data);
+        document.getElementById("placeholder").innerHTML = `\
+        <ul>
+            <li>Data Size (bytes):  ${data.byteLength}</li>
+            <li>Endoded Size (bytes):  ${encoded_data.length}</li>
+            <li>Decoded Size (bytes):  ${decoded_data.byteLength}</li>
+        </ul>
+        <h4>Data:  </h4>
+        <code>
+            ${data}
+        </code>
+        <h4>Base 91:  </h4>
+        <code id="base91">
+        </code>
+        <h4>Decoded:  </h4>
+        <code>
+            ${decoded_data}
+        </code>
+        `;
+        document.getElementById("base91").innerText = encoded_data;
+    </script>
+
+</body>
+
+</html>
+```
+
+### Base91 API
+
+#### Interfaces
+
+<a name="Options" href="#Base91Options">#</a> **Options** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/base91.ts "Source")
+
+Options structure for advanced loading.
+
+```typescript
+interface Options {
+    wasmFolder?: string;
+    wasmBinary?: ArrayBuffer;
+}
+```
+
+* _wasmFolder_: An optional `string` specifying the location of wasm file.
+* _wasmBinary_: An optional "pre-fetched" copy of the wasm binary as returned from `XHR` or `fetch`.
+
+<a name="Base91" href="#Base91">#</a> **Base91** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/base91.ts "Source")
+
+Conceptual interface for TypeScript/JavaScript wrapper API
+
+```typescript
+interface Base91 {
+    static load(options?: Options): Promise<Base91>;
+    version(): string;
+
+    encode(data: Uint8Array): string;
+    decode(array: string): Uint8Array;
+}
+```
+
+<a name="base91Load" href="#base91Load">#</a> **Base91.load**(_options_?: **Options**): **Promise\<Base91\>** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/base91.ts "Source")
+
+Loads and initializes the Base91 wasm library, returns a Promise to `Base91`:
+```typescript
+const base91 = await Base91.load();
+...dostuff...
+```
+or
+```typescript
+Base91.load().then(base91 => {...dostuff...});
+```
+
+<a name="base91Version" href="#base91Version">#</a> **base91.version**(): **string** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/base91.ts "Source")
+
+* **_returns_**:  The Base91 library Version.
+
+<a name="base91Encode" href="#base91Encode">#</a> **base91.encode**(_data_: **Uint8Array**): **string** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/base91.ts "Source")
+
+* **_data_**:  Raw data to encode.
+* **_returns_**:  Encoded string.
+
+Encodes the raw data.  
+
+<a name="base91Decode" href="#base91Decode">#</a> **base91.decode**(_str_: **string**): **Uint8Array** · [<>](https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/src/base91.ts "Source")
+
+* **_str_**:  String to decode.
+* **_returns_**:  Decoded data.
+
+Decodes the raw data.  
 
 ---
 

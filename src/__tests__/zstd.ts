@@ -12,9 +12,8 @@ describe("zstd", function () {
     it("compress", async function () {
         const zstd = await Zstd.load();
         const data = new Uint8Array(Array.from({ length: 1000 }, (_, i) => i % 256));
-        const compressed_data = await zstd.compress(data);
-        const data2 = await zstd.decompress(compressed_data);
+        const compressed_data = zstd.compress(data);
+        const data2 = zstd.decompress(compressed_data);
         expect(data).to.deep.equal(data2);
     });
 });
-

@@ -11,7 +11,6 @@ SET(EM_FLAGS
     "-s INVOKE_RUN=0"
     "-s ALLOW_MEMORY_GROWTH=1"
     "-s WASM=1"
-    "-s MODULARIZE"
     "-s ENVIRONMENT=web"
     "-s FILESYSTEM=0"
     # "-s MINIMAL_RUNTIME=1"
@@ -21,7 +20,7 @@ SET(EM_FLAGS
     "-s USE_ES6_IMPORT_META=0"
     # "-s WASM_BIGINT=1"
     "--pre-js ${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/pre.js"
-    # "--post-js ${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/post.js"
+    "--post-js ${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/post.js"
 )
 
 IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
