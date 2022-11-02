@@ -311,6 +311,7 @@ describe("bad dot", function () {
             success = false;
             expect(typeof e.message).to.equal("string");
             expect(e.message).to.not.be.empty;
+            expect(e.message).to.contain("syntax error in line");
         }
         expect(success).to.be.false;
     });
@@ -329,6 +330,7 @@ describe("bad dot", function () {
             success = false;
             expect(typeof e.message).to.equal("string");
             expect(e.message).to.not.be.empty;
+            expect(e.message).to.contain("syntax error in line");
         }
         expect(success).to.be.false;
     });
