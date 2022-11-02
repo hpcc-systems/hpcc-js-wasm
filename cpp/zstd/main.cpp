@@ -1,6 +1,5 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+
 #include <zstd.h>
 
 struct zstd
@@ -19,11 +18,6 @@ public:
     static void free(void *__ptr)
     {
         ::free(__ptr);
-    }
-
-    static void *memcpy(void *dest, const void *src, size_t n)
-    {
-        return ::memcpy(dest, src, n);
     }
 
     static size_t compress(void *dst, size_t dstCapacity, const void *src, size_t srcSize, int compressionLevel)

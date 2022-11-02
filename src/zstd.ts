@@ -1,22 +1,16 @@
 // @ts-ignore
 import * as zstdlib from "../build/cpp/zstd/zstdlib";
+import { Options, WasmLibrary } from "./wasm-library";
 import { loadWasm } from "./util";
 
 //  Ref:  http://facebook.github.io/zstd/zstd_manual.html
-
-export interface Options {
-    wasmFolder?: string;
-    wasmBinary?: ArrayBuffer;
-}
+//  Ref:  https://github.com/facebook/zstd
 
 let g_zstd: Promise<Zstd>;
-export class Zstd {
-    protected _module;
-    protected _exports;
+export class Zstd extends WasmLibrary {
 
-    private constructor(_module: any) {
-        this._module = _module;
-        this._exports = _module.zstd.prototype;
+    private constructor(_module: zstdlib) {
+        super(_module, _module.zstd.prototype);
     }
 
     static load(options?: Options): Promise<Zstd> {
@@ -33,43 +27,37 @@ export class Zstd {
     }
 
     compress(data: Uint8Array, compressionLevel: number = this.defaultCLevel()): Uint8Array {
-        const uncompressedSize = data.byteLength;
-        const uncompressedPtr = this._exports.malloc(uncompressedSize);
-        this._module.HEAPU8.set(data, uncompressedPtr);
+        const uncompressed = this.uint8_heapu8(data);
 
         const compressedSize = this._exports.compressBound(data.length);
-        const compressedPtr = this._exports.malloc(compressedSize);
-
-        const actualSize = this._exports.compress(compressedPtr, compressedSize, uncompressedPtr, uncompressedSize, compressionLevel);
-        if (this._exports.isError(actualSize)) {
-            console.error(this._exports.getErrorName(actualSize));
+        const compressed = this.malloc_heapu8(compressedSize);
+        compressed.size = this._exports.compress(compressed.ptr, compressedSize, uncompressed.ptr, uncompressed.size, compressionLevel);
+        if (this._exports.isError(compressed.size)) {
+            console.error(this._exports.getErrorName(compressed.size));
         }
+        const retVal = this.heapu8_uint8(compressed);
 
-        const retVal: Uint8Array = new Uint8Array(this._module.HEAPU8.buffer, compressedPtr, actualSize);
-        this._exports.free(compressedPtr);
-        this._exports.free(uncompressedPtr);
+        this.free_heapu8(compressed);
+        this.free_heapu8(uncompressed);
         return retVal;
     }
 
     decompress(array: Uint8Array): Uint8Array {
-        const compressedSize = array.byteLength;
-        const compressedPtr = this._exports.malloc(compressedSize);
-        this._module.HEAPU8.set(array, compressedPtr);
-
-        const uncompressedSize = this._exports.getFrameContentSize(compressedPtr, compressedSize);
+        const compressed = this.uint8_heapu8(array);
+        const uncompressedSize = this._exports.getFrameContentSize(compressed.ptr, compressed.size);
         if (this._exports.isError(uncompressedSize)) {
             console.error(this._exports.getErrorName(uncompressedSize));
         }
-        const uncompressedPtr = this._exports.malloc(uncompressedSize);
-        const actualSize = this._exports.decompress(uncompressedPtr, uncompressedSize, compressedPtr, compressedSize);
-        if (this._exports.isError(actualSize)) {
-            console.error(this._exports.getErrorName(actualSize));
+        const uncompressed = this.malloc_heapu8(uncompressedSize);
+
+        uncompressed.size = this._exports.decompress(uncompressed.ptr, uncompressedSize, compressed.ptr, compressed.size);
+        if (this._exports.isError(uncompressed.size)) {
+            console.error(this._exports.getErrorName(uncompressed.size));
         }
+        const retVal = this.heapu8_uint8(uncompressed);
 
-        const retVal = new Uint8Array(this._module.HEAPU8.buffer, uncompressedPtr, actualSize);
-        this._exports.free(uncompressedPtr);
-        this._exports.free(compressedPtr);
-
+        this.free_heapu8(uncompressed);
+        this.free_heapu8(compressed);
         return retVal;
     }
 

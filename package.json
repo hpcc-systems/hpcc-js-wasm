@@ -26,6 +26,22 @@
         "import": "./dist/index.es6.js",
         "default": "./dist/index.js"
       },
+      "expat": {
+        "import": "./dist/expat.es6.js",
+        "default": "./dist/expat.js"
+      },
+      "extract": {
+        "import": "./dist/extract.es6.js",
+        "default": "./dist/extract.js"
+      },
+      "graphviz": {
+        "import": "./dist/graphviz.es6.js",
+        "default": "./dist/graphviz.js"
+      },
+      "zstd": {
+        "import": "./dist/zstd.es6.js",
+        "default": "./dist/zstd.js"
+      },
       "default": "./dist/index.js"
     }
   },
@@ -36,13 +52,11 @@
   "jsdelivr": "dist/index.min.js",
   "types": "types/index.d.ts",
   "bin": {
-    "dot-wasm": "bin/cli.js"
+    "dot-wasm": "bin/dot-wasm.mjs"
   },
   "files": [
-    "bin/cli.js",
-    "dist/index*.*",
-    "dist/expat*.*",
-    "dist/graphviz*.*",
+    "bin/*.*",
+    "dist/*.*",
     "types/*",
     "src/*.css"
   ],
@@ -58,7 +72,7 @@
     "install-vcpkg:win32": "wsl -e ./scripts/cpp-install-vcpkg.sh",
     "install-build-deps": "run-p install-emsdk install-graphviz install-vcpkg",
     "uninstall-build-deps": "rimraf ./emsdk ./src-graphviz ./vcpkg ./src-expat ./src-vcpkg",
-    "clean": "rimraf build coverage dist* lib* tmp types *.tsbuildinfo",
+    "clean": "rimraf bin build coverage dist* lib* output-* tmp types *.tsbuildinfo",
     "compile": "tsc",
     "compile-watch": "npm run compile -- -w",
     "compile-cpp": "run-script-os",
@@ -76,12 +90,13 @@
     "dev-start": "ws",
     "lint": "eslint src/**/*.ts",
     "lint-fix": "npm run lint -- --fix",
-    "test-cli": "node ./bin/cli.js -v",
+    "test-cli": "node ./bin/dot-wasm.mjs -v",
+    "test-cli-help": "node ./bin/dot-wasm.mjs",
     "test-bundle": "npx -y esbuild --bundle ./dist/index.js --bundle ./dist/index.es6.js --outdir=tmp",
     "test-bundle-node": "npx -y esbuild --bundle --platform=node --bundle ./dist/index.node.js ./dist/index.node.es6.mjs --outdir=tmp",
     "test-chrome": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
     "test-firefox": "karma start --single-run --browsers Firefox karma.conf.js",
-    "test-node": "node ./bin/cli.js -v && mocha ./dist-test/index.node.js --reporter spec",
+    "test-node": "node ./bin/dot-wasm.mjs -v && mocha ./dist-test/index.node.js --reporter spec",
     "test": "run-s test-bundle test-bundle-node test-chrome test-node",
     "tag": "run-s standard-version git-push",
     "purge-jsdelivr": "node ./utils/purge-jsdelivr.js",
@@ -100,10 +115,12 @@
     "@types/chai": "4.3.3",
     "@types/emscripten": "1.39.6",
     "@types/mocha": "9.1.1",
-    "@typescript-eslint/eslint-plugin": "5.40.1",
-    "@typescript-eslint/parser": "5.40.1",
+    "@types/yargs": "^17.0.13",
+    "@typescript-eslint/eslint-plugin": "5.42.0",
+    "@typescript-eslint/parser": "5.42.0",
     "chai": "4.3.6",
     "eslint": "8.26.0",
+    "fzstd": "^0.0.4",
     "karma": "6.4.1",
     "karma-chai": "0.1.0",
     "karma-chrome-launcher": "3.1.1",
@@ -112,6 +129,7 @@
     "karma-spec-reporter": "0.0.34",
     "local-web-server": "5.2.1",
     "mocha": "10.1.0",
+    "node-base91": "^0.3.4",
     "node-fetch": "3.2.10",
     "npm-run-all": "4.1.5",
     "rimraf": "3.0.2",
@@ -120,7 +138,7 @@
     "run-script-os": "1.1.6",
     "standard-version": "9.5.0",
     "terser": "5.15.1",
-    "tslib": "2.4.0",
+    "tslib": "2.4.1",
     "typescript": "4.8.4"
   },
   "repository": {
