@@ -60,13 +60,15 @@ export const graphviz = {
             const graphViz = new module.Graphviz(ext?.yInvert ? 1 : 0, ext?.nop ? ext?.nop : 0);
             createFiles(graphViz, ext);
             let retVal;
+            let errorMsg;
             try {
                 retVal = graphViz.layout(dotSource, outputFormat, layoutEngine);
             } catch (e) {
+                errorMsg = module.Graphviz.prototype.lastError();
             };
             module.destroy(graphViz);
-            if (!retVal) {
-                throw new Error(module.Graphviz.prototype.lastError());
+            if (retVal === undefined) {
+                throw new Error(errorMsg);
             }
             return retVal;
         });
@@ -106,10 +108,16 @@ export class GraphvizSync {
         if (!dotSource) return "";
         const graphViz = new this._wasm.Graphviz(ext?.yInvert ? 1 : 0, ext?.nop ? ext?.nop : 0);
         createFiles(graphViz, ext);
-        const retVal = graphViz.layout(dotSource, outputFormat, layoutEngine);
+        let retVal;
+        let errorMsg;
+        try {
+            retVal = graphViz.layout(dotSource, outputFormat, layoutEngine);
+        } catch (e) {
+            errorMsg = this._wasm.Graphviz.prototype.lastError();
+        };
         this._wasm.destroy(graphViz);
-        if (!retVal) {
-            throw new Error(this._wasm.Graphviz.prototype.lastError());
+        if (retVal === undefined) {
+            throw new Error(errorMsg);
         }
         return retVal;
     }
