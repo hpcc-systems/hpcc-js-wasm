@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.19.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.18.0...v1.19.0) (2022-11-02)
+
+
+### Features
+
+*  Add Base91 wasm ([7063b76](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7063b76de652272912d47981e4584431d3eae8e0))
+*  Add Zstandard wasm ([6672890](https://github.com/hpcc-systems/hpcc-js-wasm/commit/6672890b2afb30a32fdd182fa04f404c7d71b7f6))
+
+
+### Bug Fixes
+
+*  Error handling using GraphvizSync() layout ([4ce3545](https://github.com/hpcc-systems/hpcc-js-wasm/commit/4ce3545afe65c2923121b558635da94ac339f015)), closes [#125](https://github.com/hpcc-systems/hpcc-js-wasm/issues/125)
+
 ## [1.18.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.17.1...v1.18.0) (2022-10-24)
 
 
