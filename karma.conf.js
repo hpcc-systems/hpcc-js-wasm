@@ -4,9 +4,11 @@ module.exports = function (config) {
         files: [
             'dist-test/index.js',
             { pattern: 'dist/*.wasm', watched: false, included: false, served: true },
+            { pattern: 'dist-test/*.js', watched: false, included: false, served: true },
         ],
         proxies: {
-            "/dist/": "/base/dist/"
+            "/dist/": "/base/dist/",
+            "/dist-test/": "/base/dist-test/"
         },
         reporters: ['spec'],
         port: 9876,  // karma web server port
