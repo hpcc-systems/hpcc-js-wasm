@@ -50,7 +50,7 @@ const nodeTpl = (input, cjsOutput, esOutput) => ({
             include: ["lib-es6/__tests__/*.js"],
             delimiters: ['', ''],
             values: {
-                "../index": "../index-node"
+                "\"../index\"": "\"../index-node\""
             }
         }),
         nodeResolve({
@@ -99,8 +99,9 @@ export default [
     browserTpl("lib-es6/extract", "dist/extract", "dist/extract.es6"),
 
     browserTpl("lib-es6/__tests__/index", "dist-test/index", "dist-test/index.es6"),
-    nodeTpl("lib-es6/__tests__/index", "dist-test/index.node", "dist-test/index.node.es6"),
-    browserTpl("lib-es6/__tests__/worker", "dist-test/worker", "dist-test/worker.es6"),
+    nodeTpl("lib-es6/__tests__/index-node", "dist-test/index.node", "dist-test/index.node.es6"),
+    browserTpl("lib-es6/__tests__/worker-browser", "dist-test/worker", "dist-test/worker.es6"),
+    nodeTpl("lib-es6/__tests__/worker-node", "dist-test/worker.node", "dist-test/worker.node.es6"),
 
     binTpl("lib-es6/__bin__/dot-wasm", "bin/dot-wasm.mjs"),
     binTpl("lib-es6/__bin__/sfx-wasm", "bin/sfx-wasm.mjs"),
