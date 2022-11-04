@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.19.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.19.0...v1.19.1) (2022-11-04)
+
+
+### Bug Fixes
+
+*  Add web worker unit test ([f12f5e2](https://github.com/hpcc-systems/hpcc-js-wasm/commit/f12f5e2035db5c9ea59690802f8c68169720687a))
+
 ## [1.19.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.18.0...v1.19.0) (2022-11-02)
 
 
