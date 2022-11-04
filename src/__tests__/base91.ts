@@ -20,7 +20,7 @@ describe("base91", function () {
         expect(data).to.deep.equal(data2);
     });
 
-    it("compressed", async function () {
+    it("encoded", async function () {
         const zstd = await Zstd.load();
         const data = new Uint8Array(Array.from({ length: 1000000 }, (_, i) => i % 256));
         const compressed_data = zstd.compress(data);
@@ -34,4 +34,32 @@ describe("base91", function () {
         const data2 = zstd.decompress(compressed_data2);
         expect(data).to.deep.equal(data2);
     });
+
+    if (globalThis.window?.Worker) {
+        it("worker", async function () {
+            const data = new Uint8Array(Array.from({ length: 1000 }, (_, i) => i % 256));
+
+            const value = await new Promise(resolve => {
+                const myWorker = new Worker("dist-test/worker.js");
+                myWorker.postMessage(data);
+                myWorker.onmessage = function (e) {
+                    resolve(e.data);
+                };
+            });
+            expect(value).to.deep.equal(data);
+        });
+
+        it("worker-es6", async function () {
+            const data = new Uint8Array(Array.from({ length: 1000 }, (_, i) => i % 256));
+
+            const value = await new Promise(resolve => {
+                const myWorker = new Worker("dist-test/worker.es6.js");
+                myWorker.postMessage(data);
+                myWorker.onmessage = function (e) {
+                    resolve(e.data);
+                };
+            });
+            expect(value).to.deep.equal(data);
+        });
+    }
 });

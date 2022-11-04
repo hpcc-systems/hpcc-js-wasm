@@ -100,6 +100,7 @@ export default [
 
     browserTpl("lib-es6/__tests__/index", "dist-test/index", "dist-test/index.es6"),
     nodeTpl("lib-es6/__tests__/index", "dist-test/index.node", "dist-test/index.node.es6"),
+    browserTpl("lib-es6/__tests__/worker", "dist-test/worker", "dist-test/worker.es6"),
 
     binTpl("lib-es6/__bin__/dot-wasm", "bin/dot-wasm.mjs"),
     binTpl("lib-es6/__bin__/sfx-wasm", "bin/sfx-wasm.mjs"),
