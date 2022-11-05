@@ -1,6 +1,5 @@
 import * as fzstd from 'fzstd';
 
-
 //  See:  https://github.com/Equim-chan/base91
 const table = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,./:;<=>?@[]^_`{|}~"';
 

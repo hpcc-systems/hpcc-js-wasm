@@ -1,7 +1,7 @@
 import fs from "fs";
 import yargs from "yargs";
 import { hideBin } from 'yargs/helpers'
-import { Zstd, Base91, extract } from "../index-node";
+import { Zstd, Base91 } from "../index-node";
 
 const myYargs = yargs(hideBin(process.argv)) as yargs.Argv<{}>;
 myYargs
@@ -28,13 +28,21 @@ try {
         const str = base91.encode(compressed);
         console.log(`\
 import { extract } from "./extract";
+import wrapper from "../${wasmPath.replace(".wasm", ".js")}";
+
 const blobStr = '${str}';
-export const wasmBinary = extract(blobStr);
+
+let g_module;
+export function loadWasm() {
+    if (!g_module) {
+        g_module = wrapper({
+            wasmBinary: extract(blobStr)
+        });
+    }
+    return g_module;
+}
+
         `);
-        const test = extract(str);
-        if (test.length !== wasmContent.length) {
-            throw new Error("Oh oh");
-        }
     } else {
         throw new Error("'filePath' is required.")
     }

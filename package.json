@@ -38,6 +38,10 @@
         "import": "./dist/graphviz.es6.js",
         "default": "./dist/graphviz.js"
       },
+      "sfx-graphviz": {
+        "import": "./dist/sfx-graphviz.esm.js",
+        "default": "./dist/sfx-graphviz.js"
+      },
       "zstd": {
         "import": "./dist/zstd.es6.js",
         "default": "./dist/zstd.js"
@@ -80,8 +84,14 @@
     "compile-cpp:win32": "wsl -e ./scripts/cpp-build.sh",
     "bundle": "rollup -c",
     "bundle-watch": "npm run bundle -- -w",
-    "minimize": "terser dist/index.js -c -m --source-map -o dist/index.min.js",
-    "build": "run-s compile-cpp compile bundle minimize",
+    "bundle-sfx": "rollup -c ./rollup-sfx.config.mjs",
+    "gen-sfx-base91": "node ./bin/sfx-wasm.mjs ./build/cpp/base91/base91lib.wasm > ./lib-es6/base91lib.wasm.js",
+    "gen-sfx-expat": "node ./bin/sfx-wasm.mjs ./build/cpp/expat/expatlib/expatlib.wasm > ./lib-es6/expatlib.wasm.js",
+    "gen-sfx-graphviz": "node ./bin/sfx-wasm.mjs ./build/cpp/graphviz/graphvizlib/graphvizlib.wasm > ./lib-es6/graphvizlib.wasm.js",
+    "gen-sfx-zstd": "node ./bin/sfx-wasm.mjs ./build/cpp/zstd/zstdlib.wasm > ./lib-es6/zstdlib.wasm.js",
+    "gen-sfx": "run-p gen-sfx-base91 gen-sfx-expat gen-sfx-graphviz gen-sfx-graphviz",
+    "minimize": "terser dist/index.js -c -m --source-map -o dist/index.min.js && terser dist/sfx-graphviz.js -c -m --source-map -o dist/sfx-graphviz.min.js",
+    "build": "run-s compile-cpp compile bundle gen-sfx bundle-sfx minimize",
     "build-docker": "docker build --rm --progress plain -f \"./docker/ubuntu-dev.dockerfile\" -t hpcc-js-wasm-build:latest \".\"",
     "standard-version": "standard-version",
     "standard-version-dryrun": "standard-version --dry-run",
