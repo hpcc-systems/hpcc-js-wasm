@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.20.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.20.0...v1.20.1) (2022-11-06)
+
+
+### Bug Fixes
+
+*  Rename version method for 2.x ([13639ad](https://github.com/hpcc-systems/hpcc-js-wasm/commit/13639ad20f002c5d80ec579eb02e85104a585458))
+
 ## [1.20.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.19.1...v1.20.0) (2022-11-06)
 
 
