@@ -9,8 +9,7 @@
         var wasmBinaryFile;
         switch (window.location.hostname) {
             case "localhost":
-                document.write('<script type="text/javascript" src="./dist/index.js"><' + '/script>');
-                wasmBinaryFile = "./dist/graphvizlib.wasm";
+                document.write('<script type="text/javascript" src="./dist/sfx-graphviz.js"><' + '/script>');
                 break;
             default:
                 document.write('<script src="https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.min.js"><' + '/script>');
@@ -21,7 +20,6 @@
 
     <script>
         var hpccWasm = window["@hpcc-js/wasm"];
-        // hpccWasm.wasmFolder("build/cpp/graphviz/graphvizlib");
     </script>
 </head>
 
@@ -36,11 +34,10 @@
     <h3>Sync DOT</h3>
     <div id="placeholder3"></div>
     <hr>
-    <h3>Cached wasmBinary</h3>
+    <h3>ESM wasmBinary</h3>
     <div id="placeholder4"></div>
     <hr>
     <script>
-        hpccWasm.expatVersion().then(v => alert(v));
         const dot = `
             digraph G {
                 node [shape=rect];
@@ -112,19 +109,27 @@
             }
         });
 
-        fetch(wasmBinaryFile, { credentials: 'same-origin' }).then(response => {
-            if (!response.ok) {
-                throw "failed to load wasm binary file at '" + wasmBinaryFile + "'";
-            }
-            return response.arrayBuffer();
-        }).then(wasmBinary => {
-            hpccWasm.graphviz.layout(dot, "svg", "dot", { wasmBinary: wasmBinary }).then(svg => {
-                const div = document.getElementById("placeholder4");
-                div.innerHTML = svg;
-            }).catch(err => console.error(err.message));
-        });
     </script>
 
+    <script type="module">
+        import { Graphviz } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/sfx-graphviz.esm.js";
+        if (Graphviz) {
+            const graphviz = await Graphviz.load();
+            const svg = graphviz.layout(dot, "svg", "dot");
+            const div = document.getElementById("placeholder4");
+            div.innerHTML = svg;
+        } 
+    </script>
+
+    <script type="module">
+        import { Graphviz } from "./dist/sfx-graphviz.esm.js";
+        if (Graphviz) {
+            const graphviz = await Graphviz.load();
+            const svg = graphviz.layout(dot, "svg", "dot");
+            const div = document.getElementById("placeholder4");
+            div.innerHTML = svg;
+        }
+    </script>
 </body>
 
 </html>

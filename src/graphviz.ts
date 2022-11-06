@@ -48,6 +48,7 @@ function createFiles(graphviz: any, _ext?: Ext) {
 }
 
 export function graphvizVersion(wasmFolder?: string, wasmBinary?: ArrayBuffer) {
+    console.warn("Deprecation Warning:  'graphvizVersion' will be refactored into 'Graphviz' in 2.0.0");
     return loadWasm(graphvizlib, "graphvizlib", wasmFolder, wasmBinary).then(module => {
         return module.Graphviz.prototype.version();
     });
@@ -55,6 +56,7 @@ export function graphvizVersion(wasmFolder?: string, wasmBinary?: ArrayBuffer) {
 
 export const graphviz = {
     layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot", ext?: Ext): Promise<string> {
+        console.warn("Deprecation Warning:  'graphviz' will be replaced with 'Graphviz' in 2.0.0");
         if (!dotSource) return Promise.resolve("");
         return loadWasm(graphvizlib, "graphvizlib", ext?.wasmFolder, ext?.wasmBinary).then(module => {
             const graphViz = new module.Graphviz(ext?.yInvert ? 1 : 0, ext?.nop ? ext?.nop : 0);
@@ -105,6 +107,7 @@ export class GraphvizSync {
     }
 
     layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot", ext?: Ext): string {
+        console.warn("Deprecation Warning:  'GraphvizSync' will be replaced with 'Graphviz' in 2.0.0");
         if (!dotSource) return "";
         const graphViz = new this._wasm.Graphviz(ext?.yInvert ? 1 : 0, ext?.nop ? ext?.nop : 0);
         createFiles(graphViz, ext);

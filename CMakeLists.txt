@@ -19,6 +19,8 @@ SET(EM_FLAGS
     "-s IGNORE_CLOSURE_COMPILER_ERRORS=0"
     "-s USE_ES6_IMPORT_META=0"
     # "-s WASM_BIGINT=1"
+    "-s STANDALONE_WASM=0"
+    # "-s DYNAMIC_EXECUTION=0"
     "--pre-js ${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/pre.js"
     "--post-js ${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/post.js"
 )

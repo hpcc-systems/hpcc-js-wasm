@@ -12,6 +12,7 @@
 /node_modules
 /rust
 /src-*
+/src/*.wasm.ts
 /tmp
 /types
 /vcpkg

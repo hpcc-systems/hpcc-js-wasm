@@ -96,7 +96,6 @@ export default [
     browserTpl("lib-es6/graphviz", "dist/graphviz", "dist/graphviz.es6"),
     browserTpl("lib-es6/expat", "dist/expat", "dist/expat.es6"),
     browserTpl("lib-es6/zstd", "dist/zstd", "dist/zstd.es6"),
-    browserTpl("lib-es6/extract", "dist/extract", "dist/extract.es6"),
 
     browserTpl("lib-es6/__tests__/index", "dist-test/index", "dist-test/index.es6"),
     nodeTpl("lib-es6/__tests__/index-node", "dist-test/index.node", "dist-test/index.node.es6"),
