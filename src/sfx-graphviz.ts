@@ -55,7 +55,7 @@ export class Graphviz {
         });
     }
 
-    graphvizVersion() {
+    version() {
         return this._module.Graphviz.prototype.version();
     }
 
