@@ -5,15 +5,18 @@
     <meta charset="UTF-8">
     <title>GraphViz WASM</title>
 
+    <script type="module" worker>
+
+    </script>
+
     <script>
         var wasmBinaryFile;
-        switch (window.location.hostname) {
+        switch (window.location.hostnamez) {
             case "localhost":
-                document.write('<script type="text/javascript" src="./dist/sfx-graphviz.js"><' + '/script>');
+                document.write('<script src="./dist/index.js"><' + '/script>');
                 break;
             default:
                 document.write('<script src="https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.min.js"><' + '/script>');
-                wasmBinaryFile = "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphvizlib.wasm";
                 break;
         }
     </script>
@@ -36,6 +39,11 @@
     <hr>
     <h3>ESM wasmBinary</h3>
     <div id="placeholder4"></div>
+    <hr>
+    <h3>Web Worker</h3>
+    <div id="placeholder5"></div>
+    <h3>Load on demand</h3>
+    <div id="placeholder6"></div>
     <hr>
     <script>
         const dot = `
@@ -122,13 +130,20 @@
     </script>
 
     <script type="module">
-        import { Graphviz } from "./dist/sfx-graphviz.esm.js";
-        if (Graphviz) {
-            const graphviz = await Graphviz.load();
-            const svg = graphviz.layout(dot, "svg", "dot");
-            const div = document.getElementById("placeholder4");
-            div.innerHTML = svg;
+        const div = document.getElementById("placeholder5");
+        const myWorker = new Worker("./index-worker.js", { type: 'module' });
+        myWorker.onmessage = (e) => {
+            div.innerHTML = e.data;
         }
+        myWorker.postMessage(dot);
+    </script>
+
+    <script type="module">
+        const div6 = document.getElementById("placeholder6");
+        const { Graphviz } = await import("https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/sfx-graphviz.esm.js");
+        const graphviz = await Graphviz.load();
+        const svg = graphviz.layout(dot, "svg", "dot");
+        div6.innerHTML = svg;
     </script>
 </body>
 
