@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.20.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.19.1...v1.20.0) (2022-11-06)
+
+
+### Features
+
+*  Add self extracting wasm "sfx-graphviz" ([2bc80f8](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2bc80f860f9ac7f358a94bc5d356ebe635737fd3))
+
 ### [1.19.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.19.0...v1.19.1) (2022-11-04)
 
 
