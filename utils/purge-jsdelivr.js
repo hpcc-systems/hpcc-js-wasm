@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const https = require("https");
+import https from "https";
 
 function get(id, url) {
     return new Promise((resolve, reject) => {

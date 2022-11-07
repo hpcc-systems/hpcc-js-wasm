@@ -12,7 +12,45 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 Built with:
 - [emsdk](https://github.com/emscripten-core/emsdk) - v3.1.24
 
+## Homepage and Documents
 
-See [Home Page](https://hpcc-systems.github.io/hpcc-js-wasm/) for more information and documentation.
+* [Homepage](https://hpcc-systems.github.io/hpcc-js-wasm/)
+    * [Base91](https://hpcc-systems.github.io/hpcc-js-wasm/classes/base91.Base91.html)
+    * [Expat](https://hpcc-systems.github.io/hpcc-js-wasm/classes/expat.Expat.html)
+    * [Graphviz](https://hpcc-systems.github.io/hpcc-js-wasm/classes/base91.Base91.html)
+    * [Zstd](https://hpcc-systems.github.io/hpcc-js-wasm/classes/zstd.Zstd.html)
 
+## Quick Migration Example
 
+v1.x.x
+```ts
+import { graphviz, wasmFolder } from "@hpcc-js/wasm";
+
+wasmFolder("https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist");
+
+const dot = "digraph G { Hello -> World }";
+
+graphviz.dot(dot).then(svg => {
+    const div = document.getElementById("placeholder");
+    div.innerHTML = svg;    
+});
+
+graphvizVersion.then(version => console.log(version));
+```
+
+v2.x.x
+```ts
+import { Graphviz } from "@hpcc-js/wasm/graphviz";
+
+const graphviz = await Graphviz.load();
+
+const dot = "digraph G { Hello -> World }";
+const svg = graphviz.dot(dot);
+console.log(graphviz.version());
+```
+
+Notes:
+* Import must specify which wasm library your using
+* wasmFolder is no longer needed
+* All wasm libraries have the same asynchronous load pattern
+    - `const instance = await Wasm.load();`

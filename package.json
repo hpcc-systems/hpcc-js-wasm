@@ -4,16 +4,17 @@
   "description": "hpcc-js - WASM Libraries",
   "keywords": [
     "graphviz",
-    "expat",
+    "typescript",
+    "webassembly",
     "wasm",
     "dot",
-    "twopi",
-    "circo",
-    "fdp",
-    "neato",
-    "osage",
-    "patchwork",
-    "xml"
+    "zstd",
+    "graphviz-dot",
+    "zstandard",
+    "expat",
+    "base91",
+    "expat-xml-parser",
+    "webassemby"
   ],
   "type": "module",
   "exports": {
@@ -68,7 +69,7 @@
     "clean-build": "rimraf bin build coverage dist* lib* output-* tmp types *.tsbuildinfo",
     "clean-docs": "rimraf docs/.vitepress/dist docs/classes docs/interfaces docs/modules docs/.nojekyll docs/README.md",
     "clean": "run-p clean-build clean-docs",
-    "copy-res": "cp ./docs/hpccsystems.png ./docs/.vitepress/dist",
+    "copy-res": "cp ./docs/*.png ./docs/.vitepress/dist",
     "compile": "tsc",
     "compile-watch": "npm run compile -- -w",
     "compile-cpp": "run-script-os",
@@ -158,5 +159,5 @@
   "bugs": {
     "url": "https://github.com/hpcc-systems/hpcc-js-wasm/issues"
   },
-  "homepage": "https://github.com/hpcc-systems/hpcc-js-wasm#readme"
+  "homepage": "https://hpcc-systems.github.io/hpcc-js-wasm/"
 }
