@@ -2,8 +2,7 @@ module.exports = function (config) {
     config.set({
         frameworks: ['mocha', 'chai'],
         files: [
-            'dist-test/index.js',
-            { pattern: 'dist/*.wasm', watched: false, included: false, served: true },
+            'dist-test/index.umd.js',
             { pattern: 'dist-test/*.js', watched: false, included: false, served: true },
         ],
         proxies: {

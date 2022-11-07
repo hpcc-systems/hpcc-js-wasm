@@ -1,5 +1,5 @@
 import { parentPort } from "node:worker_threads";
-import { Base91 } from "../index-node";
+import { Base91 } from "@hpcc-js/wasm/base91";
 
 parentPort?.on("message", async function (data) {
     const base91 = await Base91.load();

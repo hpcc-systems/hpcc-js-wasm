@@ -1,12 +1,107 @@
 // @ts-ignore
-import * as expatlib from "../build/cpp/expat/expatlib/expatlib";
-import { loadWasm } from "./util";
+import { loadWasm } from "./expatlib.wasm";
 
 export type Attributes = { [key: string]: string };
 export interface IParser {
     startElement(tag: string, attrs: Attributes): void;
     endElement(tag: string): void;
     characterData(content: string): void;
+}
+
+function parseAttrs(attrs: string): Attributes {
+    const retVal: Attributes = {};
+    const keys = attrs;
+    const sep = `${String.fromCharCode(1)}`;
+    const sep2 = `${sep}${sep}`;
+    keys.split(sep2).filter((key: string) => !!key).forEach((key: string) => {
+        const parts = key.split(sep);
+        retVal[parts[0]] = parts[1];
+    });
+    return retVal;
+}
+
+/**
+ * Expat XML parser WASM library, provides a simplified wrapper around the Expat XML Parser library.  
+ * 
+ * See [libexpat.github.io](https://libexpat.github.io/) for c++ details.
+ * 
+ * ```ts
+ * import { Expat } from "@hpcc-js/wasm/expat";
+ * 
+ * const expat = await Expat.load();
+ * 
+ * const xml = ` \
+ *     <root>
+ *         <child xxx="yyy">content</child>
+ *     </root>
+ * `;
+ * 
+ * const callback = {
+ *     startElement(tag, attrs) { console.log("start", tag, attrs); },
+ *     endElement(tag) { console.log("end", tag); },
+ *     characterData(content) { console.log("characterData", content); }
+ * };
+ * 
+ * expat.parse(xml, callback);
+ * ```
+ 
+ */
+export class Expat {
+
+    private constructor(protected _module: any) {
+    }
+
+    /**
+     * Compiles and instantiates the raw wasm.
+     * 
+     * ::: info
+     * In general WebAssembly compilation is disallowed on the main thread if the buffer size is larger than 4KB, hence forcing `load` to be asynchronous;
+     * :::
+     * 
+     * @returns A promise to an instance of the Expat class.
+     */
+    static load(): Promise<Expat> {
+        return loadWasm().then((module: any) => {
+            return new Expat(module);
+        });
+    }
+
+    /**
+     * 
+     * @returns The Expat c++ version
+     */
+    version(): string {
+        return this._module.CExpat.prototype.version();
+    }
+
+    /**
+     * Parses the XML with suitable callbacks.
+     * 
+     * :::tip
+     * The _IParser.characterData_ callback method can get called several times for a single tag element.
+     * :::
+     * 
+     * @param xml string containing XML
+     * @param callback Callback interface
+     * @returns `true`|`false` if the XML parse succeeds.
+     */
+    parse(xml: string, callback: IParser): boolean {
+        const parser = new this._module.CExpatJS();
+        parser.startElement = function () {
+            callback.startElement(this.tag(), parseAttrs(this.attrs()));
+        };
+        parser.endElement = function () {
+            callback.endElement(this.tag());
+        };
+        parser.characterData = function () {
+            callback.characterData(this.content());
+        };
+        parser.create();
+        const retVal = parser.parse(xml);
+        parser.destroy();
+        this._module.destroy(parser);
+        return retVal;
+    }
 }
 
 export class StackElement {
@@ -27,8 +122,9 @@ export class StackElement {
 export class StackParser implements IParser {
     private _stack: StackElement[] = [];
 
-    parse(xml: string, wasmFolder?: string, wasmBinary?: ArrayBuffer): Promise<boolean> {
-        return parse(xml, this, wasmFolder, wasmBinary);
+    async parse(xml: string): Promise<boolean> {
+        const expat = await Expat.load();
+        return expat.parse(xml, this);
     }
 
     top(): StackElement {
@@ -50,40 +146,3 @@ export class StackParser implements IParser {
     }
 }
 
-function parseAttrs(attrs: string): Attributes {
-    const retVal: Attributes = {};
-    const keys = attrs;
-    const sep = `${String.fromCharCode(1)}`;
-    const sep2 = `${sep}${sep}`;
-    keys.split(sep2).filter((key: string) => !!key).forEach((key: string) => {
-        const parts = key.split(sep);
-        retVal[parts[0]] = parts[1];
-    });
-    return retVal;
-}
-
-export function expatVersion(wasmFolder?: string, wasmBinary?: ArrayBuffer) {
-    return loadWasm(expatlib, "expatlib", wasmFolder, wasmBinary).then(module => {
-        return module.CExpat.prototype.version();
-    });
-}
-
-export function parse(xml: string, callback: IParser, wasmFolder?: string, wasmBinary?: ArrayBuffer): Promise<boolean> {
-    return loadWasm(expatlib, "expatlib", wasmFolder, wasmBinary).then(module => {
-        const parser = new module.CExpatJS();
-        parser.startElement = function () {
-            callback.startElement(this.tag(), parseAttrs(this.attrs()));
-        };
-        parser.endElement = function () {
-            callback.endElement(this.tag());
-        };
-        parser.characterData = function () {
-            callback.characterData(this.content());
-        };
-        parser.create();
-        const retVal = parser.parse(xml);
-        parser.destroy();
-        module.destroy(parser);
-        return retVal;
-    });
-}

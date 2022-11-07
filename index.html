@@ -120,7 +120,8 @@
     </script>
 
     <script type="module">
-        import { Graphviz } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/sfx-graphviz.esm.js";
+        //     import { Graphviz } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/sfx-graphviz.esm.js";
+        import { Graphviz } from "./dist/graphviz.js";
         if (Graphviz) {
             const graphviz = await Graphviz.load();
             const svg = graphviz.layout(dot, "svg", "dot");

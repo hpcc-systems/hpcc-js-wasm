@@ -20,6 +20,7 @@ SET(EM_FLAGS
     "-s USE_ES6_IMPORT_META=0"
     # "-s WASM_BIGINT=1"
     "-s STANDALONE_WASM=0"
+    "-s BINARYEN_ASYNC_COMPILATION=1"
     # "-s DYNAMIC_EXECUTION=0"
     "--pre-js ${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/pre.js"
     "--post-js ${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/post.js"

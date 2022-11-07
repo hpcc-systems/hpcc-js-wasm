@@ -1,11 +1,11 @@
-import * as fzstd from 'fzstd';
+import { decompress } from "fzstd";
 
 //  See:  https://github.com/Equim-chan/base91
 const table = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,./:;<=>?@[]^_`{|}~"';
 
 function decode(raw: string): Uint8Array {
     const len = raw.length;
-    const ret = [];
+    const ret: number[] = [];
 
     let b = 0;
     let n = 0;
@@ -38,5 +38,5 @@ function decode(raw: string): Uint8Array {
 
 export function extract(raw: string): Uint8Array {
     const compressed = decode(raw);
-    return fzstd.decompress(compressed);
+    return decompress(compressed);
 }

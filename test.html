@@ -6,7 +6,7 @@
     <title>Mocha Tests</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./node_modules/mocha/mocha.css" />
-    <script src="./dist/index.js"></script>
+    <script src="./dist/index-browser.js"></script>
 </head>
 
 <body>
@@ -19,7 +19,7 @@
         mocha.setup('bdd');
         mocha.checkLeaks();
     </script>
-    <script src="./dist-test/index.js"></script>
+    <script src="./dist-test/index.umd.js"></script>
     <script class="mocha-exec">
         mocha.run();
     </script>

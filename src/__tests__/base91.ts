@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { Base91 } from "../index";
-import { Zstd } from "../index";
+import { Base91 } from "@hpcc-js/wasm/base91";
+import { Zstd } from "@hpcc-js/wasm/zstd";
 
 describe("base91", function () {
     it("version", async function () {

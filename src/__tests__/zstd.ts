@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Zstd } from "../index";
+import { Zstd } from "@hpcc-js/wasm/zstd";
 
 describe("zstd", function () {
     it("version", async function () {

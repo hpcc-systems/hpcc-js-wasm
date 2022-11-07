@@ -88,10 +88,3 @@ TARGET_LINK_LIBRARIES(graphvizlib PRIVATE
 #     gvplugin_neato_layout
 #     ortho
 # )
-
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/graphvizlib.wasm DESTINATION dist COMPONENT runtime)
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/graphvizlib.wasm DESTINATION dist-test COMPONENT runtime)
-
-IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/graphvizlib.wasm.map DESTINATION dist COMPONENT runtime)
-ENDIF ()

@@ -1,0 +1,25 @@
+{
+    "entryPoints": [
+        "./src/base91.ts",
+        "./src/expat.ts",
+        "./src/graphviz.ts",
+        "./src/wasm-library.ts",
+        "./src/zstd.ts",
+    ],
+    "out": "./docs",
+    "readme": "none",
+    "cleanOutputDir": false,
+    "excludeProtected": true,
+    "excludePrivate": true,
+    "hideGenerator": true,
+    "hideBreadcrumbs": true,
+    "hideInPageTOC": true,
+    "publicPath": "/",
+    "sort": [
+        "static-first",
+        "source-order"
+    ],
+    "plugin": [
+        "typedoc-plugin-markdown"
+    ]
+}

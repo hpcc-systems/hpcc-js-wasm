@@ -15,48 +15,37 @@
     "patchwork",
     "xml"
   ],
+  "type": "module",
   "exports": {
-    ".": {
-      "types": "./types/index.d.ts",
-      "node": {
-        "import": "./dist/index.node.es6.mjs",
-        "require": "./dist/index.node.js"
-      },
-      "browser": {
-        "import": "./dist/index.es6.js",
-        "default": "./dist/index.js"
-      },
-      "expat": {
-        "import": "./dist/expat.es6.js",
-        "default": "./dist/expat.js"
-      },
-      "extract": {
-        "import": "./dist/extract.es6.js",
-        "default": "./dist/extract.js"
-      },
-      "graphviz": {
-        "import": "./dist/graphviz.es6.js",
-        "default": "./dist/graphviz.js"
-      },
-      "sfx-graphviz": {
-        "import": "./dist/sfx-graphviz.esm.js",
-        "default": "./dist/sfx-graphviz.js"
-      },
-      "zstd": {
-        "import": "./dist/zstd.es6.js",
-        "default": "./dist/zstd.js"
-      },
-      "default": "./dist/index.js"
+    "./base91": {
+      "types": "./types/base91.d.ts",
+      "import": "./dist/base91.js",
+      "default": "./dist/base91.umd.js"
+    },
+    "./expat": {
+      "types": "./types/expat.d.ts",
+      "import": "./dist/expat.js",
+      "default": "./dist/expat.umd.js"
+    },
+    "./graphviz": {
+      "types": "./types/graphviz.d.ts",
+      "import": "./dist/graphviz.js",
+      "default": "./dist/graphviz.umd.js"
+    },
+    "./zstd": {
+      "types": "./types/zstd.d.ts",
+      "import": "./dist/zstd.js",
+      "default": "./dist/zstd.umd.js"
     }
   },
-  "main": "dist/index.node.js",
-  "module": "dist/index.node.es6.mjs",
-  "browser": "dist/index.js",
-  "unpkg": "dist/index.min.js",
-  "jsdelivr": "dist/index.min.js",
-  "types": "types/index.d.ts",
+  "main": "./dist/graphviz.umd.js",
+  "module": "./dist/graphviz.js",
+  "browser": "./dist/graphviz.umd.js",
+  "unpkg": "./dist/index.umd.min.js",
+  "jsdelivr": "./dist/index.umd.min.js",
+  "types": "./types/index.d.ts",
   "bin": {
-    "dot-wasm": "bin/dot-wasm.mjs"
+    "dot-wasm": "./bin/dot-wasm.js"
   },
   "files": [
     "bin/*.*",
@@ -76,37 +65,46 @@
     "install-vcpkg:win32": "wsl -e ./scripts/cpp-install-vcpkg.sh",
     "install-build-deps": "run-p install-emsdk install-graphviz install-vcpkg",
     "uninstall-build-deps": "rimraf ./emsdk ./src-graphviz ./vcpkg ./src-expat ./src-vcpkg",
-    "clean": "rimraf bin build coverage dist* lib* output-* tmp types *.tsbuildinfo",
+    "clean-build": "rimraf bin build coverage dist* lib* output-* tmp types *.tsbuildinfo",
+    "clean-docs": "rimraf docs/.vitepress/dist docs/classes docs/interfaces docs/modules docs/.nojekyll docs/README.md",
+    "clean": "run-p clean-build clean-docs",
+    "copy-res": "cp ./docs/hpccsystems.png ./docs/.vitepress/dist",
     "compile": "tsc",
     "compile-watch": "npm run compile -- -w",
     "compile-cpp": "run-script-os",
     "compile-cpp:linux": "./scripts/cpp-build.sh",
     "compile-cpp:win32": "wsl -e ./scripts/cpp-build.sh",
     "bundle": "rollup -c",
-    "bundle-watch": "npm run bundle -- -w",
-    "bundle-sfx": "rollup -c ./rollup-sfx.config.mjs",
-    "gen-sfx-base91": "node ./bin/sfx-wasm.mjs ./build/cpp/base91/base91lib.wasm > ./lib-es6/base91lib.wasm.js",
-    "gen-sfx-expat": "node ./bin/sfx-wasm.mjs ./build/cpp/expat/expatlib/expatlib.wasm > ./lib-es6/expatlib.wasm.js",
-    "gen-sfx-graphviz": "node ./bin/sfx-wasm.mjs ./build/cpp/graphviz/graphvizlib/graphvizlib.wasm > ./lib-es6/graphvizlib.wasm.js",
-    "gen-sfx-zstd": "node ./bin/sfx-wasm.mjs ./build/cpp/zstd/zstdlib.wasm > ./lib-es6/zstdlib.wasm.js",
-    "gen-sfx": "run-p gen-sfx-base91 gen-sfx-expat gen-sfx-graphviz gen-sfx-graphviz",
-    "minimize": "terser dist/index.js -c -m --source-map -o dist/index.min.js && terser dist/sfx-graphviz.js -c -m --source-map -o dist/sfx-graphviz.min.js",
-    "build": "run-s compile-cpp compile bundle gen-sfx bundle-sfx minimize",
+    "bundle-debug": "rollup -c --configDebug",
+    "bundle-watch": "npm run bundle-debug -- -w",
+    "bundle-sfx": "rollup -c ./rollup-sfx.config.js",
+    "gen-sfx-base91": "node ./utils/sfx-wasm.js ./build/cpp/base91/base91lib.wasm > ./lib-esm/base91lib.wasm.js",
+    "gen-sfx-expat": "node ./utils/sfx-wasm.js ./build/cpp/expat/expatlib/expatlib.wasm > ./lib-esm/expatlib.wasm.js",
+    "gen-sfx-graphviz": "node ./utils/sfx-wasm.js ./build/cpp/graphviz/graphvizlib/graphvizlib.wasm > ./lib-esm/graphvizlib.wasm.js",
+    "gen-sfx-zstd": "node ./utils/sfx-wasm.js ./build/cpp/zstd/zstdlib.wasm > ./lib-esm/zstdlib.wasm.js",
+    "gen-sfx": "mkdir -p ./lib-esm && run-p gen-sfx-base91 gen-sfx-expat gen-sfx-graphviz gen-sfx-graphviz gen-sfx-zstd",
+    "gen-docs": "typedoc",
+    "gen-docs-watch": "typedoc --watch",
+    "build-docs-vitepress": "vitepress build docs",
+    "build-docs": "run-s gen-docs build-docs-vitepress copy-res",
+    "build-docs-watch": "vitepress dev docs",
     "build-docker": "docker build --rm --progress plain -f \"./docker/ubuntu-dev.dockerfile\" -t hpcc-js-wasm-build:latest \".\"",
+    "build": "run-s compile-cpp gen-sfx compile bundle",
     "standard-version": "standard-version",
     "standard-version-dryrun": "standard-version --dry-run",
     "git-push": "git push --follow-tags upstream trunk",
     "watch": "run-p compile-watch bundle-watch",
-    "dev-start": "ws",
+    "serve-docs": "vitepress serve docs",
+    "serve": "ws",
     "lint": "eslint src/**/*.ts",
     "lint-fix": "npm run lint -- --fix",
-    "test-cli": "node ./bin/dot-wasm.mjs -v",
-    "test-cli-help": "node ./bin/dot-wasm.mjs",
-    "test-bundle": "npx -y esbuild --bundle ./dist/index.js --bundle ./dist/index.es6.js --outdir=tmp",
-    "test-bundle-node": "npx -y esbuild --bundle --platform=node --bundle ./dist/index.node.js ./dist/index.node.es6.mjs --outdir=tmp",
-    "test-chrome": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
-    "test-firefox": "karma start --single-run --browsers Firefox karma.conf.js",
-    "test-node": "node ./bin/dot-wasm.mjs -v && mocha ./dist-test/index.node.js --reporter spec",
+    "test-cli": "node ./bin/dot-wasm.js -v",
+    "test-cli-help": "node ./bin/dot-wasm.js",
+    "test-bundle": "npx -y esbuild --bundle ./dist/base91.umd.js --bundle ./dist/base91.js --outdir=tmp",
+    "test-bundle-node": "npx -y esbuild --bundle --platform=node --bundle ./dist/base91.umd.js ./dist/base91.js --outdir=tmp",
+    "test-chrome": "karma start --single-run --browsers ChromeHeadless karma.conf.cjs",
+    "test-firefox": "karma start --single-run --browsers Firefox karma.conf.cjs",
+    "test-node": "node ./bin/dot-wasm.js -v && mocha ./dist-test/index.node.cjs --reporter spec && mocha ./dist-test/index.node.js --reporter spec",
     "test": "run-s test-bundle test-bundle-node test-chrome test-node",
     "tag": "run-s standard-version git-push",
     "purge-jsdelivr": "node ./utils/purge-jsdelivr.js",
@@ -114,42 +112,41 @@
     "update": "npx npm-check-updates -u -t minor"
   },
   "dependencies": {
-    "yargs": "17.6.0"
+    "@rollup/plugin-typescript": "^9.0.2",
+    "yargs": "17.6.2"
   },
   "devDependencies": {
-    "@rollup/plugin-alias": "3.1.9",
-    "@rollup/plugin-commonjs": "22.0.2",
-    "@rollup/plugin-node-resolve": "13.3.0",
-    "@rollup/plugin-replace": "4.0.0",
-    "@rollup/plugin-wasm": "6.0.1",
+    "@rollup/plugin-commonjs": "23.0.2",
+    "@rollup/plugin-node-resolve": "15.0.1",
+    "@rollup/plugin-terser": "0.1.0",
     "@types/chai": "4.3.3",
     "@types/emscripten": "1.39.6",
-    "@types/mocha": "9.1.1",
-    "@types/yargs": "^17.0.13",
+    "@types/mocha": "10.0.0",
+    "@types/yargs": "17.0.13",
     "@typescript-eslint/eslint-plugin": "5.42.0",
     "@typescript-eslint/parser": "5.42.0",
     "chai": "4.3.6",
-    "eslint": "8.26.0",
-    "fzstd": "^0.0.4",
+    "eslint": "8.27.0",
+    "fzstd": "0.0.4",
     "karma": "6.4.1",
     "karma-chai": "0.1.0",
     "karma-chrome-launcher": "3.1.1",
-    "karma-firefox-launcher": "^2.1.2",
+    "karma-firefox-launcher": "2.1.2",
     "karma-mocha": "2.0.1",
     "karma-spec-reporter": "0.0.34",
     "local-web-server": "5.2.1",
     "mocha": "10.1.0",
-    "node-base91": "^0.3.4",
-    "node-fetch": "3.2.10",
     "npm-run-all": "4.1.5",
     "rimraf": "3.0.2",
-    "rollup": "2.79.1",
-    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup": "3.2.5",
+    "rollup-plugin-sourcemaps": "0.6.3",
     "run-script-os": "1.1.6",
     "standard-version": "9.5.0",
-    "terser": "5.15.1",
     "tslib": "2.4.1",
-    "typescript": "4.8.4"
+    "typedoc": "^0.23.20",
+    "typedoc-plugin-markdown": "^3.13.6",
+    "typescript": "4.8.4",
+    "vitepress": "1.0.0-alpha.27"
   },
   "repository": {
     "type": "git",

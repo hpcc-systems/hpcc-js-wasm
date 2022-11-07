@@ -1,10 +1,9 @@
 import fs from "fs";
-import { exit } from "process";
-import yargs from "yargs";
-import { hideBin } from 'yargs/helpers'
-import { graphviz, graphvizVersion, Ext, Format, Engine } from "../index-node";
+import * as yargs from "yargs";
+import { hideBin } from "yargs/helpers";
+import { Graphviz, Engine, Format, Options } from "@hpcc-js/wasm/graphviz";
 
-const myYargs = yargs(hideBin(process.argv)) as yargs.Argv<{ vx: boolean, layout: Engine, format: Format, n: string }>;
+const myYargs = yargs.default(hideBin(process.argv)) as yargs.Argv<{ vx: boolean, layout: Engine, format: Format, n: string }>;
 myYargs
     .usage("Usage: dot-wasm [options] fileOrDot")
     .demandCommand(0, 1)
@@ -37,21 +36,17 @@ try {
     } else {
         dot = argv._[0] as string;
     }
+    const graphviz = await Graphviz.load();
 
     if (argv.v) {
-        graphvizVersion().then(version => {
-            console.log(`GraphViz version:  ${version}`);
-        }).catch(e => {
-            console.error(e.message);
-            exit(1);
-        })
+        console.log(`GraphViz version:  ${graphviz.version()}`);
     } else if (dot) {
 
         if (argv.n && argv.layout.trim() !== "neato") {
             throw new Error("-n option is only supported with -T neato");
         }
 
-        const ext: Ext = {
+        const ext: Options = {
         };
         if (argv.n) {
             ext.nop = parseInt(argv.n);
@@ -60,14 +55,10 @@ try {
             ext.yInvert = true;
         }
 
-        graphviz.layout(dot, (argv.format?.trim() ?? "svg") as Format, (argv.layout?.trim() ?? "dot") as Engine, ext).then(response => {
-            console.log(response);
-        }).catch(e => {
-            console.error(e.message);
-            exit(1);
-        });
+        const response = graphviz.layout(dot, (argv.format?.trim() ?? "svg") as Format, (argv.layout?.trim() ?? "dot") as Engine, ext);
+        console.log(response);
     } else {
-        throw new Error("'fileOrDot' is required.")
+        throw new Error("'fileOrDot' is required.");
     }
 } catch (e: any) {
     console.error(`Error:  ${e?.message}\n`);

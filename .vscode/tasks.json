@@ -26,7 +26,7 @@
         {
             "type": "npm",
             "label": "Web Server",
-            "script": "dev-start",
+            "script": "serve",
             "problemMatcher": [],
             "presentation": {
                 "group": "group-build"
