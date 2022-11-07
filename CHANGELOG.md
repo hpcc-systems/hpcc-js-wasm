@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.20.1...v2.0.0) (2022-11-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* Refactor public interfaces to follow common pattern
+Start using sfx-wasm bundler
+
+Update docs to use vitepress
+
+Signed-off-by: Gordon Smith <GordonJSmith@gmail.com>
+
+### Features
+
+* Switch default to ESM Modules ([02a4e0f](https://github.com/hpcc-systems/hpcc-js-wasm/commit/02a4e0f30a547bcf2d5472f2b49d5e51b3438e51))
+
 ### [1.20.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.20.0...v1.20.1) (2022-11-06)
 
 
