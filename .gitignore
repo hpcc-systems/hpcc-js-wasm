@@ -7,6 +7,12 @@
 /coverage
 /dist
 /dist-test
+/docs/.vitepress/dist
+/docs/classes
+/docs/interfaces
+/docs/modules
+/docs/.nojekyll
+/docs/README.md
 /emsdk*
 /lib-*
 /node_modules

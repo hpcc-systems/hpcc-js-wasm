@@ -1,7 +1,4 @@
-import { wasmFolder } from "../index";
-wasmFolder("dist");
-
-export * from "./base91";
-export * from "./expat";
-export * from "./graphviz";
-export * from "./zstd";
+export * from "./base91.js";
+export * from "./expat.js";
+export * from "./graphviz.js";
+export * from "./zstd.js";

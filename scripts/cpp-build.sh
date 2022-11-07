@@ -10,5 +10,5 @@ then
 fi
 
 cd ./build
-cmake --build . --target install -- -j
+cmake --build . -- -j
 cd ..

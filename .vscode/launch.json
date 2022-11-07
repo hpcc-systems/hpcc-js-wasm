@@ -58,18 +58,6 @@
             "type": "node"
         },
         {
-            "name": "sfx-wasm",
-            "program": "${workspaceFolder}/bin/sfx-wasm.mjs",
-            "request": "launch",
-            "args": [
-                "./build/cpp/base91/base91lib.wasm"
-            ],
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "type": "node"
-        },
-        {
             "name": "cli rollup wasm",
             "program": "${workspaceFolder}/output-node/test-wasm.js",
             "request": "launch",

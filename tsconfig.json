@@ -1,17 +1,18 @@
 {
     "compilerOptions": {
         "rootDir": "./src",
-        "outDir": "./lib-es6",
+        "outDir": "./lib-esm",
         "declarationDir": "./types",
         "composite": true,
         "target": "ES2020",
         "module": "ES2022",
-        "moduleResolution": "node",
-        "strict": true,
+        "moduleResolution": "Node16",
         "esModuleInterop": true,
         "sourceMap": true,
         "declaration": true,
-        "declarationMap": true
+        "declarationMap": true,
+        "strict": true,
+        "noImplicitAny": false
     },
     "lib": [
         "dom",

@@ -5,7 +5,7 @@ describe("worker-browser", function () {
         const data = new Uint8Array(Array.from({ length: 1000 }, (_, i) => i % 256));
 
         const value = await new Promise(resolve => {
-            const myWorker = new Worker("dist-test/worker.js");
+            const myWorker = new Worker("dist-test/worker.umd.js");
             myWorker.postMessage(data);
             myWorker.onmessage = function (e) {
                 resolve(e.data);
@@ -18,7 +18,7 @@ describe("worker-browser", function () {
         const data = new Uint8Array(Array.from({ length: 1000 }, (_, i) => i % 256));
 
         const value = await new Promise(resolve => {
-            const myWorker = new Worker("dist-test/worker.es6.js");
+            const myWorker = new Worker("dist-test/worker.js");
             myWorker.postMessage(data);
             myWorker.onmessage = function (e) {
                 resolve(e.data);

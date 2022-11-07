@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Attributes, parse, StackParser, expatVersion } from "../index";
+import { Attributes, Expat, StackParser } from "@hpcc-js/wasm/expat";
 
 class Cat {
 
@@ -38,28 +38,29 @@ class KeywordParser extends StackParser {
 
 describe("expat", function () {
     it("version", async function () {
-        const v = await expatVersion();
+        const expat = await Expat.load();
+        const v = await expat.version();
         expect(v).to.be.a.string;
         expect(v).to.not.be.empty;
     });
 
-    it("simple", function () {
+    it("simple", async function () {
         const xml = "<root><child xxx=\"yyy\">content</child></root>";
         const callback = {
             startElement(tag: string, attrs: Attributes) { console.log("start", tag, attrs); },
             endElement(tag: string) { console.log("end", tag); },
             characterData(content: string) { console.log("characterData", content); }
         };
-        return parse(xml, callback).then(response => {
-            expect(response).to.be.true;
-        });
+        const expat = await Expat.load();
+        const response = expat.parse(xml, callback);
+        expect(response).to.be.true;
     });
 
-    it("parse", function () {
+    it("parse", async function () {
         const callback = new KeywordParser();
-        return parse(encodedXml(), callback).then(response => {
-            expect(response).to.be.true;
-        });
+        const expat = await Expat.load();
+        const response = expat.parse(encodedXml(), callback);
+        expect(response).to.be.true;
     });
 });
 
