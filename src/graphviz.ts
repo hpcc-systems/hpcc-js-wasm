@@ -133,11 +133,12 @@ export class Graphviz {
         let errorMsg;
         try {
             retVal = graphViz.layout(dotSource, outputFormat, layoutEngine);
-        } catch (e) {
-            errorMsg = this._module.Graphviz.prototype.lastError();
+        } catch (e: any) {
+            errorMsg = e.message;
         };
+        errorMsg = this._module.Graphviz.prototype.lastError() || errorMsg;
         this._module.destroy(graphViz);
-        if (retVal === undefined) {
+        if (!retVal && errorMsg) {
             throw new Error(errorMsg);
         }
         return retVal;

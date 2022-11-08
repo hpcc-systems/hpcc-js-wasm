@@ -13,6 +13,14 @@
             "webRoot": "${workspaceRoot}"
         },
         {
+            "name": "file:///index.html",
+            "type": "msedge",
+            "request": "launch",
+            "url": "./index.html",
+            "runtimeArgs": [],
+            "webRoot": "${workspaceRoot}"
+        },
+        {
             "name": "hw-graphviz.html",
             "type": "msedge",
             "request": "launch",

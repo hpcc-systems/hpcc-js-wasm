@@ -9,6 +9,32 @@ const pkg = require("./package.json");
 
 let debug = false;
 
+const browserTplIndex = (input, umdOutput, esOutput) => ({
+    input: input,
+    external: id => {
+        console.log(id);
+        return id.indexOf("./") >= 0;
+    },
+    output: [{
+        file: umdOutput + ".js",
+        format: "umd",
+        sourcemap: true,
+        name: pkg.name
+    }, {
+        file: esOutput + ".js",
+        format: "es",
+        sourcemap: true
+    }],
+    plugins: [
+        nodeResolve({
+            preferBuiltins: true
+        }),
+        commonjs({}),
+        sourcemaps(),
+        debug ? undefined : terser({})
+    ]
+});
+
 const browserTpl = (input, umdOutput, esOutput) => ({
     input: input,
     output: [{
@@ -78,6 +104,8 @@ const binTpl = (input, esOutput) => ({
 export default args => {
     debug = args.configDebug ?? false;
     return [
+        browserTplIndex("lib-esm/index", "dist/index.umd", "dist/index"),
+
         browserTpl("lib-esm/base91", "dist/base91.umd", "dist/base91"),
         browserTpl("lib-esm/graphviz", "dist/graphviz.umd", "dist/graphviz"),
         browserTpl("lib-esm/expat", "dist/expat.umd", "dist/expat"),

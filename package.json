@@ -18,6 +18,11 @@
   ],
   "type": "module",
   "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.umd.js"
+    },
     "./base91": {
       "types": "./types/base91.d.ts",
       "import": "./dist/base91.js",
@@ -39,11 +44,11 @@
       "default": "./dist/zstd.umd.js"
     }
   },
-  "main": "./dist/graphviz.umd.js",
-  "module": "./dist/graphviz.js",
-  "browser": "./dist/graphviz.umd.js",
-  "unpkg": "./dist/index.umd.min.js",
-  "jsdelivr": "./dist/index.umd.min.js",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.js",
+  "browser": "./dist/index.umd.js",
+  "unpkg": "./dist/index.umd.js",
+  "jsdelivr": "./dist/index.umd.js",
   "types": "./types/index.d.ts",
   "bin": {
     "dot-wasm": "./bin/dot-wasm.js"
