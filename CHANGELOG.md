@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.0.0...v2.0.1) (2022-11-08)
+
+
+### Bug Fixes
+
+*  Add index.js for type resolution ([c370257](https://github.com/hpcc-systems/hpcc-js-wasm/commit/c370257c9ee4a5ab7e233359007ea24ec465b35f))
+*  Convert JSDelivr purge to ESM ([5712eb7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/5712eb7d97321ccb8b6791c75e7c27770ef33bfa))
+
 ## [2.0.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v1.20.1...v2.0.0) (2022-11-07)
 
 
