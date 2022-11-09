@@ -2,15 +2,17 @@
 
 ![Tests](https://github.com/hpcc-systems/hpcc-js-wasm/workflows/Test%20PR/badge.svg)
 
+**@hpcc-js/wasm is now an ESM by default package** - this is a good thing, but does require some breaking changes.
+
 This repository contains a collection of useful c++ libraries compiled to WASM for (re)use in Node JS, Web Browsers and JavaScript Libraries:
 - [base91](https://base91.sourceforge.net/) - v0.6.0
 - [expat](https://libexpat.github.io/) - v2.4.9
-- [graphviz](https://www.graphviz.org/) - v7.0.0
+- [graphviz](https://www.graphviz.org/) - v7.0.1
 - [zstd](https://github.com/facebook/zstd) - v1.5.2
 - ...more to follow...
 
 Built with:
-- [emsdk](https://github.com/emscripten-core/emsdk) - v3.1.24
+- [emsdk](https://github.com/emscripten-core/emsdk) - v3.1.25
 
 ## Homepage and Documents
 
@@ -54,3 +56,11 @@ Notes:
 * wasmFolder is no longer needed
 * All wasm libraries have the same asynchronous load pattern
     - `const instance = await Wasm.load();`
+
+### ⚠⚠⚠ TypeScript Notes ⚠⚠⚠ 
+
+When importing an ESM package AND referencing explicit `exports` (like `@hpcc-js/wasm/graphviz` or `@hpcc-js/wasm/expat`), you should change the following tsconfig.json setting:
+* `moduleResolution: Node16`
+
+This will ensure the correct "types" are auto discovered.
+

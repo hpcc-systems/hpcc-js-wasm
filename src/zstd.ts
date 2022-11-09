@@ -10,10 +10,10 @@ let g_zstd: Promise<Zstd>;
 /**
  * The Zstandard WASM library, provides a simplified wrapper around the Zstandard c++ library.
  * 
- * Dee [Zstandard](https://facebook.github.io/zstd/) for more details.
+ * See [Zstandard](https://facebook.github.io/zstd/) for more details.
  * 
  * ```ts
- * import { Graphviz } from "@hpcc-js/wasm/zstd";
+ * import { Zstd } from "@hpcc-js/wasm/zstd";
  * 
  * const zstd = await Zstd.load();
  * 
