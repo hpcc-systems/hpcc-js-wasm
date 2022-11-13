@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=6.0.1
+VERSION=7.0.1
 
 if [ ! -d "src-graphviz" ] 
 then

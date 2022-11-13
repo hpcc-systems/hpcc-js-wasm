@@ -69,7 +69,7 @@
     "build-docker": "docker build --rm --progress plain -f \"./docker/ubuntu-dev.dockerfile\" -t hpcc-js-wasm-build:latest \".\"",
     "standard-version": "standard-version",
     "standard-version-dryrun": "standard-version --dry-run",
-    "git-push": "git push --follow-tags upstream trunk",
+    "git-push": "git push --follow-tags upstream trunk-1_16",
     "watch": "run-p compile-es6-watch bundle-watch",
     "dev-start": "ws",
     "lint": "eslint src/**/*.ts",

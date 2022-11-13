@@ -2,9 +2,9 @@ name: Test PR
 
 on:
   push:
-    branches: [trunk]
+    branches: [trunk-1_16]
   pull_request:
-    branches: [trunk]
+    branches: [trunk-1_16]
 
 jobs:
   build:
