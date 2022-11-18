@@ -28,7 +28,7 @@ Alternatively the @hpcc-js/wasm package can be imported directly within the html
 For modern browsers and `import`:
 ```html
 <script type="module">
-    import { graphvizSync } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.js";
+    import { Graphviz } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.js";
 
     const graphviz = await Graphviz.load();
     const dot = "digraph G { Hello -> World }";
