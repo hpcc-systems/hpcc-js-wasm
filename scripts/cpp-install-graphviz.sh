@@ -2,7 +2,7 @@
 
 # List of current vertsion can be found in https://gitlab.com/graphviz/graphviz/-/tags  ---
 # UPDATE README.md
-VERSION=7.0.1
+VERSION=7.0.2
 
 if [ ! -d "src-graphviz" ] 
 then
@@ -15,7 +15,7 @@ then
     cd ./src-graphviz
     mkdir ./build
     cd ./build
-    cmake ..
+    cmake .. -Dwith_gvedit=OFF
     cmake --build . -- -j -k #  see https://gitlab.com/graphviz/graphviz/-/issues/2098
     cd ..
     cd ..

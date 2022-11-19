@@ -1,10 +1,6 @@
 name: Test PR
 
-on:
-  push:
-    branches: [trunk]
-  pull_request:
-    branches: [trunk]
+on: ["push", "pull_request"]
 
 jobs:
   build:
@@ -12,11 +8,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-node@v2
         with:
           node-version: "16.x"
           registry-url: "https://registry.npmjs.org"
           scope: "@hpcc-js"
+
       - run: npm ci
       - run: npm run lint
       - run: sudo apt-get update
@@ -29,3 +27,11 @@ jobs:
       - run: npm run test;
         env:
           CI: true
+
+      - run: npm run coverage
+      - run: npm run coverage-report
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

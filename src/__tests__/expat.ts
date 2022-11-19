@@ -20,6 +20,7 @@ class KeywordParser extends StackParser {
 
     currCat: any;
     _json: any = {};
+    _meta: string = "";
 
     startElement(tag: string, attrs: Attributes) {
         const retVal = super.startElement(tag, attrs);
@@ -33,6 +34,15 @@ class KeywordParser extends StackParser {
                 break;
         }
         return retVal;
+    }
+
+    endElement(tag: string) {
+        switch (tag) {
+            case "meta":
+                this._meta = this.top().content;
+                break;
+        }
+        return super.endElement(tag);
     }
 }
 
@@ -57,10 +67,10 @@ describe("expat", function () {
     });
 
     it("parse", async function () {
-        const callback = new KeywordParser();
-        const expat = await Expat.load();
-        const response = expat.parse(encodedXml(), callback);
+        const parser = new KeywordParser();
+        const response = await parser.parse(encodedXml());
         expect(response).to.be.true;
+        expect(parser._meta).to.equal("Some Content!");
     });
 });
 
@@ -79,6 +89,7 @@ function encodedXml() {
 function xml() {
     return `
 <xml>
+    <meta>Some Content!</meta>
     <cat group="1">
         <keyword name="beginc++" />
         <keyword name="elif" />

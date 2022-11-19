@@ -1,18 +1,19 @@
 # @hpcc-js/wasm - Version 2
 
 ![Tests](https://github.com/hpcc-systems/hpcc-js-wasm/workflows/Test%20PR/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/GordonSmith/hpcc-js-wasm/badge.svg?branch=BUMP_VERSIONS)](https://coveralls.io/github/GordonSmith/hpcc-js-wasm?branch=BUMP_VERSIONS)
 
 **@hpcc-js/wasm is now an ESM by default package** - this is a good thing, but does require some breaking changes.
 
 This repository contains a collection of useful c++ libraries compiled to WASM for (re)use in Node JS, Web Browsers and JavaScript Libraries:
 - [base91](https://base91.sourceforge.net/) - v0.6.0
-- [expat](https://libexpat.github.io/) - v2.4.9
-- [graphviz](https://www.graphviz.org/) - v7.0.1
+- [expat](https://libexpat.github.io/) - v2.5.0
+- [graphviz](https://www.graphviz.org/) - v7.0.2
 - [zstd](https://github.com/facebook/zstd) - v1.5.2
 - ...more to follow...
 
 Built with:
-- [emsdk](https://github.com/emscripten-core/emsdk) - v3.1.25
+- [emsdk](https://github.com/emscripten-core/emsdk) - v3.1.26
 
 ## Homepage and Documents
 

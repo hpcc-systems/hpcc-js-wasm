@@ -74,7 +74,7 @@ export class Base91 extends WasmLibrary {
         super(_module, new _module.CBasE91());
     }
 
-    static load(options) {
+    static load() {
         if (!g_base91) {
             g_base91 = loadWasm(base91lib, "./build/cpp/base91/base91lib.wasm").then(module => {
                 return new Base91(module)
@@ -127,7 +127,7 @@ export class Zstd extends WasmLibrary {
         super(_module, _module.zstd.prototype);
     }
 
-    static load(options) {
+    static load() {
         if (!g_zstd) {
             g_zstd = loadWasm(zstdlib, "./build/cpp/zstd/zstdlib.wasm").then(module => {
                 return new Zstd(module)

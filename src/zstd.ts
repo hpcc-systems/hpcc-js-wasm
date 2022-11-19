@@ -70,6 +70,7 @@ export class Zstd extends WasmLibrary {
         const compressedSize = this._exports.compressBound(data.length);
         const compressed = this.malloc_heapu8(compressedSize);
         compressed.size = this._exports.compress(compressed.ptr, compressedSize, uncompressed.ptr, uncompressed.size, compressionLevel);
+        /* istanbul ignore if  */
         if (this._exports.isError(compressed.size)) {
             console.error(this._exports.getErrorName(compressed.size));
         }
@@ -87,12 +88,14 @@ export class Zstd extends WasmLibrary {
     decompress(compressedData: Uint8Array): Uint8Array {
         const compressed = this.uint8_heapu8(compressedData);
         const uncompressedSize = this._exports.getFrameContentSize(compressed.ptr, compressed.size);
+        /* istanbul ignore if  */
         if (this._exports.isError(uncompressedSize)) {
             console.error(this._exports.getErrorName(uncompressedSize));
         }
         const uncompressed = this.malloc_heapu8(uncompressedSize);
 
         uncompressed.size = this._exports.decompress(uncompressed.ptr, uncompressedSize, compressed.ptr, compressed.size);
+        /* istanbul ignore if  */
         if (this._exports.isError(uncompressed.size)) {
             console.error(this._exports.getErrorName(uncompressed.size));
         }
