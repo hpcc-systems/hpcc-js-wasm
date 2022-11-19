@@ -7,6 +7,13 @@ export const formats: Format[] = ["svg", "dot", "json", "dot_json", "xdot_json",
 export const engines: Engine[] = ["circo", "dot", "fdp", "sfdp", "neato", "osage", "patchwork", "twopi"];
 
 describe("all combos", function () {
+    it("layout optionals", async function () {
+        const graphviz = await Graphviz.load();
+        const result = graphviz.layout(dot);
+        expect(result).to.be.a("string");
+        expect(result).to.not.be.empty;
+    });
+
     for (const engine of engines) {
         for (const format of formats) {
             it(`${engine}-${format}`, async function () {
@@ -19,78 +26,7 @@ describe("all combos", function () {
     }
 });
 
-describe("graphviz", async function () {
-    it("version", async function () {
-        const graphviz = await Graphviz.load();
-        const v = graphviz.version();
-        expect(v).to.be.a.string;
-        expect(v).to.not.be.empty;
-    });
-
-    it("circo", async function () {
-        const graphviz = await Graphviz.load();
-        const svg = graphviz.circo(dot, "svg");
-        expect(svg).to.be.a("string");
-        expect(svg).to.not.be.empty;
-    });
-    it("dot", async function () {
-        const graphviz = await Graphviz.load();
-        const svg = graphviz.dot(dot, "svg");
-        expect(svg).to.be.a("string");
-        expect(svg).to.not.be.empty;
-
-    });
-    it("blank-dot", async function () {
-        const graphviz = await Graphviz.load();
-        const svg = graphviz.dot("", "svg");
-        expect(svg).to.be.a("string");
-        expect(svg).to.be.empty;
-    });
-    it("fdp", async function () {
-        const graphviz = await Graphviz.load();
-        const svg = graphviz.fdp(dot, "svg");
-        expect(svg).to.be.a("string");
-        expect(svg).to.not.be.empty;
-
-    });
-    it("sfdp", async function () {
-        const graphviz = await Graphviz.load();
-        const svg = graphviz.sfdp(dot, "svg");
-        expect(svg).to.be.a("string");
-        expect(svg).to.not.be.empty;
-
-    });
-    it("neato", async function () {
-        const graphviz = await Graphviz.load();
-        const svg = graphviz.neato(dot, "svg");
-        expect(svg).to.be.a("string");
-        expect(svg).to.not.be.empty;
-
-    });
-    it("osage", async function () {
-        const graphviz = await Graphviz.load();
-        const svg = graphviz.osage(dot, "svg");
-        expect(svg).to.be.a("string");
-        expect(svg).to.not.be.empty;
-
-    });
-    it("patchwork", async function () {
-        const graphviz = await Graphviz.load();
-        const svg = graphviz.patchwork(dot, "svg");
-        expect(svg).to.be.a("string");
-        expect(svg).to.not.be.empty;
-
-    });
-    it("twopi", async function () {
-        const graphviz = await Graphviz.load();
-        const svg = graphviz.twopi(dot, "svg");
-        expect(svg).to.be.a("string");
-        expect(svg).to.not.be.empty;
-
-    });
-});
-
-describe("Graphviz API", function () {
+describe("graphviz", function () {
 
     it("version", async function () {
         const graphviz = await Graphviz.load();
@@ -101,65 +37,113 @@ describe("Graphviz API", function () {
 
     it("circo", async function () {
         const graphviz = await Graphviz.load();
-        const svg = graphviz.circo(dot, "svg");
+        let svg = graphviz.circo(dot);
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
-
+        svg = graphviz.circo(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+        svg = graphviz.circo(dot, "svg", {});
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
     });
+
     it("dot", async function () {
         const graphviz = await Graphviz.load();
-        const svg = graphviz.dot(dot, "svg");
+        let svg = graphviz.dot(dot);
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+        svg = graphviz.dot(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+        svg = graphviz.dot(dot, "svg", {});
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
     });
+
     it("blank-dot", async function () {
         const graphviz = await Graphviz.load();
         const svg = graphviz.dot("", "svg");
         expect(svg).to.be.a("string");
         expect(svg).to.be.empty;
-
     });
+
     it("fdp", async function () {
         const graphviz = await Graphviz.load();
-        const svg = graphviz.fdp(dot, "svg");
+        let svg = graphviz.fdp(dot);
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
-
+        svg = graphviz.fdp(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+        svg = graphviz.fdp(dot, "svg", {});
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
     });
+
     it("sfdp", async function () {
         const graphviz = await Graphviz.load();
-        const svg = graphviz.sfdp(dot, "svg");
+        let svg = graphviz.sfdp(dot);
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
-
+        svg = graphviz.sfdp(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+        svg = graphviz.sfdp(dot, "svg", {});
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
     });
+
     it("neato", async function () {
         const graphviz = await Graphviz.load();
-        const svg = graphviz.neato(dot, "svg");
+        let svg = graphviz.neato(dot);
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
-
+        svg = graphviz.neato(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+        svg = graphviz.neato(dot, "svg", {});
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
     });
+
     it("osage", async function () {
         const graphviz = await Graphviz.load();
-        const svg = graphviz.osage(dot, "svg");
+        let svg = graphviz.osage(dot);
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
-
+        svg = graphviz.osage(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+        svg = graphviz.osage(dot, "svg", {});
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
     });
+
     it("patchwork", async function () {
         const graphviz = await Graphviz.load();
-        const svg = graphviz.patchwork(dot, "svg");
+        let svg = graphviz.patchwork(dot);
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
-
+        svg = graphviz.patchwork(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+        svg = graphviz.patchwork(dot, "svg", {});
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
     });
+
     it("twopi", async function () {
         const graphviz = await Graphviz.load();
-        const svg = graphviz.twopi(dot, "svg");
+        let svg = graphviz.twopi(dot);
         expect(svg).to.be.a("string");
         expect(svg).to.not.be.empty;
-
+        svg = graphviz.twopi(dot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+        svg = graphviz.twopi(dot, "svg", {});
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
     });
 
     it("images", async function () {
@@ -179,8 +163,19 @@ describe("Graphviz API", function () {
 });
 
 describe("bad dot", function () {
+    it("blank", async function () {
+        const graphviz = await Graphviz.load();
+        try {
+            const svg = graphviz.dot("", "svg");
+            expect(svg).to.be.empty;
+            throw new Error("expected");
+        } catch (e: any) {
+            expect(typeof e.message).to.equal("string");
+            expect(e.message).to.contain("expected");
+        }
+    });
 
-    it("dot", async function () {
+    it("syntax error", async function () {
         const graphviz = await Graphviz.load();
         try {
             graphviz.dot(badDot, "svg");

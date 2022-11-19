@@ -13,6 +13,7 @@ function decode(raw: string): Uint8Array {
 
     for (let i = 0; i < len; i++) {
         const p = table.indexOf(raw[i]);
+        /* istanbul ignore next */
         if (p === -1) continue;
         if (v < 0) {
             v = p;

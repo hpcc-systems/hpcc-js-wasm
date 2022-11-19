@@ -3,12 +3,13 @@ import { Base91 } from "@hpcc-js/wasm/base91";
 import { Zstd } from "@hpcc-js/wasm/zstd";
 
 describe("base91", function () {
+
     it("version", async function () {
         const base91 = await Base91.load();
+        expect(await Base91.load()).to.equal(base91);
         const v = base91.version();
         expect(v).to.be.a.string;
         expect(v).to.not.be.empty;
-        console.log(v);
     });
 
     it("simple", async function () {

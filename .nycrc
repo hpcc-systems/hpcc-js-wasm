@@ -1,0 +1,7 @@
+{
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "exclude": [
+        "build",
+        "src/__tests__"
+    ]
+}
