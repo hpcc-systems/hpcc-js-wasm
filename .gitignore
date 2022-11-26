@@ -22,4 +22,5 @@
 /tmp
 /types
 /vcpkg
+.coveralls.yml
 *.tsbuildinfo

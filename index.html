@@ -59,8 +59,8 @@
     <h3>ESM</h3>
     <div id="ESM"></div>
     <script type="module">
-        //     import { Graphviz } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js";
-        import { Graphviz } from "./dist/index.js";
+        import { Graphviz } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js";
+        //  import { Graphviz } from "./dist/index.js";
         if (Graphviz) {
             const graphviz = await Graphviz.load();
             const svg = graphviz.layout(dot, "svg", "dot");
@@ -70,7 +70,8 @@
     <hr>
     <h3>UMD</h3>
     <div id="UMD"></div>
-    <script src="./dist/index.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.umd.js"></script>
+    <!-- <script src="./dist/index.umd.js"></script> -->
     <script>
         var hpccWasm = window["@hpcc-js/wasm"];
         hpccWasm.Graphviz.load().then(graphviz => {
@@ -92,7 +93,8 @@
     <h3>Image</h3>
     <div id="image"></div>
     <script type="module">
-        import { Graphviz } from "./dist/index.js";
+        import { Graphviz } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js";
+        // import { Graphviz } from "./dist/index.js";
         if (Graphviz) {
             const graphviz = await Graphviz.load();
             const svg = graphviz.neato('digraph { a[image="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"]; }', "svg", { images: [{ path: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png", width: "272px", height: "92px" }] });
@@ -103,7 +105,8 @@
     <h3>Image 2</h3>
     <div id="image2"></div>
     <script type="module">
-        import { Graphviz } from "./dist/index.js";
+        import { Graphviz } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js";
+        // import { Graphviz } from "./dist/index.js";
         if (Graphviz) {
             const graphviz = await Graphviz.load();
             const svg = graphviz.neato('digraph { a[image="./resources/hpcc-logo.png"]; }', "svg", { images: [{ path: "./resources/hpcc-logo.png", width: "272px", height: "92px" }] });
