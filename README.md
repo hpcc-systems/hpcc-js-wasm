@@ -8,7 +8,7 @@
 This repository contains a collection of useful c++ libraries compiled to WASM for (re)use in Node JS, Web Browsers and JavaScript Libraries:
 - [base91](https://base91.sourceforge.net/) - v0.6.0
 - [expat](https://libexpat.github.io/) - v2.5.0
-- [graphviz](https://www.graphviz.org/) - v7.0.2
+- [graphviz](https://www.graphviz.org/) - v7.0.3
 - [zstd](https://github.com/facebook/zstd) - v1.5.2
 - ...more to follow...
 

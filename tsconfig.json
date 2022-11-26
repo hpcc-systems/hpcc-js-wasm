@@ -11,6 +11,7 @@
         "sourceMap": true,
         "declaration": true,
         "declarationMap": true,
+        "skipLibCheck": true,
         "strict": true,
         "noImplicitAny": false
     },
