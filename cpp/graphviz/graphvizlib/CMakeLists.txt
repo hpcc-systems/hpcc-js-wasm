@@ -42,6 +42,7 @@ ADD_EXECUTABLE(graphvizlib
 )
 
 SET_TARGET_PROPERTIES(graphvizlib PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=webview")
+# target_compile_features(graphvizlib PUBLIC cxx_std_17)
 
 TARGET_LINK_LIBRARIES(graphvizlib PRIVATE
     gvplugin_core

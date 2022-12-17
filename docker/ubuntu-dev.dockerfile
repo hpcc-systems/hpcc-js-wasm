@@ -21,15 +21,24 @@ RUN apt-get install -y python3 python3-pip
 # Set the working directory
 WORKDIR /usr/src/app
 
-COPY ./scripts ./scripts
-
-RUN ./scripts/cpp-install-emsdk.sh
-RUN ./scripts/cpp-install-graphviz.sh
-RUN ./scripts/cpp-install-vcpkg.sh
-RUN ./vcpkg/bootstrap-vcpkg.sh
-
-COPY . .
+COPY ./cpp ./cpp
+COPY ./src ./src
+COPY ./utils ./utils
+COPY ./*.* .
 
 RUN npm ci
+
+COPY ./scripts ./scripts
+RUN ./scripts/cpp-install-emsdk.sh
+
+COPY ./vcpkg-overlays ./vcpkg-overlays
+COPY ./vcpkg.json ./vcpkg.json
+RUN ./scripts/cpp-install-vcpkg.sh
+RUN ./vcpkg/bootstrap-vcpkg.sh
+RUN ./vcpkg/vcpkg install --overlay-ports=./vcpkg-overlays
+
+RUN ./scripts/cpp-install-graphviz.sh
+
 RUN npm run build
-RUN npm run test-node
+
+ENTRYPOINT ["npm", "run", "build"]
