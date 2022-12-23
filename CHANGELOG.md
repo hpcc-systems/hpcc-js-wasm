@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.3.0...v2.4.0) (2022-12-23)
+
+
+### Features
+
+*  Add unload method to mirror load ([9adf1f7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/9adf1f760ce084a754be0dc184bd8047cb44e81a))
+
 ## [2.3.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.2.0...v2.3.0) (2022-12-06)
 
 
