@@ -9,7 +9,6 @@ export async function doFetch(wasmUrl) {
     return readFile(wasmUrl);
 }
 
-
 export async function loadWasm(wrapper, wasmUrl) {
     return wrapper({
         wasmBinary: await readFile(wasmUrl)
@@ -193,6 +192,11 @@ myYargs
     .usage("Usage: sfx-wasm [options] filePath")
     .demandCommand(0, 1)
     .example("sfx-wasm ./input.wasm", "Wrap file in a self extracting JavaScript file.")
+    .option("d", {
+        alias: "debug",
+        describe: "Debug build",
+        boolean: true
+    })
     .help("h")
     .alias("h", "help")
     .epilog("https://github.com/hpcc-systems/hpcc-js-wasm")
@@ -211,28 +215,63 @@ try {
         const compressed = zstd.compress(new Uint8Array(wasmContent))
         const base91 = await Base91.load();
         const str = base91.encode(compressed);
-        console.log(`\
+        const debugMap = `\
+(path, scriptDirectory) => {
+    console.log("XXXX:  ", path, scriptDirectory);
+    switch (path) {
+        case "base91lib.wasm":
+        case "base91lib.wasm.map":
+            return scriptDirectory + "../build/cpp/base91/" + path
+        case "expatlib.wasm":
+        case "expatlib.wasm.map":
+            return scriptDirectory + "../build/cpp/expat/expatlib/" + path
+        case "graphvizlib.wasm":
+        case "graphvizlib.wasm.map":
+            return scriptDirectory + "../build/cpp/graphviz/graphvizlib/" + path
+        case "zstdlib.wasm":
+        case "zstdlib.wasm.map":
+            return scriptDirectory + "../build/cpp/zstd/" + path
+    }
+    return scriptDirectory + path;
+}
+`;
+        const content = `\
 import { extract } from "./extract.js";
-import wrapper from "../${wasmPath.replace(".wasm", ".js")}";
+import wrapper from "${wasmPath.replace(".wasm", ".js")}";
 
 const blobStr = '${str}';
 
 let g_module;
+let g_wasmBinary;
 export function loadWasm() {
+    if (!g_wasmBinary) {
+        g_wasmBinary = extract(blobStr)
+    }
     if (!g_module) {
         g_module = wrapper({
-            wasmBinary: extract(blobStr)
+            ${argv.d ? `` : ``}
+            wasmBinary: ${argv.d ? "undefined" : "g_wasmBinary"},
+            locateFile: ${argv.d ? debugMap : "undefined"}
         });
     }
     return g_module;
 }
-`);
+
+export function unloadWasm() {
+    if (g_module) {
+        g_module = undefined;
+    }
+}
+`;
+        if (argv.o) {
+            debugger;
+        } else {
+            console.log(content);
+        }
     } else {
         throw new Error("'filePath' is required.")
     }
 } catch (e) {
-    console.error(`Error:  ${e?.message}\n`);
+    console.error(`Error:  ${e?.message} \n`);
     myYargs.showHelp();
 }
-
-

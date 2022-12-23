@@ -1,5 +1,5 @@
 // @ts-ignore
-import { loadWasm } from "./zstdlib.wasm.js";
+import { loadWasm, unloadWasm } from "./zstdlib.wasm.js";
 import { WasmLibrary } from "./wasm-library.js";
 
 //  Ref:  http://facebook.github.io/zstd/zstd_manual.html
@@ -46,6 +46,13 @@ export class Zstd extends WasmLibrary {
             });
         }
         return g_zstd;
+    }
+
+    /**
+     * Unloades the compiled wasm instance.
+     */
+    static unload() {
+        unloadWasm();
     }
 
     /**

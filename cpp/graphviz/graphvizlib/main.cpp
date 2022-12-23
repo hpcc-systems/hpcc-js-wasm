@@ -4,6 +4,10 @@
 #include <gvc.h>
 #include <globals.h>
 #include <gvc/gvplugin.h>
+// #include <cgraph++/AGraph.h>
+// #include <gvc++/GVContext.h>
+// #include <gvc++/GVLayout.h>
+// #include <gvc++/GVRenderData.h>
 
 #include <emscripten.h>
 
@@ -43,6 +47,9 @@ int vizErrorf(char *buf)
     return 0;
 }
 
+int origYInvert = Y_invert;
+int origNop = Nop;
+
 const char *Graphviz::version()
 {
     return PACKAGE_VERSION;
@@ -52,9 +59,6 @@ const char *Graphviz::lastError()
 {
     return lastErrorStr;
 }
-
-int origYInvert = Y_invert;
-int origNop = Nop;
 
 Graphviz::Graphviz(int yInvert, int nop)
 {
@@ -66,9 +70,37 @@ Graphviz::~Graphviz()
 {
 }
 
+void Graphviz::createFile(const char *path, const char *data)
+{
+    EM_ASM(
+        {
+            var path = UTF8ToString($0);
+            var data = UTF8ToString($1);
+
+            FS.createPath("/", PATH.dirname(path));
+            FS.writeFile(PATH.join("/", path), data);
+        },
+        path, data);
+}
+
+const char *Graphviz::lastResult()
+{
+    return m_result.c_str();
+}
+
 const char *Graphviz::layout(const char *src, const char *format, const char *engine)
 {
     lastErrorStr[0] = '\0';
+    m_result = "";
+
+    // const auto demand_loading = false;
+    // auto gvc = std::make_shared<GVC::GVContext>(lt_preloaded_symbols, demand_loading);
+    // auto g = std::make_shared<CGraph::AGraph>(dot);
+    // const auto layout = GVC::GVLayout(gvc, g, engine);
+    // const auto result = layout.render(format);
+    // m_result = result.string_view();
+
+    // return m_result.c_str();
 
     GVC_t *gvc = gvContextPlugins(lt_preloaded_symbols, true);
 
@@ -100,19 +132,6 @@ const char *Graphviz::layout(const char *src, const char *format, const char *en
     gvFreeContext(gvc);
 
     return m_result.c_str();
-}
-
-void Graphviz::createFile(const char *path, const char *data)
-{
-    EM_ASM(
-        {
-            var path = UTF8ToString($0);
-            var data = UTF8ToString($1);
-
-            FS.createPath("/", PATH.dirname(path));
-            FS.writeFile(PATH.join("/", path), data);
-        },
-        path, data);
 }
 
 //  Include JS Glue  ---

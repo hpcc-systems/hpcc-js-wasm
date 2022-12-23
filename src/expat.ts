@@ -1,5 +1,5 @@
 // @ts-ignore
-import { loadWasm } from "./expatlib.wasm.js";
+import { loadWasm, unloadWasm } from "./expatlib.wasm.js";
 
 export type Attributes = { [key: string]: string };
 export interface IParser {
@@ -64,6 +64,13 @@ export class Expat {
         return loadWasm().then((module: any) => {
             return new Expat(module);
         });
+    }
+
+    /**
+     * Unloades the compiled wasm instance.
+     */
+    static unload() {
+        unloadWasm();
     }
 
     /**

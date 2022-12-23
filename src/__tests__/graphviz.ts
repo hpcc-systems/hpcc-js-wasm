@@ -2,6 +2,7 @@ import { expect } from "chai";
 import { Engine, Format, Graphviz } from "@hpcc-js/wasm/graphviz";
 import { badDot, dot } from "./dot001.js";
 import { ortho } from "./dot002.js";
+import { dotMemory } from "./dot003.js";
 
 export const formats: Format[] = ["svg", "dot", "json", "dot_json", "xdot_json", "plain", "plain-ext"];
 export const engines: Engine[] = ["circo", "dot", "fdp", "sfdp", "neato", "osage", "patchwork", "twopi"];
@@ -160,6 +161,22 @@ describe("graphviz", function () {
         const svg = graphviz.dot(ortho, "svg");
         expect(svg).to.be.not.empty;
     });
+
+    it("memory access out of bounds", async function () {
+        this.timeout(10000);
+        for (let i = 0; i < 20; ++i) {
+            const graphviz = await Graphviz.load();
+            try {
+                const svg = graphviz.dot(dotMemory, "json");
+                expect(svg).to.be.not.empty;
+            } catch (e: any) {
+                console.log(`Failed at i:  ${i} - ${e.message}`);
+                expect(false, e.message).to.be.false;
+                break;
+            }
+            Graphviz.unload();
+        }
+    });
 });
 
 describe("bad dot", function () {
@@ -178,8 +195,8 @@ describe("bad dot", function () {
     it("syntax error", async function () {
         const graphviz = await Graphviz.load();
         try {
-            graphviz.dot(badDot, "svg");
-            expect(true).to.be.false;
+            const xxx = graphviz.dot(badDot, "svg");
+            expect(true, xxx).to.be.false;
         } catch (e: any) {
             expect(typeof e.message).to.equal("string");
             expect(e.message).to.contain("syntax error in line");

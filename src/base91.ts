@@ -1,5 +1,5 @@
 // @ts-ignore
-import { loadWasm } from "./base91lib.wasm.js";
+import { loadWasm, unloadWasm } from "./base91lib.wasm.js";
 import { WasmLibrary } from "./wasm-library.js";
 
 //  Ref:  http://base91.sourceforge.net/#a5
@@ -42,6 +42,13 @@ export class Base91 extends WasmLibrary {
             });
         }
         return g_base91;
+    }
+
+    /**
+     * Unloades the compiled wasm instance.
+     */
+    static unload() {
+        unloadWasm();
     }
 
     /**

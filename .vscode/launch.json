@@ -5,6 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "sfx-wasm",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "gen-sfx-graphviz"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
             "name": "index.html",
             "type": "msedge",
             "request": "launch",
@@ -50,10 +63,11 @@
             "sourceMapPathOverrides": {
                 "webpack:///./*": "${workspaceRoot}/*",
                 "webpack:///*": "/*"
-            }
+            },
         },
         {
             "name": "test-node",
+            "type": "node",
             "request": "launch",
             "runtimeArgs": [
                 "run-script",
@@ -63,7 +77,11 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "type": "node"
+            "outFiles": [
+                "${workspaceFolder}/**/*.js",
+                "${workspaceFolder}/**/*.c",
+                "!**/node_modules/**"
+            ],
         },
         {
             "name": "cli rollup wasm",

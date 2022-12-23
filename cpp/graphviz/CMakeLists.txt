@@ -1,12 +1,12 @@
-PROJECT(graphlayout)
+project(graphlayout)
 
 find_package(expat CONFIG REQUIRED)
 
-SET(GRAPHVIZ_LIB_DIR "${GRAPHVIZ_DIR}/lib")
-SET(GRAPHVIZ_PLUGIN_DIR "${GRAPHVIZ_DIR}/plugin")
-SET(GRAPHVIZ_BUILD_DIR "${GRAPHVIZ_DIR}/build")
+set(GRAPHVIZ_LIB_DIR "${GRAPHVIZ_DIR}/lib")
+set(GRAPHVIZ_PLUGIN_DIR "${GRAPHVIZ_DIR}/plugin")
+set(GRAPHVIZ_BUILD_DIR "${GRAPHVIZ_DIR}/build")
 
-INCLUDE_DIRECTORIES(
+include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${VCPKG_INCLUDE_DIR}
 )

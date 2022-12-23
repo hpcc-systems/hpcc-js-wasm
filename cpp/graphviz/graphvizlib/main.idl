@@ -3,6 +3,7 @@ interface Graphviz
   void Graphviz(long yInvert, long nop);
   [Const] static DOMString version();
   [Const] static DOMString lastError();
-  [Const] DOMString layout([Const] DOMString dot, [Const] DOMString format, [Const] DOMString engine);
   void createFile([Const] DOMString file, [Const] DOMString data);
+  [Const] DOMString lastResult();
+  [Const] DOMString layout([Const] DOMString dot, [Const] DOMString format, [Const] DOMString engine);
 };

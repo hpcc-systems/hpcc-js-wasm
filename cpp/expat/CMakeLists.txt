@@ -1,1 +1,1 @@
-ADD_SUBDIRECTORY(expatlib)
+add_subdirectory(expatlib)

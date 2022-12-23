@@ -1,45 +1,93 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.9.2)
+cmake_minimum_required(VERSION 3.9.2)
 
-PROJECT(cpp)
+set(REPO_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(VCPKG_FILES_DIR "${CMAKE_BINARY_DIR}" CACHE STRING "Folder for vcpkg download, build and installed files")
+set(CMAKE_TOOLCHAIN_FILE ${REPO_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake)
+set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE ${REPO_DIR}/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake)
+set(VCPKG_ROOT ${REPO_DIR}/vcpkg)
+set(VCPKG_OVERLAY_PORTS ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg-overlays)
+set(VCPKG_VERBOSE OFF)
+set(VCPKG_TARGET_TRIPLET "wasm32-emscripten")
+file(REMOVE ${REPO_DIR}/vcpkg/vcpkg)
 
-SET(CMAKE_INSTALL_PREFIX "..")
-SET(VCPKG_INCLUDE_DIR ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/include)
+project(cpp)
+
+option(ENABLE_SANITIZERS "Enable Clang's sanitizer options" OFF)
+
+set(CMAKE_INSTALL_PREFIX "..")
+set(VCPKG_INCLUDE_DIR ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/include)
 
 # See:  https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
-SET(EM_FLAGS 
-    "-s ASSERTIONS=0"
-    "-s INVOKE_RUN=0"
-    "-s ALLOW_MEMORY_GROWTH=1"
-    "-s WASM=1"
-    "-s ENVIRONMENT=web"
-    "-s FILESYSTEM=0"
-    # "-s MINIMAL_RUNTIME=1"
-    "-s MODULARIZE=1" 
-    "-s EXPORT_ES6=1"
-    "-s IGNORE_CLOSURE_COMPILER_ERRORS=0"
-    "-s USE_ES6_IMPORT_META=0"
-    # "-s WASM_BIGINT=1"
-    "-s STANDALONE_WASM=0"
-    "-s BINARYEN_ASYNC_COMPILATION=1"
-    # "-s DYNAMIC_EXECUTION=0"
+set(EM_CPP_FLAGS "")
+
+set(EM_LINK_FLAGS 
+    "-sASSERTIONS=0"
+    "-sINVOKE_RUN=0"
+    "-sALLOW_MEMORY_GROWTH=1"
+    "-sWASM=1"
+    "-sENVIRONMENT=webview"
+    "-sFILESYSTEM=0"
+    # "-sMINIMAL_RUNTIME=1"
+    "-sMODULARIZE=1" 
+    "-sEXPORT_ES6=1"
+    "-sIGNORE_CLOSURE_COMPILER_ERRORS=0"
+    # "-sWASM_BIGINT=1"
+    "-sSTANDALONE_WASM=0"
+    "-sBINARYEN_ASYNC_COMPILATION=1"
+    # "-sDYNAMIC_EXECUTION=0"
     "--pre-js ${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/pre.js"
     "--post-js ${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/post.js"
 )
 
-IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    SET(EM_FLAGS 
-        ${EM_FLAGS}
-        "-gsource-map"
-        "--source-map-base ${CMAKE_CURRENT_SOURCE_DIR}"
-    )
-ENDIF()
 
-SET(EMSDK_DIR "${CMAKE_SOURCE_DIR}/emsdk")
-SET(EXPAT_DIR "${CMAKE_SOURCE_DIR}/src-expat/expat")
-SET(GRAPHVIZ_DIR "${CMAKE_SOURCE_DIR}/src-graphviz")
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(EM_LINK_FLAGS 
+        ${EM_LINK_FLAGS}
+        "-sUSE_ES6_IMPORT_META=1"
+        "-gsource-map"
+        "--source-map-base ./"  #  Debugging c++ only works in browser with "Experimental DWARF support turned on"
+    )
+
+    if (ENABLE_SANITIZERS)
+        set(EM_CPP_FLAGS 
+            ${EM_CPP_FLAGS}
+            "-fsanitize=address"
+        )
+
+        set(EM_LINK_FLAGS 
+            ${EM_LINK_FLAGS}
+            "-fsanitize=address"
+            "-sENVIRONMENT=web,node"
+        )
+    endif ()
+else ()
+    set(EM_LINK_FLAGS 
+        ${EM_LINK_FLAGS}
+        "-sUSE_ES6_IMPORT_META=0"
+    )
+endif ()
+
+set(EMSDK_DIR "${CMAKE_SOURCE_DIR}/emsdk")
+set(EXPAT_DIR "${CMAKE_SOURCE_DIR}/src-expat/expat")
+set(GRAPHVIZ_DIR "${CMAKE_SOURCE_DIR}/src-graphviz")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-ADD_SUBDIRECTORY(cpp)
+set(PACK_MODE "")
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(PACK_MODE "-d")
+endif ()
+
+function(packWasm targetID)
+    add_custom_target(sfx-${targetID} ALL
+        COMMAND node ./utils/sfx-wasm.js ${PACK_MODE} ${CMAKE_CURRENT_BINARY_DIR}/${targetID}.wasm > ${REPO_DIR}/lib-esm/${targetID}.wasm.js
+        WORKING_DIRECTORY ${REPO_DIR}
+        COMMENT "SFX Wasm ${targetID}"
+    ) 
+
+    add_dependencies(sfx-${targetID} ${targetID} base91lib zstdlib)
+endfunction ()
+
+add_subdirectory(cpp)

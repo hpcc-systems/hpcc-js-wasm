@@ -1,4 +1,4 @@
-ADD_SUBDIRECTORY(base91)
-ADD_SUBDIRECTORY(expat)
-ADD_SUBDIRECTORY(graphviz)
-ADD_SUBDIRECTORY(zstd)
+add_subdirectory(base91)
+add_subdirectory(expat)
+add_subdirectory(graphviz)
+add_subdirectory(zstd)

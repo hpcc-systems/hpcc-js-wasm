@@ -1,5 +1,5 @@
 // @ts-ignore
-import { loadWasm } from "./graphvizlib.wasm.js";
+import { loadWasm, unloadWasm } from "./graphvizlib.wasm.js";
 
 /**
  * Various graphic and data formats for end user, web, documents and other applications.  See [Output Formats](https://graphviz.gitlab.io/docs/outputs/) for more information.
@@ -111,6 +111,13 @@ export class Graphviz {
     }
 
     /**
+     * Unloades the compiled wasm instance.
+     */
+    static unload() {
+        unloadWasm();
+    }
+
+    /**
      * @returns The Graphviz c++ version
      */
     version(): string {
@@ -128,16 +135,19 @@ export class Graphviz {
     layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot", options?: Options): string {
         if (!dotSource) return "";
         const graphViz = new this._module.Graphviz(options?.yInvert ? 1 : 0, options?.nop ? options?.nop : 0);
-        createFiles(graphViz, options);
-        let retVal;
-        let errorMsg;
+        let retVal = "";
+        let errorMsg = "";
         try {
-            retVal = graphViz.layout(dotSource, outputFormat, layoutEngine);
-        } catch (e: any) {
-            errorMsg = e.message;
-        };
-        errorMsg = this._module.Graphviz.prototype.lastError() || errorMsg;
-        this._module.destroy(graphViz);
+            createFiles(graphViz, options);
+            try {
+                retVal = graphViz.layout(dotSource, outputFormat, layoutEngine);
+            } catch (e: any) {
+                errorMsg = e.message;
+            };
+            errorMsg = graphViz.lastError() || errorMsg;
+        } finally {
+            this._module.destroy(graphViz);
+        }
         if (!retVal && errorMsg) {
             throw new Error(errorMsg);
         }
