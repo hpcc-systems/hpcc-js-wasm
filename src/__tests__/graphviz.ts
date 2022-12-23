@@ -171,7 +171,7 @@ describe("graphviz", function () {
                 expect(svg).to.be.not.empty;
             } catch (e: any) {
                 console.log(`Failed at i:  ${i} - ${e.message}`);
-                expect(false, e.message).to.be.false;
+                expect(false, e.message).to.be.true;
                 break;
             }
             Graphviz.unload();
