@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.4.0...v2.5.0) (2022-12-24)
+
+
+### Features
+
+*  Bump GraphViz to 7.0.5 ([cf656ad](https://github.com/hpcc-systems/hpcc-js-wasm/commit/cf656adfbe6405e5538c6ccde92348caee79d947))
+
+
+### Bug Fixes
+
+*  Test asset should fail ([175325d](https://github.com/hpcc-systems/hpcc-js-wasm/commit/175325dfb9500dbe95d91c3b4f5da395ae51749d))
+
 ## [2.4.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.3.0...v2.4.0) (2022-12-23)
 
 
