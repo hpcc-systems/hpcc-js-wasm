@@ -10,6 +10,7 @@ add_library(cgraph STATIC
   ${GRAPHVIZ_LIB_DIR}/cgraph/exit.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/itos.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/likely.h
+  ${GRAPHVIZ_LIB_DIR}/cgraph/list.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/prisize_t.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/stack.h
   ${GRAPHVIZ_LIB_DIR}/cgraph/startswith.h

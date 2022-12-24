@@ -5,10 +5,10 @@ string(REPLACE ";" " " CPP_FLAGS "${EM_CPP_FLAGS}")
 
 set(EM_LINK_FLAGS 
     ${EM_LINK_FLAGS}
-    "-s FILESYSTEM=1"
-    "-s EXPORT_NAME='${CMAKE_PROJECT_NAME}'"
-    "-s EXPORTED_FUNCTIONS=\"[_free]\""
-    "-s EXPORTED_RUNTIME_METHODS=\"[]\""
+    "-sFILESYSTEM=1"
+    "-sEXPORT_NAME='${CMAKE_PROJECT_NAME}'"
+    "-sEXPORTED_FUNCTIONS=\"['_free', '_malloc']\""
+    "-sEXPORTED_RUNTIME_METHODS=\"[]\""
     "--post-js ${CMAKE_CURRENT_BINARY_DIR}/main_glue.js"
 )
 string(REPLACE ";" " " LINK_FLAGS "${EM_LINK_FLAGS}")

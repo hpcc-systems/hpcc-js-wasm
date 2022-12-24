@@ -6,7 +6,6 @@ set(CMAKE_TOOLCHAIN_FILE ${REPO_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake)
 set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE ${REPO_DIR}/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake)
 set(VCPKG_ROOT ${REPO_DIR}/vcpkg)
 set(VCPKG_OVERLAY_PORTS ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg-overlays)
-set(VCPKG_VERBOSE OFF)
 set(VCPKG_TARGET_TRIPLET "wasm32-emscripten")
 file(REMOVE ${REPO_DIR}/vcpkg/vcpkg)
 

@@ -30,10 +30,17 @@ describe("all combos", function () {
 describe("graphviz", function () {
 
     it("version", async function () {
-        const graphviz = await Graphviz.load();
-        const v = graphviz.version();
+        let graphviz = await Graphviz.load();
+        let v = graphviz.version();
         expect(v).to.be.a.string;
         expect(v).to.not.be.empty;
+        Graphviz.unload();
+
+        graphviz = await Graphviz.load();
+        v = graphviz.version();
+        expect(v).to.be.a.string;
+        expect(v).to.not.be.empty;
+        Graphviz.unload();
     });
 
     it("circo", async function () {
