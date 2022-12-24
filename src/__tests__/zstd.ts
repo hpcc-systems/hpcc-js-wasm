@@ -7,10 +7,18 @@ describe("zstd", function () {
         let v = zstd.version();
         expect(v).to.be.a.string;
         expect(v).to.not.be.empty;
+
         zstd = await Zstd.load();
         v = zstd.version();
         expect(v).to.be.a.string;
         expect(v).to.not.be.empty;
+        Zstd.unload();
+
+        zstd = await Zstd.load();
+        v = zstd.version();
+        expect(v).to.be.a.string;
+        expect(v).to.not.be.empty;
+        Zstd.unload();
     });
 
     it("compress", async function () {

@@ -5,11 +5,19 @@ import { Zstd } from "@hpcc-js/wasm/zstd";
 describe("base91", function () {
 
     it("version", async function () {
-        const base91 = await Base91.load();
+        let base91 = await Base91.load();
         expect(await Base91.load()).to.equal(base91);
-        const v = base91.version();
+        let v = base91.version();
         expect(v).to.be.a.string;
         expect(v).to.not.be.empty;
+        Base91.unload();
+
+        base91 = await Base91.load();
+        expect(await Base91.load()).to.equal(base91);
+        v = base91.version();
+        expect(v).to.be.a.string;
+        expect(v).to.not.be.empty;
+        Base91.unload();
     });
 
     it("simple", async function () {

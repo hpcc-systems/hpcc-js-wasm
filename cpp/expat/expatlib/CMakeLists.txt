@@ -7,9 +7,9 @@ string(REPLACE ";" " " CPP_FLAGS "${EM_CPP_FLAGS}")
 
 set(EM_LINK_FLAGS 
     ${EM_LINK_FLAGS}
-    "-s EXPORT_NAME='${CMAKE_PROJECT_NAME}'"
-    "-s EXPORTED_FUNCTIONS=\"['_malloc']\""
-    "-s EXPORTED_RUNTIME_METHODS=\"[]\""
+    "-sEXPORT_NAME='${CMAKE_PROJECT_NAME}'"
+    "-sEXPORTED_FUNCTIONS=\"['_malloc']\""
+    "-sEXPORTED_RUNTIME_METHODS=\"[]\""
     "--post-js ${CMAKE_CURRENT_BINARY_DIR}/main_glue.js"
 )
 string(REPLACE ";" " " LINK_FLAGS "${EM_LINK_FLAGS}")

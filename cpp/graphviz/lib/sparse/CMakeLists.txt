@@ -6,7 +6,6 @@ add_library(sparse STATIC
   ${GRAPHVIZ_LIB_DIR}/sparse/colorutil.h
   ${GRAPHVIZ_LIB_DIR}/sparse/DotIO.h
   ${GRAPHVIZ_LIB_DIR}/sparse/general.h
-  ${GRAPHVIZ_LIB_DIR}/sparse/IntStack.h
   ${GRAPHVIZ_LIB_DIR}/sparse/LinkedList.h
   ${GRAPHVIZ_LIB_DIR}/sparse/mq.h
   ${GRAPHVIZ_LIB_DIR}/sparse/QuadTree.h
@@ -19,7 +18,6 @@ add_library(sparse STATIC
   ${GRAPHVIZ_LIB_DIR}/sparse/colorutil.c
   ${GRAPHVIZ_LIB_DIR}/sparse/DotIO.c
   ${GRAPHVIZ_LIB_DIR}/sparse/general.c
-  ${GRAPHVIZ_LIB_DIR}/sparse/IntStack.c
   ${GRAPHVIZ_LIB_DIR}/sparse/LinkedList.c
   ${GRAPHVIZ_LIB_DIR}/sparse/mq.c
   ${GRAPHVIZ_LIB_DIR}/sparse/QuadTree.c

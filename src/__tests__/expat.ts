@@ -48,10 +48,17 @@ class KeywordParser extends StackParser {
 
 describe("expat", function () {
     it("version", async function () {
-        const expat = await Expat.load();
-        const v = await expat.version();
+        let expat = await Expat.load();
+        let v = await expat.version();
         expect(v).to.be.a.string;
         expect(v).to.not.be.empty;
+        Expat.unload();
+
+        expat = await Expat.load();
+        v = await expat.version();
+        expect(v).to.be.a.string;
+        expect(v).to.not.be.empty;
+        Expat.unload();
     });
 
     it("simple", async function () {
