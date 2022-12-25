@@ -20,7 +20,7 @@ Built with:
 * [Homepage](https://hpcc-systems.github.io/hpcc-js-wasm/)
     * [Base91](https://hpcc-systems.github.io/hpcc-js-wasm/classes/base91.Base91.html)
     * [Expat](https://hpcc-systems.github.io/hpcc-js-wasm/classes/expat.Expat.html)
-    * [Graphviz](https://hpcc-systems.github.io/hpcc-js-wasm/classes/base91.Base91.html)
+    * [Graphviz](https://hpcc-systems.github.io/hpcc-js-wasm/classes/graphviz.Graphviz.html)
     * [Zstd](https://hpcc-systems.github.io/hpcc-js-wasm/classes/zstd.Zstd.html)
 
 ## Quick Migration Example
