@@ -4,15 +4,15 @@
 # UPDATE README.md
 VERSION=7.0.5
 
-if [ ! -d "src-graphviz" ] 
+if [ ! -d "third-party/graphviz" ] 
 then
     wget -c https://gitlab.com/graphviz/graphviz/-/archive/$VERSION/graphviz-$VERSION.tar.gz
-    mkdir ./src-graphviz
-    tar -xzf ./graphviz-$VERSION.tar.gz -C ./src-graphviz --strip-components=1
+    mkdir -p ./third-party/graphviz
+    tar -xzf ./graphviz-$VERSION.tar.gz -C ./third-party/graphviz --strip-components=1
     rm ./graphviz-$VERSION.tar.gz
 
     #  Generate grammar files (and others)  ---
-    cd ./src-graphviz
+    cd ./third-party/graphviz
     mkdir ./build
     cd ./build
     cmake .. -Dwith_gvedit=OFF

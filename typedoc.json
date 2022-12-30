@@ -1,10 +1,10 @@
 {
     "entryPoints": [
-        "./src/base91.ts",
-        "./src/expat.ts",
-        "./src/graphviz.ts",
-        "./src/wasm-library.ts",
-        "./src/zstd.ts",
+        "./src-ts/base91.ts",
+        "./src-ts/expat.ts",
+        "./src-ts/graphviz.ts",
+        "./src-ts/wasm-library.ts",
+        "./src-ts/zstd.ts",
     ],
     "out": "./docs",
     "readme": "none",

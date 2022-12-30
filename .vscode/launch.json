@@ -95,12 +95,12 @@
         },
         {
             "name": "CLI",
-            "program": "${workspaceFolder}/bin/dot-wasm.mjs",
+            "program": "${workspaceFolder}/bin/dot-wasm.js",
             "request": "launch",
             "args": [
                 "-K neato",
                 "-n 2",
-                "./src/__tests__/simple.dot"
+                "./src-ts/__tests__/simple.dot"
             ],
             "skipFiles": [
                 "<node_internals>/**"
@@ -109,7 +109,7 @@
         },
         {
             "name": "CLI Version",
-            "program": "${workspaceFolder}/bin/dot-wasm.mjs",
+            "program": "${workspaceFolder}/bin/dot-wasm.js",
             "request": "launch",
             "args": [
                 "-v"

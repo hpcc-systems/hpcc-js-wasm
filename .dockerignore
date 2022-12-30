@@ -8,7 +8,7 @@ docker/
 emsdk/
 lib-*/
 node_modules/
-src-graphviz/
+third-party/graphviz/
 types/
 vcpkg/
 *.tsbuildinfo

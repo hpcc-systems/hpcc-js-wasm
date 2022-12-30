@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "rootDir": "./src",
+        "rootDir": "src-ts",
         "outDir": "./lib-esm",
         "declarationDir": "./types",
         "composite": true,
@@ -21,7 +21,7 @@
     ],
     "types": [],
     "include": [
-        "./src/**/*"
+        "src-ts/**/*"
     ],
     "references": []
 }
