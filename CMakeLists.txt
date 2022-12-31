@@ -7,7 +7,7 @@ set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE ${REPO_DIR}/emsdk/upstream/emscripten/cmake/M
 set(VCPKG_ROOT ${REPO_DIR}/vcpkg)
 set(VCPKG_OVERLAY_PORTS ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg-overlays)
 set(VCPKG_TARGET_TRIPLET "wasm32-emscripten")
-file(REMOVE ${REPO_DIR}/vcpkg/vcpkg)
+# file(REMOVE ${REPO_DIR}/vcpkg/vcpkg)
 
 project(cpp)
 
@@ -34,8 +34,8 @@ set(EM_LINK_FLAGS
     "-sSTANDALONE_WASM=0"
     "-sBINARYEN_ASYNC_COMPILATION=1"
     # "-sDYNAMIC_EXECUTION=0"
-    "--pre-js ${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/pre.js"
-    "--post-js ${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/post.js"
+    "--pre-js ${CMAKE_CURRENT_SOURCE_DIR}/src-cpp/src/pre.js"
+    "--post-js ${CMAKE_CURRENT_SOURCE_DIR}/src-cpp/src/post.js"
 )
 
 
@@ -68,7 +68,7 @@ endif ()
 
 set(EMSDK_DIR "${CMAKE_SOURCE_DIR}/emsdk")
 set(EXPAT_DIR "${CMAKE_SOURCE_DIR}/src-expat/expat")
-set(GRAPHVIZ_DIR "${CMAKE_SOURCE_DIR}/src-graphviz")
+set(GRAPHVIZ_DIR "${CMAKE_SOURCE_DIR}/third-party/graphviz")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -89,4 +89,4 @@ function(packWasm targetID)
     add_dependencies(sfx-${targetID} ${targetID} base91lib zstdlib)
 endfunction ()
 
-add_subdirectory(cpp)
+add_subdirectory(src-cpp)

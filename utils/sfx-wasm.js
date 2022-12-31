@@ -2,8 +2,8 @@ import { readFile } from "fs/promises";
 import fs from "fs";
 import yargs from "yargs";
 import { hideBin } from 'yargs/helpers'
-import zstdlib from "../build/cpp/zstd/zstdlib.js";
-import base91lib from "../build/cpp/base91/base91lib.js";
+import zstdlib from "../build/src-cpp/zstd/zstdlib.js";
+import base91lib from "../build/src-cpp/base91/base91lib.js";
 
 export async function doFetch(wasmUrl) {
     return readFile(wasmUrl);
@@ -75,7 +75,7 @@ export class Base91 extends WasmLibrary {
 
     static load() {
         if (!g_base91) {
-            g_base91 = loadWasm(base91lib, "./build/cpp/base91/base91lib.wasm").then(module => {
+            g_base91 = loadWasm(base91lib, "./build/src-cpp/base91/base91lib.wasm").then(module => {
                 return new Base91(module)
             });
         }
@@ -128,7 +128,7 @@ export class Zstd extends WasmLibrary {
 
     static load() {
         if (!g_zstd) {
-            g_zstd = loadWasm(zstdlib, "./build/cpp/zstd/zstdlib.wasm").then(module => {
+            g_zstd = loadWasm(zstdlib, "./build/src-cpp/zstd/zstdlib.wasm").then(module => {
                 return new Zstd(module)
             });
         }
@@ -221,16 +221,16 @@ try {
     switch (path) {
         case "base91lib.wasm":
         case "base91lib.wasm.map":
-            return scriptDirectory + "../build/cpp/base91/" + path
+            return scriptDirectory + "../build/src-cpp/base91/" + path
         case "expatlib.wasm":
         case "expatlib.wasm.map":
-            return scriptDirectory + "../build/cpp/expat/expatlib/" + path
+            return scriptDirectory + "../build/src-cpp/expat/expatlib/" + path
         case "graphvizlib.wasm":
         case "graphvizlib.wasm.map":
-            return scriptDirectory + "../build/cpp/graphviz/graphvizlib/" + path
+            return scriptDirectory + "../build/src-cpp/graphviz/graphvizlib/" + path
         case "zstdlib.wasm":
         case "zstdlib.wasm.map":
-            return scriptDirectory + "../build/cpp/zstd/" + path
+            return scriptDirectory + "../build/src-cpp/zstd/" + path
     }
     return scriptDirectory + path;
 }

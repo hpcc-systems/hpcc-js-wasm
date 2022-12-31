@@ -19,7 +19,7 @@ RUN apt-get install -y gcc-multilib g++-multilib pkg-config autoconf bison libto
 RUN apt-get install -y python3 python3-pip
 
 # Set the working directory
-WORKDIR /usr/src/app
+WORKDIR /usr/src-ts/app
 
 COPY ./cpp ./cpp
 COPY ./src ./src
