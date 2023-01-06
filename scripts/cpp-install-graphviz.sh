@@ -2,7 +2,7 @@
 
 # List of current vertsion can be found in https://gitlab.com/graphviz/graphviz/-/tags  ---
 # UPDATE README.md
-VERSION=7.0.5
+VERSION=7.0.6
 
 if [ ! -d "third-party/graphviz" ] 
 then

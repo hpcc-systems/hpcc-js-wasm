@@ -6,7 +6,6 @@ add_library(sfdpgen STATIC
   # Header files
   ${GRAPHVIZ_LIB_DIR}/sfdpgen/Multilevel.h
   ${GRAPHVIZ_LIB_DIR}/sfdpgen/post_process.h
-  ${GRAPHVIZ_LIB_DIR}/sfdpgen/PriorityQueue.h
   ${GRAPHVIZ_LIB_DIR}/sfdpgen/sfdp.h
   ${GRAPHVIZ_LIB_DIR}/sfdpgen/sfdpinternal.h
   ${GRAPHVIZ_LIB_DIR}/sfdpgen/sparse_solve.h
@@ -17,7 +16,6 @@ add_library(sfdpgen STATIC
   # Source files
   ${GRAPHVIZ_LIB_DIR}/sfdpgen/Multilevel.c
   ${GRAPHVIZ_LIB_DIR}/sfdpgen/post_process.c
-  ${GRAPHVIZ_LIB_DIR}/sfdpgen/PriorityQueue.c
   ${GRAPHVIZ_LIB_DIR}/sfdpgen/sfdpinit.c
   ${GRAPHVIZ_LIB_DIR}/sfdpgen/sparse_solve.c
   ${GRAPHVIZ_LIB_DIR}/sfdpgen/spring_electrical.c

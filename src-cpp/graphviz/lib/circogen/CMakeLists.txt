@@ -8,7 +8,6 @@ add_library(circogen STATIC
   ${GRAPHVIZ_LIB_DIR}/circogen/circo.h
   ${GRAPHVIZ_LIB_DIR}/circogen/circpos.h
   ${GRAPHVIZ_LIB_DIR}/circogen/circular.h
-  ${GRAPHVIZ_LIB_DIR}/circogen/deglist.h
   ${GRAPHVIZ_LIB_DIR}/circogen/edgelist.h
   ${GRAPHVIZ_LIB_DIR}/circogen/nodelist.h
 
@@ -19,7 +18,6 @@ add_library(circogen STATIC
   ${GRAPHVIZ_LIB_DIR}/circogen/circpos.c
   ${GRAPHVIZ_LIB_DIR}/circogen/circular.c
   ${GRAPHVIZ_LIB_DIR}/circogen/circularinit.c
-  ${GRAPHVIZ_LIB_DIR}/circogen/deglist.c
   ${GRAPHVIZ_LIB_DIR}/circogen/edgelist.c
   ${GRAPHVIZ_LIB_DIR}/circogen/nodelist.c
 )
