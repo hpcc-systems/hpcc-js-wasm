@@ -1,9 +1,9 @@
 #include "main.hpp"
 
-#include "../config.h"
 #include <gvc.h>
-#include <globals.h>
-#include <gvc/gvplugin.h>
+// #include <globals.h>
+#include <gvplugin.h>
+#include <graphviz_version.h>
 // #include <cgraph++/AGraph.h>
 // #include <gvc++/GVContext.h>
 // #include <gvc++/GVLayout.h>
@@ -47,7 +47,9 @@ int vizErrorf(char *buf)
     return 0;
 }
 
+extern int Y_invert;
 int origYInvert = Y_invert;
+extern int Nop;
 int origNop = Nop;
 
 const char *Graphviz::version()

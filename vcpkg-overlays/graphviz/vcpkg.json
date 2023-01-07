@@ -1,0 +1,18 @@
+{
+  "name": "graphviz",
+  "version-semver": "7.0.6",
+  "port-version": 1,
+  "homepage": "https://graphviz.org/",
+  "description": "Graphviz is open source graph visualization software. Graph visualization is a way of representing structural information as diagrams of abstract graphs and networks. It has important applications in networking, bioinformatics, software engineering, database and web design, machine learning, and in visual interfaces for other technical domains.",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    },
+    "zlib"
+  ]
+}
