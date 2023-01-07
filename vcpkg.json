@@ -5,6 +5,7 @@
     "dependencies": [
         "base91",
         "expat",
+        "graphviz",
         "triangle",
         "zstd"
     ]
