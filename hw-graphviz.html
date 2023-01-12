@@ -10,7 +10,7 @@
     <div id="placeholder"></div>
     <script type="module">
         //  Prefer local version (if available)  ---
-        import { Graphviz as GraphvizLocal } from "./dist/index.js";
+        const GraphvizLocal = await import("./dist/index.js").then(m => m.Graphviz).catch(() => undefined);
         import { Graphviz as GraphvizExternal } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js";
 
         const Graphviz = GraphvizLocal ?? GraphvizExternal;
