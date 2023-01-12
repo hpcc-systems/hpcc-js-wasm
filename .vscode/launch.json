@@ -5,19 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "sfx-wasm",
-            "request": "launch",
-            "runtimeArgs": [
-                "run-script",
-                "gen-sfx-graphviz"
-            ],
-            "runtimeExecutable": "npm",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "type": "node"
-        },
-        {
             "name": "index.html",
             "type": "msedge",
             "request": "launch",
@@ -53,6 +40,19 @@
             "request": "launch",
             "url": "http://localhost:8000/hw-base91.html",
             "webRoot": "${workspaceRoot}"
+        },
+        {
+            "name": "sfx-wasm",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "gen-sfx-graphviz"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
         },
         {
             "name": "test-browser",

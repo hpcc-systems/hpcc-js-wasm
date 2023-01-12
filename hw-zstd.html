@@ -9,8 +9,11 @@
 <body>
     <div id="placeholder"></div>
     <script type="module">
-        import { Zstd } from "./dist/index.es6.js";
-        //import { Zstd } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.es6.js";
+        //  Prefer local version (if available)  ---
+        import { Zstd as ZstdLocal } from "./dist/index.js";
+        import { Zstd as ZstdExternal } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js";
+
+        const Zstd = ZstdLocal ?? ZstdExternal;
 
         const zstd = await Zstd.load();
         const data = new Uint8Array(Array.from({ length: 100000 }, (_, i) => i % 256));
