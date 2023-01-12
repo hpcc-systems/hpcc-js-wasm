@@ -10,7 +10,7 @@
     <div id="placeholder"></div>
     <script type="module">
         //  Prefer local version (if available)  ---
-        import { Base91 as Base91Local } from "./dist/index.js";
+        const Base91Local = await import("./dist/index.js").then(m => m.Base91).catch(() => undefined);
         import { Base91 as Base91External } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js";
 
         const Base91 = Base91Local ?? Base91External;

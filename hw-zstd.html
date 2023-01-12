@@ -10,7 +10,7 @@
     <div id="placeholder"></div>
     <script type="module">
         //  Prefer local version (if available)  ---
-        import { Zstd as ZstdLocal } from "./dist/index.js";
+        const ZstdLocal = await import("./dist/index.js").then(m => m.Zstd).catch(() => undefined);
         import { Zstd as ZstdExternal } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js";
 
         const Zstd = ZstdLocal ?? ZstdExternal;
