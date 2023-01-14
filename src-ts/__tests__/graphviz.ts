@@ -252,3 +252,60 @@ describe("options", async function () {
         expect(plain1).to.not.equal(plain5);
     });
 });
+
+const stripWhitespaces = str => str.replace(/[\r\n\t\s]+/g, "");
+
+describe("unflatten", async function () {
+    it("simple", async function () {
+        Graphviz.unload();
+        const graphviz = await Graphviz.load();
+        const dot = `\
+graph {
+    a -- 1;
+    a -- 2;
+    a -- 3;
+    a -- 4;
+    b;
+    c;
+    d;
+    e;
+}`;
+        let after = graphviz.unflatten(dot, 2, false, 1);
+        expect(stripWhitespaces(after)).to.equal(stripWhitespaces(`\
+graph {
+    a -- 1	[minlen=1];
+    a -- 2	[minlen=2];
+    a -- 3	[minlen=1];
+    a -- 4	[minlen=2];
+    b -- c	[style=invis];
+    d -- e	[style=invis];
+}`));
+        after = graphviz.unflatten(dot, 2, true, 1);
+        expect(stripWhitespaces(after)).to.equal(stripWhitespaces(`\
+graph {
+    a -- 1  [minlen=1];
+    a -- 2  [minlen=2];
+    a -- 3  [minlen=1];
+    a -- 4  [minlen=2];
+    b -- c  [style=invis];
+    d -- e  [style=invis];
+}`));
+    });
+
+    it("empty", async function () {
+        const graphviz = await Graphviz.load();
+        const after = graphviz.unflatten("", 2, false, 1);
+        expect(after).to.equal("");
+    });
+
+    it("syntax error", async function () {
+        const graphviz = await Graphviz.load();
+        try {
+            const xxx = graphviz.dot(badDot, "svg");
+            expect(true, xxx).to.be.false;
+        } catch (e: any) {
+            expect(typeof e.message).to.equal("string");
+            expect(e.message).to.contain("syntax error in line");
+        }
+    });
+});

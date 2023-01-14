@@ -4,6 +4,7 @@
 // #include <globals.h>
 #include <gvplugin.h>
 #include <graphviz_version.h>
+#include <fstream>
 // #include <cgraph++/AGraph.h>
 // #include <gvc++/GVContext.h>
 // #include <gvc++/GVLayout.h>
@@ -133,6 +134,133 @@ const char *Graphviz::layout(const char *src, const char *format, const char *en
     gvFinalize(gvc);
     gvFreeContext(gvc);
 
+    return m_result.c_str();
+}
+
+int myindegree(Agnode_t *n)
+{
+    return agdegree(n->root, n, TRUE, FALSE);
+}
+
+/* need outdegree without selfarcs */
+int myoutdegree(Agnode_t *n)
+{
+    Agedge_t *e;
+    int rv = 0;
+
+    for (e = agfstout(n->root, n); e; e = agnxtout(n->root, e))
+    {
+        if (agtail(e) != aghead(e))
+            rv++;
+    }
+    return rv;
+}
+
+bool isleaf(Agnode_t *n)
+{
+    return myindegree(n) + myoutdegree(n) == 1;
+}
+
+bool ischainnode(Agnode_t *n)
+{
+    return myindegree(n) == 1 && myoutdegree(n) == 1;
+}
+
+void adjustlen(Agedge_t *e, Agsym_t *sym, int newlen)
+{
+    char buf[12];
+
+    snprintf(buf, sizeof(buf), "%d", newlen);
+    agxset(e, sym, buf);
+}
+
+Agsym_t *bindedgeattr(Agraph_t *g, const char *str)
+{
+    return agattr(g, AGEDGE, const_cast<char *>(str), "");
+}
+
+const char *Graphviz::unflatten(const char *src, unsigned int MaxMinlen, bool Do_fans, unsigned int ChainLimit)
+{
+    lastErrorStr[0] = '\0';
+    m_result = "";
+    Agraph_t *g = agmemread(src);
+    if (g)
+    {
+
+        Agnode_t *ChainNode;
+        unsigned int ChainSize = 0;
+
+        Agnode_t *n;
+        Agedge_t *e;
+        char *str;
+        Agsym_t *m_ix, *s_ix;
+        int cnt, d;
+
+        m_ix = bindedgeattr(g, "minlen");
+        s_ix = bindedgeattr(g, "style");
+
+        for (n = agfstnode(g); n; n = agnxtnode(g, n))
+        {
+            d = myindegree(n) + myoutdegree(n);
+            if (d == 0)
+            {
+                if (ChainLimit < 1)
+                    continue;
+                if (ChainNode)
+                {
+                    e = agedge(g, ChainNode, n, const_cast<char *>(""), TRUE);
+                    agxset(e, s_ix, "invis");
+                    ChainSize++;
+                    if (ChainSize < ChainLimit)
+                        ChainNode = n;
+                    else
+                    {
+                        ChainNode = NULL;
+                        ChainSize = 0;
+                    }
+                }
+                else
+                    ChainNode = n;
+            }
+            else if (d > 1)
+            {
+                if (MaxMinlen < 1)
+                    continue;
+                cnt = 0;
+                for (e = agfstin(g, n); e; e = agnxtin(g, e))
+                {
+                    if (isleaf(agtail(e)))
+                    {
+                        str = agxget(e, m_ix);
+                        if (str[0] == 0)
+                        {
+                            adjustlen(e, m_ix, cnt % MaxMinlen + 1);
+                            cnt++;
+                        }
+                    }
+                }
+
+                cnt = 0;
+                for (e = agfstout(g, n); e; e = agnxtout(g, e))
+                {
+                    if (isleaf(e->node) || (Do_fans && ischainnode(e->node)))
+                    {
+                        str = agxget(e, m_ix);
+                        if (str[0] == 0)
+                            adjustlen(e, m_ix, cnt % MaxMinlen + 1);
+                        cnt++;
+                    }
+                }
+            }
+        }
+        FILE *fp = fopen("tmp.dot", "w");
+        agwrite(g, fp);
+        fclose(fp);
+        std::ifstream file("tmp.dot");
+        std::string graph_str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+        remove("tmp.dot");
+        m_result = graph_str;
+    }
     return m_result.c_str();
 }
 
