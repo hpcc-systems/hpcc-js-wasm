@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.6.0...v2.7.0) (2023-01-15)
+
+
+### Features
+
+*  Add unflatten method ([2844a16](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2844a16a21f74fa789ec086d849a01a77bd59fb2)), closes [#149](https://github.com/hpcc-systems/hpcc-js-wasm/issues/149)
+
+
+### Bug Fixes
+
+*  Convert local import to be dynamic ([af11237](https://github.com/hpcc-systems/hpcc-js-wasm/commit/af112372546e8ae13502cbe6311f895d42552ef0))
+*  Update test/demo pages to work with es6 ([70e0528](https://github.com/hpcc-systems/hpcc-js-wasm/commit/70e0528d3b4412b78e320d511859f5c655a4030d)), closes [#146](https://github.com/hpcc-systems/hpcc-js-wasm/issues/146)
+
 ## [2.6.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.5.0...v2.6.0) (2023-01-06)
 
 
