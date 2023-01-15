@@ -149,6 +149,39 @@ export class Graphviz {
             this._module.destroy(graphViz);
         }
         if (!retVal && errorMsg) {
+            Graphviz.unload();
+            throw new Error(errorMsg);
+        }
+        return retVal;
+    }
+
+    /**
+     * unflatten is a preprocessor to dot that is used to improve the aspect ratio of graphs having many leaves or disconnected nodes. The usual layout for such a graph is generally very wide or tall. unflatten inserts invisible edges or adjusts the minlen on edges to improve layout compaction.
+     * 
+     * @param dotSource Required - graph definition in [DOT](https://graphviz.gitlab.io/doc/info/lang.html) language
+     * @param l The minimum length of leaf edges is staggered between 1 and len (a small integer).
+     * @param f Enables the staggering of the -l option to fanout nodes whose indegree and outdegree are both 1.  This helps with structures such as a -> {w x y \} -> b. This option only works if the -l flag is set.
+     * @param c Form disconnected nodes into chains of up to len nodes.
+     * @returns A string containing the "unflattened" dotSource.
+     */
+
+    unflatten(dotSource: string, l: number = 0, f: boolean = false, c: number = 0): string {
+        if (!dotSource) return "";
+        const graphViz = new this._module.Graphviz();
+        let retVal = "";
+        let errorMsg = "";
+        try {
+            try {
+                retVal = graphViz.unflatten(dotSource, l, f, c);
+            } catch (e: any) {
+                errorMsg = e.message;
+            };
+            errorMsg = graphViz.lastError() || errorMsg;
+        } finally {
+            this._module.destroy(graphViz);
+        }
+        if (!retVal && errorMsg) {
+            Graphviz.unload();
             throw new Error(errorMsg);
         }
         return retVal;

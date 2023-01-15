@@ -15,4 +15,5 @@ public:
     void createFile(const char *path, const char *data);
     const char *lastResult();
     const char *layout(const char *dot, const char *format, const char *engine);
+    const char *unflatten(const char *dot, unsigned int MaxMinlen = 0, bool Do_fans = false, unsigned int ChainLimit = 0);
 };

@@ -6,4 +6,5 @@ interface Graphviz
   void createFile([Const] DOMString file, [Const] DOMString data);
   [Const] DOMString lastResult();
   [Const] DOMString layout([Const] DOMString dot, [Const] DOMString format, [Const] DOMString engine);
+  [Const] DOMString unflatten([Const] DOMString dot, long MaxMinlen, boolean Do_fans, long ChainLimit);
 };
