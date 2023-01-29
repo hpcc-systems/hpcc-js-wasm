@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.8.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.7.0...v2.8.0) (2023-01-29)
+
+
+### Features
+
+*  GraphViz 7.1.0 ([2b4d9df](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2b4d9dff9344263e47200464ec25f84926ca8439))
+
 ## [2.7.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.6.0...v2.7.0) (2023-01-15)
 
 
