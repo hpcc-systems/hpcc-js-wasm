@@ -160,7 +160,7 @@ export class Graphviz {
      * 
      * @param dotSource Required - graph definition in [DOT](https://graphviz.gitlab.io/doc/info/lang.html) language
      * @param l The minimum length of leaf edges is staggered between 1 and len (a small integer).
-     * @param f Enables the staggering of the -l option to fanout nodes whose indegree and outdegree are both 1.  This helps with structures such as a -> {w x y \} -> b. This option only works if the -l flag is set.
+     * @param f Enables the staggering of the -l option to fanout nodes whose indegree and outdegree are both 1.  This helps with structures such as a -> \{w x y \} -> b. This option only works if the -l flag is set.
      * @param c Form disconnected nodes into chains of up to len nodes.
      * @returns A string containing the "unflattened" dotSource.
      */

@@ -5,7 +5,7 @@
 # ./vcpkg/packages/expat/CONTROL
 # ./vcpkg/packages/zstd/CONTROL
 # UPDATE README.md
-VERSION=2022.11.14
+VERSION=2023.01.09
 
 if [ ! -d "./vcpkg" ] 
 then
