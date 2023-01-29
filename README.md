@@ -13,7 +13,7 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 - ...more to follow...
 
 Built with:
-- [emsdk](https://github.com/emscripten-core/emsdk) - v3.1.29
+- [emsdk](https://github.com/emscripten-core/emsdk) - v3.1.31
 
 ## Homepage and Documents
 
