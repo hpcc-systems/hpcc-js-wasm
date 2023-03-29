@@ -21,8 +21,8 @@ RUN apt-get install -y python3 python3-pip
 # Set the working directory
 WORKDIR /usr/src-ts/app
 
-COPY ./cpp ./cpp
-COPY ./src ./src
+COPY ./src-cpp ./src-cpp
+COPY ./src-ts ./src-ts
 COPY ./utils ./utils
 COPY ./*.* .
 
@@ -37,8 +37,6 @@ RUN ./scripts/cpp-install-vcpkg.sh
 RUN ./vcpkg/bootstrap-vcpkg.sh
 RUN ./vcpkg/vcpkg install --overlay-ports=./vcpkg-overlays
 
-RUN ./scripts/cpp-install-graphviz.sh
-
 RUN npm run build
 
-ENTRYPOINT ["npm", "run", "build"]
+ENTRYPOINT ["npm", "run", "test-node"]
