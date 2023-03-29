@@ -1,3 +1,5 @@
 {
-    "cmake.cmakePath": "${workspaceFolder}/scripts/cmake.sh"
+    "cmake.cmakePath": "${workspaceFolder}/scripts/cmake.sh",
+    "ecl.launchConfiguration": "not found",
+    "ecl.targetCluster": {}
 }
