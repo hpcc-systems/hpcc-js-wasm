@@ -39,4 +39,6 @@ RUN ./vcpkg/vcpkg install --overlay-ports=./vcpkg-overlays
 
 RUN npm run build
 
-ENTRYPOINT ["npm", "run", "test-node"]
+ENTRYPOINT ["/bin/sh", "-c"]
+
+CMD ["npm", "run", "test-node"]
