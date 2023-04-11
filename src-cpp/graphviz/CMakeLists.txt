@@ -17,7 +17,7 @@ set(EM_LINK_FLAGS
     "-sFILESYSTEM=1"
     "-sEXPORT_NAME='${CMAKE_PROJECT_NAME}'"
     "-sEXPORTED_FUNCTIONS=\"['_free', '_malloc']\""
-    "-sEXPORTED_RUNTIME_METHODS=\"[]\""
+    "-sEXPORTED_RUNTIME_METHODS=\"[UTF8ToString]\""
     "--post-js ${CMAKE_CURRENT_BINARY_DIR}/main_glue.js"
 )
 string(REPLACE ";" " " LINK_FLAGS "${EM_LINK_FLAGS}")

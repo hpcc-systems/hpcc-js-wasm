@@ -1,11 +1,8 @@
 #!/bin/bash
 
 # List of current vertsion can be found in https://github.com/microsoft/vcpkg/releases  ---
-# ./vcpkg/packages/base91_wasm32-emscripten/CONTROL
-# ./vcpkg/packages/expat/CONTROL
-# ./vcpkg/packages/zstd/CONTROL
 # UPDATE README.md
-VERSION=2023.01.09
+VERSION=2023.02.24
 
 if [ ! -d "./vcpkg" ] 
 then
