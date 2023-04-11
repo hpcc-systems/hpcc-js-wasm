@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.10.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.9.0...v2.10.0) (2023-04-11)
+
+
+### Features
+
+*  Bump Versions ([88a6aed](https://github.com/hpcc-systems/hpcc-js-wasm/commit/88a6aed30d2895b7d6cf9091454fa9ea6b8d8b49))
+
+
+### Bug Fixes
+
+*  Update docker build ([25e7410](https://github.com/hpcc-systems/hpcc-js-wasm/commit/25e7410ced8285e917128086d41ad685811b5e15))
+
 ## [2.9.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.8.0...v2.9.0) (2023-03-29)
 
 
