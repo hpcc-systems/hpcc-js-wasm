@@ -20,6 +20,7 @@
 /src-ts/*.wasm.ts
 /tmp
 /types
+/wasi-sdk*
 /vcpkg
 .coveralls.yml
 *.tsbuildinfo
