@@ -2,7 +2,7 @@
 
 # List of current vertsion can be found in https://github.com/microsoft/vcpkg/releases  ---
 # UPDATE README.md
-VERSION=2023.02.24
+VERSION=2023.04.15
 
 if [ ! -d "./vcpkg" ] 
 then
