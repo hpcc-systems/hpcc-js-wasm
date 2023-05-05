@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.13.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.12.0...v2.13.0) (2023-05-05)
+
+
+### Features
+
+*  Bump Versions ([081c69f](https://github.com/hpcc-systems/hpcc-js-wasm/commit/081c69fd271c785fcb1004692234a5ee3ef5eced))
+
 ## [2.12.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.11.0...v2.12.0) (2023-04-22)
 
 
