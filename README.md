@@ -53,7 +53,7 @@ console.log(graphviz.version());
 ```
 
 Notes:
-* Import must specify which wasm library your using
+* Import must specify which wasm library you are using
 * wasmFolder is no longer needed
 * All wasm libraries have the same asynchronous load pattern
     - `const instance = await Wasm.load();`
