@@ -6,6 +6,7 @@
 /coverage
 /dist
 /dist-test
+/docs/.vitepress/cache
 /docs/.vitepress/dist
 /docs/classes
 /docs/interfaces
