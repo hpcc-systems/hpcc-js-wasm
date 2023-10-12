@@ -130,7 +130,7 @@
     "@types/yargs": "17.0.28",
     "@typescript-eslint/eslint-plugin": "6.7.5",
     "@typescript-eslint/parser": "6.7.5",
-    "assemblyscript": "0.27.12",
+    "assemblyscript": "0.27.13",
     "chai": "4.3.10",
     "coveralls": "3.1.1",
     "eslint": "8.51.0",
