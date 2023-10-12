@@ -154,7 +154,7 @@
     "typedoc": "0.25.2",
     "typedoc-plugin-markdown": "3.16.0",
     "typescript": "5.2.2",
-    "vitepress": "1.0.0-rc.20"
+    "vitepress": "1.0.0-rc.21"
   },
   "repository": {
     "type": "git",
