@@ -1,0 +1,29 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "[actions]"
+
+  - package-ecosystem: "gitsubmodule"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "[submodule]"
+
+  - package-ecosystem: "docker"
+    directory: "/docker"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "[docker]"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "[npm]"
