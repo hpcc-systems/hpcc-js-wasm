@@ -124,7 +124,7 @@
     "@rollup/plugin-node-resolve": "15.2.3",
     "@rollup/plugin-terser": "0.4.4",
     "@types/chai": "4.3.8",
-    "@types/emscripten": "1.39.8",
+    "@types/emscripten": "1.39.9",
     "@types/mocha": "10.0.3",
     "@types/node": "20.8.6",
     "@types/yargs": "17.0.28",
