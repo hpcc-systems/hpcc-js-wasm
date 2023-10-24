@@ -133,7 +133,7 @@
     "assemblyscript": "0.27.14",
     "chai": "4.3.10",
     "coveralls": "3.1.1",
-    "eslint": "8.51.0",
+    "eslint": "8.52.0",
     "fzstd": "0.1.0",
     "karma": "6.4.2",
     "karma-chai": "0.1.0",
