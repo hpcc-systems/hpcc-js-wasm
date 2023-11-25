@@ -9,7 +9,7 @@ export type Format = "svg" | "dot" | "json" | "dot_json" | "xdot_json" | "plain"
 /**
  * Various algorithms for projecting abstract graphs into a space for visualization.  See [Layout Engines](https://graphviz.gitlab.io/docs/layouts/) for more details.
  */
-export type Engine = "circo" | "dot" | "fdp" | "sfdp" | "neato" | "osage" | "patchwork" | "twopi";
+export type Engine = "circo" | "dot" | "fdp" | "sfdp" | "neato" | "osage" | "patchwork" | "twopi" | "nop" | "nop2";
 
 /**
  * Example:  Passing a web hosted Image to GraphViz:
@@ -281,5 +281,25 @@ export class Graphviz {
      */
     twopi(dotSource: string, outputFormat: Format = "svg", options?: Options): string {
         return this.layout(dotSource, outputFormat, "twopi", options);
+    }
+
+    /**
+     * Convenience function that performs the **nop** layout, is equivalent to `layout(dotSource, "dot", "nop");`.
+     * 
+     * @param dotSource Required - graph definition in [DOT](https://graphviz.gitlab.io/doc/info/lang.html) language
+     * @returns A string containing the "pretty printed" dotSource.
+     */
+    nop(dotSource: string): string {
+        return this.layout(dotSource, "dot", "nop");
+    }
+
+    /**
+     * Convenience function that performs the **nop2** layout, is equivalent to `layout(dotSource, "dot", "nop2");`.
+     * 
+     * @param dotSource Required - graph definition in [DOT](https://graphviz.gitlab.io/doc/info/lang.html) language
+     * @returns A string containing the "pretty printed" dotSource.
+     */
+    nop2(dotSource: string): string {
+        return this.layout(dotSource, "dot", "nop2");
     }
 }

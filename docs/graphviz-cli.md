@@ -17,7 +17,7 @@ Usage: dot-wasm [options] fileOrDot
 Options:
       --version      Show version number                               [boolean]
   -K, --layout       Set layout engine (circo | dot | fdp | sfdp | neato | osage
-                     | patchwork | twopi). By default, dot is used.
+                     | patchwork | twopi | nop | nop2). By default, dot is used.
   -T, --format       Set output language to one of the supported formats (svg,
                      dot, json, dot_json, xdot_json, plain, plain-ext). By
                      default, svg is produced.

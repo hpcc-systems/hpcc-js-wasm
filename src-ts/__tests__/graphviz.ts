@@ -5,7 +5,7 @@ import { ortho } from "./dot002.js";
 import { dotMemory } from "./dot003.js";
 
 export const formats: Format[] = ["svg", "dot", "json", "dot_json", "xdot_json", "plain", "plain-ext"];
-export const engines: Engine[] = ["circo", "dot", "fdp", "sfdp", "neato", "osage", "patchwork", "twopi"];
+export const engines: Engine[] = ["circo", "dot", "fdp", "sfdp", "neato", "osage", "patchwork", "twopi", "nop", "nop2"];
 
 describe("all combos", function () {
     it("layout optionals", async function () {
@@ -183,6 +183,36 @@ describe("graphviz", function () {
             }
             Graphviz.unload();
         }
+    });
+
+    it("nop", async function () {
+        const graphviz = await Graphviz.load();
+        const dot = "digraph { a -> b; c->d; }";
+        const prettyDot = graphviz.nop(dot);
+        expect(prettyDot).to.be.not.empty;
+        expect(prettyDot).to.not.equal(dot);
+
+        //  Do layout to "syntax check"  ---
+        const out1 = graphviz.dot(dot, "plain");
+        expect(out1).to.not.be.empty;
+        const out2 = graphviz.dot(prettyDot, "plain");
+        expect(out2).to.not.be.empty;
+        expect(out1).to.equal(out2);
+    });
+
+    it("nop2", async function () {
+        const graphviz = await Graphviz.load();
+        const dot = "digraph { a -> b; c->d; }";
+        const prettyDot = graphviz.nop2(dot);
+        expect(prettyDot).to.be.not.empty;
+        expect(prettyDot).to.not.equal(dot);
+
+        //  Do layout to "syntax check"  ---
+        const out1 = graphviz.dot(dot, "plain");
+        expect(out1).to.not.be.empty;
+        const out2 = graphviz.dot(prettyDot, "plain");
+        expect(out2).to.not.be.empty;
+        expect(out1).to.equal(out2);
     });
 });
 
