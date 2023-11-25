@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.15.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.14.1...v2.15.0) (2023-11-25)
+
+
+### Features
+
+*  Add nop and nop2 layout options ([f71c4f1](https://github.com/hpcc-systems/hpcc-js-wasm/commit/f71c4f121105a872a02129c6d9c8d63f5d23317f))
+
+
+### Bug Fixes
+
+*  Limit dependabot.yml to only bump security issues ([b41a764](https://github.com/hpcc-systems/hpcc-js-wasm/commit/b41a764f8027e976d76ad7ba84003697929ba52c))
+*  Site generation was failing ([c64cd0f](https://github.com/hpcc-systems/hpcc-js-wasm/commit/c64cd0f714d5cab69dd90a829eb59b74333363fd))
+
 ### [2.14.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.14.0...v2.14.1) (2023-10-12)
 
 ## [2.14.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.13.1...v2.14.0) (2023-09-13)
