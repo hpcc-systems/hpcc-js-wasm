@@ -10,7 +10,7 @@ myYargs
     .example("dot-wasm -K neato -T xdot ./input.dot", "Execute NEATO layout and outputs XDOT format.")
     .alias("K", "layout")
     .nargs("K", 1)
-    .describe("K", "Set layout engine (circo | dot | fdp | sfdp | neato | osage | patchwork | twopi). By default, dot is used.")
+    .describe("K", "Set layout engine (circo | dot | fdp | sfdp | neato | osage | patchwork | twopi | nop | nop2). By default, dot is used.")
     .alias("T", "format")
     .nargs("T", 1)
     .describe("T", "Set output language to one of the supported formats (svg | dot | json | dot_json | xdot_json | plain | plain-ext). By default, svg is produced.")
