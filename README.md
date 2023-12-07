@@ -41,7 +41,7 @@ graphviz.dot(dot).then(svg => {
 graphvizVersion.then(version => console.log(version));
 ```
 
-v2.x.x
+v2.x.x - ESM (Modern ECMAScript Modules)
 ```ts
 import { Graphviz } from "@hpcc-js/wasm/graphviz";
 
@@ -52,16 +52,19 @@ const svg = graphviz.dot(dot);
 console.log(graphviz.version());
 ```
 
+v2.x.x - CommonJS
+```ts
+const { Graphviz } = require("@hpcc-js/wasm/graphviz");
+
+Graphviz.load().then(graphviz => {
+    const dot = "digraph G { Hello -> World }";
+    const svg = graphviz.dot(dot);
+    console.log(graphviz.version());
+});
+```
+
 Notes:
 * Import must specify which wasm library you are using
 * wasmFolder is no longer needed
 * All wasm libraries have the same asynchronous load pattern
     - `const instance = await Wasm.load();`
-
-### ⚠⚠⚠ TypeScript Notes ⚠⚠⚠ 
-
-When importing an ESM package AND referencing explicit `exports` (like `@hpcc-js/wasm/graphviz` or `@hpcc-js/wasm/expat`), you should change the following tsconfig.json setting:
-* `moduleResolution: Node16`
-
-This will ensure the correct "types" are auto discovered.
-

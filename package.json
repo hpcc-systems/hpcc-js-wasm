@@ -21,30 +21,35 @@
     ".": {
       "types": "./types/index.d.ts",
       "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
       "default": "./dist/index.umd.js"
     },
     "./base91": {
       "types": "./types/base91.d.ts",
       "import": "./dist/base91.js",
+      "require": "./dist/base91.cjs",
       "default": "./dist/base91.umd.js"
     },
     "./expat": {
       "types": "./types/expat.d.ts",
       "import": "./dist/expat.js",
+      "require": "./dist/expat.cjs",
       "default": "./dist/expat.umd.js"
     },
     "./graphviz": {
       "types": "./types/graphviz.d.ts",
       "import": "./dist/graphviz.js",
+      "require": "./dist/graphviz.cjs",
       "default": "./dist/graphviz.umd.js"
     },
     "./zstd": {
       "types": "./types/zstd.d.ts",
       "import": "./dist/zstd.js",
+      "require": "./dist/zstd.cjs",
       "default": "./dist/zstd.umd.js"
     }
   },
-  "main": "./dist/index.umd.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "browser": "./dist/index.umd.js",
   "unpkg": "./dist/index.umd.js",
