@@ -3,7 +3,7 @@
 ![Tests](https://github.com/hpcc-systems/hpcc-js-wasm/workflows/Test%20PR/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/GordonSmith/hpcc-js-wasm/badge.svg?branch=BUMP_VERSIONS)](https://coveralls.io/github/GordonSmith/hpcc-js-wasm?branch=BUMP_VERSIONS)
 
-**@hpcc-js/wasm is now an ESM by default package** - this is a good thing, but does require some breaking changes.
+**Note:  @hpcc-js/wasm is now an ESM by default package** - this is a good thing, but does require some breaking changes.
 
 This repository contains a collection of useful c++ libraries compiled to WASM for (re)use in Node JS, Web Browsers and JavaScript Libraries:
 - [base91](https://base91.sourceforge.net/) - v0.6.0
@@ -23,7 +23,43 @@ Built with:
     * [Graphviz](https://hpcc-systems.github.io/hpcc-js-wasm/classes/graphviz.Graphviz.html)
     * [Zstd](https://hpcc-systems.github.io/hpcc-js-wasm/classes/zstd.Zstd.html)
 
-## Quick Migration Example
+## Quick Start
+
+```ts
+import { Base91, Graphviz, Zstd } from "@hpcc-js/wasm";
+
+// Graphviz  ---
+async function dot2svg() {
+    const graphviz = await Graphviz.load();
+    console.log("svg:  ", graphviz.dot('digraph G { Hello -> World }'));
+}
+
+dot2svg();
+
+// Base91 + Zstd ---
+const text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.";
+const data = new TextEncoder().encode(text);
+
+async function compressDecompress() {
+    const zstd = await Zstd.load();
+    const compressed_data = zstd.compress(data);
+    const base91 = await Base91.load();
+    const base91Str = base91.encode(compressed_data);
+
+    const compressed_data2 = base91.decode(base91Str);
+    const data2 = zstd.decompress(compressed_data2);
+    const text2 = new TextDecoder().decode(data2);
+
+    console.log("Text Length:  ", text.length);
+    console.log("Compressed Length:  ", compressed_data.length);
+    console.log("Base91 Length:  ", base91Str.length);
+    console.log("Passed:  ", text === text2);
+}
+
+compressDecompress();
+```
+
+## Quick Migration from v1
 
 v1.x.x
 ```ts
@@ -41,30 +77,19 @@ graphviz.dot(dot).then(svg => {
 graphvizVersion.then(version => console.log(version));
 ```
 
-v2.x.x - ESM (Modern ECMAScript Modules)
+v2.x.x
 ```ts
-import { Graphviz } from "@hpcc-js/wasm/graphviz";
+import { Graphviz } from "@hpcc-js/wasm";
 
-const graphviz = await Graphviz.load();
+async function render() {
+    const graphviz = await Graphviz.load();
+    console.log(graphviz.dot('digraph G { Hello -> World }'));
+}
 
-const dot = "digraph G { Hello -> World }";
-const svg = graphviz.dot(dot);
-console.log(graphviz.version());
-```
-
-v2.x.x - CommonJS
-```ts
-const { Graphviz } = require("@hpcc-js/wasm/graphviz");
-
-Graphviz.load().then(graphviz => {
-    const dot = "digraph G { Hello -> World }";
-    const svg = graphviz.dot(dot);
-    console.log(graphviz.version());
-});
+render();
 ```
 
 Notes:
-* Import must specify which wasm library you are using
 * wasmFolder is no longer needed
 * All wasm libraries have the same asynchronous load pattern
-    - `const instance = await Wasm.load();`
+    - `const instance = await <Wasm>.load();`

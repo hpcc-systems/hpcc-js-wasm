@@ -1,0 +1,19 @@
+{
+  "name": "hello-world",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hpcc-js/wasm": "^2.15.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
