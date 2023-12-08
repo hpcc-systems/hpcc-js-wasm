@@ -81,12 +81,15 @@ v2.x.x
 ```ts
 import { Graphviz } from "@hpcc-js/wasm";
 
-async function render() {
-    const graphviz = await Graphviz.load();
-    console.log(graphviz.dot('digraph G { Hello -> World }'));
-}
+const dot = "digraph G { Hello -> World }";
 
-render();
+Graphviz.load().then(graphviz => {
+    const svg = graphviz.dot(dot);
+    const div = document.getElementById("placeholder");
+    div.innerHTML = svg;    
+
+    console.log(graphviz.version());
+});
 ```
 
 Notes:
