@@ -21,6 +21,11 @@ const browserTplIndex = (input, umdOutput, esOutput) => ({
         sourcemap: true,
         name: pkg.name
     }, {
+        file: esOutput + ".cjs",
+        format: "commonjs",
+        sourcemap: true,
+        name: pkg.name
+    }, {
         file: esOutput + ".js",
         format: "es",
         sourcemap: true
@@ -40,6 +45,11 @@ const browserTpl = (input, umdOutput, esOutput) => ({
     output: [{
         file: umdOutput + ".js",
         format: "umd",
+        sourcemap: true,
+        name: pkg.name
+    }, {
+        file: esOutput + ".cjs",
+        format: "commonjs",
         sourcemap: true,
         name: pkg.name
     }, {
