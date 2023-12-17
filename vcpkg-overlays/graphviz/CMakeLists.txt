@@ -18,7 +18,6 @@ option(with_cxx_api    "enables building the C++ API" OFF )
 option(with_cxx_tests  "enables building the C++ tests" OFF )
 option(use_win_pre_inst_libs "enables building using pre-installed Windows libraries" OFF )
 
-
 if(WIN32)
   # Build dynamic-link libraries on Windows, including MinGW. The
   # CMake build system does not currently support building static

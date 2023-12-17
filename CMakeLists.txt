@@ -1,13 +1,4 @@
-cmake_minimum_required(VERSION 3.9.2)
-
-set(REPO_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(VCPKG_FILES_DIR "${CMAKE_BINARY_DIR}" CACHE STRING "Folder for vcpkg download, build and installed files")
-set(CMAKE_TOOLCHAIN_FILE ${REPO_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake)
-set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE ${REPO_DIR}/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake)
-set(VCPKG_ROOT ${REPO_DIR}/vcpkg)
-set(VCPKG_OVERLAY_PORTS ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg-overlays)
-set(VCPKG_TARGET_TRIPLET "wasm32-emscripten")
-# file(REMOVE ${REPO_DIR}/vcpkg/vcpkg)
+cmake_minimum_required(VERSION 3.10)
 
 project(cpp)
 
@@ -23,21 +14,30 @@ set(EM_LINK_FLAGS
     "-sASSERTIONS=0"
     "-sINVOKE_RUN=0"
     "-sALLOW_MEMORY_GROWTH=1"
-    "-sWASM=1"
+    # "-sWASM=1"
     "-sENVIRONMENT=webview"
     "-sFILESYSTEM=0"
     # "-sMINIMAL_RUNTIME=1"
     "-sMODULARIZE=1" 
     "-sEXPORT_ES6=1"
-    "-sIGNORE_CLOSURE_COMPILER_ERRORS=0"
+    # "-sIGNORE_CLOSURE_COMPILER_ERRORS=0"
     # "-sWASM_BIGINT=1"
-    "-sSTANDALONE_WASM=0"
-    "-sBINARYEN_ASYNC_COMPILATION=1"
+    # "-sSTANDALONE_WASM=0"
+    # "-sBINARYEN_ASYNC_COMPILATION=1"
     # "-sDYNAMIC_EXECUTION=0"
+    "-sPOLYFILL=0"
+    # "-sSTRICT=0"
+    "-sIGNORE_MISSING_MAIN=0"
+    "-sAUTO_JS_LIBRARIES=0"
+    "-sAUTO_NATIVE_LIBRARIES=0"
+    "-sAUTO_ARCHIVE_INDEXES=0"
+    "-sDEFAULT_TO_CXX=0"
+    "-sUSE_GLFW=0"
+    "-sALLOW_UNIMPLEMENTED_SYSCALLS=1"
+    "-sINCOMING_MODULE_JS_API=\"['wasmBinary']\""
     "--pre-js ${CMAKE_CURRENT_SOURCE_DIR}/src-cpp/src/pre.js"
     "--post-js ${CMAKE_CURRENT_SOURCE_DIR}/src-cpp/src/post.js"
 )
-
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(EM_LINK_FLAGS 
@@ -81,6 +81,7 @@ endif ()
 
 function(packWasm targetID)
     add_custom_target(sfx-${targetID} ALL
+        COMMAND cmake -E make_directory ${REPO_DIR}/lib-esm
         COMMAND node ./utils/sfx-wasm.js ${PACK_MODE} ${CMAKE_CURRENT_BINARY_DIR}/${targetID}.wasm > ${REPO_DIR}/lib-esm/${targetID}.wasm.js
         WORKING_DIRECTORY ${REPO_DIR}
         COMMENT "SFX Wasm ${targetID}"
