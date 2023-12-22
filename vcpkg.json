@@ -1,12 +1,28 @@
 {
-    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
-    "name": "hpccjswasm",
-    "version": "1",
-    "dependencies": [
-        "base91",
-        "expat",
-        "graphviz",
-        "triangle",
-        "zstd"
-    ]
+  "dependencies": [
+    {
+      "name": "base91",
+      "version>=": "0.6.0"
+    },
+    {
+      "name": "expat",
+      "version>=": "2.5.0#3"
+    },
+    {
+      "name": "graphviz",
+      "version>=": "9.0.0"
+    },
+    {
+      "name": "triangle",
+      "version>=": "1.6#3"
+    },
+    {
+      "name": "zstd",
+      "version>=": "1.5.5#2"
+    },
+    {
+      "name": "zlib",
+      "version>=": "1.3"
+    }
+  ]
 }

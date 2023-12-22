@@ -1,0 +1,36 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "vcpkg",
+            "hidden": true,
+            "generator": "Ninja",
+            "cacheVariables": {
+                "REPO_DIR": "${sourceDir}",
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+            }
+        },
+        {
+            "name": "vcpkg-emscripten",
+            "inherits": [
+                "vcpkg"
+            ],
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "MinSizeRel",
+                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "${sourceDir}/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+                "VCPKG_TARGET_TRIPLET": "wasm32-emscripten"
+            }
+        },
+        {
+            "name": "vcpkg-emscripten-debug",
+            "inherits": [
+                "vcpkg-emscripten"
+            ],
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        }
+    ]
+}

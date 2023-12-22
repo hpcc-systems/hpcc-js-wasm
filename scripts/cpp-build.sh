@@ -3,11 +3,7 @@
 source ./emsdk/emsdk_env.sh
 if [ ! -d "./build" ] 
 then
-    mkdir -p build
-    cmake -S . -B ./build -DCMAKE_BUILD_TYPE=MinSizeRel
+    cmake -S . -B ./build --preset vcpkg-emscripten
 fi
 
-mkdir -p ./lib-esm
-cd ./build
-cmake --build . -- -j
-cd ..
+cmake --build ./build --parallel
