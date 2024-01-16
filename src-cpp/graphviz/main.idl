@@ -4,7 +4,17 @@ interface Graphviz
   [Const] static DOMString version();
   [Const] static DOMString lastError();
   void createFile([Const] DOMString file, [Const] DOMString data);
-  [Const] DOMString lastResult();
+
+  [Const] attribute DOMString layout_result;
   [Const] DOMString layout([Const] DOMString dot, [Const] DOMString format, [Const] DOMString engine);
+
+  [Const] attribute DOMString acyclic_outFile;
+  attribute long acyclic_num_rev;
+  boolean acyclic([Const] DOMString dot, boolean doWrite, boolean verbose);
+
+  [Const] attribute DOMString tred_out;
+  [Const] attribute DOMString tred_err;
+  void tred([Const] DOMString dot, boolean verbose, boolean printRemovedEdges);
+
   [Const] DOMString unflatten([Const] DOMString dot, long MaxMinlen, boolean Do_fans, long ChainLimit);
 };
