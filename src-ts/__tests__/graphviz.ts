@@ -285,6 +285,132 @@ describe("options", async function () {
 
 const stripWhitespaces = str => str.replace(/[\r\n\t\s]+/g, "");
 
+describe("acyclic", async function () {
+    it("simple", async function () {
+        Graphviz.unload();
+        const graphviz = await Graphviz.load();
+        const acyclicDot = `\
+digraph {
+    a -> b;
+    b -> c;
+    c -> d;
+    d -> a;
+    d -> e;
+    e -> d;
+}`;
+        let retVal = graphviz.acyclic(acyclicDot);
+        expect(retVal.acyclic).to.equal(true);
+        expect(retVal.num_rev).to.equal(2);
+        expect(retVal.outFile).to.be.empty;
+        retVal = graphviz.acyclic(acyclicDot, true);
+        expect(retVal.acyclic).to.equal(true);
+        expect(retVal.num_rev).to.equal(2);
+        expect(retVal.outFile).to.not.be.empty;
+        retVal = graphviz.acyclic(acyclicDot, true, true);
+        expect(retVal.acyclic).to.equal(true);
+        expect(retVal.num_rev).to.equal(2);
+        expect(retVal.outFile).to.not.be.empty;
+        const notAcyclicDot = `\
+digraph {
+    a -> b;
+    b -> c;
+    c -> d;
+    d -> e;
+}`;
+        retVal = graphviz.acyclic(notAcyclicDot);
+        expect(retVal.acyclic).to.equal(false);
+        expect(retVal.num_rev).to.equal(0);
+        expect(retVal.outFile).to.be.empty;
+        retVal = graphviz.acyclic(notAcyclicDot, true);
+        expect(retVal.acyclic).to.equal(false);
+        expect(retVal.num_rev).to.equal(0);
+        expect(retVal.outFile).to.not.be.empty;
+        retVal = graphviz.acyclic(notAcyclicDot, true, true);
+        expect(retVal.acyclic).to.equal(false);
+        expect(retVal.num_rev).to.equal(0);
+        expect(retVal.outFile).to.not.be.empty;
+    });
+
+    it("empty", async function () {
+        const graphviz = await Graphviz.load();
+        const retVal = graphviz.acyclic("");
+        expect(retVal.acyclic).to.equal(false);
+        expect(retVal.num_rev).to.equal(0);
+        expect(retVal.outFile).to.be.empty;
+    });
+
+    it("syntax error", async function () {
+        const graphviz = await Graphviz.load();
+        try {
+            const retVal = graphviz.acyclic(badDot);
+            expect(true).to.be.false;
+        } catch (e: any) {
+            expect(typeof e.message).to.equal("string");
+            expect(e.message).to.contain("syntax error in line");
+        }
+    });
+});
+
+describe("tred", async function () {
+    it("simple", async function () {
+        Graphviz.unload();
+        const graphviz = await Graphviz.load();
+        const dot = `\
+digraph {
+    a -> b;
+    b -> c;
+    c -> d;
+    d -> e;
+}`;
+
+        let retVal = graphviz.tred(dot);
+        expect(stripWhitespaces(retVal.out)).to.equal(stripWhitespaces(dot));
+        expect(retVal.err).to.equal("");
+        retVal = graphviz.tred(dot, true);
+        expect(stripWhitespaces(retVal.out)).to.equal(stripWhitespaces(dot));
+        expect(retVal.err).to.not.be.empty;
+        retVal = graphviz.tred(dot, true, true);
+        expect(stripWhitespaces(retVal.out)).to.equal(stripWhitespaces(dot));
+        expect(retVal.err).to.not.be.empty;
+        const acyclicDot = `\
+digraph {
+    a -> b;
+    b -> c;
+    c -> d;
+    d -> a;
+    d -> e;
+    e -> d;
+}`;
+        retVal = graphviz.tred(acyclicDot);
+        expect(stripWhitespaces(retVal.out)).to.not.equal(stripWhitespaces(dot));
+        expect(retVal.err).to.not.be.empty;
+        retVal = graphviz.tred(acyclicDot, true);
+        expect(stripWhitespaces(retVal.out)).to.not.equal(stripWhitespaces(dot));
+        expect(retVal.err).to.not.be.empty;
+        retVal = graphviz.tred(acyclicDot, true, true);
+        expect(stripWhitespaces(retVal.out)).to.not.equal(stripWhitespaces(dot));
+        expect(retVal.err).to.not.be.empty;
+    });
+
+    it("empty", async function () {
+        const graphviz = await Graphviz.load();
+        const { out, err } = graphviz.tred("");
+        expect(out).to.equal("");
+        expect(err).to.equal("");
+    });
+
+    it("syntax error", async function () {
+        const graphviz = await Graphviz.load();
+        try {
+            const xxx = graphviz.tred(badDot);
+            expect(true).to.be.false;
+        } catch (e: any) {
+            expect(typeof e.message).to.equal("string");
+            expect(e.message).to.contain("syntax error in line");
+        }
+    });
+});
+
 describe("unflatten", async function () {
     it("simple", async function () {
         Graphviz.unload();
@@ -331,7 +457,7 @@ graph {
     it("syntax error", async function () {
         const graphviz = await Graphviz.load();
         try {
-            const xxx = graphviz.dot(badDot, "svg");
+            const xxx = graphviz.unflatten(badDot);
             expect(true, xxx).to.be.false;
         } catch (e: any) {
             expect(typeof e.message).to.equal("string");
