@@ -36,7 +36,6 @@ describe("base91", function () {
 
         const base91 = await Base91.load();
         const base91Str = base91.encode(compressed_data);
-        console.log(data.byteLength, base91Str.length);
         const compressed_data2 = base91.decode(base91Str);
         expect(compressed_data).to.deep.equal(compressed_data2);
 

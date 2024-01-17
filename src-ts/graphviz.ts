@@ -123,6 +123,7 @@ export class Graphviz {
     version(): string {
         return this._module.Graphviz.prototype.version();
     }
+
     /**
      * Performs layout for the supplied _dotSource_, see [The DOT Language](https://graphviz.gitlab.io/doc/info/lang.html) for specification.  
      * 
@@ -156,23 +157,89 @@ export class Graphviz {
     }
 
     /**
+      * acyclic is a filter that takes a directed graph as input and outputs a copy of the graph with sufficient edges reversed to make the graph acyclic. The reversed edge inherits all of the attributes of the original edge. The optional file argument specifies where the input graph is stored; by default.
+      * 
+      * @param dotSource Required - graph definition in [DOT](https://graphviz.gitlab.io/doc/info/lang.html) language
+      * @param doWrite Enable output is produced, though the return value will indicate whether the graph is acyclic or not.
+      * @param verbose Print information about whether the file is acyclic, has a cycle or is undirected.
+      * @returns `{ acyclic: boolean, num_rev: number, outFile: string }` `acyclic` will be true if a cycle was found, `num_rev` will contain the number of reversed edges and `outFile` will (optionally) contain the output.
+      */
+    acyclic(dotSource: string, doWrite: boolean = false, verbose: boolean = false): { acyclic: boolean, num_rev: number, outFile: string } {
+        if (!dotSource) return { acyclic: false, num_rev: 0, outFile: "" };
+        const graphViz = new this._module.Graphviz();
+        let acyclic: boolean = false;
+        let num_rev: number = 0;
+        let outFile: string = "";
+        let errorMsg = "";
+        try {
+            try {
+                acyclic = graphViz.acyclic(dotSource, doWrite, verbose);
+                num_rev = graphViz.acyclic_num_rev;
+                outFile = graphViz.acyclic_outFile;
+            } catch (e: any) {
+                errorMsg = e.message;
+            };
+            errorMsg = graphViz.lastError() || errorMsg;
+        } finally {
+            this._module.destroy(graphViz);
+        }
+        if (errorMsg) {
+            Graphviz.unload();
+            throw new Error(errorMsg);
+        }
+        return { acyclic, num_rev, outFile };
+    }
+
+    /**
+      * tred computes the transitive reduction of directed graphs, and prints the resulting graphs to standard output.  This removes edges implied by transitivity. Nodes and subgraphs are not otherwise affected. The ‘‘meaning’’ and validity of the reduced graphs is application dependent. tred is particularly useful as a preprocessor to dot to reduce clutter in dense layouts.  Undirected graphs are silently ignored.
+      * 
+      * @param dotSource Required - graph definition in [DOT](https://graphviz.gitlab.io/doc/info/lang.html) language
+      * @param verbose Print additional information.
+      * @param printRemovedEdges Print information about removed edges.
+      * @returns `{ out: string, err: string }`.
+      */
+    tred(dotSource: string, verbose: boolean = false, printRemovedEdges: boolean = false): { out: string, err: string } {
+        if (!dotSource) return { out: "", err: "" };
+        const graphViz = new this._module.Graphviz();
+        let out: string = "";
+        let err: string = "";
+        let errorMsg = "";
+        try {
+            try {
+                graphViz.tred(dotSource, verbose, printRemovedEdges);
+                out = graphViz.tred_out;
+                err = graphViz.tred_err;
+            } catch (e: any) {
+                errorMsg = e.message;
+            };
+            errorMsg = graphViz.lastError() || errorMsg;
+        } finally {
+            this._module.destroy(graphViz);
+        }
+        if (!out && errorMsg) {
+            Graphviz.unload();
+            throw new Error(errorMsg);
+        }
+        return { out, err };
+    }
+
+    /**
      * unflatten is a preprocessor to dot that is used to improve the aspect ratio of graphs having many leaves or disconnected nodes. The usual layout for such a graph is generally very wide or tall. unflatten inserts invisible edges or adjusts the minlen on edges to improve layout compaction.
      * 
      * @param dotSource Required - graph definition in [DOT](https://graphviz.gitlab.io/doc/info/lang.html) language
-     * @param l The minimum length of leaf edges is staggered between 1 and len (a small integer).
-     * @param f Enables the staggering of the -l option to fanout nodes whose indegree and outdegree are both 1.  This helps with structures such as a -> \{w x y \} -> b. This option only works if the -l flag is set.
-     * @param c Form disconnected nodes into chains of up to len nodes.
+     * @param maxMinlen The minimum length of leaf edges is staggered between 1 and len (a small integer).
+     * @param do_fans Enables the staggering of the -maxMinlen option to fanout nodes whose indegree and outdegree are both 1.  This helps with structures such as a -> \{w x y \} -> b. This option only works if the -maxMinlen flag is set.
+     * @param chainLimit Form disconnected nodes into chains of up to len nodes.
      * @returns A string containing the "unflattened" dotSource.
      */
-
-    unflatten(dotSource: string, l: number = 0, f: boolean = false, c: number = 0): string {
+    unflatten(dotSource: string, maxMinlen: number = 0, do_fans: boolean = false, chainLimit: number = 0): string {
         if (!dotSource) return "";
         const graphViz = new this._module.Graphviz();
         let retVal = "";
         let errorMsg = "";
         try {
             try {
-                retVal = graphViz.unflatten(dotSource, l, f, c);
+                retVal = graphViz.unflatten(dotSource, maxMinlen, do_fans, chainLimit);
             } catch (e: any) {
                 errorMsg = e.message;
             };

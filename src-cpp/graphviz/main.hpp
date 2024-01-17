@@ -1,10 +1,7 @@
-#include <string>
+#include "util.hpp"
 
 class Graphviz
 {
-private:
-    std::string m_result;
-
 public:
     static const char *version();
     static const char *lastError();
@@ -13,7 +10,18 @@ public:
     ~Graphviz();
 
     void createFile(const char *path, const char *data);
-    const char *lastResult();
+
+    StringBuffer layout_result;
     const char *layout(const char *dot, const char *format, const char *engine);
-    const char *unflatten(const char *dot, unsigned int MaxMinlen = 0, bool Do_fans = false, unsigned int ChainLimit = 0);
+
+    StringBuffer acyclic_outFile;
+    size_t acyclic_num_rev;
+    bool acyclic(const char *dot, bool doWrite = false, bool verbose = false);
+
+    StringBuffer tred_out;
+    StringBuffer tred_err;
+    void tred(const char *dot, bool verbose = false, bool printRemovedEdges = false);
+
+    StringBuffer unflatten_out;
+    const char *unflatten(const char *dot, int maxMinlen = 0, bool do_fans = false, int chainLimit = 0);
 };
