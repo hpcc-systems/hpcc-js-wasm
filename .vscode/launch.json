@@ -5,12 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "index.html",
+            "name": "index-browser",
             "type": "msedge",
             "request": "launch",
             "url": "http://localhost:8000/index.html",
-            "runtimeArgs": [],
-            "webRoot": "${workspaceRoot}"
+            "webRoot": "${workspaceRoot}",
+            "sourceMapPathOverrides": {
+                "webpack:///./*": "${workspaceRoot}/*",
+                "webpack:///*": "/*"
+            },
         },
         {
             "name": "file:///index.html",

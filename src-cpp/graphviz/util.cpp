@@ -46,10 +46,12 @@ TempFileBuffer::operator std::string() const
     if (filePointer != nullptr)
     {
         std::rewind(filePointer);
-        char buffer[256];
-        size_t bytesRead;
-        while ((bytesRead = std::fread(buffer, 1, sizeof(buffer), filePointer)) > 0)
-            content.append(buffer, bytesRead);
+        std::fseek(filePointer, 0, SEEK_END);
+        long fileSize = std::ftell(filePointer);
+        std::rewind(filePointer);
+
+        content.resize(fileSize);
+        std::fread(&content[0], 1, fileSize, filePointer);
     }
     return content;
 }

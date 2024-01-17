@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <cstdio>
 
 class StringBuffer
 {
@@ -22,6 +23,11 @@ private:
 public:
     TempFileBuffer();
     ~TempFileBuffer();
+
+    TempFileBuffer(const TempFileBuffer &) = delete;
+    TempFileBuffer(TempFileBuffer &&) = delete;
+    TempFileBuffer &operator=(const TempFileBuffer &) = delete;
+    TempFileBuffer &operator=(TempFileBuffer &&) = delete;
 
     operator FILE *() const;
     operator std::string() const;

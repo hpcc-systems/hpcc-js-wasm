@@ -1,9 +1,7 @@
-#include <string>
 #include "util.hpp"
 
 class Graphviz
 {
-private:
 public:
     static const char *version();
     static const char *lastError();
