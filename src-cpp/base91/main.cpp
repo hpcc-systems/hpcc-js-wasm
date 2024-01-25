@@ -14,12 +14,12 @@ public:
         reset();
     }
 
-    void *malloc(size_t __size)
+    static void *malloc(size_t __size)
     {
         return ::malloc(__size);
     }
 
-    void free(void *__ptr)
+    static void free(void *__ptr)
     {
         ::free(__ptr);
     }
