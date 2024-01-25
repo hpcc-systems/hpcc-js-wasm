@@ -1,6 +1,6 @@
 module.exports = function (config) {
     config.set({
-        frameworks: ['mocha', 'chai'],
+        frameworks: ['mocha'],
         files: [
             'dist-test/index.umd.js',
             { pattern: 'dist-test/*.js', watched: false, included: false, served: true },

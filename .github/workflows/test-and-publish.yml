@@ -56,7 +56,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-
       - name: Publish
         if: github.ref_type == 'tag'
         env:
