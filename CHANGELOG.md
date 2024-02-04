@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.16.0-next.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.15.3...v2.16.0-next.0) (2024-02-04)
+
+
+### Features
+
+* Add acyclic and tred support ([dc1dd27](https://github.com/hpcc-systems/hpcc-js-wasm/commit/dc1dd2761f97e959498984bef7815f3cfe3ac565)), closes [#210](https://github.com/hpcc-systems/hpcc-js-wasm/issues/210)
+
 ### [2.15.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.15.2...v2.15.3) (2023-12-23)
 
 ### [2.15.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.15.1...v2.15.2) (2023-12-22)
