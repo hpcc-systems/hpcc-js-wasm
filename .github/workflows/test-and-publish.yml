@@ -61,7 +61,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         run: |
-          npm publish
+            npm publish ${{ contains(github.ref, 'next') && '--tag next' || '' }}
 
       - name: Purge jsdelivr
         if: github.ref_type == 'tag'
