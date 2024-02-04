@@ -97,6 +97,7 @@
     "build-docker": "run-s build-docker-image build-docker-wasm",
     "build": "mkdirp ./lib-esm && run-s compile-cpp compile bundle",
     "standard-version": "standard-version",
+    "standard-version-next": "standard-version -p next",
     "standard-version-dryrun": "standard-version --dry-run",
     "git-push": "git push --follow-tags upstream trunk",
     "watch": "run-p compile-watch bundle-watch",
@@ -116,6 +117,7 @@
     "coverage": "nyc npm run test-node",
     "coverage-report": "nyc report --reporter=lcov",
     "tag": "run-s standard-version git-push",
+    "tag-next": "run-s standard-version-next git-push",
     "purge-jsdelivr": "node ./utils/purge-jsdelivr.js",
     "update": "npx npm-check-updates -u -t minor",
     "update-major": "npx npm-check-updates -u"

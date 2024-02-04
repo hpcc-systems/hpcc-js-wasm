@@ -1,4 +1,4 @@
-name: teast-and-publish
+name: test-and-publish
 
 on: 
   pull_request:
