@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.16.0-next.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.16.0-next.1...v2.16.0-next.2) (2024-02-04)
+
+
+### Bug Fixes
+
+*  Tag pre-release npm publish CI command ([3785a32](https://github.com/hpcc-systems/hpcc-js-wasm/commit/3785a320237cff13901a1072c1e13f564dad4149))
+
 ## [2.16.0-next.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.16.0-next.0...v2.16.0-next.1) (2024-02-04)
 
 
