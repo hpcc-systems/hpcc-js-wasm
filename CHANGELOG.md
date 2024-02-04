@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.16.0-next.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.16.0-next.0...v2.16.0-next.1) (2024-02-04)
+
+
+### Bug Fixes
+
+*  Force pre-relase to true on "next" release. ([c28b76a](https://github.com/hpcc-systems/hpcc-js-wasm/commit/c28b76ad374bea21c9dac2965700a011922c6d25))
+
 ## [2.16.0-next.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.15.3...v2.16.0-next.0) (2024-02-04)
 
 
