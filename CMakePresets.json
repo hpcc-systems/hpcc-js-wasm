@@ -23,13 +23,23 @@
             }
         },
         {
-            "name": "vcpkg-emscripten-debug",
+            "name": "vcpkg-emscripten-Debug",
             "inherits": [
                 "vcpkg-emscripten"
             ],
             "binaryDir": "${sourceDir}/build",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "vcpkg-emscripten-MinSizeRel",
+            "inherits": [
+                "vcpkg-emscripten"
+            ],
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "MinSizeRel"
             }
         }
     ]

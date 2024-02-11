@@ -82,6 +82,7 @@ add_graphviz_library(pack)
 add_graphviz_library(sparse)
 add_graphviz_library(pathplan)
 add_graphviz_library(xdot)
+add_graphviz_library(vpsc)
 
 target_link_libraries(graphvizlib PRIVATE
     ${EXPAT_LIBRARIES}
