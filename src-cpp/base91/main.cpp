@@ -1,7 +1,7 @@
 #include <string>
 #include <base91.hpp>
 
-const char *const version = "0.6.0";
+const char *const version = "0.6.0.1";
 
 class CBasE91
 {

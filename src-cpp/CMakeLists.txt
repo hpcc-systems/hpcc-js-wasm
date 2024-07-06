@@ -1,4 +1,5 @@
 add_subdirectory(base91)
 add_subdirectory(expat)
 add_subdirectory(graphviz)
+add_subdirectory(llama)
 add_subdirectory(zstd)

@@ -146,11 +146,12 @@ function bothTpl(input, umdOutput, esOutput, globalName = undefined, external = 
 await Promise.all([
     bothTpl("lib-esm/base91", "dist/base91.umd", "dist/base91", "hpccjs_wasm_base91"),
     bothTpl("lib-esm/duckdb", "dist/duckdb.umd", "dist/duckdb", "hpccjs_wasm_duckdb"),
-    bothTpl("lib-esm/graphviz", "dist/graphviz.umd", "dist/graphviz", "hpccjs_wasm_graphviz"),
     bothTpl("lib-esm/expat", "dist/expat.umd", "dist/expat", "hpccjs_wasm_expat"),
+    bothTpl("lib-esm/graphviz", "dist/graphviz.umd", "dist/graphviz", "hpccjs_wasm_graphviz"),
+    bothTpl("lib-esm/llama", "dist/llama.umd", "dist/llama", "hpccjs_wasm_llama"),
     bothTpl("lib-esm/zstd", "dist/zstd.umd", "dist/zstd", "hpccjs_wasm_zstd")
 ]);
-await bothTpl("lib-esm/index", "dist/index.umd", "dist/index", "hpccjs_wasm", ["./base91.js", "./duckdb.js", "./expat.js", "./graphviz.js", "./zstd.js"]);
+await bothTpl("lib-esm/index", "dist/index.umd", "dist/index", "hpccjs_wasm", ["./base91.js", "./duckdb.js", "./expat.js", "./graphviz.js", "./llama.js", "./zstd.js"]);
 
 browserTpl("lib-esm/__tests__/index-browser", "dist-test/index.umd", "dist-test/index", "hpccjs_wasm_test");
 browserTpl("lib-esm/__tests__/worker-browser", "dist-test/worker.umd", "dist-test/worker", "hpccjs_wasm_test_worker");

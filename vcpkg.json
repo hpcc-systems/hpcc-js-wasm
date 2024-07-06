@@ -12,6 +12,7 @@
       "name": "graphviz",
       "version>=": "11.0.0"
     },
+    "llama",
     {
       "name": "triangle",
       "version>=": "1.6#3"

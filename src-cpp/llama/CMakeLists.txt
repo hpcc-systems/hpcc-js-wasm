@@ -1,6 +1,8 @@
-project(zstdlib)
+project(llamalib)
 
-find_package(zstd CONFIG REQUIRED)
+set(CMAKE_CXX_STANDARD 17)
+
+find_package(Llama CONFIG REQUIRED)
 
 # See:  https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
 string(REPLACE ";" " " CPP_FLAGS "${EM_CPP_FLAGS}")
@@ -26,17 +28,25 @@ set_property(SOURCE main.cpp APPEND PROPERTY OBJECT_DEPENDS ${CMAKE_CURRENT_BINA
 include_directories(
     ${VCPKG_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${Llama_DIR}/common
 )
 
-add_executable(zstdlib
+add_executable(llamalib
     main.cpp
+    ${Llama_DIR}/common/common.cpp
+    ${Llama_DIR}/common/sampling.cpp
+    ${Llama_DIR}/common/console.cpp
+    ${Llama_DIR}/common/grammar-parser.cpp
+    ${Llama_DIR}/common/json-schema-to-grammar.cpp
+    ${Llama_DIR}/common/build-info.cpp
 )
 
-set_target_properties(zstdlib PROPERTIES COMPILE_FLAGS "${CPP_FLAGS}")
-set_target_properties(zstdlib PROPERTIES LINK_FLAGS "${LINK_FLAGS}")
+set_target_properties(llamalib PROPERTIES COMPILE_FLAGS "${CPP_FLAGS}")
+set_target_properties(llamalib PROPERTIES LINK_FLAGS "${LINK_FLAGS}")
 
-target_link_libraries(zstdlib
-    PRIVATE $<IF:$<TARGET_EXISTS:zstd::libzstd_shared>,zstd::libzstd_shared,zstd::libzstd_static>
+target_link_libraries(llamalib
+    PRIVATE llama 
+    ${Llama_DIR}/../../lib/libggml.a
 )
 
-packWasm(zstdlib)
+packWasm(llamalib)

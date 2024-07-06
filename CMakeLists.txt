@@ -39,7 +39,7 @@ set(EM_LINK_FLAGS
     "--post-js ${CMAKE_CURRENT_SOURCE_DIR}/src-cpp/src/post.js"
 )
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+if (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     set(EM_LINK_FLAGS 
         ${EM_LINK_FLAGS}
         "-sUSE_ES6_IMPORT_META=1"

@@ -18,6 +18,11 @@ export namespace Graphviz {
         return import("./graphviz.js").then(mod => mod.Graphviz.load());
     }
 }
+export namespace Llama {
+    export function load() {
+        return import("./llama.js").then(mod => mod.Llama.load());
+    }
+}
 export namespace Zstd {
     export function load() {
         return import("./zstd.js").then(mod => mod.Zstd.load());

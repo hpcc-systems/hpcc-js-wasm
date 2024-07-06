@@ -3,7 +3,7 @@ import { Base91 } from "@hpcc-js/wasm/base91";
 import { Zstd } from "@hpcc-js/wasm/zstd";
 import { Console } from "node:console";
 
-describe("base91", function () {
+describe.only("base91", function () {
 
     it("version", async function () {
         let base91 = await Base91.load();

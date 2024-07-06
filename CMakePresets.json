@@ -33,6 +33,16 @@
             }
         },
         {
+            "name": "vcpkg-emscripten-RelWithDebInfo",
+            "inherits": [
+                "vcpkg-emscripten"
+            ],
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+            }
+        },
+        {
             "name": "vcpkg-emscripten-MinSizeRel",
             "inherits": [
                 "vcpkg-emscripten"
