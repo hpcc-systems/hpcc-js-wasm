@@ -1,3 +1,4 @@
+#define LOG_DISABLE_LOGS
 #include "common.h"
 
 #include "console.h"
@@ -141,14 +142,20 @@ static std::string chat_add_and_format(struct llama_model *model, std::vector<ll
 
 int main(int argc, char **argv)
 {
+    std::cout << "main-01" << std::endl;
+
     gpt_params params;
     g_params = &params;
 
+    std::cout << "main-02" << std::endl;
     if (!gpt_params_parse(argc, argv, params))
     {
+        std::cout << "main-02-01" << std::endl;
         gpt_params_print_usage(argc, argv, params);
+        std::cout << "main-02-02" << std::endl;
         return 1;
     }
+    std::cout << "main-03" << std::endl;
 
     llama_sampling_params &sparams = params.sparams;
 
@@ -1170,9 +1177,14 @@ public:
     static void test()
     {
         std::cout << "Hello" << std::endl;
-        int argc = 2;
-        const char *argv[] = {"tinyllama-1.1b-1t-openorca.Q4_K_M.gguf", "Who are you?"};
+        const char *_argv[] = {"--help"};
+        std::cout << "Hello2" << std::endl;
+        char **argv = (char **)_argv;
+        std::cout << "Hello3" << std::endl;
+        int argc = sizeof(_argv) / sizeof(_argv[0]);
+        std::cout << "Hello4" << std::endl;
         ::main(argc, (char **)&argv);
+        std::cout << "Hello5" << std::endl;
     }
 };
 

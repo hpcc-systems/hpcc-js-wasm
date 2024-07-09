@@ -21,7 +21,7 @@ describe.only("llama", function () {
         Llama.unload();
     });
 
-    it.skip("test", async function () {
+    it("test", async function () {
         let llama = await Llama.load();
         llama.test();
     });

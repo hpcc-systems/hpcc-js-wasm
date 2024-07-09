@@ -1,5 +1,10 @@
 {
     "cmake.cmakePath": "${workspaceFolder}/scripts/cmake.sh",
     "ecl.launchConfiguration": "not found",
-    "ecl.targetCluster": {}
+    "ecl.targetCluster": {},
+    "files.associations": {
+        "*.json": "json",
+        "*.mod": "ecl",
+        "iostream": "cpp"
+    }
 }
