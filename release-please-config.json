@@ -1,0 +1,13 @@
+{
+    "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+    "release-type": "node",
+    "packages": {
+        "packages/base91": {},
+        "packages/duckdb": {},
+        "packages/expat": {},
+        "packages/graphviz": {},
+        "packages/graphviz-cli": {},
+        "packages/wasm": {},
+        "packages/zstd": {}
+    }
+}
