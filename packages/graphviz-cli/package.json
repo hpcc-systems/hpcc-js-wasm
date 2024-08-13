@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm-graphviz-cli",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "hpcc-js - WASM Graphviz Cli",
   "type": "module",
   "bin": {
