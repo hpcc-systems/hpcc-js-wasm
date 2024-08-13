@@ -6,6 +6,9 @@ env:
 on:
   pull_request:
   push:
+    branches:
+      - trunk
+      - trunk-2.x
 
 jobs:
   build:

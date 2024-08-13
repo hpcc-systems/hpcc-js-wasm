@@ -1,6 +1,12 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [Conventional Commits](https://www.conventionalcommits.org) for commit guidelines.
+
+## [2.18.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.18.2...wasm-v2.18.3) (2024-08-13)
+
+### Features
+
+*  Switch to release-please from standard-version ([bf590647](https://github.com/hpcc-systems/hpcc-js-wasm/commit/bf590647467d3ca48699a9fdd3461ef95f16b871))
 
 ### [2.18.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/v2.18.1...v2.18.2) (2024-08-08)
 
