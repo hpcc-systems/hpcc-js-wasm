@@ -33,7 +33,7 @@ describe("graphviz", function () {
         let graphviz = await Graphviz.load();
         let v = graphviz.version();
         expect(v).to.be.a.string;
-        expect(v).to.equal("12.0.0");
+        expect(v).to.equal("12.1.0");
         console.log("graphviz version: " + v);
         Graphviz.unload();
 
