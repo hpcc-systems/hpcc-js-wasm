@@ -8,8 +8,8 @@
         "packages/expat": {},
         "packages/graphviz": {},
         "packages/graphviz-cli": {},
-        "packages/wasm": {},
-        "packages/zstd": {}
+        "packages/zstd": {},
+        "packages/wasm": {}
     },
     "plugins": [
         {

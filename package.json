@@ -57,6 +57,7 @@
     "git-push": "git push --follow-tags upstream trunk",
     "serve-docs": "vitepress serve docs",
     "serve": "ws",
+    "lint-skypack": "lerna run lint-skypack",
     "lint": "lerna run lint",
     "lint-fix": "npm run lint -- --fix",
     "test-node": "lerna run test-node",
@@ -66,8 +67,10 @@
     "tag": "run-s standard-version git-push",
     "tag-next": "run-s standard-version-next git-push",
     "purge-jsdelivr": "node ./utils/purge-jsdelivr.js",
-    "update": "npx -y npm-check-updates -u -t minor",
-    "update-major": "npx -y npm-check-updates -u"
+    "update-root": "npx -y npm-check-updates -u -t minor",
+    "update": "npm run update-root && lerna run update",
+    "update-major-root": "npx -y npm-check-updates -u",
+    "update-major": "npm run update-major-root && lerna run update-major"
   },
   "dependencies": {},
   "devDependencies": {
@@ -102,7 +105,7 @@
     "run-script-os": "1.1.6",
     "tslib": "2.6.3",
     "typedoc": "0.26.5",
-    "typedoc-plugin-markdown": "4.2.3",
+    "typedoc-plugin-markdown": "4.2.4",
     "typescript": "5.5.4",
     "typescript-eslint": "8.1.0",
     "vitepress": "1.3.2"

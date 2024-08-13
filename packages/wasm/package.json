@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm",
-  "version": "3.1.0",
+  "version": "2.18.3",
   "description": "hpcc-js - WASM Libraries",
   "type": "module",
   "exports": {
@@ -66,22 +66,24 @@
     "build": "run-p build-types build-ts",
     "lint-skypack": "npx -y @skypack/package-check",
     "lint-eslint": "eslint src/**/*.ts",
-    "lint": "run-p lint-eslint lint-skypack",
+    "lint": "run-p lint-eslint",
     "test-chrome": "karma start --single-run --browsers ChromiumHeadless karma.conf.cjs",
     "test-firefox": "karma start --single-run --browsers Firefox karma.conf.cjs",
     "test-node": "mocha ./dist-test/index.node.js --reporter spec",
-    "test": "run-s test-chrome test-node"
+    "test": "run-s test-chrome test-node",
+    "update": "npx -y npm-check-updates -u -t minor",
+    "update-major": "npx -y npm-check-updates -u"
   },
   "dependencies": {
     "yargs": "17.7.2"
   },
   "devDependencies": {
     "@hpcc-js/esbuild-plugins": "1.0.7",
-    "@hpcc-js/wasm-base91": "1.1.0",
-    "@hpcc-js/wasm-duckdb": "1.1.0",
-    "@hpcc-js/wasm-expat": "1.1.0",
-    "@hpcc-js/wasm-graphviz": "1.1.0",
-    "@hpcc-js/wasm-zstd": "1.1.0",
+    "@hpcc-js/wasm-base91": "1.0.2",
+    "@hpcc-js/wasm-duckdb": "1.0.1",
+    "@hpcc-js/wasm-expat": "1.0.1",
+    "@hpcc-js/wasm-graphviz": "1.0.3",
+    "@hpcc-js/wasm-zstd": "1.0.2",
     "esbuild-plugin-umd-wrapper": "3.0.0"
   },
   "keywords": [

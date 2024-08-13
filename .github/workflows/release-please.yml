@@ -14,9 +14,82 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: googleapis/release-please-action@v4
+      - name: Initialize Release Please
+        id: release
+        uses: googleapis/release-please-action@v4
         with:
           target-branch: ${{ github.ref_name }}
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+      - name: Checkout Sources
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v4
+
+      - name: Install NodeJS
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: "https://registry.npmjs.org"
+          scope: "@hpcc-js"
+
+      - name: Install OS Dependencies
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+          sudo apt-get install -y git cmake ninja-build wget zip
+          sudo apt-get install -y gcc-multilib g++-multilib pkg-config autoconf bison libtool flex
+          sudo apt-get install -y python3 python3-pip
+          sudo apt-get install -y chromium
+
+      - name: Export GitHub Actions cache environment variables
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+
+      - name: Install Dependencies
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          npm ci
+          npm run install-build-deps
+
+      - name: Build
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          npm run build
+
+      - name: Test
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          CI: true
+        run: |
+          npm run test
+
+      - name: Calculate Coverage
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          npm run coverage
+          npm run coverage-report
+
+      - name: Update Coveralls
+        if: ${{ steps.release.outputs.release_created }}
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+        run: |
+          npm publish
+
+      - name: Purge jsdelivr
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          npm run purge-jsdelivr

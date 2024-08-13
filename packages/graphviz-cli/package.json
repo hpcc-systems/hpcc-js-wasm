@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm-graphviz-cli",
-  "version": "1.1.0",
+  "version": "1.0.4",
   "description": "hpcc-js - WASM Graphviz Cli",
   "type": "module",
   "bin": {
@@ -30,10 +30,12 @@
     "build": "run-p build-types build-ts",
     "lint-skypack": "npx -y @skypack/package-check",
     "lint-eslint": "eslint src/**/*.ts",
-    "lint": "run-p lint-eslint lint-skypack"
+    "lint": "run-p lint-eslint",
+    "update": "npx -y npm-check-updates -u -t minor",
+    "update-major": "npx -y npm-check-updates -u"
   },
   "dependencies": {
-    "@hpcc-js/wasm-graphviz": "1.1.0",
+    "@hpcc-js/wasm-graphviz": "1.0.3",
     "yargs": "17.7.2"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-# @hpcc-js/wasm - Version 2
+# @hpcc-js/wasm - Version 3
 
 ![Tests](https://github.com/hpcc-systems/hpcc-js-wasm/workflows/Test%20PR/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/GordonSmith/hpcc-js-wasm/badge.svg?branch=BUMP_VERSIONS)](https://coveralls.io/github/GordonSmith/hpcc-js-wasm?branch=BUMP_VERSIONS)
@@ -9,7 +9,7 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 - [base91](https://base91.sourceforge.net/) - v0.6.0
 - [duckdb](https://github.com/duckdb/duckdb) - v0.9.2
 - [expat](https://libexpat.github.io/) - v2.6.2
-- [graphviz](https://www.graphviz.org/) - v12.0.0
+- [graphviz](https://www.graphviz.org/) - v12.1.0
 - [zstd](https://github.com/facebook/zstd) - v1.5.6
 - ...more to follow...
 
@@ -25,10 +25,23 @@ Built with:
     * [Graphviz](https://hpcc-systems.github.io/hpcc-js-wasm/graphviz/classes/Graphviz.html)
     * [Zstd](https://hpcc-systems.github.io/hpcc-js-wasm/zstd/classes/Zstd.html)
 
+## Version 3 Changes
+
+Converted this repository to a monorepo with the following packages:
+- @hpcc-js/wasm-base91
+- @hpcc-js/wasm-duckdb
+- @hpcc-js/wasm-expat
+- @hpcc-js/wasm-graphviz
+- @hpcc-js/wasm-graphviz-cli
+- @hpcc-js/wasm-zstd
+- @hpcc-js/wasm (meta package for backward compatibility)
+
 ## Quick Start
 
 ```ts
-import { Base91, Graphviz, Zstd } from "@hpcc-js/wasm";
+import { Base91 } from "@hpcc-js/wasm-base91";
+import { Graphviz } from "@hpcc-js/wasm-graphviz";
+import { Zstd } from "@hpcc-js/wasm-zstd";
 
 // Graphviz  ---
 async function dot2svg() {
@@ -98,3 +111,18 @@ Notes:
 * wasmFolder is no longer needed
 * All wasm libraries have the same asynchronous load pattern
     - `const instance = await <Wasm>.load();`
+
+v3.x.x
+```ts
+import { Graphviz } from "@hpcc-js/wasm-graphviz";
+
+const dot = "digraph G { Hello -> World }";
+
+Graphviz.load().then(graphviz => {
+    const svg = graphviz.dot(dot);
+    const div = document.getElementById("placeholder");
+    div.innerHTML = svg;    
+
+    console.log(graphviz.version());
+});
+```

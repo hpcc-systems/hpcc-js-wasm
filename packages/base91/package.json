@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm-base91",
-  "version": "1.1.0",
+  "version": "1.0.2",
   "description": "hpcc-js - WASM Base91",
   "type": "module",
   "exports": {
@@ -27,11 +27,13 @@
     "build": "run-p build-types build-ts",
     "lint-skypack": "npx -y @skypack/package-check",
     "lint-eslint": "eslint src/**/*.ts",
-    "lint": "run-p lint-eslint lint-skypack",
+    "lint": "run-p lint-eslint",
     "test-chrome": "karma start --single-run --browsers ChromiumHeadless karma.conf.cjs",
     "test-firefox": "karma start --single-run --browsers Firefox karma.conf.cjs",
     "test-node": "nyc mocha ./dist-test/index.node.js --reporter spec",
-    "test": "run-s test-chrome test-node"
+    "test": "run-s test-chrome test-node",
+    "update": "npx -y npm-check-updates -u -t minor",
+    "update-major": "npx -y npm-check-updates -u"
   },
   "dependencies": {},
   "devDependencies": {

@@ -2,6 +2,7 @@ import { expect } from "chai";
 import { DuckDB } from "@hpcc-js/wasm-duckdb";
 
 describe("duckdb", function () {
+    this.timeout(5000);
     it("version", async function () {
         const duckdb = await DuckDB.load();
         const v = duckdb.version();

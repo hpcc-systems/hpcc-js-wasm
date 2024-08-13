@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm-duckdb",
-  "version": "1.1.0",
+  "version": "1.0.1",
   "description": "hpcc-js - WASM DuckDB",
   "type": "module",
   "exports": {
@@ -31,14 +31,16 @@
     "build": "npm-run-all --serial pack-duckdb --parallel build-types build-ts",
     "lint-skypack": "npx -y @skypack/package-check",
     "lint-eslint": "eslint src/**/*.ts",
-    "lint": "run-p lint-eslint lint-skypack",
+    "lint": "run-p lint-eslint",
     "test-chrome": "karma start --single-run --browsers ChromiumHeadless karma.conf.cjs",
     "test-firefox": "karma start --single-run --browsers Firefox karma.conf.cjs",
-    "test": "run-s test-chrome"
+    "test": "run-s test-chrome",
+    "update": "npx -y npm-check-updates -u -t minor",
+    "update-major": "npx -y npm-check-updates -u"
   },
   "dependencies": {},
   "devDependencies": {
-    "@duckdb/duckdb-wasm": "1.28.1-dev106.0",
+    "@duckdb/duckdb-wasm": "1.28.1-dev99.0",
     "@hpcc-js/esbuild-plugins": "1.0.7"
   },
   "keywords": [
