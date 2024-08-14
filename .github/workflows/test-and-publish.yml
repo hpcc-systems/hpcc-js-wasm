@@ -1,4 +1,4 @@
-name: test-and-publish
+name: Test PR
 
 env:
   VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
@@ -63,30 +63,7 @@ jobs:
           npm run test
 
       - name: Calculate Coverage
+        if: ${{ matrix.node == 20 }}
         run: |
           npm run coverage
           npm run coverage-report
-
-      - name: Update Coveralls
-        uses: coverallsapp/github-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish
-        if: github.ref_type == 'tag'
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        run: |
-          npm publish ${{ contains(github.ref, 'next') && '--tag next' || '' }}
-
-      - name: Purge jsdelivr
-        if: github.ref_type == 'tag'
-        run: |
-          npm run purge-jsdelivr
-
-      - name: Create Release
-        if: github.ref_type == 'tag'
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: ${{ contains(github.ref, '-next.') }}

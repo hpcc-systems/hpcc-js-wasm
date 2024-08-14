@@ -30,7 +30,7 @@
     "build": "run-p build-types build-ts",
     "lint-skypack": "npx -y @skypack/package-check",
     "lint-eslint": "eslint src/**/*.ts",
-    "lint": "run-p lint-eslint lint-skypack"
+    "lint": "run-p lint-eslint"
   },
   "dependencies": {
     "@hpcc-js/wasm-graphviz": "1.1.0",
