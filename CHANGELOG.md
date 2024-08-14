@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.0.0...wasm-root-v3.1.0) (2024-08-14)
+
+
+### Features
+
+* Bump Versions ([#241](https://github.com/hpcc-systems/hpcc-js-wasm/issues/241)) ([55a2969](https://github.com/hpcc-systems/hpcc-js-wasm/commit/55a2969af94d15e5e34f2f51f4b58eb6484c21d9))
+
+
+### Bug Fixes
+
+* Clean up publish action ([#244](https://github.com/hpcc-systems/hpcc-js-wasm/issues/244)) ([6533b06](https://github.com/hpcc-systems/hpcc-js-wasm/commit/6533b06fa5a133fe983ed72ec54ac71806830782))
+
 ## [3.0.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v2.18.2...wasm-root-v3.0.0) (2024-08-13)
 
 
