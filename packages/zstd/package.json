@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm-zstd",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "hpcc-js - WASM zstd",
   "type": "module",
   "exports": {
