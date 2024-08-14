@@ -1,6 +1,6 @@
 # @hpcc-js/wasm
 
-_This folder contains a rebundling the following WebAssembly libraries for backward compatability:_
+_This folder contains a rebundling the following WebAssembly libraries for backward compatability with v2.x.x:_
 
 * [@hpcc-js/wasm-base91](../base91/README.md)
 * [@hpcc-js/wasm-duckdb](../duckdb/README.md)
