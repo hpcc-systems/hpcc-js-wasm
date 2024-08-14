@@ -87,7 +87,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         run: |
-          npm publish
+          npm run publish
 
       - name: Purge jsdelivr
         if: ${{ steps.release.outputs.release_created }}
