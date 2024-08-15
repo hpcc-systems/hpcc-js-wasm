@@ -58,7 +58,7 @@
     <div id="ESM"></div>
     <script type="module">
         import { Graphviz } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js";
-        //  import { Graphviz } from "./dist/index.js";
+        // import { Graphviz } from "./packages/wasm/dist/index.js";
         if (Graphviz) {
             const graphviz = await Graphviz.load();
             const svg = graphviz.layout(dot, "svg", "dot");
@@ -69,7 +69,7 @@
     <h3>UMD 1</h3>
     <div id="UMD1"></div>
     <script src="https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.umd.js"></script>
-    <!-- <script src="./dist/graphviz.umd.js"></script> -->
+    <!-- <script src="./packages/wasm/dist/graphviz.umd.js"></script> -->
     <script>
         var hpccWasm = window["@hpcc-js/wasm"];
         hpccWasm.Graphviz.load().then(graphviz => {
@@ -81,7 +81,7 @@
     <h3>UMD 2</h3>
     <div id="UMD2"></div>
     <script src="https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.umd.js"></script>
-    <!-- <script src="./dist/index.umd.js"></script> -->
+    <!-- <script src="./packages/wasm/dist/index.umd.js"></script> -->
     <script>
         var hpccWasm = window["@hpcc-js/wasm"];
         hpccWasm.Graphviz.load().then(graphviz => {

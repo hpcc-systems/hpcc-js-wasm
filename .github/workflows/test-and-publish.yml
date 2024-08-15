@@ -67,3 +67,12 @@ jobs:
         run: |
           npm run coverage
           npm run coverage-report
+
+      - name: Upload error logs
+        if: ${{ failure() || cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.node }}-logs
+          path: |
+            ./vcpkg/buildtrees/**/*.log
+            ./build/**/*.log

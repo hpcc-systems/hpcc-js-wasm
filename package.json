@@ -70,7 +70,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@eslint/js": "^9.9.0",
+    "@eslint/js": "9.9.0",
     "@istanbuljs/nyc-config-typescript": "1.0.2",
     "@types/chai": "4.3.17",
     "@types/emscripten": "1.39.13",
@@ -83,6 +83,7 @@
     "chai": "5.1.1",
     "coveralls": "3.1.1",
     "c8": "10.1.2",
+    "@hpcc-js/esbuild-plugins": "1.0.10",
     "eslint": "9.9.0",
     "globals": "15.9.0",
     "karma": "6.4.4",

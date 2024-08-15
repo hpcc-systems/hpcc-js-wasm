@@ -40,8 +40,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@duckdb/duckdb-wasm": "1.28.1-dev99.0",
-    "@hpcc-js/esbuild-plugins": "1.0.7"
+    "@duckdb/duckdb-wasm": "1.28.1-dev106.0"
   },
   "keywords": [
     "graphviz",

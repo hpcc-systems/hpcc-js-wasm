@@ -38,9 +38,7 @@
     "@hpcc-js/wasm-graphviz": "1.1.0",
     "yargs": "17.7.2"
   },
-  "devDependencies": {
-    "@hpcc-js/esbuild-plugins": "1.0.7"
-  },
+  "devDependencies": {},
   "keywords": [
     "graphviz",
     "typescript",

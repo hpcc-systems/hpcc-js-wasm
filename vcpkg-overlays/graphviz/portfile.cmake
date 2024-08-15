@@ -13,12 +13,20 @@ file(COPY ${CMAKE_CURRENT_LIST_DIR}/CMakeLists.txt DESTINATION ${SOURCE_PATH})
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
-        -Denable_ltdl=OFF
-        -Dwith_gvedit=OFF
-        -Dwith_smyrna=OFF
-        -Dwith_zlib=OFF
+        -DENABLE_LTDL=OFF
+        -DWITH_EXPAT=ON
+        -DWITH_GVEDIT=OFF
+        -WITH_SMYRNA=OFF
+        -DWITH_ZLIB=OFF
         -Duse_win_pre_inst_libs=OFF
         -DBUILD_SHARED_LIBS=OFF
+        -DENABLE_TCL=OFF
+        -DENABLE_SWIG=OFF
+        -DENABLE_SHARP=OFF
+        -DENABLE_D=OFF
+        -DENABLE_GO=OFF
+        -DENABLE_JAVASCRIPT=OFF
+        -DGRAPHVIZ_CLI=OFF
 )
 vcpkg_cmake_install()
 # vcpkg_cmake_config_fixup(PACKAGE_NAME "graphviz" CONFIG_PATH "share/cmake/graphviz")

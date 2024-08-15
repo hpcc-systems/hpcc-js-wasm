@@ -36,9 +36,7 @@
     "update-major": "npx -y npm-check-updates -u"
   },
   "dependencies": {},
-  "devDependencies": {
-    "@hpcc-js/esbuild-plugins": "1.0.7"
-  },
+  "devDependencies": {},
   "keywords": [
     "graphviz",
     "typescript",
