@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.1.0...wasm-root-v3.1.1) (2024-08-15)
+
+
+### Bug Fixes
+
+* Graphviz not including html table support ([#252](https://github.com/hpcc-systems/hpcc-js-wasm/issues/252)) ([11fd7e7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/11fd7e7d20b2b8fa7a0d3832775aedb4cd7e9bd3))
+* Release Please Publish ([#250](https://github.com/hpcc-systems/hpcc-js-wasm/issues/250)) ([ca67fa1](https://github.com/hpcc-systems/hpcc-js-wasm/commit/ca67fa1a7a36650f7e3406db624c12965a3e514c))
+* UMD files were not backward compatible ([11fd7e7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/11fd7e7d20b2b8fa7a0d3832775aedb4cd7e9bd3))
+
 ## [3.1.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.0.0...wasm-root-v3.1.0) (2024-08-14)
 
 

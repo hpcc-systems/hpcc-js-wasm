@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.1.0...wasm-zstd-v1.1.1) (2024-08-15)
+
+
+### Bug Fixes
+
+* Graphviz not including html table support ([#252](https://github.com/hpcc-systems/hpcc-js-wasm/issues/252)) ([11fd7e7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/11fd7e7d20b2b8fa7a0d3832775aedb4cd7e9bd3))
+* UMD files were not backward compatible ([11fd7e7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/11fd7e7d20b2b8fa7a0d3832775aedb4cd7e9bd3))
+
 ## [1.1.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.0.2...wasm-zstd-v1.1.0) (2024-08-14)
 
 
