@@ -16,7 +16,7 @@ export default {
         nav: [
             { text: 'Guide', link: '/getting-started' },
             { text: 'GitHub', link: 'https://github.com/hpcc-systems/hpcc-js-wasm' },
-            { text: 'Changelog', link: 'https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/CHANGELOG.md' },
+            { text: 'Changelog', link: 'https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/packages/wasm/CHANGELOG.md' },
         ],
         sidebar: [
             {
