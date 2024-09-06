@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - trunk
-      - trunk-2.x
 
 permissions:
   contents: write
@@ -12,7 +11,7 @@ name: release-please
 
 jobs:
   release-please:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - name: Initialize Release Please
         id: release
@@ -46,6 +45,7 @@ jobs:
           sudo apt-get install -y chromium
 
       - name: Export GitHub Actions cache environment variables
+        if: ${{ steps.release.outputs.release_created }}
         uses: actions/github-script@v7
         with:
           script: |
