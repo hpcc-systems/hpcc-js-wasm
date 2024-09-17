@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.4.0...wasm-graphviz-v1.5.0) (2024-09-17)
+
+
+### Features
+
+* Add support for the `canon` output format ([66bc3bb](https://github.com/hpcc-systems/hpcc-js-wasm/commit/66bc3bb7f3d8b7b207766e80230fb86973db99e8))
+
 ## [1.4.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.3.0...wasm-graphviz-v1.4.0) (2024-09-11)
 
 

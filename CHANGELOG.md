@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.4.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.3.0...wasm-root-v3.4.0) (2024-09-17)
+
+
+### Features
+
+* Add support for the `canon` output format ([66bc3bb](https://github.com/hpcc-systems/hpcc-js-wasm/commit/66bc3bb7f3d8b7b207766e80230fb86973db99e8))
+
 ## [3.3.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.2.1...wasm-root-v3.3.0) (2024-09-11)
 
 
