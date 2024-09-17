@@ -31,6 +31,7 @@
     "lint-skypack": "npx -y @skypack/package-check",
     "lint-eslint": "eslint src/**/*.ts",
     "lint": "run-p lint-eslint",
+    "test": "node bin/index.js --help",
     "update": "npx -y npm-check-updates -u -t minor",
     "update-major": "npx -y npm-check-updates -u"
   },

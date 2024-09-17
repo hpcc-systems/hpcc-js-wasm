@@ -18,9 +18,9 @@
   ],
   "scripts": {
     "clean": "rimraf ./build ./dist ./dist-test ./types",
-    "pack-duckdb-eh-worker-node": "npx -y mkdirp build && node ./utils/sfx-wasm.js ./node_modules/@duckdb/duckdb-wasm/dist/duckdb-node-eh.worker.cjs > ./build/duckdb-node-eh.worker.ts",
-    "pack-duckdb-eh-worker": "npx -y mkdirp build && node ./utils/sfx-wasm.js ./node_modules/@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js > ./build/duckdb-browser-eh.worker.ts",
-    "pack-duckdb-eh": "npx -y mkdirp build && node ./utils/sfx-wasm.js ./node_modules/@duckdb/duckdb-wasm/dist/duckdb-eh.wasm > ./build/duckdb-eh.wasm.ts",
+    "pack-duckdb-eh-worker-node": "npx -y mkdirp build && node ./utils/sfx-wasm.js ../../node_modules/@duckdb/duckdb-wasm/dist/duckdb-node-eh.worker.cjs > ./build/duckdb-node-eh.worker.ts",
+    "pack-duckdb-eh-worker": "npx -y mkdirp build && node ./utils/sfx-wasm.js ../../node_modules/@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js > ./build/duckdb-browser-eh.worker.ts",
+    "pack-duckdb-eh": "npx -y mkdirp build && node ./utils/sfx-wasm.js ../../node_modules/@duckdb/duckdb-wasm/dist/duckdb-eh.wasm > ./build/duckdb-eh.wasm.ts",
     "pack-duckdb": "run-p pack-duckdb-eh pack-duckdb-eh-worker pack-duckdb-eh-worker-node",
     "build-types": "tsc --project tsconfig.json --emitDeclarationOnly",
     "build-types-watch": "npm run build-types -- --watch",
@@ -30,17 +30,17 @@
     "build-dev": "run-p build-types build-ts-dev",
     "build": "npm-run-all --serial pack-duckdb --parallel build-types build-ts",
     "lint-skypack": "npx -y @skypack/package-check",
-    "lint-eslint": "eslint src/**/*.ts",
+    "lint-eslint": "eslint src/**/*.ts spec/*.ts",
     "lint": "run-p lint-eslint",
-    "test-chrome": "karma start --single-run --browsers ChromiumHeadless karma.conf.cjs",
-    "test-firefox": "karma start --single-run --browsers Firefox karma.conf.cjs",
-    "test": "run-s test-chrome",
+    "test-browser": "jasmine-browser-runner runSpecs",
+    "test": "run-s test-browser",
     "update": "npx -y npm-check-updates -u -t minor",
     "update-major": "npx -y npm-check-updates -u"
   },
   "dependencies": {},
   "devDependencies": {
-    "@duckdb/duckdb-wasm": "1.28.1-dev106.0"
+    "@duckdb/duckdb-wasm": "1.28.1-dev106.0",
+    "mkdirp": "3.0.1"
   },
   "keywords": [
     "DuckDB",

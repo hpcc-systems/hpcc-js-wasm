@@ -1,4 +1,6 @@
-import { bothTpl, browserBoth, nodeBoth } from "@hpcc-js/esbuild-plugins";
+import { bothTpl, browserTpl, nodeTpl } from "@hpcc-js/esbuild-plugins";
+import { copyFile } from "fs/promises";
+import * as path from "path";
 
 //  config  ---
 await Promise.all([
@@ -10,9 +12,12 @@ await Promise.all([
 ]);
 await bothTpl("src/index.ts", "dist/index", undefined, "@hpcc-js/wasm", ["./base91.js", "./duckdb.js", "./expat.js", "./graphviz.js", "./zstd.js"]);
 
-browserBoth("test/index-browser.ts", "dist-test/index.browser");
-browserBoth("test/worker-browser.ts", "dist-test/worker.browser");
-nodeBoth("test/index-node.ts", "dist-test/index.node");
-nodeBoth("test/worker-node.ts", "dist-test/worker.node");
+await Promise.all([
+    browserTpl("spec/index-browser.ts", "dist-test/index.browser"),
+    nodeTpl("spec/index-node.ts", "dist-test/index.node"),
+]);
 
-// nodeTpl("src/__bin__/dot-wasm.ts", "bin/dot-wasm", "esm", ["@hpcc-js/wasm/graphviz"]);
+await Promise.all([
+    copyFile(path.resolve("../graphviz/dist-test/worker.browser.js"), path.resolve("./dist-test/worker.browser.js")),
+    copyFile(path.resolve("../graphviz/dist-test/worker.node.js"), path.resolve("./dist-test/worker.node.js")),
+]);

@@ -12,8 +12,6 @@
             "DOM",
             "ES2020"
         ],
-        "types": [
-            "mocha"
-        ]
+        "types": []
     }
 }
