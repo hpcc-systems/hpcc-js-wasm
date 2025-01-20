@@ -51,11 +51,21 @@ add_executable(graphvizlib
 set_target_properties(graphvizlib PROPERTIES COMPILE_FLAGS "${CPP_FLAGS}")
 set_target_properties(graphvizlib PROPERTIES LINK_FLAGS "${LINK_FLAGS}")
 
+add_executable(graphvizlib-standalone
+    main-standalone.cpp
+    util.hpp
+    util.cpp
+)
+
+set_target_properties(graphvizlib-standalone PROPERTIES COMPILE_FLAGS "")
+set_target_properties(graphvizlib-standalone PROPERTIES LINK_FLAGS "--no-entry -s STANDALONE_WASM -s EXPORTED_FUNCTIONS=\"['_free', '_malloc', '_layout', '_lastError']\"")
+
 # link libraries
 function(add_graphviz_library library)
     find_library(GRAPHVIZ_${library} NAMES ${library})
     if(GRAPHVIZ_${library})
         target_link_libraries(graphvizlib PRIVATE ${GRAPHVIZ_${library}})
+        target_link_libraries(graphvizlib-standalone PRIVATE ${GRAPHVIZ_${library}})
     else()
         message(FATAL_ERROR "Could not find library ${library}!")
     endif()
@@ -90,18 +100,9 @@ target_link_libraries(graphvizlib PRIVATE
     ${EXPAT_LIBRARIES}
 )
 
-# add_executable(graphvizlib-web
-#     ${SRCS}
-# )
-
-# set_target_properties(graphvizlib-web PROPERTIES LINK_FLAGS "${LINK_FLAGS} -s ENVIRONMENT=web")
-
-# target_link_libraries(graphvizlib-web PRIVATE
-#     gvplugin_core
-#     gvplugin_dot_layout
-#     gvplugin_neato_layout
-#     ortho
-# )
+target_link_libraries(graphvizlib-standalone PRIVATE
+    ${EXPAT_LIBRARIES}
+)
 
 # add_executable(graphvizlib-worker
 #     ${SRCS}
