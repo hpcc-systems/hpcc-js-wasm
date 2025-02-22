@@ -27,6 +27,7 @@ set(EM_LINK_FLAGS
     # "-sSTANDALONE_WASM=0"
     # "-sBINARYEN_ASYNC_COMPILATION=1"
     # "-sDYNAMIC_EXECUTION=0"
+    "-sWASM_BIGINT=0"
     "-sPOLYFILL=0"
     # "-sSTRICT=0"
     "-sIGNORE_MISSING_MAIN=0"
@@ -45,7 +46,6 @@ set(EM_LINK_FLAGS
 if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     set(EM_LINK_FLAGS 
         ${EM_LINK_FLAGS}
-        "-sUSE_ES6_IMPORT_META=1"
         "-gsource-map"
         "--source-map-base ./"  #  Debugging c++ only works in browser with "Experimental DWARF support turned on"
     )
@@ -65,7 +65,6 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebIn
 else ()
     set(EM_LINK_FLAGS 
         ${EM_LINK_FLAGS}
-        "-sUSE_ES6_IMPORT_META=0"
     )
 endif ()
 
