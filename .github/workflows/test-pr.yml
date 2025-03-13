@@ -5,6 +5,7 @@ env:
 
 on:
   pull_request:
+  push:
 
 jobs:
   build:
@@ -12,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-24.04, macos-13, macos-14]
-        node: [18, 20, 22]
+        node: [20, 22]
 
     runs-on: ${{ matrix.os }}
     name: Node ${{ matrix.os }}, node-${{ matrix.node }} sample

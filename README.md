@@ -1,7 +1,8 @@
 # @hpcc-js/wasm - Version 3
 
-![Tests](https://github.com/hpcc-systems/hpcc-js-wasm/workflows/Test%20PR/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/GordonSmith/hpcc-js-wasm/badge.svg?branch=BUMP_VERSIONS)](https://coveralls.io/github/GordonSmith/hpcc-js-wasm?branch=BUMP_VERSIONS)
+[![Test PR](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/test-pr.yml/badge.svg)](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/test-pr.yml)
+[![release-please](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/release-please.yml/badge.svg)](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/release-please.yml)
+[![Coverage Status](https://coveralls.io/repos/github/hpcc-systems/hpcc-js-wasm/badge.svg?branch=BUMP_VERSIONS)](https://coveralls.io/github/GordonSmith/hpcc-js-wasm?branch=BUMP_VERSIONS)
 
 This repository contains a collection of useful c++ libraries compiled to WASM for (re)use in Node JS, Web Browsers and JavaScript Libraries:
 - [base91](https://base91.sourceforge.net/) - v0.6.0
@@ -13,7 +14,7 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 - ...more to follow...
 
 Built with:
-- [emsdk](https://github.com/emscripten-core/emsdk) - v3.1.73
+- [emsdk](https://github.com/emscripten-core/emsdk) - v4.0.5
 
 ## Homepage and Documents
 
