@@ -75,7 +75,7 @@
     "update-major": "npx -y npm-check-updates -u"
   },
   "dependencies": {
-    "yargs": "17.7.2"
+    "yargs": "18.0.0"
   },
   "devDependencies": {
     "@hpcc-js/wasm-base91": "1.3.1",
