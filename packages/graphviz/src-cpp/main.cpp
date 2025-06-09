@@ -65,7 +65,7 @@ Graphviz::Graphviz(int yInvert, int nop)
     lastErrorStr = "";
     agseterr(AGERR);
     agseterrf(vizErrorf);
-    agreadline(1);
+    // agreadline(1);
 }
 
 Graphviz::~Graphviz()
@@ -95,7 +95,7 @@ const char *Graphviz::layout(const char *src, const char *format, const char *en
     if (graph)
     {
         char *data = NULL;
-        unsigned int length;
+        size_t length;
 
         gvLayout(gvc, graph, engine);
         gvRenderData(gvc, graph, format, &data, &length);

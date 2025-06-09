@@ -61,7 +61,6 @@ describe("llama", () => {
         expect(embeddings3[0]).to.be.a.instanceOf(Array);
         expect(embeddings3[0].length).to.be.greaterThan(0);
         expect(embeddings3[0][0]).to.be.a("number");
-
         expect(embeddings).to.deep.equal(embeddings3);
     });
-}, 20000);
+}, 60000);

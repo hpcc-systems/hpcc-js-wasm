@@ -46,7 +46,15 @@ set(ENABLE_LUA AUTO CACHE STRING "Build Lua language bindings")
 set_property(CACHE ENABLE_LUA PROPERTY STRINGS AUTO ON OFF)
 set(ENABLE_PERL AUTO CACHE STRING "Build Perl language bindings")
 set_property(CACHE ENABLE_PERL PROPERTY STRINGS AUTO ON OFF)
-option(GRAPHVIZ_CLI "Build command line tools" ON)
+set(ENABLE_PHP AUTO CACHE STRING "Build PHP language bindings")
+set_property(CACHE ENABLE_PHP PROPERTY STRINGS AUTO ON OFF)
+set(ENABLE_PYTHON AUTO CACHE STRING "Build Python language bindings")
+set_property(CACHE ENABLE_PYTHON PROPERTY STRINGS AUTO ON OFF)
+set(ENABLE_R AUTO CACHE STRING "Build R language bindings")
+set_property(CACHE ENABLE_R PROPERTY STRINGS AUTO ON OFF)
+set(ENABLE_RUBY AUTO CACHE STRING "Build Ruby language bindings")
+set_property(CACHE ENABLE_RUBY PROPERTY STRINGS AUTO ON OFF)
+option(GRAPHVIZ_CLI "Build command line tools" OFF)
 
 if(WIN32)
   if(BUILD_SHARED_LIBS)
@@ -122,7 +130,7 @@ else()
       "${WINDOWS_DEPENDENCY_VCPKG_DIR}/x86-windows")
 endif()
 
-set(GRAPHVIZ_PLUGIN_VERSION 6)
+set(GRAPHVIZ_PLUGIN_VERSION 8)
 # Name of the config file used by Graphviz
 set(GVPLUGIN_CONFIG_FILE config${GRAPHVIZ_PLUGIN_VERSION})
 
@@ -210,6 +218,7 @@ if(ENABLE_LTDL)
   add_definitions(-DENABLE_LTDL)
 endif()
 
+find_package(AA)
 find_package(DevIL)
 find_package(Freetype)
 find_package(PANGOCAIRO)
@@ -275,7 +284,9 @@ if(NOT ENABLE_SWIG STREQUAL "OFF")
     cmake_policy(SET CMP0086 NEW)
   endif()
 
-  find_package(SWIG COMPONENTS csharp d go guile java javascript lua perl5)
+  find_package(SWIG
+    COMPONENTS csharp d go guile java javascript lua perl5 php7 python r ruby
+  )
   if(ENABLE_SWIG STREQUAL "AUTO")
     if(SWIG_FOUND)
       message(STATUS "setting -DENABLE_SWIG=ON")
@@ -432,6 +443,82 @@ if(NOT ENABLE_PERL STREQUAL "OFF")
   endif()
 endif()
 
+if(NOT ENABLE_PHP STREQUAL "OFF")
+  find_package(PHP)
+  if(ENABLE_SWIG AND SWIG_php7_FOUND AND PHP_FOUND)
+    if(ENABLE_PHP STREQUAL "AUTO")
+      message(STATUS "setting -DENABLE_PHP=ON")
+      set(ENABLE_PHP ON)
+    endif()
+  elseif(ENABLE_PHP STREQUAL "ON")
+    message(
+      FATAL_ERROR "-DENABLE_SWIG=ON must be set and PHP libraries must be \
+                   available to use -DENABLE_PHP=ON"
+    )
+  else()
+    message(STATUS "setting -DENABLE_PHP=OFF")
+    set(ENABLE_PHP OFF)
+  endif()
+endif()
+
+if(NOT ENABLE_PYTHON STREQUAL "OFF")
+  find_package(Python3 COMPONENTS Development)
+  if(ENABLE_SWIG AND SWIG_python_FOUND AND Python3_Development_FOUND)
+    if(ENABLE_PYTHON STREQUAL "AUTO")
+      message(STATUS "setting -DENABLE_PYTHON=ON")
+      set(ENABLE_PYTHON ON)
+    endif()
+  elseif(ENABLE_PYTHON STREQUAL "ON")
+    message(
+      FATAL_ERROR "-DENABLE_SWIG=ON must be set and Python libraries must be \
+                   available to use -DENABLE_PYTHON=ON"
+    )
+  else()
+    message(STATUS "setting -DENABLE_PYTHON=OFF")
+    set(ENABLE_PYTHON OFF)
+  endif()
+endif()
+
+if(NOT ENABLE_R STREQUAL "OFF")
+  if(PkgConfig_FOUND)
+    pkg_check_modules(R R)
+  else()
+    set(R_FOUND 0)
+  endif()
+  if(ENABLE_SWIG AND SWIG_r_FOUND AND R_FOUND)
+    if(ENABLE_R STREQUAL "AUTO")
+      message(STATUS "setting -DENABLE_R=ON")
+      set(ENABLE_R ON)
+    endif()
+  elseif(ENABLE_R STREQUAL "ON")
+    message(
+      FATAL_ERROR "-DENABLE_SWIG=ON must be set and R libraries must be \
+                   available to use -DENABLE_R=ON"
+    )
+  else()
+    message(STATUS "setting -DENABLE_R=OFF")
+    set(ENABLE_R OFF)
+  endif()
+endif()
+
+if(NOT ENABLE_RUBY STREQUAL "OFF")
+  find_package(Ruby)
+  if(ENABLE_SWIG AND SWIG_ruby_FOUND AND Ruby_FOUND)
+    if(ENABLE_RUBY STREQUAL "AUTO")
+      message(STATUS "setting -DENABLE_RUBY=ON")
+      set(ENABLE_RUBY ON)
+    endif()
+  elseif(ENABLE_RUBY STREQUAL "ON")
+    message(
+      FATAL_ERROR "-DENABLE_SWIG=ON must be set and Ruby libraries must be \
+                   available to use -DENABLE_RUBY=ON"
+    )
+  else()
+    message(STATUS "setting -DENABLE_RUBY=OFF")
+    set(ENABLE_RUBY OFF)
+  endif()
+endif()
+
 if(UNIX)
   # hpcc-js-wasm find_library(MATH_LIB m)
   # hpcc-js-wasm link_libraries(${MATH_LIB})
@@ -526,11 +613,19 @@ add_custom_target(uninstall
 
 # =========================== Compiler configuration ===========================
 
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /experimental:c11atomics")
+  # we also need to set this C option for the C++ compiler because Visual
+  # Studio, when building C that links against C++ (e.g. lib/neatogen/*.c), uses
+  # the C++ compiler options instead of the C ones
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /experimental:c11atomics")
+endif()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
@@ -551,6 +646,13 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
   # we suppress this warning.
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4996")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4996")
+  if(DEFINED ENV{CFLAGS})
+    if("$ENV{CFLAGS}" MATCHES "-fsanitize=[^ ]*address")
+      # Avoid "warning LNK4300: ignoring '/INCREMENTAL' because input module
+      # contains ASAN metadata"
+      add_link_options("/INCREMENTAL:NO")
+    endif()
+  endif()
 else()
   # Enable common warnings flags
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
@@ -568,6 +670,10 @@ endif()
 check_c_compiler_flag(-Wimplicit-fallthrough HAVE_C_WIMPLICIT_FALLTHROUGH)
 if(HAVE_C_WIMPLICIT_FALLTHROUGH)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wimplicit-fallthrough")
+endif()
+check_c_compiler_flag(-Wmaybe-uninitialized HAVE_C_WMAYBE_UNINITIALIZED)
+if(HAVE_C_WMAYBE_UNINITIALIZED)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmaybe-uninitialized")
 endif()
 check_c_compiler_flag(
   -Wmissing-field-initializers HAVE_C_WMISSING_FIELD_INITIALIZERS
@@ -587,10 +693,20 @@ check_c_compiler_flag(-Wundef HAVE_C_WUNDEF)
 if(HAVE_C_WUNDEF)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wundef")
 endif()
+check_c_compiler_flag(-Wunused-but-set-variable HAVE_C_WUNUSED_BUT_SET_VARIABLE)
 include(CheckCXXCompilerFlag)
+check_cxx_compiler_flag(
+  -Wmissing-field-initializers HAVE_CXX_WMISSING_FIELD_INITIALIZERS
+)
+check_cxx_compiler_flag(-Wshadow HAVE_CXX_WSHADOW)
+if(HAVE_CXX_WSHADOW)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wshadow")
+endif()
 check_cxx_compiler_flag(-Wsign-compare HAVE_CXX_WSIGN_COMPARE)
 check_cxx_compiler_flag(-Wunused-function HAVE_CXX_WUNUSED_FUNCTION)
+check_cxx_compiler_flag(-Wunused-label HAVE_CXX_WUNUSED_LABEL)
 check_cxx_compiler_flag(-Wunused-parameter HAVE_CXX_WUNUSED_PARAMETER)
+check_cxx_compiler_flag(-Wunused-variable HAVE_CXX_WUNUSED_VARIABLE)
 
 if(use_coverage)
   add_compile_options("-coverage")
@@ -606,8 +722,10 @@ include(CPack)
 include(CTest)
 
 # ======================= Specify subdirectories to build ======================
+if(GRAPHVIZ_CLI)
 # hpcc-js-wasm add_subdirectory(contrib/diffimg)
 # hpcc-js-wasm add_subdirectory(contrib/prune)
+endif()
 # hpcc-js-wasm add_subdirectory(graphs)
 add_subdirectory(lib)
 # add_subdirectory(plugin)
