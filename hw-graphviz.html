@@ -7,13 +7,12 @@
 </head>
 
 <body>
+    <h2 id="placeholder_version"></h2>
     <div id="placeholder"></div>
     <script type="module">
         //  Prefer local version (if available)  ---
-        const GraphvizLocal = await import("./dist/index.js").then(m => m.Graphviz).catch(() => undefined);
-        import { Graphviz as GraphvizExternal } from "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js";
-
-        const Graphviz = GraphvizLocal ?? GraphvizExternal;
+        const Graphviz = await import("./packages/graphviz/dist/index.js").then(m => m.Graphviz).catch(() => undefined) ??
+            await import("https://cdn.jsdelivr.net/npm/@hpcc-js/wasm-graphviz/dist/index.js").then(m => m.Graphviz);
 
         const dot = `
             digraph G {
@@ -48,7 +47,9 @@
         `;
 
         const graphviz = await Graphviz.load();
-        const div = document.getElementById("placeholder");
+        let div = document.getElementById("placeholder_version");
+        div.innerText = `Version: ${graphviz.version()}`;
+        div = document.getElementById("placeholder");
         div.innerHTML = graphviz.layout(dot, "svg", "dot");
     </script>
 
