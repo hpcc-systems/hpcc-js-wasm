@@ -71,7 +71,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.umd.js"></script>
     <!-- <script src="./packages/wasm/dist/graphviz.umd.js"></script> -->
     <script>
-        var hpccWasm = window["@hpcc-js/wasm"];
+        var hpccWasm = window["@hpcc-js/wasm/graphviz"];
         hpccWasm.Graphviz.load().then(graphviz => {
             var svg = graphviz.layout(dot, "svg", "dot");
             document.getElementById("UMD1").innerHTML = svg;

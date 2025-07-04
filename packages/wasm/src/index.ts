@@ -1,6 +1,6 @@
 export namespace Base91 {
     export function load() {
-        return import("./base91.ts").then(mod => mod.Base91.load());
+        return import("./base91.js").then(mod => mod.Base91.load());
     }
 }
 export namespace DuckDB {
@@ -10,16 +10,16 @@ export namespace DuckDB {
 }
 export namespace Expat {
     export function load() {
-        return import("./expat.ts").then(mod => mod.Expat.load());
+        return import("./expat.js").then(mod => mod.Expat.load());
     }
 }
 export namespace Graphviz {
     export function load() {
-        return import("./graphviz.ts").then(mod => mod.Graphviz.load());
+        return import("./graphviz.js").then(mod => mod.Graphviz.load());
     }
 }
 export namespace Zstd {
     export function load() {
-        return import("./zstd.ts").then(mod => mod.Zstd.load());
+        return import("./zstd.js").then(mod => mod.Zstd.load());
     }
 }
