@@ -17,7 +17,7 @@ set(EM_LINK_FLAGS
     "-sINVOKE_RUN=0"
     "-sALLOW_MEMORY_GROWTH=1"
     # "-sWASM=1"
-    "-sENVIRONMENT=webview"
+    "-sENVIRONMENT=web"
     "-sFILESYSTEM=0"
     # "-sMINIMAL_RUNTIME=1"
     "-sMODULARIZE=1" 
