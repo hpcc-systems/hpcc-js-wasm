@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# List of current vertsion can be found in https://github.com/microsoft/vcpkg/releases  ---
+# List of current version can be found in https://github.com/microsoft/vcpkg/releases  ---
 # UPDATE README.md
-VCPKG_BUILD_TOOLS_VERSION=2025.04.09
+VCPKG_BUILD_TOOLS_VERSION=2025.06.13
 
 if [ ! -d "./vcpkg" ] 
 then

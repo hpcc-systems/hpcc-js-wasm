@@ -48,9 +48,10 @@
   "jsdelivr": "./dist/index.umd.js",
   "types": "./types/index.d.ts",
   "bin": {
-    "dot-wasm": "node ./node_modules/@hpcc-js/wasm-graphviz-cli/bin/index.js"
+    "dot-wasm": "./deprecated/dot-wasm.js"
   },
   "files": [
+    "deprecated/**/*",
     "dist/**/*",
     "src/**/*",
     "types/**/*"

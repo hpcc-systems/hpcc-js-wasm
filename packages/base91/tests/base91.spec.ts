@@ -22,7 +22,6 @@ describe("base91", function () {
 
     it("simple", async function () {
         const base91 = await Base91.load();
-
         const data = new Uint8Array(Array.from({ length: 1000 }, (_, i) => i % 256));
         const base91Str = base91.encode(data);
         const data2 = await base91.decode(base91Str);

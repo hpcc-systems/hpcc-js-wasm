@@ -27,7 +27,7 @@
             "name": "index-browser",
             "type": "msedge",
             "request": "launch",
-            "url": "http://localhost:8000/index.html",
+            "url": "http://localhost:8080/index.html",
             "webRoot": "${workspaceRoot}",
             "sourceMapPathOverrides": {
                 "webpack:///./*": "${workspaceRoot}/*",
@@ -46,28 +46,28 @@
             "name": "http:///index.html",
             "type": "msedge",
             "request": "launch",
-            "url": "http://localhost:8000/index.html",
+            "url": "http://localhost:8080/index.html",
             "webRoot": "${workspaceRoot}"
         },
         {
             "name": "hw-graphviz.html",
             "type": "msedge",
             "request": "launch",
-            "url": "http://localhost:8000/hw-graphviz.html",
+            "url": "http://localhost:8080/hw-graphviz.html",
             "webRoot": "${workspaceRoot}"
         },
         {
             "name": "hw-zstd.html",
             "type": "msedge",
             "request": "launch",
-            "url": "http://localhost:8000/hw-zstd.html",
+            "url": "http://localhost:8080/hw-zstd.html",
             "webRoot": "${workspaceRoot}"
         },
         {
             "name": "hw-base91.html",
             "type": "msedge",
             "request": "launch",
-            "url": "http://localhost:8000/hw-base91.html",
+            "url": "http://localhost:8080/hw-base91.html",
             "webRoot": "${workspaceRoot}"
         },
         {
@@ -87,7 +87,7 @@
             "name": "test-browser",
             "type": "msedge",
             "request": "launch",
-            "url": "http://localhost:8000/test.html",
+            "url": "http://localhost:8080/test.html",
             "webRoot": "${workspaceRoot}",
             "sourceMapPathOverrides": {
                 "webpack:///./*": "${workspaceRoot}/*",

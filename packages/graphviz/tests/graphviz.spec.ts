@@ -34,7 +34,7 @@ describe("graphviz", function () {
         let graphviz = await Graphviz.load();
         let v = graphviz.version();
         expect(v).to.be.a.string;
-        expect(v).to.equal("13.0.0");       //  Update README.md with the new version!!!
+        expect(v).to.equal("13.1.0");       //  Update README.md with the new version!!!
         console.log("graphviz version: " + v);
         Graphviz.unload();
 
@@ -357,7 +357,7 @@ describe("tred", function () {
         Graphviz.unload();
         const graphviz = await Graphviz.load();
         const dot = `\
-digraph {
+digraph {node[label="\\N"];
     a -> b;
     b -> c;
     c -> d;
@@ -417,7 +417,7 @@ describe("unflatten", function () {
         Graphviz.unload();
         const graphviz = await Graphviz.load();
         const dot = `\
-graph {
+graph {node[label="\\N"];
     a -- 1;
     a -- 2;
     a -- 3;
@@ -429,7 +429,7 @@ graph {
 }`;
         let after = graphviz.unflatten(dot, 2, false, 1);
         expect(stripWhitespaces(after)).to.equal(stripWhitespaces(`\
-graph {
+graph {node[label="\\N"];
     a -- 1	[minlen=1];
     a -- 2	[minlen=2];
     a -- 3	[minlen=1];
@@ -439,7 +439,7 @@ graph {
 }`));
         after = graphviz.unflatten(dot, 2, true, 1);
         expect(stripWhitespaces(after)).to.equal(stripWhitespaces(`\
-graph {
+graph {node[label="\\N"];
     a -- 1  [minlen=1];
     a -- 2  [minlen=2];
     a -- 3  [minlen=1];

@@ -36,7 +36,7 @@ describe("expat", function () {
         let expat = await Expat.load();
         let v = await expat.version();
         expect(v).to.be.a.string;
-        expect(v).to.equal("expat_2.6.2");
+        expect(v).to.equal("expat_2.7.1");
         console.log("expat version: " + v);
         Expat.unload();
 

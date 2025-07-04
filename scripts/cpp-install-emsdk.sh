@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# List of current vertsion can be found in https://github.com/emscripten-core/emsdk/tags  ---
+# List of current version can be found in https://github.com/emscripten-core/emsdk/tags  ---
 # UPDATE README.md
-VERSION=4.0.5
+VERSION=4.0.10
 
 if [ ! -d "./emsdk" ] 
 then

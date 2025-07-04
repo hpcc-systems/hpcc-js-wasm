@@ -7,14 +7,14 @@
 This repository contains a collection of useful c++ libraries compiled to WASM for (re)use in Node JS, Web Browsers and JavaScript Libraries:
 - [base91](https://base91.sourceforge.net/) - v0.6.0
 - [duckdb](https://github.com/duckdb/duckdb) - v1.1.1
-- [expat](https://libexpat.github.io/) - v2.6.2
-- [graphviz](https://www.graphviz.org/) - v13.0.0
+- [expat](https://libexpat.github.io/) - v2.7.1
+- [graphviz](https://www.graphviz.org/) - v13.1.0
 - [llama.cpp](https://github.com/ggerganov/llama.cpp) - b3718
-- [zstd](https://github.com/facebook/zstd) - v1.5.6
+- [zstd](https://github.com/facebook/zstd) - v1.5.7
 - ...more to follow...
 
 Built with:
-- [emsdk](https://github.com/emscripten-core/emsdk) - v4.0.5
+- [emsdk](https://github.com/emscripten-core/emsdk) - v4.0.10
 
 ## Homepage and Documents
 
