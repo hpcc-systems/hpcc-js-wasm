@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.8.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.8.0...wasm-root-v3.8.1) (2025-07-04)
+
+
+### Bug Fixes
+
+* umd loading not working 100% ([04632f8](https://github.com/hpcc-systems/hpcc-js-wasm/commit/04632f86a2f57482a7c3e903b37de978c9a0f1ec))
+
 ## [3.8.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.7.1...wasm-root-v3.8.0) (2025-07-04)
 
 
