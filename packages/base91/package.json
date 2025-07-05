@@ -36,7 +36,9 @@
     "update-major": "npx -y npm-check-updates -u"
   },
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "@hpcc-js/esbuild-plugins": "1.4.8"
+  },
   "keywords": [
     "base64",
     "base91",
