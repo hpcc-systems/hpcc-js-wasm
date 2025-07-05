@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.7.0...wasm-duckdb-v1.7.1) (2025-07-05)
+
+
+### Bug Fixes
+
+* move esbuild into packages ([03f0587](https://github.com/hpcc-systems/hpcc-js-wasm/commit/03f0587c56a54f4819c78c143a4c4755bdb96ee0))
+
 ## [1.7.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.6.0...wasm-duckdb-v1.7.0) (2025-07-04)
 
 

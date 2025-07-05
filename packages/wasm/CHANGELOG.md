@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.24.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.24.1...wasm-v2.24.2) (2025-07-05)
+
+
+### Bug Fixes
+
+* move esbuild into packages ([03f0587](https://github.com/hpcc-systems/hpcc-js-wasm/commit/03f0587c56a54f4819c78c143a4c4755bdb96ee0))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.4.0 to ^1.4.1
+    * @hpcc-js/wasm-duckdb bumped from ^1.7.0 to ^1.7.1
+    * @hpcc-js/wasm-expat bumped from ^1.4.0 to ^1.4.1
+    * @hpcc-js/wasm-graphviz bumped from ^1.9.0 to ^1.9.1
+    * @hpcc-js/wasm-zstd bumped from ^1.3.0 to ^1.3.1
+
 ## [2.24.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.24.0...wasm-v2.24.1) (2025-07-04)
 
 

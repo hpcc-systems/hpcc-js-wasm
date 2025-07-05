@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.8.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.8.1...wasm-root-v3.8.2) (2025-07-05)
+
+
+### Bug Fixes
+
+* move esbuild into packages ([03f0587](https://github.com/hpcc-systems/hpcc-js-wasm/commit/03f0587c56a54f4819c78c143a4c4755bdb96ee0))
+
 ## [3.8.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.8.0...wasm-root-v3.8.1) (2025-07-04)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.3.0...wasm-zstd-v1.3.1) (2025-07-05)
+
+
+### Bug Fixes
+
+* move esbuild into packages ([03f0587](https://github.com/hpcc-systems/hpcc-js-wasm/commit/03f0587c56a54f4819c78c143a4c4755bdb96ee0))
+
 ## [1.3.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.2.1...wasm-zstd-v1.3.0) (2025-07-04)
 
 
