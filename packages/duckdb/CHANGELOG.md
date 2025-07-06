@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.7.1...wasm-duckdb-v1.7.2) (2025-07-06)
+
+
+### Bug Fixes
+
+* remove findWasmBinary from bundles ([1fc05ec](https://github.com/hpcc-systems/hpcc-js-wasm/commit/1fc05ec2e5c4b6e82fa1e96bd80bb6ed7865be09))
+
 ## [1.7.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.7.0...wasm-duckdb-v1.7.1) (2025-07-05)
 
 
