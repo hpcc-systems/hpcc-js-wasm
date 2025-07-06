@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.8.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.8.2...wasm-root-v3.8.3) (2025-07-06)
+
+
+### Bug Fixes
+
+* remove findWasmBinary from bundles ([1fc05ec](https://github.com/hpcc-systems/hpcc-js-wasm/commit/1fc05ec2e5c4b6e82fa1e96bd80bb6ed7865be09))
+
 ## [3.8.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.8.1...wasm-root-v3.8.2) (2025-07-05)
 
 

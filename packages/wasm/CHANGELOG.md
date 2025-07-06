@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.24.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.24.2...wasm-v2.24.3) (2025-07-06)
+
+
+### Bug Fixes
+
+* remove findWasmBinary from bundles ([1fc05ec](https://github.com/hpcc-systems/hpcc-js-wasm/commit/1fc05ec2e5c4b6e82fa1e96bd80bb6ed7865be09))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.4.1 to ^1.4.2
+    * @hpcc-js/wasm-duckdb bumped from ^1.7.1 to ^1.7.2
+    * @hpcc-js/wasm-expat bumped from ^1.4.1 to ^1.4.2
+    * @hpcc-js/wasm-graphviz bumped from ^1.9.1 to ^1.9.2
+    * @hpcc-js/wasm-zstd bumped from ^1.3.1 to ^1.3.2
+
 ## [2.24.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.24.1...wasm-v2.24.2) (2025-07-05)
 
 
