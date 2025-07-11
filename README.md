@@ -26,6 +26,16 @@ Built with:
     * [Llama](https://hpcc-systems.github.io/hpcc-js-wasm/llama/src/llama/classes/Llama.html)
     * [Zstd](https://hpcc-systems.github.io/hpcc-js-wasm/zstd/src/zstd/classes/Zstd.html)
 
+## AI Assistant / Copilot Instructions
+
+This repository includes comprehensive instructions for AI assistants and GitHub Copilot:
+
+* [Main Copilot Instructions](.copilot-instructions.md) - Repository overview and architecture
+* [Development Workflow](.copilot-workflow.md) - Step-by-step development processes
+* [Package Patterns](.copilot-patterns.md) - Common patterns and quick reference
+* [Troubleshooting Guide](.copilot-troubleshooting.md) - Debugging and problem resolution
+* Package-specific guides in `packages/*/` directories
+
 ## Version 3 Changes
 
 Converted this repository to a monorepo with the following packages:
