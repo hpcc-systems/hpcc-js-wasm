@@ -30,10 +30,10 @@ Built with:
 
 This repository includes comprehensive instructions for AI assistants and GitHub Copilot:
 
-* [Main Copilot Instructions](.copilot-instructions.md) - Repository overview and architecture
-* [Development Workflow](.copilot-workflow.md) - Step-by-step development processes
-* [Package Patterns](.copilot-patterns.md) - Common patterns and quick reference
-* [Troubleshooting Guide](.copilot-troubleshooting.md) - Debugging and problem resolution
+* [Main Instructions](.github/instructions/main.md) - Repository overview and architecture
+* [Development Workflow](.github/instructions/workflow.md) - Step-by-step development processes
+* [Package Patterns](.github/instructions/patterns.md) - Common patterns and quick reference
+* [Troubleshooting Guide](.github/instructions/troubleshooting.md) - Debugging and problem resolution
 * Package-specific guides in `packages/*/` directories
 
 ## Version 3 Changes

@@ -1,25 +1,25 @@
-# Copilot Instructions Summary
+# Instructions Summary
 
 This directory contains comprehensive instructions for AI assistants working with the HPCC-JS-WASM repository.
 
 ## File Overview
 
 ### Main Instructions
-- **[.copilot-instructions.md](.copilot-instructions.md)** - Start here! Repository overview, architecture, and basic guidance
-- **[.copilot-workflow.md](.copilot-workflow.md)** - Step-by-step development workflows for common tasks
-- **[.copilot-patterns.md](.copilot-patterns.md)** - Quick reference for package patterns and usage examples
-- **[.copilot-troubleshooting.md](.copilot-troubleshooting.md)** - Debugging guide for common issues
+- **[main.md](main.md)** - Start here! Repository overview, architecture, and basic guidance
+- **[workflow.md](workflow.md)** - Step-by-step development workflows for common tasks
+- **[patterns.md](patterns.md)** - Quick reference for package patterns and usage examples
+- **[troubleshooting.md](troubleshooting.md)** - Debugging guide for common issues
 
 ### Package-Specific Instructions
-- **[packages/graphviz/.copilot-package.md](packages/graphviz/.copilot-package.md)** - Graphviz package specifics
-- **[packages/duckdb/.copilot-package.md](packages/duckdb/.copilot-package.md)** - DuckDB package specifics
+- **[../../packages/graphviz/.copilot-package.md](../../packages/graphviz/.copilot-package.md)** - Graphviz package specifics
+- **[../../packages/duckdb/.copilot-package.md](../../packages/duckdb/.copilot-package.md)** - DuckDB package specifics
 
 ## Quick Start for AI Assistants
 
-1. **First Time Setup**: Read [.copilot-instructions.md](.copilot-instructions.md) for repository overview
-2. **Development Tasks**: Follow workflows in [.copilot-workflow.md](.copilot-workflow.md)
-3. **Package Usage**: Check patterns in [.copilot-patterns.md](.copilot-patterns.md)
-4. **Problems?**: Consult [.copilot-troubleshooting.md](.copilot-troubleshooting.md)
+1. **First Time Setup**: Read [main.md](main.md) for repository overview
+2. **Development Tasks**: Follow workflows in [workflow.md](workflow.md)
+3. **Package Usage**: Check patterns in [patterns.md](patterns.md)
+4. **Problems?**: Consult [troubleshooting.md](troubleshooting.md)
 
 ## Key Points for AI Assistants
 
