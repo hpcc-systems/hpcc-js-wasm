@@ -20,6 +20,7 @@ dist-test/
 /lib-*
 node_modules/
 /packages/llama/docs
+/packages/javac/
 /rust
 /third-party
 /src-ts/*.wasm.ts

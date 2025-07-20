@@ -18,19 +18,13 @@ function get(id, url) {
 
 async function purgePackage(id, ver) {
     const purgeIndex = `https://purge.jsdelivr.net/npm/${id}${ver}/dist/index.js`;
-    const purgeIndexNode = `https://purge.jsdelivr.net/npm/${id}${ver}/dist/index.node.js`;
-    const purgeIndexMin = `https://purge.jsdelivr.net/npm/${id}${ver}/dist/index.min.js`;
-    const purgeIndexNodeMin = `https://purge.jsdelivr.net/npm/${id}${ver}/dist/index.node.min.js`;
-    const purgeGraphviz = `https://purge.jsdelivr.net/npm/${id}${ver}/dist/graphvizlib.wasm`;
-    const purgeExpat = `https://purge.jsdelivr.net/npm/${id}${ver}/dist/expatlib.wasm`;
+    const purgeIndexNode = `https://purge.jsdelivr.net/npm/${id}${ver}/dist/index.cjs`;
+    const purgeIndexUmd = `https://purge.jsdelivr.net/npm/${id}${ver}/dist/index.umd.js`;
     const purgePackage = `https://purge.jsdelivr.net/npm/${id}${ver}/package.json`;
     return Promise.all([
         get(id, purgeIndex),
         get(id, purgeIndexNode),
-        get(id, purgeIndexMin),
-        get(id, purgeIndexNodeMin),
-        get(id, purgeGraphviz),
-        get(id, purgeExpat),
+        get(id, purgeIndexUmd),
         get(id, purgePackage)
     ]).then(responses => {
         return {

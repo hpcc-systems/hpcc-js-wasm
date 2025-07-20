@@ -87,6 +87,61 @@ function replaceFunctionByName(contents, functionName, replacement, patterns) {
 
     return result;
 }
+export const replaceString = (replacements) => {
+    if (!replacements || typeof replacements !== 'object') {
+        throw new Error('replaceString: replacements must be an object');
+    }
+
+    return {
+        name: 'replace-string',
+        setup(build) {
+            // Store the original write option
+            const originalWrite = build.initialOptions.write !== false;
+
+            // Disable writing so we can intercept the output
+            build.initialOptions.write = false;
+
+            build.onEnd(async (result) => {
+                if (result.errors.length > 0 || !result.outputFiles) return;
+
+                const { writeFile, mkdir } = await import('fs/promises');
+                const { dirname } = await import('path');
+
+                for (const outputFile of result.outputFiles) {
+                    let contents = new TextDecoder().decode(outputFile.contents);
+                    let modified = false;
+
+                    // Check if any of the target strings exist in the file
+                    const hasTargetString = Object.keys(replacements).some(searchString =>
+                        contents.includes(searchString)
+                    );
+
+                    if (hasTargetString) {
+                        // Replace all occurrences of each string
+                        for (const [searchString, replacement] of Object.entries(replacements)) {
+                            if (contents.includes(searchString)) {
+                                contents = contents.replaceAll(searchString, replacement);
+                                modified = true;
+                            }
+                        }
+                    }
+
+                    // Write the file (modified or not)
+                    if (originalWrite) {
+                        try {
+                            // Ensure directory exists
+                            await mkdir(dirname(outputFile.path), { recursive: true });
+                            await writeFile(outputFile.path, contents, 'utf8');
+                        } catch (error) {
+                            console.warn(`[replace-string] Failed to write ${outputFile.path}:`, error.message);
+                        }
+                    }
+                }
+            });
+        },
+    };
+};
+
 export const replaceFunction = (replacements) => {
     if (!replacements || typeof replacements !== 'object') {
         throw new Error('replaceFunction: replacements must be an object');

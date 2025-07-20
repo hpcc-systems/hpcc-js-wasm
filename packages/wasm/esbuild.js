@@ -1,11 +1,14 @@
 import { bothTpl } from "@hpcc-js/esbuild-plugins";
-import { replaceFunction } from "../../utils/esbuild-plugins.js";
+import { replaceFunction, replaceString } from "../../utils/esbuild-plugins.js";
 
 const replaceConfig = {
     plugins: [
         replaceFunction({
             'findWasmBinary': 'const findWasmBinary=()=>"";'
-        })
+        }),
+        replaceString({
+            "import.meta.url": "''",
+        }),
     ]
 };
 
