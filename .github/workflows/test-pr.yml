@@ -1,4 +1,4 @@
-name: Test PR
+name: Test PR (test-pr.yml)
 
 env:
   VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"

@@ -26,10 +26,9 @@
         "@hpcc-js/wasm-graphviz": "file:../../packages/graphviz",
         "@hpcc-js/wasm-llama": "file:../../packages/llama",
         "@hpcc-js/wasm-zstd": "file:../../packages/zstd",
-        "@rollup/plugin-node-resolve": "^15.2.3",
-        "@rollup/plugin-commonjs": "^25.0.7",
-        "esbuild": "0.25.8",
-        "rollup": "4.24.4",
+        "@rollup/plugin-node-resolve": "16.0.1",
+        "@rollup/plugin-commonjs": "28.0.6",
+        "rollup": "4.45.1",
         "webpack": "5.100.2",
         "webpack-cli": "6.0.1"
     }

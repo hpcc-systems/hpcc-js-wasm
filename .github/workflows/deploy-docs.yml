@@ -1,4 +1,4 @@
-name: Deploy vitepress content to Pages
+name: Deploy vitepress content to Pages (deploy-docs.yml)
 
 on:
   push:
