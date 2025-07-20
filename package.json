@@ -19,7 +19,8 @@
   ],
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "tests/bundlers"
   ],
   "scripts": {
     "install-emsdk": "run-script-os",
@@ -30,7 +31,8 @@
     "install-vcpkg:win32": "wsl -e ./scripts/cpp-install-vcpkg.sh",
     "install-playright": "npx playwright install",
     "install-playright-with-deps": "npx playwright install --with-deps",
-    "install-build-deps": "run-s install-emsdk install-vcpkg install-playright",
+    "install-bundler-deps": "./scripts/install-bundler-deps.sh",
+    "install-build-deps": "run-s install-emsdk install-vcpkg install-playright install-bundler-deps",
     "uninstall-build-deps": "rimraf ./emsdk ./vcpkg ./src-expat ./src-vcpkg ./wasi-sdk ./wit-bindgen",
     "uninstall": "rimraf --glob ./node_modules ./packages/**/node_modules ./package-lock.json",
     "clean-build": "rimraf --glob .nyc_output bin build coverage output-* tmp vcpkg/vcpkg .nx",
@@ -68,6 +70,12 @@
     "test-browser": "vitest run --project browser",
     "test-node": "vitest run --project node",
     "test": "lerna run test",
+    "test-bundlers": "npm run test --workspace=tests/bundlers",
+    "test-bundlers-script": "./scripts/test-bundlers.sh",
+    "test-bundlers-webpack": "npm run test:webpack --workspace=tests/bundlers",
+    "test-bundlers-esbuild": "npm run test:esbuild --workspace=tests/bundlers",
+    "test-bundlers-rollup": "npm run test:rollup --workspace=tests/bundlers",
+    "test-all": "npm run test && npm run test-bundlers",
     "coverage": "lerna run coverage",
     "publish": "lerna publish from-package -y",
     "purge-jsdelivr": "node ./utils/purge-jsdelivr.js",

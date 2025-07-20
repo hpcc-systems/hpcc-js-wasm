@@ -1,6 +1,6 @@
 # @hpcc-js/wasm - Version 3
 
-[![Test PR](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/test-pr.yml/badge.svg)](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/test-pr.yml)
+[![Test PR](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/test-pr.yml/badge.svg?branch=release-please--branches--trunk)](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/test-pr.yml)
 [![release-please](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/release-please.yml/badge.svg)](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/release-please.yml)
 [![Coverage Status](https://coveralls.io/repos/github/hpcc-systems/hpcc-js-wasm/badge.svg?branch=BUMP_VERSIONS)](https://coveralls.io/github/GordonSmith/hpcc-js-wasm?branch=BUMP_VERSIONS)
 

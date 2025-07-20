@@ -2,6 +2,7 @@ export default {
     title: '@hpcc-js/wasm',
     description: 'HPCC Systems Wasm Libraries',
     base: '/hpcc-js-wasm/',
+    srcExclude: ['**/tests/**'],
 
     themeConfig: {
         repo: "hpcc-systems/hpcc-js-wasm",

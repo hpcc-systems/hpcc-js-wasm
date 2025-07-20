@@ -1,0 +1,36 @@
+{
+    "name": "@hpcc-js/wasm-bundler-tests",
+    "version": "1.0.0",
+    "description": "Integration tests for bundler compatibility",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "clean": "rimraf dist",
+        "build:webpack": "webpack --config webpack.config.js",
+        "build:webpack-browser": "webpack --config webpack.browser.config.js",
+        "build:esbuild": "esbuild src/esbuild-test.js --bundle --platform=node --outfile=dist/esbuild-test.js",
+        "build:esbuild-browser": "esbuild src/esbuild-browser-test.js --bundle --platform=browser --outfile=dist/esbuild-browser-test.js",
+        "build:rollup": "rollup --config rollup.config.js",
+        "build:rollup-browser": "rollup --config rollup.browser.config.js",
+        "build": "run-s build:*",
+        "test:node": "vitest run --config vitest.node.config.js",
+        "test:browser": "vitest run --config vitest.browser.config.js",
+        "test": "run-s test:node test:browser",
+        "update": "npx -y npm-check-updates -u -t minor",
+        "update-major": "npx -y npm-check-updates -u"
+    },
+    "devDependencies": {
+        "@hpcc-js/wasm-base91": "file:../../packages/base91",
+        "@hpcc-js/wasm-duckdb": "file:../../packages/duckdb",
+        "@hpcc-js/wasm-expat": "file:../../packages/expat",
+        "@hpcc-js/wasm-graphviz": "file:../../packages/graphviz",
+        "@hpcc-js/wasm-llama": "file:../../packages/llama",
+        "@hpcc-js/wasm-zstd": "file:../../packages/zstd",
+        "@rollup/plugin-node-resolve": "^15.2.3",
+        "@rollup/plugin-commonjs": "^25.0.7",
+        "esbuild": "0.25.8",
+        "rollup": "4.24.4",
+        "webpack": "5.100.2",
+        "webpack-cli": "6.0.1"
+    }
+}
