@@ -49,14 +49,14 @@ export class DuckDB {
      */
     static load(): Promise<DuckDB> {
         const workerUrl = URL.createObjectURL(
-            new Blob([loadWasmWorker()], { type: "text/javascript" })
+            new Blob([new Uint8Array(loadWasmWorker())], { type: "text/javascript" })
         );
         const worker = new Worker(workerUrl);
         URL.revokeObjectURL(workerUrl);
         const logger = new ConsoleLogger();
         const db = new AsyncDuckDB(logger, worker);
         const wasmUrl = URL.createObjectURL(
-            new Blob([load()], { "type": "application/wasm" })
+            new Blob([new Uint8Array(load())], { "type": "application/wasm" })
         );
         return db.instantiate(wasmUrl, null).then(async () => {
             URL.revokeObjectURL(wasmUrl);

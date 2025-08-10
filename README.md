@@ -8,13 +8,13 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 - [base91](https://base91.sourceforge.net/) - v0.6.0
 - [duckdb](https://github.com/duckdb/duckdb) - v1.1.1
 - [expat](https://libexpat.github.io/) - v2.7.1
-- [graphviz](https://www.graphviz.org/) - v13.1.1
+- [graphviz](https://www.graphviz.org/) - v13.1.2
 - [llama.cpp](https://github.com/ggerganov/llama.cpp) - b3718
 - [zstd](https://github.com/facebook/zstd) - v1.5.7
 - ...more to follow...
 
 Built with:
-- [emsdk](https://github.com/emscripten-core/emsdk) - v4.0.11
+- [emsdk](https://github.com/emscripten-core/emsdk) - v4.0.12
 
 ## Homepage and Documents
 
