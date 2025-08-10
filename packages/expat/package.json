@@ -37,7 +37,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@hpcc-js/esbuild-plugins": "1.4.8"
+    "@hpcc-js/esbuild-plugins": "1.4.9"
   },
   "keywords": [
     "graphviz",
