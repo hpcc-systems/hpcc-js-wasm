@@ -4,7 +4,7 @@ import { badDot, dot } from "./dot001.js";
 import { ortho } from "./dot002.js";
 import { dotMemory } from "./dot003.js";
 
-const formats: Format[] = ["svg", "dot", "json", "dot_json", "xdot_json", "plain", "plain-ext", "canon"];
+const formats: Format[] = ["svg", "svg_inline", "dot", "json", "dot_json", "xdot_json", "plain", "plain-ext", "canon"];
 const engines: Engine[] = ["circo", "dot", "fdp", "sfdp", "neato", "osage", "patchwork", "twopi", "nop", "nop2"];
 
 describe("all combos", () => {

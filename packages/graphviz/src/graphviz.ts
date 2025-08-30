@@ -4,7 +4,7 @@ import load, { reset } from "../../../build/packages/graphviz/src-cpp/graphvizli
 /**
  * Various graphic and data formats for end user, web, documents and other applications.  See [Output Formats](https://graphviz.gitlab.io/docs/outputs/) for more information.
  */
-export type Format = "svg" | "dot" | "json" | "dot_json" | "xdot_json" | "plain" | "plain-ext" | "canon";
+export type Format = "svg" | "svg_inline" | "dot" | "json" | "dot_json" | "xdot_json" | "plain" | "plain-ext" | "canon";
 
 /**
  * Various algorithms for projecting abstract graphs into a space for visualization.  See [Layout Engines](https://graphviz.gitlab.io/docs/layouts/) for more details.
