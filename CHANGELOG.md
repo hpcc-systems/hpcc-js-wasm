@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.11.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.10.0...wasm-root-v3.11.0) (2025-08-30)
+
+
+### Features
+
+* Add svg_inline to GraphViz Format type ([0ce48b1](https://github.com/hpcc-systems/hpcc-js-wasm/commit/0ce48b1db994f54c93203be5a98fc80502dfeb87))
+
 ## [3.10.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.9.0...wasm-root-v3.10.0) (2025-08-10)
 
 

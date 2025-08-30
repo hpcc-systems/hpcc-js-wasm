@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.11.0...wasm-graphviz-v1.12.0) (2025-08-30)
+
+
+### Features
+
+* Add svg_inline to GraphViz Format type ([0ce48b1](https://github.com/hpcc-systems/hpcc-js-wasm/commit/0ce48b1db994f54c93203be5a98fc80502dfeb87))
+
 ## [1.11.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.10.0...wasm-graphviz-v1.11.0) (2025-08-10)
 
 
