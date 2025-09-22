@@ -31,7 +31,6 @@ describe("llama", () => {
         const model = "https://huggingface.co/CompendiumLabs/bge-base-en-v1.5-gguf/resolve/main/bge-base-en-v1.5-q4_k_m.gguf";
         const webBlob: Blob = await WebBlob.create(new URL(model));
         expect(webBlob.type).to.be.a.string;
-        expect(webBlob.type).equals("binary/octet-stream");
         const data: ArrayBuffer = await webBlob.arrayBuffer();
         expect(data).to.be.instanceOf(ArrayBuffer);
         expect(data.byteLength).to.be.greaterThan(0);

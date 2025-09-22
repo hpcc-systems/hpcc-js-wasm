@@ -28,8 +28,8 @@
         "@hpcc-js/wasm-zstd": "file:../../packages/zstd",
         "@rollup/plugin-node-resolve": "16.0.1",
         "@rollup/plugin-commonjs": "28.0.6",
-        "rollup": "4.46.2",
-        "webpack": "5.101.0",
+        "rollup": "4.52.0",
+        "webpack": "5.101.3",
         "webpack-cli": "6.0.1"
     }
 }

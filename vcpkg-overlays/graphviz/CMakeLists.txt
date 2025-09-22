@@ -54,7 +54,53 @@ set(ENABLE_R AUTO CACHE STRING "Build R language bindings")
 set_property(CACHE ENABLE_R PROPERTY STRINGS AUTO ON OFF)
 set(ENABLE_RUBY AUTO CACHE STRING "Build Ruby language bindings")
 set_property(CACHE ENABLE_RUBY PROPERTY STRINGS AUTO ON OFF)
-option(GRAPHVIZ_CLI "Build command line tools" OFF)
+option(GRAPHVIZ_CLI "Build command line tools" ON)
+set(WITH_GDK AUTO CACHE STRING "enable GDK-dependent components (GDK plugin)")
+set_property(CACHE WITH_GDK PROPERTY STRINGS AUTO ON OFF)
+
+set(WITH_GTK AUTO CACHE STRING "enable GTK-dependent components (smyrna)")
+set_property(CACHE WITH_GTK PROPERTY STRINGS AUTO ON OFF)
+if(WITH_GTK STREQUAL "AUTO")
+  set(AUTO_GTK ON)
+else()
+  set(AUTO_GTK OFF)
+endif()
+
+set(WITH_POPPLER AUTO CACHE STRING
+  "enable Poppler-dependent components (Poppler plugin)")
+set_property(CACHE WITH_POPPLER PROPERTY STRINGS AUTO ON OFF)
+if(WITH_POPPLER STREQUAL "AUTO")
+  set(AUTO_POPPLER ON)
+else()
+  set(AUTO_POPPLER OFF)
+endif()
+
+set(WITH_RSVG AUTO CACHE STRING
+  "enable librsvg-dependent components (Rsvg plugin)")
+set_property(CACHE WITH_RSVG PROPERTY STRINGS AUTO ON OFF)
+if(WITH_RSVG STREQUAL "AUTO")
+  set(AUTO_RSVG ON)
+else()
+  set(AUTO_RSVG OFF)
+endif()
+
+set(WITH_WEBP AUTO CACHE STRING
+  "enable WebP-dependent components (WebP plugin)")
+set_property(CACHE WITH_WEBP PROPERTY STRINGS AUTO ON OFF)
+if(WITH_WEBP STREQUAL "AUTO")
+  set(AUTO_WEBP ON)
+else()
+  set(AUTO_WEBP OFF)
+endif()
+
+set(WITH_X AUTO CACHE STRING
+  "enable X11-dependent components (xlib plugin, libglcomp, Smyrna)")
+set_property(CACHE WITH_X PROPERTY STRINGS AUTO ON OFF)
+if(WITH_X STREQUAL "AUTO")
+  set(AUTO_X ON)
+else()
+  set(AUTO_X OFF)
+endif()
 
 if(WIN32)
   if(BUILD_SHARED_LIBS)
@@ -148,9 +194,6 @@ if(WIN32)
   endif()
 endif()
 
-# FIXME: workaround for uninitialized variable in `freetype-targets.cmake`
-set(_cmake_import_check_xcframework_for_freetype /dev/null)
-
 find_package(ANN)
 find_package(CAIRO)
 
@@ -174,12 +217,27 @@ find_package(GTS)
 if(NOT WITH_SMYRNA STREQUAL "OFF")
   find_package(Freetype)
   find_package(GLUT)
-  find_package(GTK2)
+  if(WITH_GTK)
+    find_package(GTK2)
+    if(NOT AUTO_GTK)
+      set_package_properties(GTK2 PROPERTIES TYPE REQUIRED)
+    endif()
+  else()
+    message(STATUS "skipping GTK discovery because -DWITH_GTK=OFF")
+    set(GTK2_FOUND 0)
+  endif()
   find_package(PkgConfig)
   find_package(Fontconfig)
   if(PkgConfig_FOUND)
     pkg_check_modules(GTKGLEXT gtkglext-1.0)
-    pkg_check_modules(XRENDER xrender)
+    if(AUTO_X)
+      pkg_check_modules(XRENDER xrender)
+    elseif(WITH_X)
+      pkg_check_modules(XRENDER REQUIRED xrender)
+    else()
+      message(STATUS "skipping xrender discovery because -DWITH_X=OFF")
+      set(XRENDER_FOUND 0)
+    endif()
   endif()
   if(Freetype_FOUND AND GLUT_FOUND AND GTK2_FOUND AND Fontconfig_FOUND AND
      GTKGLEXT_FOUND AND GTS_FOUND AND XRENDER_FOUND)
@@ -224,21 +282,76 @@ find_package(Freetype)
 find_package(PANGOCAIRO)
 find_package(PkgConfig)
 if(PkgConfig_FOUND)
-  pkg_check_modules(GDK gdk-3.0)
+  if(WITH_GDK STREQUAL "OFF")
+    message(STATUS "skipping GDK discovery because -DWITH_GDK=OFF")
+    set(GDK_FOUND 0)
+  else()
+    pkg_check_modules(GDK gdk-3.0)
+  endif()
+  if(WITH_GDK STREQUAL "ON")
+    if(NOT GDK_FOUND)
+      message(FATAL_ERROR "-DWITH_GDK=ON and GDK not found")
+    endif()
+  endif()
   pkg_check_modules(GDK_PIXBUF gdk-pixbuf-2.0)
   pkg_check_modules(LASI lasi)
-  pkg_check_modules(POPPLER poppler-glib)
-  pkg_check_modules(RSVG librsvg-2.0)
-  pkg_check_modules(WEBP libwebp)
-  pkg_check_modules(X11 x11)
-  pkg_check_modules(XRENDER xrender)
+  if(AUTO_POPPLER)
+    pkg_check_modules(POPPLER poppler-glib)
+  elseif(WITH_POPPLER)
+    pkg_check_modules(POPPLER REQUIRED poppler-glib)
+  else()
+    message(STATUS "skipping Poppler discovery because -DWITH_POPPLER=OFF")
+    set(POPPLER_FOUND 0)
+  endif()
+  if(AUTO_RSVG)
+    pkg_check_modules(RSVG librsvg-2.0)
+  elseif(WITH_RSVG)
+    pkg_check_modules(RSVG REQUIRED librsvg-2.0)
+  else()
+    message(STATUS "skipping librsvg discovery because -DWITH_RSVG=OFF")
+    set(RSVG_FOUND 0)
+  endif()
+  if(AUTO_WEBP)
+    pkg_check_modules(WEBP libwebp)
+  elseif(WITH_WEBP)
+    pkg_check_modules(WEBP REQUIRED libwebp)
+  else()
+    message(STATUS "skipping libwebp discovery because -DWITH_WEBP=OFF")
+    set(WEBP_FOUND 0)
+  endif()
+  if(AUTO_X)
+    pkg_check_modules(X11 x11)
+    pkg_check_modules(XRENDER xrender)
+  elseif(WITH_X)
+    pkg_check_modules(X11 REQUIRED x11)
+    pkg_check_modules(XRENDER REQUIRED xrender)
+  else()
+    message(STATUS "skipping x11, xrender discovery because -DWITH_X=OFF")
+    set(X11_FOUND 0)
+    set(XRENDER_FOUND 0)
+  endif()
 else()
+  if(WITH_GDK STREQUAL "ON")
+    message(FATAL_ERROR "-DWITH_GDK=ON and pkg-config not found")
+  endif()
   set(GDK_FOUND 0)
   set(GDK_PIXBUF_FOUND 0)
   set(LASI_FOUND 0)
+  if(NOT AUTO_POPPLER AND WITH_POPPLER)
+    message(FATAL_ERROR "-DWITH_POPPLER=ON and pkg-config not found")
+  endif()
   set(POPPLER_FOUND 0)
+  if(NOT AUTO_RSVG AND WITH_RSVG)
+    message(FATAL_ERROR "-DWITH_RSVG=ON and pkg-config not found")
+  endif()
   set(RSVG_FOUND 0)
+  if(NOT AUTO_WEBP AND WITH_WEBP)
+    message(FATAL_ERROR "-DWITH_WEBP=ON and pkg-config not found")
+  endif()
   set(WEBP_FOUND 0)
+  if(NOT AUTO_X AND WITH_X)
+    message(FATAL_ERROR "-DWITH_X=ON and pkg-config not found")
+  endif()
   set(X11_FOUND 0)
   set(XRENDER_FOUND 0)
 endif()
@@ -260,7 +373,7 @@ endif()
 
 if(NOT ENABLE_TCL STREQUAL "OFF")
   if(WIN32 AND NOT MINGW)
-    FIND_PROGRAM(TCL_RUNTIME_LIBRARY NAMES tcl86t.dll)
+    find_program(TCL_RUNTIME_LIBRARY NAMES tcl86t.dll)
     set(TCL_RUNTIME_LIBRARIES ${TCL_RUNTIME_LIBRARY})
   endif()
   find_package(TCL)
@@ -541,58 +654,58 @@ endif()
 
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 
-if(DEFINED VERSION)
-  set(GRAPHVIZ_VERSION_STRING "${VERSION}")
-else()
-  execute_process(
-    COMMAND           ${Python3_EXECUTABLE} gen_version.py
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-    RESULT_VARIABLE   gen_version_result
-    OUTPUT_VARIABLE   GRAPHVIZ_VERSION_STRING
-    ERROR_VARIABLE    gen_version_error
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    ERROR_STRIP_TRAILING_WHITESPACE
-  )
-  if(NOT gen_version_result EQUAL 0)
-    message(FATAL_ERROR "Failed to set version: ${gen_version_error}")
-  endif()
-endif()
+execute_process(
+  COMMAND           ${Python3_EXECUTABLE} gen_version.py --major
+  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+  OUTPUT_VARIABLE   GRAPHVIZ_VERSION_MAJOR
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+  COMMAND_ERROR_IS_FATAL ANY
+)
+execute_process(
+  COMMAND           ${Python3_EXECUTABLE} gen_version.py --minor
+  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+  OUTPUT_VARIABLE   GRAPHVIZ_VERSION_MINOR
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+  COMMAND_ERROR_IS_FATAL ANY
+)
+execute_process(
+  COMMAND           ${Python3_EXECUTABLE} gen_version.py --patch
+  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+  OUTPUT_VARIABLE   GRAPHVIZ_VERSION_PATCH
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+  COMMAND_ERROR_IS_FATAL ANY
+)
+execute_process(
+  COMMAND           ${Python3_EXECUTABLE} gen_version.py --pre-release
+  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+  OUTPUT_VARIABLE   GRAPHVIZ_VERSION_PRE_RELEASE
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+  COMMAND_ERROR_IS_FATAL ANY
+)
+set(GRAPHVIZ_VERSION
+  "${GRAPHVIZ_VERSION_MAJOR}.${GRAPHVIZ_VERSION_MINOR}.\
+${GRAPHVIZ_VERSION_PATCH}${GRAPHVIZ_VERSION_PRE_RELEASE}"
+)
 
 # Set GRAPHVIZ_VERSION_BUILD to time of last commit, or to 0 if that fails.
 execute_process(
   COMMAND           ${Python3_EXECUTABLE}
                     gen_version.py --committer-date-graphviz
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-  RESULT_VARIABLE   gen_date_result
   OUTPUT_VARIABLE   GRAPHVIZ_VERSION_BUILD
-  ERROR_VARIABLE    gen_date_error
   OUTPUT_STRIP_TRAILING_WHITESPACE
-  ERROR_STRIP_TRAILING_WHITESPACE
+  COMMAND_ERROR_IS_FATAL ANY
 )
-if(NOT gen_date_result EQUAL 0)
-  message(FATAL_ERROR "Failed to set date: ${gen_date_error}")
-endif()
 
-string(REGEX REPLACE "\\..*"
-  "" GRAPHVIZ_VERSION_MAJOR
-  ${GRAPHVIZ_VERSION_STRING})
-string(REGEX REPLACE "[^.]*\\.([^.]*)\\..*"
-  "\\1" GRAPHVIZ_VERSION_MINOR
-  ${GRAPHVIZ_VERSION_STRING})
-string(REGEX REPLACE "[^.]*\\.[^.]*\\.(.*)$"
-  "\\1" GRAPHVIZ_VERSION_PATCH
-  ${GRAPHVIZ_VERSION_STRING})
-
-set(GRAPHVIZ_VERSION_FULL "${GRAPHVIZ_VERSION_STRING}")
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/builddate.h
      "#define BUILDDATE \"${GRAPHVIZ_VERSION_BUILD}\"")
 
-configure_file(graphviz_version.h.cmake
+configure_file(graphviz_version.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/graphviz_version.h @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/graphviz_version.h
         DESTINATION ${HEADER_INSTALL_DIR})
 
-message(STATUS "Graphviz version: ${GRAPHVIZ_VERSION_FULL}")
+message(STATUS "Graphviz version: ${GRAPHVIZ_VERSION}")
 
 include(config_checks)
 if(NOT HAVE_GETOPT_H)
@@ -613,7 +726,7 @@ add_custom_target(uninstall
 
 # =========================== Compiler configuration ===========================
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -694,6 +807,10 @@ if(HAVE_C_WUNDEF)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wundef")
 endif()
 check_c_compiler_flag(-Wunused-but-set-variable HAVE_C_WUNUSED_BUT_SET_VARIABLE)
+check_c_compiler_flag(-Wunused-parameter HAVE_C_WUNUSED_PARAMETER)
+if(HAVE_C_WUNUSED_PARAMETER)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-parameter")
+endif()
 include(CheckCXXCompilerFlag)
 check_cxx_compiler_flag(
   -Wmissing-field-initializers HAVE_CXX_WMISSING_FIELD_INITIALIZERS
@@ -772,9 +889,8 @@ install(
   ARCHIVE DESTINATION ${LIBRARY_INSTALL_DIR}
 )
 #  === hpcc-js-wasm  ===
-MATH(EXPR GRAPHVIZ_PLUGIN_VERSION "${GRAPHVIZ_PLUGIN_VERSION}+1")
 set(GVPLUGIN_VERSION "${GRAPHVIZ_PLUGIN_VERSION}")
-set(VERSION "${GRAPHVIZ_VERSION_STRING}")
+set(VERSION "${GRAPHVIZ_VERSION}")
 set(prefix "${CMAKE_INSTALL_PREFIX}") # cmake-lint: disable=C0103
 set(exec_prefix "${CMAKE_INSTALL_PREFIX}") # cmake-lint: disable=C0103
 set(PACKAGE "graphviz")
