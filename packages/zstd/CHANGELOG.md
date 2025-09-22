@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.5.0...wasm-zstd-v1.5.1) (2025-09-22)
+
+
+### Bug Fixes
+
+* bump versions ([2b2f904](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2b2f9048079ac4aeaa2801ee3ca3f966b43ff8e1))
+
 ## [1.5.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.4.0...wasm-zstd-v1.5.0) (2025-08-10)
 
 
