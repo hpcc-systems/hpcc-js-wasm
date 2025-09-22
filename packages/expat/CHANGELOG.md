@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.6.0...wasm-expat-v1.6.1) (2025-09-22)
+
+
+### Bug Fixes
+
+* bump versions ([2b2f904](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2b2f9048079ac4aeaa2801ee3ca3f966b43ff8e1))
+
 ## [1.6.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.5.0...wasm-expat-v1.6.0) (2025-08-10)
 
 
