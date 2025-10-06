@@ -12,7 +12,7 @@ export const browser = {
         browser: {
             provider: "playwright",
             enabled: true,
-            headless: process.env.CI ? true : false,
+            headless: process.env.HEADLESS !== 'false',
             instances: [
                 { browser: 'chromium' },
 

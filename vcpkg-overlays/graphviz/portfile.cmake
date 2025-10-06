@@ -3,9 +3,21 @@ vcpkg_from_gitlab(
   OUT_SOURCE_PATH SOURCE_PATH
   REPO graphviz/graphviz
   REF "${VERSION}"
-  SHA512 2c5c84958604ebbc30e000242d04d166ab7fc56e1912218a9b7f9e93c1d88ffd8ae562fd3005274f8db7f8863e436076fd3012942cbe1973a91def3c7b1b1f5d
+  SHA512 edfde09fdd47d5e10c2c531fcc28749b07be49c2a5506102a04a0fbe1321441aaba44545ed7b983c78c510eec894f823c260bbfa06109c29c15eb591b16275d6
   HEAD_REF main
 )
+
+# Fix GVPLUGIN_CURRENT and GVPLUGIN_REVISION undefined variables in 14.0.1
+# This is a regression from 14.0.0 which used GRAPHVIZ_PLUGIN_VERSION
+file(GLOB_RECURSE PLUGIN_CMAKE_FILES "${SOURCE_PATH}/plugin/*/CMakeLists.txt")
+foreach(PLUGIN_FILE ${PLUGIN_CMAKE_FILES})
+  vcpkg_replace_string("${PLUGIN_FILE}" 
+    "\${GVPLUGIN_CURRENT}.0.\${GVPLUGIN_REVISION}"
+    "\${GRAPHVIZ_PLUGIN_VERSION}.0.0")
+  vcpkg_replace_string("${PLUGIN_FILE}"
+    "\${GVPLUGIN_CURRENT}"
+    "\${GRAPHVIZ_PLUGIN_VERSION}")
+endforeach()
 
 file(COPY ${CMAKE_CURRENT_LIST_DIR}/CMakeLists.txt DESTINATION ${SOURCE_PATH})
 file(COPY ${CMAKE_CURRENT_LIST_DIR}/cmake/config_checks.cmake DESTINATION ${SOURCE_PATH}/cmake)
