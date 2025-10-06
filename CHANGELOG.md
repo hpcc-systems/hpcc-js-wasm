@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.12.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.11.1...wasm-root-v3.12.0) (2025-10-06)
+
+
+### Features
+
+* update graphviz to 14.0.1 ([b06cbe2](https://github.com/hpcc-systems/hpcc-js-wasm/commit/b06cbe2c6a8e97a3c75b5046a7775124e80cd7cc))
+
 ## [3.11.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v3.11.0...wasm-root-v3.11.1) (2025-09-22)
 
 
