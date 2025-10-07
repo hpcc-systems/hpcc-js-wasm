@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm",
-  "version": "2.26.2",
+  "version": "2.26.3",
   "description": "hpcc-js - WASM Libraries",
   "type": "module",
   "exports": {
@@ -83,7 +83,7 @@
     "@hpcc-js/wasm-base91": "^1.6.1",
     "@hpcc-js/wasm-duckdb": "^1.9.1",
     "@hpcc-js/wasm-expat": "^1.6.1",
-    "@hpcc-js/wasm-graphviz": "^1.12.1",
+    "@hpcc-js/wasm-graphviz": "^1.13.0",
     "@hpcc-js/wasm-zstd": "^1.5.1"
   },
   "keywords": [

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.12.1...wasm-graphviz-v1.13.0) (2025-10-06)
+
+
+### Features
+
+* update graphviz to 14.0.1 ([b06cbe2](https://github.com/hpcc-systems/hpcc-js-wasm/commit/b06cbe2c6a8e97a3c75b5046a7775124e80cd7cc))
+
 ## [1.12.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.12.0...wasm-graphviz-v1.12.1) (2025-09-22)
 
 
