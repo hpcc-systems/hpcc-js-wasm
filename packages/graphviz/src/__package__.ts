@@ -1,3 +1,3 @@
 export const PKG_NAME = "@hpcc-js/wasm-graphviz";
-export const PKG_VERSION = "1.13.0";
-export const BUILD_VERSION = "3.12.0";
+export const PKG_VERSION = "1.15.0";
+export const BUILD_VERSION = "4.0.0";
