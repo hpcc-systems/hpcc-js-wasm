@@ -41,7 +41,7 @@
   "dependencies": {},
   "devDependencies": {
     "@duckdb/duckdb-wasm": "1.30.0",
-    "@hpcc-js/esbuild-plugins": "1.5.1",
+    "@hpcc-js/esbuild-plugins": "1.5.2",
     "mkdirp": "3.0.1"
   },
   "keywords": [
