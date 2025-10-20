@@ -1,5 +1,51 @@
 # Changelog
 
+## [2.28.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.27.0...wasm-v2.28.0) (2025-10-20)
+
+
+### Features
+
+* Add llama.cpp web assembly support ([9b802ae](https://github.com/hpcc-systems/hpcc-js-wasm/commit/9b802ae0481f1f9cca3197c9398fc1d1b35fe33b))
+* Add llama.cpp web assembly support ([5602a88](https://github.com/hpcc-systems/hpcc-js-wasm/commit/5602a8889df432345d1370ce4dba919262ce6c34))
+* Bump Graphviz to 13.0.0 ([56597d4](https://github.com/hpcc-systems/hpcc-js-wasm/commit/56597d4a26c6b8821d39082582eb19c8deeca748))
+* Bump Graphviz to 13.0.0 ([af2ff8c](https://github.com/hpcc-systems/hpcc-js-wasm/commit/af2ff8c1870e8edd74f9324b881da33e0e5cabe0))
+* bump version ([77a00c9](https://github.com/hpcc-systems/hpcc-js-wasm/commit/77a00c9b5b4a08cc06522fd5e0fda1db7431d4ec))
+* Bump versions ([a557b2e](https://github.com/hpcc-systems/hpcc-js-wasm/commit/a557b2eb8042f12d4bc78f0a2b9cbcc508c9e26f))
+* Bump versions ([b19c6c7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/b19c6c70d7fb1a0da16bcd61cb519db89ed322dd))
+* Bump versions ([dac0326](https://github.com/hpcc-systems/hpcc-js-wasm/commit/dac032608c36ef27eb5b2a09e7b4e3e4d5f2c79a))
+* Bump versions ([93b90e2](https://github.com/hpcc-systems/hpcc-js-wasm/commit/93b90e223d1233b44a7b5cb55130b08cd3c28179))
+* Bump Versions ([9172492](https://github.com/hpcc-systems/hpcc-js-wasm/commit/91724922b873db4416bd025a2c16b8b43fe496d5))
+* Bump Versions ([208783e](https://github.com/hpcc-systems/hpcc-js-wasm/commit/208783e61c86cd5f9c01931793c3334732bbaed0))
+* Bump Versions ([#241](https://github.com/hpcc-systems/hpcc-js-wasm/issues/241)) ([fccd582](https://github.com/hpcc-systems/hpcc-js-wasm/commit/fccd58255035da8f1755809dcb29c4b4736443a4))
+* bump versions ([#330](https://github.com/hpcc-systems/hpcc-js-wasm/issues/330)) ([4ed68e3](https://github.com/hpcc-systems/hpcc-js-wasm/commit/4ed68e341bb8feb9ad27dbb60046f4f8e9f4f935))
+* Convert to monorepo ([a84bb3e](https://github.com/hpcc-systems/hpcc-js-wasm/commit/a84bb3ee08063bd81d056dcd94c0a6fd174d224e))
+* Convert to monorepo ([5e20bbd](https://github.com/hpcc-systems/hpcc-js-wasm/commit/5e20bbdaa32a4ae304e79cabe22a9bf1a38a482b))
+
+
+### Bug Fixes
+
+* Add missing DuckDB to wasm package ([697de13](https://github.com/hpcc-systems/hpcc-js-wasm/commit/697de1370c10388f36863aed8c1e9ed83949a0f9))
+* Add missing DuckDB to wasm package ([7f45a67](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7f45a675d97c31c4b3cd3adca912c24d114c9019)), closes [#257](https://github.com/hpcc-systems/hpcc-js-wasm/issues/257)
+* bump versions ([2b2f904](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2b2f9048079ac4aeaa2801ee3ca3f966b43ff8e1))
+* Clean up publish action ([#244](https://github.com/hpcc-systems/hpcc-js-wasm/issues/244)) ([fccd582](https://github.com/hpcc-systems/hpcc-js-wasm/commit/fccd58255035da8f1755809dcb29c4b4736443a4))
+* Graphviz not including html table support ([#252](https://github.com/hpcc-systems/hpcc-js-wasm/issues/252)) ([11fd7e7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/11fd7e7d20b2b8fa7a0d3832775aedb4cd7e9bd3))
+* move esbuild into packages ([03f0587](https://github.com/hpcc-systems/hpcc-js-wasm/commit/03f0587c56a54f4819c78c143a4c4755bdb96ee0))
+* Release Please fails to publish ([#246](https://github.com/hpcc-systems/hpcc-js-wasm/issues/246)) ([fccd582](https://github.com/hpcc-systems/hpcc-js-wasm/commit/fccd58255035da8f1755809dcb29c4b4736443a4))
+* remove findWasmBinary from bundles ([1fc05ec](https://github.com/hpcc-systems/hpcc-js-wasm/commit/1fc05ec2e5c4b6e82fa1e96bd80bb6ed7865be09))
+* UMD files were not backward compatible ([11fd7e7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/11fd7e7d20b2b8fa7a0d3832775aedb4cd7e9bd3))
+* umd loading not working 100% ([04632f8](https://github.com/hpcc-systems/hpcc-js-wasm/commit/04632f86a2f57482a7c3e903b37de978c9a0f1ec))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.7.0 to ^1.8.0
+    * @hpcc-js/wasm-duckdb bumped from ^1.10.0 to ^1.11.0
+    * @hpcc-js/wasm-expat bumped from ^1.7.0 to ^1.8.0
+    * @hpcc-js/wasm-graphviz bumped from ^1.14.0 to ^1.15.0
+    * @hpcc-js/wasm-zstd bumped from ^1.6.0 to ^1.7.0
+
 ## [2.27.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.26.3...wasm-v2.27.0) (2025-10-20)
 
 
