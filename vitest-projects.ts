@@ -1,3 +1,5 @@
+import { playwright } from "@vitest/browser-playwright";
+
 export const browser = {
     test: {
         name: 'browser',
@@ -10,7 +12,7 @@ export const browser = {
             "**/emsdk/**"
         ],
         browser: {
-            provider: "playwright",
+            provider: playwright(),
             enabled: true,
             headless: process.env.HEADLESS !== 'false',
             instances: [

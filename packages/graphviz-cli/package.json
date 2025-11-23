@@ -31,13 +31,13 @@
     "lint-skypack": "npx -y @skypack/package-check",
     "lint-eslint": "eslint src/**/*.ts",
     "lint": "run-p lint-eslint",
-    "test": "node bin/index.js --help",
+    "test:unit": "vitest run",
+    "test": "npm run test:unit && node bin/index.js --help",
     "update": "npx -y npm-check-updates -u -t minor",
     "update-major": "npx -y npm-check-updates -u"
   },
   "dependencies": {
-    "@hpcc-js/wasm-graphviz": "^1.15.0",
-    "yargs": "18.0.0"
+    "@hpcc-js/wasm-graphviz": "^1.15.0"
   },
   "devDependencies": {},
   "keywords": [

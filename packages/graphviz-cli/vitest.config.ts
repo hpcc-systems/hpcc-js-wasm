@@ -1,11 +1,6 @@
-import { defineConfig } from 'vitest/config';
-import { browser, node } from "../../vitest-projects.ts";
+import { defineConfig } from "vitest/config";
+import { node } from "../../vitest-projects.ts";
 
 export default defineConfig({
-    test: {
-        projects: [
-            browser,
-            node
-        ]
-    }
+    test: node.test
 });

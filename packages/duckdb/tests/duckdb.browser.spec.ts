@@ -7,7 +7,7 @@ describe("duckdb", function () {
         const duckdb = await DuckDB.load();
         const v = duckdb.version();
         expect(v).to.be.a.string;
-        expect(v).to.equal("v1.3.2");       //  Update README.md if this changes
+        expect(v).to.equal("v1.4.0");       //  Update README.md if this changes
         console.log("duckdb version: " + v);
     });
 

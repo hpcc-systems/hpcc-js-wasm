@@ -84,14 +84,14 @@ jobs:
       #   with:
       #     github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: push stamped release
-        if: ${{ steps.release.outputs.release_created }}
-        run: |
-          git config user.name github-actions[bot]
-          git config user.email 4104672+github-actions[bot]@users.noreply.github.com
-          git remote add gh-token "https://${{ secrets.GITHUB_TOKEN}}@github.com/${{ github.repository }}.git"
-          git commit -a -m 'chore: stamp files for release'
-          git push origin
+      # - name: push stamped release
+      #   if: ${{ steps.release.outputs.release_created }}
+      #   run: |
+      #     git config user.name github-actions[bot]
+      #     git config user.email 4104672+github-actions[bot]@users.noreply.github.com
+      #     git remote add gh-token "https://${{ secrets.GITHUB_TOKEN}}@github.com/${{ github.repository }}.git"
+      #     git commit -a -m 'chore: stamp files for release'
+      #     git push origin
           
       - name: Publish
         if: ${{ steps.release.outputs.release_created }}
