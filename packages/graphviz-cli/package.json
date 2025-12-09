@@ -37,7 +37,8 @@
     "update-major": "npx -y npm-check-updates -u"
   },
   "dependencies": {
-    "@hpcc-js/wasm-graphviz": "^1.16.0"
+    "@hpcc-js/wasm-graphviz": "^1.16.0",
+    "yargs": "18.0.0"
   },
   "devDependencies": {},
   "keywords": [

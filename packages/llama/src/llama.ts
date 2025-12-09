@@ -83,7 +83,7 @@ export class Llama {
         try {
             this._module.embedding(args, embeddingResult);
             const cout = embeddingResult.get(0);
-            retVal = JSON.parse(cout);
+            retVal = JSON.parse(cout ?? "[]");
         } catch (e) {
             console.error(e);
         } finally {
