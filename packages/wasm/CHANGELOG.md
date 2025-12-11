@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.30.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.29.0...wasm-v2.30.0) (2025-12-11)
+
+
+### Features
+
+* bump versions ([#341](https://github.com/hpcc-systems/hpcc-js-wasm/issues/341)) ([57116a4](https://github.com/hpcc-systems/hpcc-js-wasm/commit/57116a407c47332d996d3da508cc70ffe068fce0))
+
+
+### Bug Fixes
+
+* @hpcc-js/wasm does not include sub-package types ([#344](https://github.com/hpcc-systems/hpcc-js-wasm/issues/344)) ([38b0c51](https://github.com/hpcc-systems/hpcc-js-wasm/commit/38b0c51070ea979e9d26d593473d3b180bb357e5)), closes [#340](https://github.com/hpcc-systems/hpcc-js-wasm/issues/340)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-graphviz bumped from ^1.16.0 to ^1.17.0
+    * @hpcc-js/wasm-graphviz-cli bumped from ^1.7.0 to ^1.8.0
+
 ## [2.29.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.28.0...wasm-v2.29.0) (2025-11-23)
 
 
