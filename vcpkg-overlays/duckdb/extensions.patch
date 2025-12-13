@@ -1,0 +1,51 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1289,7 +1289,19 @@
+       include("${EXTENSION_CONFIG_BASE_DIR}/${EXT}.cmake")
+     else()
+       # in-tree or non-existent extension: load it
+-      duckdb_extension_load(${EXT})
++      if("${EXT}" STREQUAL "httpfs")
++        duckdb_extension_load(${EXT}
++          SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extension/httpfs
++          INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extension/httpfs/extension/httpfs/include
++        )
++      elseif("${EXT}" STREQUAL "excel")
++        duckdb_extension_load(${EXT}
++          SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extension/excel
++          INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extension/excel/src/excel/include
++        )
++      else()
++        duckdb_extension_load(${EXT})
++      endif()
+     endif()
+   endif()
+ endforeach()
+
+diff --git a/DuckDBConfig.cmake.in b/DuckDBConfig.cmake.in
+--- a/DuckDBConfig.cmake.in
++++ b/DuckDBConfig.cmake.in
+@@ -6,10 +6,21 @@
+ 
+ include(CMakeFindDependencyMacro)
+ find_dependency(Threads)
+-if(NOT @WITH_INTERNAL_ICU@)
++set(DUCKDB_EXTENSION_LIST "@BUILD_EXTENSIONS@")
++if(DUCKDB_EXTENSION_LIST)
++    list(FIND DUCKDB_EXTENSION_LIST "icu" DUCKDB_ICU_INDEX)
++    list(FIND DUCKDB_EXTENSION_LIST "excel" DUCKDB_EXCEL_INDEX)
++endif()
++
++if(DEFINED DUCKDB_ICU_INDEX AND DUCKDB_ICU_INDEX GREATER_EQUAL 0)
+     find_dependency(ICU COMPONENTS i18n uc data)
+ endif()
+ 
++if(DEFINED DUCKDB_EXCEL_INDEX AND DUCKDB_EXCEL_INDEX GREATER_EQUAL 0)
++    find_dependency(expat CONFIG)
++    find_dependency(minizip-ng CONFIG)
++endif()
++
+ # Compute paths
+ get_filename_component(DuckDB_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+ set(DuckDB_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")

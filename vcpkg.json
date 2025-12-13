@@ -4,6 +4,14 @@
       "name": "base91"
     },
     {
+      "name": "duckdb",
+      "default-features": false,
+      "features": [
+        "json",
+        "core-functions"
+      ]
+    },
+    {
       "name": "expat"
     },
     {

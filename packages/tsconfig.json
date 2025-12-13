@@ -10,7 +10,8 @@
         "allowImportingTsExtensions": true,
         "lib": [
             "DOM",
-            "ES2020"
+            "ES2020",
+            "ES2020.BigInt"
         ],
         "types": []
     }

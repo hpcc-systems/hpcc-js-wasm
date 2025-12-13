@@ -5,6 +5,6 @@ if [ ! -d "./build" ]
 then
     cmake -S . -B ./build --preset vcpkg-emscripten-MinSizeRel
 fi
-# cmake -S . -B ./build --preset vcpkg-emscripten-Debug
+# cmake -S . -B ./build --preset vcpkg-emscripten-RelWithDebInfo
 
 cmake --build ./build --parallel

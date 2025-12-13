@@ -57,6 +57,53 @@ npm run build-ws        # 5-10 minutes
 npm run lint           # 2-3 minutes
 ```
 
+## CMake Configuration
+
+### **CRITICAL**: ALWAYS Use VS Code CMake Extension
+
+**YOU MUST use the VS Code CMake extension for ALL CMake operations.** Manual cmake commands will fail because they don't properly set up the Emscripten environment.
+
+**REQUIRED WORKFLOW** when modifying C++ code or vcpkg packages (patches, portfile.cmake):
+
+1. **Remove vcpkg cache**: `rm -rf vcpkg/buildtrees/<package>`
+2. **Use VS Code Command Palette** (Ctrl/Cmd+Shift+P):
+   - **`CMake: Configure`** - Reconfigures CMake and reinstalls vcpkg packages with new patches
+   - **`CMake: Build`** - Builds the configured targets
+   - **`CMake: Clean Rebuild`** - Cleans and rebuilds everything
+
+**WHY THIS IS REQUIRED**:
+- Sets up Emscripten SDK environment variables correctly
+- Configures vcpkg toolchain properly
+- Handles WASM-specific build flags
+- Provides IntelliSense and debugging integration
+
+**DO NOT use manual cmake commands like:**
+- ❌ `cmake --preset vcpkg-emscripten-*` (will fail with "emcc compiler not found")
+- ❌ `cmake --build build --target <target>` (won't work without proper environment)
+- ❌ `ninja <target>` (missing environment and configuration)
+
+**EXCEPTION**: `npm run build-cpp` scripts are pre-configured with the correct environment and are safe to use for full builds.
+
+## Embind (C++ <-> JS Interop)
+
+This repo uses Emscripten Embind to expose C++ APIs to JavaScript/TypeScript.
+
+Reference: https://emscripten.org/docs/porting/connecting_cpp_and_javascript/embind.html
+
+### Guidelines
+- Prefer Embind over ad-hoc JS glue when exposing C++ to JS.
+- Avoid throwing across the WASM boundary; catch exceptions in C++ and translate into explicit error results.
+- Be explicit about ownership/lifetime:
+  - If you return raw pointers (often created with `new`) via Embind, JS must eventually free them (e.g. via the generated `.delete()` method or `Module.destroy(obj)` depending on how the wrapper is used).
+  - If practical, bind smart pointers (e.g. `std::unique_ptr` / `std::shared_ptr`) to make ownership explicit.
+- For JS values, prefer `emscripten::val` and convert at the boundary (e.g. arrays -> `val.isArray()` + `val["length"]`). Validate types and reject non-finite numbers.
+- Keep interop-friendly result types: materialize streaming results where needed for JS access patterns.
+
+### Common Patterns Used Here
+- `EMSCRIPTEN_BINDINGS(...)` with `emscripten::class_<T>` and `.function(...)`.
+- `allow_raw_pointers()` is used for functions that accept/return pointer types.
+- Provide small helper conversions (JS `val` -> C++ types) and centralize error messages for predictable JS behavior.
+
 ## Working Without Full Build
 
 ### What Works with npm ci + npm run lint Only

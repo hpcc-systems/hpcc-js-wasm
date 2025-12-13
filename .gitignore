@@ -29,6 +29,7 @@ types/
 /wasi-sdk*
 /wit-bindgen
 /vcpkg
+__screenshots__/
 .coveralls.yml
 *.tsbuildinfo
 
