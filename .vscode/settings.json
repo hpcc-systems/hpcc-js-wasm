@@ -1,40 +1,5 @@
 {
     "cmake.cmakePath": "${workspaceFolder}/scripts/cmake.sh",
     "vitest.maximumConfigs": 20,
-    "vitest.configSearchPatternExclude": "{emsdk/**,node_modules/**}",
-    
-    // AI Assistant Configuration
-    "github.copilot.enable": {
-        "*": true,
-        "markdown": true,
-        "typescript": true,
-        "javascript": true
-    },
-    
-    // File associations for better AI context
-    "files.associations": {
-        "*.idl": "webidl",
-        "*.wasm": "wasm",
-        ".copilot-*": "markdown"
-    },
-    
-    // Exclude build artifacts from AI context
-    "files.exclude": {
-        "**/build/**": true,
-        "**/dist/**": true,
-        "**/node_modules/**": true,
-        "**/emsdk/**": true,
-        "**/vcpkg/**": true,
-        "**/.nyc_output/**": true
-    },
-    
-    // Include important files for AI context
-    "search.exclude": {
-        "**/node_modules": true,
-        "**/emsdk": true,
-        "**/vcpkg": true,
-        "**/build": true,
-        "**/dist": false,
-        "**/.copilot-*": false
-    }
+    "vitest.configSearchPatternExclude": "{emsdk/**,node_modules/**}"
 }

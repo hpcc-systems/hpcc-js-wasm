@@ -122,37 +122,19 @@ export async function testExpat() {
 
 export async function testDuckDB() {
     try {
-        // DuckDB should work in browser environments with Worker support
         const { DuckDB } = await import('@hpcc-js/wasm-duckdb');
 
         // Load the WASM module
         const duckdb = await DuckDB.load();
 
         // Test basic SQL query
-        const db = duckdb.db;
-        const conn = await db.connect();
-
-        // Simple query test
-        const result = await conn.query("SELECT 42 as answer");
-
-        // DuckDB in browser returns events, let's check if query executed successfully
-        let querySuccessful = false;
-        const batches = [];
-
-        for await (const batch of result) {
-            console.log(JSON.stringify(batch, null, 2));
-
-            if (batch && (batch.toColumns || batch.value === "SELECT 42 as answer" || typeof batch === 'object')) {
-                querySuccessful = true;
-                batches.push(batch);
-            }
+        const conn = duckdb.connect();
+        const result = conn.query("SELECT 42 as answer");
+        const resultStr = result.toString();
+        if (!resultStr.includes("42")) {
+            throw new Error('DuckDB query did not return expected result');
         }
-
-        if (!querySuccessful && batches.length === 0) {
-            throw new Error('DuckDB query did not execute successfully');
-        }
-
-        await conn.close();
+        conn.close();
 
         console.log('✓ DuckDB test passed');
         DuckDB.unload();

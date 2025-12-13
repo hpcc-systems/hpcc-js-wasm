@@ -14,3 +14,8 @@ git pull
 ./emsdk install $VERSION-upstream
 ./emsdk activate $VERSION-upstream
 cd ..
+
+(
+    cd ./emsdk/upstream/emscripten
+    npm install --include=dev
+)

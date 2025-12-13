@@ -5,34 +5,33 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./types/src/index.d.ts",
+      "types": "./types/index.d.ts",
       "default": "./dist/index.js"
     }
   },
   "main": "./dist/index.js",
-  "types": "./types/src/index.d.ts",
+  "types": "./types/index.d.ts",
   "files": [
     "dist/**/*",
     "src/**/*",
     "types/**/*"
   ],
   "scripts": {
-    "clean": "rimraf coverage build dist dist-test types",
-    "pack-duckdb-eh-worker-node": "npx -y mkdirp build && node ./utils/sfx-wasm.js ../../node_modules/@duckdb/duckdb-wasm/dist/duckdb-node-eh.worker.cjs > ./build/duckdb-node-eh.worker.ts",
-    "pack-duckdb-eh-worker": "npx -y mkdirp build && node ./utils/sfx-wasm.js ../../node_modules/@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js > ./build/duckdb-browser-eh.worker.ts",
-    "pack-duckdb-eh": "npx -y mkdirp build && node ./utils/sfx-wasm.js ../../node_modules/@duckdb/duckdb-wasm/dist/duckdb-eh.wasm > ./build/duckdb-eh.wasm.ts",
-    "pack-duckdb": "run-p pack-duckdb-eh pack-duckdb-eh-worker pack-duckdb-eh-worker-node",
+    "clean": "rimraf coverage dist dist-test types .nyc_output",
+    "build-cpp": "cmake --build ../../build --target duckdblib",
+    "build-cpp-watch": "chokidar 'src-cpp/**.*' -c 'npm run build-cpp'",
     "gen-types": "tsc --project tsconfig.json --emitDeclarationOnly",
     "gen-types-watch": "npm run gen-types -- --watch",
     "bundle": "node esbuild.js",
     "bundle-dev": "npm run bundle -- --development",
     "bundle-watch": "npm run bundle-dev -- --watch",
     "build-dev": "run-p gen-types bundle-dev",
-    "build": "npm-run-all --serial pack-duckdb --parallel gen-types bundle",
+    "build": "run-p gen-types bundle",
     "lint-skypack": "npx -y @skypack/package-check",
     "lint-eslint": "eslint src/**/*.ts tests/**/*.ts",
     "lint": "run-p lint-eslint",
     "test-browser": "vitest run --project browser",
+    "test-node": "vitest run --project node",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "update": "npx -y npm-check-updates -u -t minor",
@@ -40,9 +39,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@duckdb/duckdb-wasm": "1.31.0",
-    "@hpcc-js/esbuild-plugins": "1.7.0",
-    "mkdirp": "3.0.1"
+    "@hpcc-js/esbuild-plugins": "1.7.0"
   },
   "keywords": [
     "DuckDB",
