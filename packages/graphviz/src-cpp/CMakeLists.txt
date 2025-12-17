@@ -18,19 +18,10 @@ set(EM_LINK_FLAGS
     "-sEXPORT_NAME='${CMAKE_PROJECT_NAME}'"
     "-sEXPORTED_FUNCTIONS=\"['_free', '_malloc']\""
     "-sEXPORTED_RUNTIME_METHODS=\"[UTF8ToString]\""
-    "--post-js ${CMAKE_CURRENT_BINARY_DIR}/main_glue.js"
+    "-lembind"
     "--emit-tsd ${CMAKE_CURRENT_BINARY_DIR}/graphvizlib.d.ts"
 )
 string(REPLACE ";" " " LINK_FLAGS "${EM_LINK_FLAGS}")
-
-#  Generate Glue from IDL file  ---
-add_custom_command(
-    MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/main.idl
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/main_glue.js ${CMAKE_CURRENT_BINARY_DIR}/main_glue.cpp
-    COMMAND python3 ${CMAKE_BINARY_DIR}/../emsdk/upstream/emscripten/tools/webidl_binder.py ${CMAKE_CURRENT_SOURCE_DIR}/main.idl ${CMAKE_CURRENT_BINARY_DIR}/main_glue
-)
-set_property(SOURCE main.cpp APPEND PROPERTY OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/main_glue.cpp)
-#  ---  ---  ---
 
 set(SRCS
     main.hpp
@@ -41,7 +32,6 @@ set(SRCS
 
 include_directories(
     ${Graphviz_INCLUDE_DIRS}/graphviz
-    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 add_executable(graphvizlib

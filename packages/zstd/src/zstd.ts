@@ -27,7 +27,7 @@ let g_zstd: Promise<Zstd>;
 export class Zstd extends WasmLibrary {
 
     private constructor(_module: any) {
-        super(_module, _module.zstd.prototype);
+        super(_module, _module.zstd);
     }
 
     /**

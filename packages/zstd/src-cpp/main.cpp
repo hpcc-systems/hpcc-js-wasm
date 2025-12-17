@@ -1,75 +1,103 @@
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstdint>
+#include <string>
 
 #include <zstd.h>
+
+#include <emscripten/bind.h>
 
 struct zstd
 {
 public:
-    static const char *version(void)
+    static std::string version()
     {
         return ZSTD_versionString();
     }
 
-    static void *malloc(size_t __size)
+    static uintptr_t malloc(size_t size)
     {
-        return ::malloc(__size);
+        return reinterpret_cast<uintptr_t>(::malloc(size));
     }
 
-    static void free(void *__ptr)
+    static void free(uintptr_t ptr)
     {
-        ::free(__ptr);
+        ::free(reinterpret_cast<void *>(ptr));
     }
 
-    static size_t compress(void *dst, size_t dstCapacity, const void *src, size_t srcSize, int compressionLevel)
+    static size_t compress(uintptr_t dst, size_t dstCapacity, uintptr_t src, size_t srcSize, int compressionLevel)
     {
-        return ZSTD_compress(dst, dstCapacity, src, srcSize, compressionLevel);
+        return ZSTD_compress(
+            reinterpret_cast<void *>(dst),
+            dstCapacity,
+            reinterpret_cast<const void *>(src),
+            srcSize,
+            compressionLevel);
     }
 
-    static size_t decompress(void *dst, size_t dstCapacity, const void *src, size_t compressedSize)
+    static size_t decompress(uintptr_t dst, size_t dstCapacity, uintptr_t src, size_t compressedSize)
     {
-        return ZSTD_decompress(dst, dstCapacity, src, compressedSize);
+        return ZSTD_decompress(
+            reinterpret_cast<void *>(dst),
+            dstCapacity,
+            reinterpret_cast<const void *>(src),
+            compressedSize);
     }
 
-    static unsigned long long getFrameContentSize(const void *src, size_t srcSize)
+    static double getFrameContentSize(uintptr_t src, size_t srcSize)
     {
-        return ZSTD_getFrameContentSize(src, srcSize);
+        return static_cast<double>(ZSTD_getFrameContentSize(reinterpret_cast<const void *>(src), srcSize));
     }
 
-    static size_t findFrameCompressedSize(const void *src, size_t srcSize)
+    static size_t findFrameCompressedSize(uintptr_t src, size_t srcSize)
     {
-        return ZSTD_findFrameCompressedSize(src, srcSize);
+        return ZSTD_findFrameCompressedSize(reinterpret_cast<const void *>(src), srcSize);
     }
 
-    static size_t compressBound(size_t srcSize) /*!< maximum compressed size in worst case single-pass scenario */
+    static size_t compressBound(size_t srcSize)
     {
         return ZSTD_compressBound(srcSize);
     }
 
-    static unsigned isError(size_t code) /*!< tells if a `size_t` function result is an error code */
+    static unsigned isError(size_t code)
     {
         return ZSTD_isError(code);
     }
 
-    static const char *getErrorName(size_t code) /*!< provides readable string from an error code */
+    static std::string getErrorName(size_t code)
     {
         return ZSTD_getErrorName(code);
     }
 
-    static int minCLevel(void) /*!< minimum negative compression level allowed, requires v1.4.0+ */
+    static int minCLevel()
     {
         return ZSTD_minCLevel();
     }
 
-    static int maxCLevel(void) /*!< maximum compression level available */
+    static int maxCLevel()
     {
         return ZSTD_maxCLevel();
     }
 
-    static int defaultCLevel(void) /*!< default compression level, specified by ZSTD_CLEVEL_DEFAULT, requires v1.5.0+ */
+    static int defaultCLevel()
     {
         return ZSTD_defaultCLevel();
     }
 };
 
-//  Include JS Glue  ---
-#include "main_glue.cpp"
+EMSCRIPTEN_BINDINGS(zstdlib_bindings)
+{
+    emscripten::class_<zstd>("zstd")
+        .class_function("version", &zstd::version)
+        .class_function("malloc", &zstd::malloc)
+        .class_function("free", &zstd::free)
+        .class_function("compress", &zstd::compress)
+        .class_function("decompress", &zstd::decompress)
+        .class_function("getFrameContentSize", &zstd::getFrameContentSize)
+        .class_function("findFrameCompressedSize", &zstd::findFrameCompressedSize)
+        .class_function("compressBound", &zstd::compressBound)
+        .class_function("isError", &zstd::isError)
+        .class_function("getErrorName", &zstd::getErrorName)
+        .class_function("minCLevel", &zstd::minCLevel)
+        .class_function("maxCLevel", &zstd::maxCLevel)
+        .class_function("defaultCLevel", &zstd::defaultCLevel);
+}

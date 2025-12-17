@@ -1,5 +1,5 @@
 // @ts-expect-error importing from a wasm file is resolved via a custom esbuild plugin
-import load, { reset } from "../../../build/packages/expat/src-cpp/expatlib/expatlib.wasm";
+import load, { reset } from "../../../build/packages/expat/src-cpp/expatlib.wasm";
 
 export type Attributes = { [key: string]: string };
 export interface IParser {
@@ -78,7 +78,7 @@ export class Expat {
      * @returns The Expat c++ version
      */
     version(): string {
-        return this._module.CExpat.prototype.version();
+        return this._module.CExpat.version();
     }
 
     /**
@@ -93,20 +93,16 @@ export class Expat {
      * @returns `true`|`false` if the XML parse succeeds.
      */
     parse(xml: string, callback: IParser): boolean {
-        const parser = new this._module.CExpatJS();
-        parser.startElement = function () {
-            callback.startElement(this.tag(), parseAttrs(this.attrs()));
-        };
-        parser.endElement = function () {
-            callback.endElement(this.tag());
-        };
-        parser.characterData = function () {
-            callback.characterData(this.content());
-        };
+        const parser = new this._module.CExpat();
+        parser.setCallback({
+            startElement: (tag: string, attrs: string) => callback.startElement(tag, parseAttrs(attrs)),
+            endElement: (tag: string) => callback.endElement(tag),
+            characterData: (content: string) => callback.characterData(content)
+        });
         parser.create();
         const retVal = parser.parse(xml);
         parser.destroy();
-        this._module.destroy(parser);
+        parser.delete();
         return retVal;
     }
 }

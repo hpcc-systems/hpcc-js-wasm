@@ -1,5 +1,8 @@
 #include <string>
+#include <cstdint>
 #include <base91.hpp>
+
+#include <emscripten/bind.h>
 
 const char *const version = "0.6.0";
 
@@ -14,17 +17,17 @@ public:
         reset();
     }
 
-    static void *malloc(size_t __size)
+    uintptr_t malloc(size_t __size)
     {
-        return ::malloc(__size);
+        return reinterpret_cast<uintptr_t>(::malloc(__size));
     }
 
-    static void free(void *__ptr)
+    void free(uintptr_t __ptr)
     {
-        ::free(__ptr);
+        ::free(reinterpret_cast<void *>(__ptr));
     }
 
-    const char *version()
+    std::string version() const
     {
         return ::version;
     }
@@ -34,26 +37,37 @@ public:
         basE91_init(&m_basE91);
     }
 
-    size_t encode(const void *data, size_t dataLen, void *dataOut)
+    size_t encode(uintptr_t data, size_t dataLen, uintptr_t dataOut)
     {
-        return basE91_encode(&m_basE91, data, dataLen, dataOut);
+        return basE91_encode(&m_basE91, reinterpret_cast<const void *>(data), dataLen, reinterpret_cast<void *>(dataOut));
     }
 
-    size_t encode_end(void *dataOut)
+    size_t encode_end(uintptr_t dataOut)
     {
-        return basE91_encode_end(&m_basE91, dataOut);
+        return basE91_encode_end(&m_basE91, reinterpret_cast<void *>(dataOut));
     }
 
-    size_t decode(const void *data, size_t dataLen, void *dataOut)
+    size_t decode(uintptr_t data, size_t dataLen, uintptr_t dataOut)
     {
-        return basE91_decode(&m_basE91, data, dataLen, dataOut);
+        return basE91_decode(&m_basE91, reinterpret_cast<const void *>(data), dataLen, reinterpret_cast<void *>(dataOut));
     }
 
-    size_t decode_end(void *dataOut)
+    size_t decode_end(uintptr_t dataOut)
     {
-        return basE91_decode_end(&m_basE91, dataOut);
+        return basE91_decode_end(&m_basE91, reinterpret_cast<void *>(dataOut));
     }
 };
 
-//  Include JS Glue  ---
-#include "main_glue.cpp"
+EMSCRIPTEN_BINDINGS(base91lib_bindings)
+{
+    emscripten::class_<CBasE91>("CBasE91")
+        .constructor<>()
+        .function("malloc", &CBasE91::malloc)
+        .function("free", &CBasE91::free)
+        .function("version", &CBasE91::version)
+        .function("reset", &CBasE91::reset)
+        .function("encode", &CBasE91::encode)
+        .function("encode_end", &CBasE91::encode_end)
+        .function("decode", &CBasE91::decode)
+        .function("decode_end", &CBasE91::decode_end);
+}
