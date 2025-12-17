@@ -30,21 +30,17 @@ include_directories(
 )
 
 add_executable(llamalib
-    main.cpp
     embedding.cpp
+    log_wasm.cpp
     util.cpp
-    ${Llama_DIR}/common/arg.cpp
     ${Llama_DIR}/common/common.cpp
     ${Llama_DIR}/common/sampling.cpp
-    ${Llama_DIR}/common/console.cpp
-    # ${Llama_DIR}/common/grammar-parser.cpp
-    ${Llama_DIR}/common/json-schema-to-grammar.cpp
-    ${Llama_DIR}/common/build-info.cpp
 )
 
 set_target_properties(llamalib PROPERTIES COMPILE_FLAGS "${CPP_FLAGS}")
 set_target_properties(llamalib PROPERTIES LINK_FLAGS "${LINK_FLAGS}")
 
 target_link_libraries(llamalib
-    PRIVATE llama 
+    PRIVATE llama
+    PRIVATE ggml::ggml-cpu
 )

@@ -1,9 +1,12 @@
 {
   "name": "llama",
-  "version-string": "b3718",
+  "version-string": "b7445",
   "homepage": "https://github.com/ggerganov/llama.cpp",
   "description": "Inference of LLaMA model in pure C/C++.",
   "dependencies": [
+    {
+      "name": "ggml"
+    },
     {
       "name": "vcpkg-cmake",
       "host": true

@@ -8,7 +8,7 @@ describe("llama", () => {
         const v1 = v;
         expect(v).to.be.a.string;
         expect(v).to.be.not.empty;
-        expect(v).to.equal("b3718");    //  Update README.md with the new version!!!
+        expect(v).to.equal("b7445");    //  Update README.md with the new version!!!
 
         llama = await Llama.load();
         v = llama.version();
@@ -26,7 +26,6 @@ describe("llama", () => {
     });
 
     it("test", async () => {
-
         let llama = await Llama.load();
         const model = "https://huggingface.co/CompendiumLabs/bge-base-en-v1.5-gguf/resolve/main/bge-base-en-v1.5-q4_k_m.gguf";
         const webBlob: Blob = await WebBlob.create(new URL(model));

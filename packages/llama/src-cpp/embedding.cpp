@@ -1,6 +1,6 @@
 //  See: https://github.com/ggerganov/llama.cpp/blob/master/examples/embedding/embedding.cpp  ---
-#include "arg.h"
 #include "common.h"
+#include "log.h"
 #include "llama.h"
 
 #include <ctime>
@@ -11,6 +11,115 @@
 
 namespace embedding
 {
+
+    // These are declared as extern in llama.cpp's common headers but are not always
+    // provided as compiled sources in this repo's WASM build. Provide safe defaults.
+    int LLAMA_BUILD_NUMBER = 0;
+    const char *LLAMA_COMMIT = "unknown";
+    const char *LLAMA_COMPILER = "unknown";
+    const char *LLAMA_BUILD_TARGET = "unknown";
+
+    static void print_usage(const char *argv0)
+    {
+        fprintf(stderr, "\nexample usage:\n");
+        fprintf(stderr, "  %s -m model.gguf -p \"hello\" --pooling mean --embd-output-format array\n\n", argv0);
+    }
+
+    static bool parse_args(int argc, char **argv, common_params &params)
+    {
+        for (int i = 1; i < argc; ++i)
+        {
+            const std::string arg = argv[i];
+
+            auto require_value = [&](const char *name) -> std::string
+            {
+                if (i + 1 >= argc)
+                {
+                    fprintf(stderr, "%s: missing value for %s\n", argv[0], name);
+                    return {};
+                }
+                return std::string(argv[++i]);
+            };
+
+            if (arg == "-m" || arg == "--model")
+            {
+                const auto v = require_value(arg.c_str());
+                if (v.empty())
+                    return false;
+                params.model.path = v;
+            }
+            else if (arg == "-p" || arg == "--prompt")
+            {
+                const auto v = require_value(arg.c_str());
+                if (v.empty())
+                    return false;
+                params.prompt = v;
+            }
+            else if (arg == "--pooling")
+            {
+                const auto v = require_value("--pooling");
+                if (v.empty())
+                    return false;
+                if (v == "none")
+                {
+                    params.pooling_type = LLAMA_POOLING_TYPE_NONE;
+                }
+                else if (v == "mean")
+                {
+                    params.pooling_type = LLAMA_POOLING_TYPE_MEAN;
+                }
+                else if (v == "cls")
+                {
+                    params.pooling_type = LLAMA_POOLING_TYPE_CLS;
+                }
+                else if (v == "last")
+                {
+                    params.pooling_type = LLAMA_POOLING_TYPE_LAST;
+                }
+                else
+                {
+                    fprintf(stderr, "%s: unsupported pooling type: %s\n", argv[0], v.c_str());
+                    return false;
+                }
+            }
+            else if (arg == "--embd-output-format")
+            {
+                const auto v = require_value("--embd-output-format");
+                if (v.empty())
+                    return false;
+                params.embd_out = v;
+            }
+            else if (arg == "--embd-separator")
+            {
+                const auto v = require_value("--embd-separator");
+                if (v.empty())
+                    return false;
+                params.embd_sep = v;
+            }
+            else if (arg == "--log-disable")
+            {
+                // Disable llama.cpp/common logging so stdout contains only JSON output.
+                common_log_pause(common_log_main());
+            }
+            else if (arg == "-h" || arg == "--help")
+            {
+                print_usage(argv[0]);
+                return false;
+            }
+            else
+            {
+                // ignore unknown args for forward compatibility
+            }
+        }
+
+        if (params.model.path.empty())
+        {
+            fprintf(stderr, "%s: missing model path (-m)\n", argv[0]);
+            return false;
+        }
+
+        return true;
+    }
 
     static std::vector<std::string> split_lines(const std::string &s, const std::string &separator = "\n")
     {
@@ -35,7 +144,7 @@ namespace embedding
         size_t n_tokens = tokens.size();
         for (size_t i = 0; i < n_tokens; i++)
         {
-            llama_batch_add(batch, tokens[i], i, {seq_id}, true);
+            common_batch_add(batch, tokens[i], i, {seq_id}, true);
         }
     }
 
@@ -44,8 +153,8 @@ namespace embedding
         const enum llama_pooling_type pooling_type = llama_pooling_type(ctx);
         const struct llama_model *model = llama_get_model(ctx);
 
-        // clear previous kv_cache values (irrelevant for embeddings)
-        llama_kv_cache_clear(ctx);
+        // clear previous memory values (irrelevant for embeddings)
+        llama_memory_clear(llama_get_memory(ctx), /*data*/ true);
 
         // run model
         fprintf(stderr, "%s: n_tokens = %d, n_seq = %d\n", __func__, batch.n_tokens, n_seq);
@@ -92,42 +201,56 @@ namespace embedding
             }
 
             float *out = output + embd_pos * n_embd;
-            llama_embd_normalize(embd, out, n_embd, embd_norm);
+            common_embd_normalize(embd, out, n_embd, embd_norm);
         }
     }
 
     int main(int argc, char **argv)
     {
-        gpt_params params;
+        common_params params;
 
-        if (!gpt_params_parse(argc, argv, params, LLAMA_EXAMPLE_EMBEDDING))
+        if (!parse_args(argc, argv, params))
         {
             return 1;
         }
 
         params.embedding = true;
+
+        // WASM builds typically run without cross-origin isolation (browser) and/or with limited
+        // worker thread availability (Node/test runners). Force single-threaded execution to
+        // avoid ggml threadpool creation failures ("thread constructor failed").
+        params.cpuparams.n_threads = 1;
+        params.cpuparams_batch.n_threads = 1;
+
+        // llama.cpp requires n_batch <= n_ctx. For many embedding models n_ctx defaults to the
+        // training context (often 512), while common_params defaults n_batch to 2048.
+        // Clamp to a conservative value to avoid runtime traps inside llama.cpp.
+        if (params.n_batch > 512)
+        {
+            params.n_batch = 512;
+        }
         // For non-causal models, batch size must be equal to ubatch size
         params.n_ubatch = params.n_batch;
 
-        print_build_info();
-
-        LOG_TEE("%s: seed = %u\n", __func__, params.sparams.seed);
+        if (params.embd_out.empty())
+        {
+            params.embd_out = "array";
+        }
 
         llama_backend_init();
         llama_numa_init(params.numa);
 
         // load the model
-        llama_init_result llama_init = llama_init_from_gpt_params(params);
+        auto init = common_init_from_params(params);
 
-        llama_model *model = llama_init.model;
-        llama_context *ctx = llama_init.context;
+        llama_model *model = init ? init->model() : nullptr;
+        llama_context *ctx = init ? init->context() : nullptr;
         if (model == NULL)
         {
             fprintf(stderr, "%s: error: unable to load model\n", __func__);
             return 1;
         }
 
-        const int n_ctx_train = llama_n_ctx_train(model);
         const int n_ctx = llama_n_ctx(ctx);
 
         const enum llama_pooling_type pooling_type = llama_pooling_type(ctx);
@@ -138,30 +261,18 @@ namespace embedding
             return 1;
         }
 
-        if (n_ctx > n_ctx_train)
-        {
-            fprintf(stderr, "%s: warning: model was trained on only %d context tokens (%d specified)\n",
-                    __func__, n_ctx_train, n_ctx);
-        }
-
-        // print system information
-        {
-            fprintf(stderr, "\n");
-            fprintf(stderr, "%s\n", gpt_params_get_system_info(params).c_str());
-        }
-
         // split the prompt into lines
         std::vector<std::string> prompts = split_lines(params.prompt, params.embd_sep);
 
-        // max batch size
-        const uint64_t n_batch = params.n_batch;
-        GGML_ASSERT(params.n_batch >= params.n_ctx);
+        // max batch size (cannot exceed the context window)
+        const uint64_t n_batch = std::min<uint64_t>(params.n_batch, (uint64_t)n_ctx);
+        GGML_ASSERT(n_batch > 0);
 
         // tokenize the prompts and trim
         std::vector<std::vector<int32_t>> inputs;
         for (const auto &prompt : prompts)
         {
-            auto inp = ::llama_tokenize(ctx, prompt, true, false);
+            auto inp = common_tokenize(ctx, prompt, true, false);
             if (inp.size() > n_batch)
             {
                 fprintf(stderr, "%s: error: number of tokens in input line (%lld) exceeds batch size (%lld), increase batch size and re-run\n",
@@ -173,9 +284,10 @@ namespace embedding
 
         // check if the last token is SEP
         // it should be automatically added by the tokenizer when 'tokenizer.ggml.add_eos_token' is set to 'true'
+        const llama_vocab *vocab = llama_model_get_vocab(model);
         for (auto &inp : inputs)
         {
-            if (inp.empty() || inp.back() != llama_token_sep(model))
+            if (inp.empty() || inp.back() != llama_vocab_sep(vocab))
             {
                 fprintf(stderr, "%s: warning: last token in the prompt is not SEP\n", __func__);
                 fprintf(stderr, "%s:          'tokenizer.ggml.add_eos_token' should be set to 'true' in the GGUF header\n", __func__);
@@ -191,7 +303,7 @@ namespace embedding
                 fprintf(stderr, "%s: number of tokens in prompt = %zu\n", __func__, inputs[i].size());
                 for (int j = 0; j < (int)inputs[i].size(); j++)
                 {
-                    fprintf(stderr, "%6d -> '%s'\n", inputs[i][j], llama_token_to_piece(ctx, inputs[i][j]).c_str());
+                    fprintf(stderr, "%6d -> '%s'\n", inputs[i][j], common_token_to_piece(ctx, inputs[i][j]).c_str());
                 }
                 fprintf(stderr, "\n\n");
             }
@@ -216,7 +328,7 @@ namespace embedding
         }
 
         // allocate output
-        const int n_embd = llama_n_embd(model);
+        const int n_embd = llama_model_n_embd(model);
         std::vector<float> embeddings(n_embd_count * n_embd, 0);
         float *emb = embeddings.data();
 
@@ -237,7 +349,7 @@ namespace embedding
                 batch_decode(ctx, batch, out, s, n_embd, params.embd_normalize);
                 e += pooling_type == LLAMA_POOLING_TYPE_NONE ? batch.n_tokens : s;
                 s = 0;
-                llama_batch_clear(batch);
+                common_batch_clear(batch);
             }
 
             // add to batch
@@ -318,7 +430,7 @@ namespace embedding
                     {
                         for (int j = 0; j < n_prompts; j++)
                         {
-                            float sim = llama_embd_similarity_cos(emb + i * n_embd, emb + j * n_embd, n_embd);
+                            float sim = common_embd_similarity_cos(emb + i * n_embd, emb + j * n_embd, n_embd);
                             fprintf(stdout, "%6.2f ", sim);
                         }
                         fprintf(stdout, "%1.10s", prompts[i].c_str());
@@ -364,7 +476,7 @@ namespace embedding
                     fprintf(stdout, "    [");
                     for (int j = 0;;)
                     { // at least two iteration (n_embd_count > 1)
-                        float sim = llama_embd_similarity_cos(emb + i * n_embd, emb + j * n_embd, n_embd);
+                        float sim = common_embd_similarity_cos(emb + i * n_embd, emb + j * n_embd, n_embd);
                         fprintf(stdout, "%6.2f", sim);
                         j++;
                         if (j < n_embd_count)
@@ -386,13 +498,11 @@ namespace embedding
                 fprintf(stdout, "\n}\n");
         }
 
-        LOG_TEE("\n");
-        llama_perf_print(ctx, LLAMA_PERF_TYPE_CONTEXT);
-
         // clean up
         llama_batch_free(batch);
-        llama_free(ctx);
-        llama_free_model(model);
+
+        // common_init_result handles model/context lifetime
+        init.reset();
         llama_backend_free();
 
         return 0;
@@ -403,20 +513,51 @@ namespace embedding
 #include "util.hpp"
 int embeddingMain(const std::vector<std::string> &args, std::vector<std::string> &retVal)
 {
-    ArgBuffer argBuffer(args);
-    int ret = 0;
+    // Always attempt to return [stdout, stderr] in retVal.
+    // If something goes wrong before we can redirect, populate retVal directly.
+    try
     {
-        OutErrRedirect outerr;
-        ret = embedding::main(argBuffer.argc, argBuffer.argv);
-    }
-    readOutFile(retVal);
-    readErrorFile(retVal);
+        ArgBuffer argBuffer(args);
+        int ret = 0;
+        {
+            OutErrRedirect outerr;
+            try
+            {
+                ret = embedding::main(argBuffer.argc, argBuffer.argv);
+            }
+            catch (const std::exception &e)
+            {
+                fprintf(stderr, "embedding: exception: %s\n", e.what());
+                ret = 1;
+            }
+            catch (...)
+            {
+                fprintf(stderr, "embedding: unknown exception\n");
+                ret = 1;
+            }
+        }
 
-    return ret;
+        readOutFile(retVal);
+        readErrorFile(retVal);
+        return ret;
+    }
+    catch (const std::exception &e)
+    {
+        retVal.push_back("");
+        retVal.push_back(std::string("embeddingMain: exception: ") + e.what());
+        return 1;
+    }
+    catch (...)
+    {
+        retVal.push_back("");
+        retVal.push_back("embeddingMain: unknown exception");
+        return 1;
+    }
 }
 
 #include <emscripten/bind.h>
 EMSCRIPTEN_BINDINGS(llama_embedding)
 {
+    emscripten::register_vector<std::string>("VectorString");
     emscripten::function("embedding", &embeddingMain);
 }
