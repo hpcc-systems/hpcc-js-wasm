@@ -121,7 +121,7 @@ export class Graphviz {
      * @returns The Graphviz c++ version
      */
     version(): string {
-        return this._module.Graphviz.prototype.version();
+        return this._module.Graphviz.version();
     }
 
     /**
@@ -145,9 +145,9 @@ export class Graphviz {
             } catch (e: any) {
                 errorMsg = e.message;
             };
-            errorMsg = graphViz.lastError() || errorMsg;
+            errorMsg = this._module.Graphviz.lastError() || errorMsg;
         } finally {
-            this._module.destroy(graphViz);
+            graphViz.delete();
         }
         if (!retVal && errorMsg) {
             Graphviz.unload();
@@ -179,9 +179,9 @@ export class Graphviz {
             } catch (e: any) {
                 errorMsg = e.message;
             };
-            errorMsg = graphViz.lastError() || errorMsg;
+            errorMsg = this._module.Graphviz.lastError() || errorMsg;
         } finally {
-            this._module.destroy(graphViz);
+            graphViz.delete();
         }
         if (errorMsg) {
             Graphviz.unload();
@@ -212,9 +212,9 @@ export class Graphviz {
             } catch (e: any) {
                 errorMsg = e.message;
             };
-            errorMsg = graphViz.lastError() || errorMsg;
+            errorMsg = this._module.Graphviz.lastError() || errorMsg;
         } finally {
-            this._module.destroy(graphViz);
+            graphViz.delete();
         }
         if (!out && errorMsg) {
             Graphviz.unload();
@@ -243,9 +243,9 @@ export class Graphviz {
             } catch (e: any) {
                 errorMsg = e.message;
             };
-            errorMsg = graphViz.lastError() || errorMsg;
+            errorMsg = this._module.Graphviz.lastError() || errorMsg;
         } finally {
-            this._module.destroy(graphViz);
+            graphViz.delete();
         }
         if (!retVal && errorMsg) {
             Graphviz.unload();

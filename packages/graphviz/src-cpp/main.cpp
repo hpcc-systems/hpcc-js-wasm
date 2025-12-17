@@ -4,6 +4,7 @@
 #include <gvplugin.h>
 #include <graphviz_version.h>
 
+#include <emscripten/bind.h>
 #include <emscripten.h>
 
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
@@ -34,12 +35,15 @@ lt_symlist_t lt_preloaded_symbols[] = {
     {"gvplugin_core_LTX_library", &gvplugin_core_LTX_library},
     {0, 0}};
 
-StringBuffer lastErrorStr;
-
-int vizErrorf(char *buf)
+namespace
 {
-    lastErrorStr = buf;
-    return 0;
+    std::string lastErrorStr;
+
+    int vizErrorf(char *buf)
+    {
+        lastErrorStr = buf ? buf : "";
+        return 0;
+    }
 }
 
 extern int Y_invert;
@@ -47,12 +51,12 @@ int origYInvert = Y_invert;
 extern int Nop;
 int origNop = Nop;
 
-const char *Graphviz::version()
+std::string Graphviz::version()
 {
     return PACKAGE_VERSION;
 }
 
-const char *Graphviz::lastError()
+std::string Graphviz::lastError()
 {
     return lastErrorStr;
 }
@@ -65,14 +69,13 @@ Graphviz::Graphviz(int yInvert, int nop)
     lastErrorStr = "";
     agseterr(AGERR);
     agseterrf(vizErrorf);
-    // agreadline(1);
 }
 
 Graphviz::~Graphviz()
 {
 }
 
-void Graphviz::createFile(const char *path, const char *data)
+void Graphviz::createFile(const std::string &path, const std::string &data)
 {
     EM_ASM(
         {
@@ -82,24 +85,24 @@ void Graphviz::createFile(const char *path, const char *data)
             FS.createPath("/", PATH.dirname(path));
             FS.writeFile(PATH.join("/", path), data);
         },
-        path, data);
+        path.c_str(), data.c_str());
 }
 
-const char *Graphviz::layout(const char *src, const char *format, const char *engine)
+std::string Graphviz::layout(const std::string &src, const std::string &format, const std::string &engine)
 {
     layout_result = "";
 
     GVC_t *gvc = gvContextPlugins(lt_preloaded_symbols, true);
 
-    Agraph_t *graph = agmemread(src);
+    Agraph_t *graph = agmemread(src.c_str());
     if (graph)
     {
         char *data = NULL;
         size_t length;
 
-        gvLayout(gvc, graph, engine);
-        gvRenderData(gvc, graph, format, &data, &length);
-        layout_result = data;
+        gvLayout(gvc, graph, engine.c_str());
+        gvRenderData(gvc, graph, format.c_str(), &data, &length);
+        layout_result = data ? data : "";
         gvFreeRenderData(data);
         gvFreeLayout(gvc, graph);
         agclose(graph);
@@ -111,47 +114,47 @@ const char *Graphviz::layout(const char *src, const char *format, const char *en
     return layout_result;
 }
 
-bool Graphviz::acyclic(const char *src, bool doWrite, bool verbose)
+bool Graphviz::acyclic(const std::string &src, bool doWrite, bool verbose)
 {
     acyclic_outFile = "";
     acyclic_num_rev = 0;
     bool retVal = false;
 
-    Agraph_t *graph = agmemread(src);
+    Agraph_t *graph = agmemread(src.c_str());
     if (graph)
     {
         TempFileBuffer outFile;
         graphviz_acyclic_options_t opts = {outFile, doWrite, verbose};
         retVal = graphviz_acyclic(graph, &opts, &acyclic_num_rev);
-        acyclic_outFile = outFile;
+        acyclic_outFile = std::string(outFile);
         agclose(graph);
     }
     return retVal;
 }
 
-void Graphviz::tred(const char *src, bool verbose, bool printRemovedEdges)
+void Graphviz::tred(const std::string &src, bool verbose, bool printRemovedEdges)
 {
     tred_out = "";
     tred_err = "";
 
-    Agraph_t *graph = agmemread(src);
+    Agraph_t *graph = agmemread(src.c_str());
     if (graph)
     {
         TempFileBuffer out;
         TempFileBuffer err;
         graphviz_tred_options_t opts = {verbose, printRemovedEdges, out, err};
         graphviz_tred(graph, &opts);
-        tred_out = out;
-        tred_err = err;
+        tred_out = std::string(out);
+        tred_err = std::string(err);
         agclose(graph);
     }
 }
 
-const char *Graphviz::unflatten(const char *src, int maxMinlen, bool do_fans, int chainLimit)
+std::string Graphviz::unflatten(const std::string &src, int maxMinlen, bool do_fans, int chainLimit)
 {
     unflatten_out = "";
 
-    Agraph_t *graph = agmemread(src);
+    Agraph_t *graph = agmemread(src.c_str());
     if (graph)
     {
         graphviz_unflatten_options_t opts = {do_fans, maxMinlen, chainLimit};
@@ -159,11 +162,28 @@ const char *Graphviz::unflatten(const char *src, int maxMinlen, bool do_fans, in
 
         TempFileBuffer tempFile;
         agwrite(graph, tempFile);
-        unflatten_out = tempFile;
+        unflatten_out = std::string(tempFile);
         agclose(graph);
     }
     return unflatten_out;
 }
 
-//  Include JS Glue  ---
-#include "main_glue.cpp"
+EMSCRIPTEN_BINDINGS(graphvizlib_bindings)
+{
+    emscripten::class_<Graphviz>("Graphviz")
+        .constructor<>()
+        .constructor<int, int>()
+        .class_function("version", &Graphviz::version)
+        .class_function("lastError", &Graphviz::lastError)
+        .function("createFile", &Graphviz::createFile)
+        .property("layout_result", &Graphviz::layout_result)
+        .function("layout", &Graphviz::layout)
+        .property("acyclic_outFile", &Graphviz::acyclic_outFile)
+        .property("acyclic_num_rev", &Graphviz::acyclic_num_rev)
+        .function("acyclic", &Graphviz::acyclic)
+        .property("tred_out", &Graphviz::tred_out)
+        .property("tred_err", &Graphviz::tred_err)
+        .function("tred", &Graphviz::tred)
+        .property("unflatten_out", &Graphviz::unflatten_out)
+        .function("unflatten", &Graphviz::unflatten);
+}

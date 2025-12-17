@@ -119,12 +119,6 @@ public:
             XML_SetDefaultHandler(m_p, fEnable ? DefaultHandler : NULL);
     }
 
-    // void EnableExternalEntityRefHandler(bool fEnable = true)
-    // {
-    // 	assert(m_p != NULL);
-    // 	XML_SetExternalEntityRefHandler(m_p, fEnable ? ExternalEntityRefHandler : NULL);
-    // }
-
     void EnableUnknownEncodingHandler(bool fEnable = true)
     {
         XML_SetUnknownEncodingHandler(m_p, fEnable ? UnknownEncodingHandler : NULL, 0);
@@ -206,17 +200,6 @@ public:
     {
         return XML_ExpatVersion();
     }
-
-    /*	static void GetExpatVersion(int *pnMajor, int *pnMinor, int *pnMicro)
-	{
-		XML_expat_version v = XML_ExpatVersionInfo();
-		if(pnMajor)
-			*pnMajor = v .major;
-		if(pnMinor)
-			*pnMinor = v .minor;
-		if(pnMicro)
-			*pnMicro = v .micro;
-	}*/
 
     static const XML_LChar *GetErrorString(enum XML_Error nError)
     {
