@@ -29,6 +29,18 @@ export class Llama {
     private constructor(protected _module: MainModule) {
     }
 
+    private logRedirectedOutputFiles(fileNames: string[] = ["error.txt", "output.txt"]) {
+        const fs: any = (this._module as any).FS;
+        for (const fileName of fileNames) {
+            try {
+                const txt = fs?.readFile?.(fileName, { encoding: "utf8" });
+                if (txt) console.error(txt);
+            } catch (_err) {
+                void _err;
+            }
+        }
+    }
+
     /**
      * Compiles and instantiates the raw wasm.
      * 
@@ -81,11 +93,18 @@ export class Llama {
         const embeddingResult = new this._module.VectorString();
         let retVal: number[][] = [];
         try {
-            this._module.embedding(args, embeddingResult);
-            const cout = embeddingResult.get(0);
-            retVal = JSON.parse(cout ?? "[]");
+            const rc = this._module.embedding(args, embeddingResult);
+            const stdout = embeddingResult.get(0) ?? "";
+            const stderr = embeddingResult.get(1) ?? "";
+            if (rc !== 0) {
+                throw new Error(stderr || "llama.embedding failed");
+            }
+            retVal = JSON.parse(stdout || "[]");
         } catch (e) {
             console.error(e);
+            // If the call aborted before returning, the embind out-params are not available.
+            // Try to read the redirected output files for a useful error message.
+            this.logRedirectedOutputFiles();
         } finally {
             embeddingResult.delete();
             args.delete();
