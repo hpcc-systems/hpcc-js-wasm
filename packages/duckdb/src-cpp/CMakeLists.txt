@@ -6,7 +6,6 @@ find_package(DuckDB CONFIG REQUIRED)
 
 set(EM_CPP_FLAGS 
     ${EM_CPP_FLAGS}
-    "-msimd128"
     "-fwasm-exceptions"
 )
 string(REPLACE ";" " " CPP_FLAGS "${EM_CPP_FLAGS}")

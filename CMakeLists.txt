@@ -10,6 +10,7 @@ set(VCPKG_INCLUDE_DIR ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/include)
 # See:  https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
 set(EM_CPP_FLAGS 
     "-flto"
+    "-msimd128"
 )
 
 set(EM_LINK_FLAGS 
