@@ -134,27 +134,17 @@ export async function testDuckDB() {
         const duckdb = await DuckDB.load();
 
         // Test basic SQL query
-        const db = duckdb.db;
-        const conn = await db.connect();
+        const conn = duckdb.connect();
+        const result = conn.query("SELECT 42 as answer");
 
-        // Simple query test
-        const result = await conn.query("SELECT 42 as answer");
-        const batches = [];
-        for await (const batch of result) {
-            batches.push(batch);
+        // Verify result using getValue (column-first indexing)
+        const value = result.getValue(0, 0);
+        if (value !== 42) {
+            throw new Error(`DuckDB query did not return expected result: got ${value}`);
         }
 
-        if (batches.length === 0) {
-            throw new Error('DuckDB query returned no results');
-        }
-
-        // Check if we can access the result
-        const firstBatch = batches[0];
-        if (!firstBatch || !firstBatch.toColumns) {
-            throw new Error('DuckDB result format unexpected');
-        }
-
-        await conn.close();
+        result.delete();
+        conn.delete();
 
         console.log('✓ DuckDB test passed');
         DuckDB.unload();

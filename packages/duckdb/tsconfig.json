@@ -2,7 +2,12 @@
     "extends": "../tsconfig.json",
     "compilerOptions": {
         "rootDir": "./src",
-        "declarationDir": "./types"
+        "declarationDir": "./types",
+        "lib": [
+            "ES2022",
+            "DOM",
+            "ESNext.Disposable"
+        ]
     },
     "include": [
         "./src/**/*"

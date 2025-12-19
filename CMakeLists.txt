@@ -5,15 +5,34 @@ project(cpp)
 option(ENABLE_SANITIZERS "Enable Clang's sanitizer options" OFF)
 
 set(CMAKE_INSTALL_PREFIX "..")
+
+set(VCPKG_ROOT ${CMAKE_SOURCE_DIR}/vcpkg)
+set(CMAKE_TOOLCHAIN_FILE ${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
+set(VCPKG_INSTALLED_DIR "${CMAKE_BINARY_DIR}/vcpkg_installed")
+set(VCPKG_INSTALL_OPTIONS "--x-abi-tools-use-exact-versions;--downloads-root=${CMAKE_BINARY_DIR}/vcpkg_downloads;--x-buildtrees-root=${CMAKE_BINARY_DIR}/vcpkg_buildtrees;--x-packages-root=${CMAKE_BINARY_DIR}/vcpkg_packages;--x-install-root=${CMAKE_BINARY_DIR}/vcpkg_installed")
 set(VCPKG_INCLUDE_DIR ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/include)
 
 # See:  https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
 set(EM_CPP_FLAGS 
     "-flto"
     "-msimd128"
+
+    "-sSTRICT=1"
 )
 
 set(EM_LINK_FLAGS 
+    "-flto"
+    "--no-entry"
+    "-lembind"
+
+    "-sSTRICT=1"
+    # "-sIGNORE_MISSING_MAIN=0"
+    # "-sAUTO_JS_LIBRARIES=0"
+    # "-sAUTO_NATIVE_LIBRARIES=0"
+    # "-sDEFAULT_TO_CXX=0"
+    # "-sUSE_GLFW=0"
+    # "-sALLOW_UNIMPLEMENTED_SYSCALLS=0"
+    # "-sINCOMING_MODULE_JS_API=\"[]\""
     "-sASSERTIONS=0"
     "-sINVOKE_RUN=0"
     "-sALLOW_MEMORY_GROWTH=1"
@@ -24,22 +43,17 @@ set(EM_LINK_FLAGS
     "-sMODULARIZE=1" 
     "-sEXPORT_ES6=1"
     # "-sIGNORE_CLOSURE_COMPILER_ERRORS=0"
-    # "-sWASM_BIGINT=1"
     # "-sSTANDALONE_WASM=0"
     # "-sBINARYEN_ASYNC_COMPILATION=1"
     # "-sDYNAMIC_EXECUTION=0"
     "-sWASM_BIGINT=0"
     "-sPOLYFILL=0"
     # "-sSTRICT=0"
-    "-sIGNORE_MISSING_MAIN=0"
-    "-sAUTO_JS_LIBRARIES=0"
-    "-sAUTO_NATIVE_LIBRARIES=0"
-    "-sAUTO_ARCHIVE_INDEXES=0"
-    "-sDEFAULT_TO_CXX=0"
-    "-sUSE_GLFW=0"
-    "-sALLOW_UNIMPLEMENTED_SYSCALLS=1"
+    # "-sAUTO_ARCHIVE_INDEXES=0"
     "-sINCOMING_MODULE_JS_API=\"['wasmBinary']\""
-    "--no-entry"
+    "-sEXPORTED_FUNCTIONS=\"['_free', '_malloc']\""
+    "-sEXPORTED_RUNTIME_METHODS=\"['UTF8ToString', 'lengthBytesUTF8', 'stringToUTF8', 'HEAPU8']\""
+    "-lembind"
     "--pre-js ${CMAKE_CURRENT_SOURCE_DIR}/src-cpp/src/pre.js"
     "--post-js ${CMAKE_CURRENT_SOURCE_DIR}/src-cpp/src/post.js"
 )
@@ -82,9 +96,4 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(PACK_MODE "-d")
 endif ()
 
-add_subdirectory(packages/base91/src-cpp)
-add_subdirectory(packages/duckdb/src-cpp)
-add_subdirectory(packages/expat/src-cpp)
-add_subdirectory(packages/graphviz/src-cpp)
-add_subdirectory(packages/llama/src-cpp)
-add_subdirectory(packages/zstd/src-cpp)
+add_subdirectory(packages)

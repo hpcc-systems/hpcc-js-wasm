@@ -13,4 +13,4 @@ git checkout $VCPKG_BUILD_TOOLS_VERSION
 ./bootstrap-vcpkg.sh
 cd ..
 source ./emsdk/emsdk_env.sh
-./vcpkg/vcpkg install --overlay-ports=./vcpkg-overlays --overlay-triplets=./vcpkg-triplets --triplet=wasm32-emscripten --x-install-root=./vcpkg/vcpkg-installed_wasm
+./vcpkg/vcpkg install --triplet=wasm32-emscripten --x-abi-tools-use-exact-versions --downloads-root=./build/vcpkg_downloads --x-buildtrees-root=./build/vcpkg_buildtrees --x-packages-root=./build/vcpkg_packages --x-install-root=./build/vcpkg_installed

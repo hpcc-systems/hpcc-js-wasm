@@ -1,10 +1,26 @@
+---
+title: Llama
+description: WebAssembly wrapper for llama.cpp AI models
+outline: deep
+---
+
 # @hpcc-js/wasm-llama
 
 ## Installation
 
-```sh
+::: code-group
+```sh [npm]
 npm install @hpcc-js/wasm-llama
 ```
+
+```sh [yarn]
+yarn add @hpcc-js/wasm-llama
+```
+
+```sh [pnpm]
+pnpm add @hpcc-js/wasm-llama
+```
+:::
 
 ## Quick Start
 
@@ -19,6 +35,8 @@ const data: ArrayBuffer = await webBlob.arrayBuffer();
 
 const embeddings = llama.embedding("Hello and Welcome!", new Uint8Array(data));
 ```
+
+<!--@include: ../../docs/llama/src/llama/README.md-->
 
 ## Reference
 

@@ -64,7 +64,7 @@ For comprehensive development including C++ changes:
 npm ci
 
 # 2. Install build tools (requires system dependencies)
-npm run install-build-deps
+npm run install-build-deps  # Installs emsdk, vcpkg, playwright, bundler test deps
 
 # 3. Build C++ to WASM
 npm run build-cpp

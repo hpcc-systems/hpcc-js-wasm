@@ -24,7 +24,7 @@ This is a WebAssembly (WASM) monorepo providing JavaScript/TypeScript bindings f
 npm ci
 
 # 2. Install build dependencies (20-30 minutes - NEVER CANCEL)
-# Includes: emsdk install (~5 min), vcpkg install (~15-20 min), playwright (~5-10 min)
+# Includes: emsdk install (~5 min), vcpkg install (~15-20 min), playwright (~5-10 min), bundler test deps
 npm run install-build-deps
 
 # 3. Build C++ to WASM (30-45 minutes - NEVER CANCEL) 
@@ -34,7 +34,7 @@ npm run build-cpp
 # 4. Build TypeScript packages (5-10 minutes)
 npm run build-ws
 
-# 5. Full build command (45+ minutes total - NEVER CANCEL)
+# 5. Full build command equivalent to build-cpp + build-ws (45+ minutes total - NEVER CANCEL)
 # Equivalent to: build-cpp && build-ws
 npm run build
 ```
@@ -49,6 +49,20 @@ From actual runs in clean environment:
 - `npm run build-cpp`: 30-60 minutes (C++ compilation to WASM)
 - `npm run test`: 15-30 minutes (includes browser and node tests)
 
+## CMake / C++ (WASM) Build
+
+Prefer the npm scripts. They source `./emsdk/emsdk_env.sh` and use the repo's CMake preset(s):
+
+```bash
+npm run build-cpp
+```
+
+For fast iteration:
+
+```bash
+npm run build-cpp-watch
+```
+
 ### Quick Development (TypeScript Only)
 ```bash
 # For TypeScript-only changes when WASM files exist
@@ -57,32 +71,15 @@ npm run build-ws        # 5-10 minutes
 npm run lint           # 2-3 minutes
 ```
 
-## CMake Configuration
+### Manual CMake (only when needed)
 
-### **CRITICAL**: ALWAYS Use VS Code CMake Extension
+Manual CMake is supported, but you must source Emscripten first:
 
-**YOU MUST use the VS Code CMake extension for ALL CMake operations.** Manual cmake commands will fail because they don't properly set up the Emscripten environment.
-
-**REQUIRED WORKFLOW** when modifying C++ code or vcpkg packages (patches, portfile.cmake):
-
-1. **Remove vcpkg cache**: `rm -rf vcpkg/buildtrees/<package>`
-2. **Use VS Code Command Palette** (Ctrl/Cmd+Shift+P):
-   - **`CMake: Configure`** - Reconfigures CMake and reinstalls vcpkg packages with new patches
-   - **`CMake: Build`** - Builds the configured targets
-   - **`CMake: Clean Rebuild`** - Cleans and rebuilds everything
-
-**WHY THIS IS REQUIRED**:
-- Sets up Emscripten SDK environment variables correctly
-- Configures vcpkg toolchain properly
-- Handles WASM-specific build flags
-- Provides IntelliSense and debugging integration
-
-**DO NOT use manual cmake commands like:**
-- ❌ `cmake --preset vcpkg-emscripten-*` (will fail with "emcc compiler not found")
-- ❌ `cmake --build build --target <target>` (won't work without proper environment)
-- ❌ `ninja <target>` (missing environment and configuration)
-
-**EXCEPTION**: `npm run build-cpp` scripts are pre-configured with the correct environment and are safe to use for full builds.
+```bash
+source ./emsdk/emsdk_env.sh
+cmake -S . -B ./build --preset vcpkg-emscripten-MinSizeRel
+cmake --build ./build --parallel
+```
 
 ## Embind (C++ <-> JS Interop)
 
@@ -130,18 +127,6 @@ Reference: https://emscripten.org/docs/porting/connecting_cpp_and_javascript/emb
 ```
 ✘ [ERROR] Could not resolve "../../../build/packages/base91/src-cpp/base91lib.wasm"
 ✘ [ERROR] Could not resolve "../../../build/packages/graphviz/src-cpp/graphvizlib.wasm"
-```
-
-### DuckDB Exception
-The DuckDB package is special:
-```bash
-cd packages/duckdb
-npm run pack-duckdb    # Uses pre-built WASM from @duckdb/duckdb-wasm
-npm run build          # Can complete without C++ compilation
-```
-This works because DuckDB uses pre-compiled WASM binaries rather than building from C++ source.
-```
-ERROR: Could not resolve "../../../build/packages/graphviz/src-cpp/graphvizlib.wasm"
 ```
 
 ## Testing
@@ -202,9 +187,10 @@ npm test
 ### 3. End-to-End Validation
 ```bash
 # Test the examples in the root directory
-node -e "
-const { Graphviz } = require('./packages/graphviz/dist/index.js');
-Graphviz.load().then(g => console.log(g.version()));
+node --input-type=module -e "
+import { Graphviz } from './packages/graphviz/dist/index.js';
+const g = await Graphviz.load();
+console.log(g.version());
 "
 ```
 
@@ -214,14 +200,9 @@ Graphviz.load().then(g => console.log(g.version()));
 - **Network restrictions**: Downloads may fail in restricted environments
 - **Docker alternative**: Use `npm run build-docker` if local builds fail
 - **SSL certificate issues**: May block package downloads
-- **Node.js version**: Requires Node.js 20+ for optimal compatibility
+- **Node.js version**: CI runs Node.js 22 and 24 (primary support); docs deploy currently uses Node.js 20
 
 ### Package-Specific Notes
-
-#### DuckDB Package
-- **Special build process**: Uses pre-built WASM from @duckdb/duckdb-wasm
-- **Can build without C++ compilation**: Run `npm run pack-duckdb` instead
-- **Build command**: Uses `pack-duckdb-eh` scripts to generate WASM files
 
 #### Other Packages (base91, expat, graphviz, llama, zstd)
 - **Require C++ compilation**: Must run `npm run build-cpp` first
@@ -281,7 +262,7 @@ npm run build-docs          # Build VitePress documentation
 ### Advanced Build Options
 ```bash
 npm run build-cpp-watch     # Watch C++ files for changes
-npm run build-ts-watch      # Watch TypeScript files
+npm run build-watch      # Watch TypeScript files
 npm run build-dev           # Development builds
 ```
 

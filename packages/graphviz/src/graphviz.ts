@@ -1,5 +1,7 @@
 // @ts-expect-error importing from a wasm file is resolved via a custom esbuild plugin
-import load, { reset } from "../../../build/packages/graphviz/src-cpp/graphvizlib.wasm";
+import load, { reset } from "../../../build/packages/graphviz/graphvizlib.wasm";
+import type { MainModule } from "../../../build/packages/graphviz/graphvizlib.js";
+import { MainModuleEx } from "@hpcc-js/wasm-util";
 
 /**
  * Various graphic and data formats for end user, web, documents and other applications.  See [Output Formats](https://graphviz.gitlab.io/docs/outputs/) for more information.
@@ -70,6 +72,8 @@ function createFiles(graphviz: any, _options?: Options) {
     [...options.files, ...imagesToFiles(options.images)].forEach(file => graphviz.createFile(file.path, file.data));
 }
 
+let g_graphviz: Promise<Graphviz>;
+
 /**
  * The Graphviz layout algorithms take descriptions of graphs in a simple text language, and make diagrams in useful formats, such as images and SVG for web pages or display in an interactive graph browser.
  * 
@@ -90,9 +94,10 @@ function createFiles(graphviz: any, _options?: Options) {
  * * https://raw.githack.com/hpcc-systems/hpcc-js-wasm/trunk/index.html
  * * https://observablehq.com/@gordonsmith/graphviz
  */
-export class Graphviz {
+export class Graphviz extends MainModuleEx<MainModule> {
 
-    private constructor(protected _module: any) {
+    private constructor(_module: MainModule) {
+        super(_module);
     }
 
     /**
@@ -105,9 +110,10 @@ export class Graphviz {
      * @returns A promise to an instance of the Graphviz class.
      */
     static load(): Promise<Graphviz> {
-        return load().then((module: any) => {
-            return new Graphviz(module);
-        });
+        if (!g_graphviz) {
+            g_graphviz = (load() as Promise<MainModule>).then((module) => new Graphviz(module));
+        }
+        return g_graphviz;
     }
 
     /**
@@ -121,7 +127,7 @@ export class Graphviz {
      * @returns The Graphviz c++ version
      */
     version(): string {
-        return this._module.Graphviz.version();
+        return this._module.CGraphviz.version();
     }
 
     /**
@@ -135,7 +141,7 @@ export class Graphviz {
      */
     layout(dotSource: string, outputFormat: Format = "svg", layoutEngine: Engine = "dot", options?: Options): string {
         if (!dotSource) return "";
-        const graphViz = new this._module.Graphviz(options?.yInvert ? 1 : 0, options?.nop ? options?.nop : 0);
+        const graphViz = new this._module.CGraphviz(options?.yInvert ? 1 : 0, options?.nop ? options?.nop : 0);
         let retVal = "";
         let errorMsg = "";
         try {
@@ -145,7 +151,7 @@ export class Graphviz {
             } catch (e: any) {
                 errorMsg = e.message;
             };
-            errorMsg = this._module.Graphviz.lastError() || errorMsg;
+            errorMsg = this._module.CGraphviz.lastError() || errorMsg;
         } finally {
             graphViz.delete();
         }
@@ -166,7 +172,7 @@ export class Graphviz {
       */
     acyclic(dotSource: string, doWrite: boolean = false, verbose: boolean = false): { acyclic: boolean, num_rev: number, outFile: string } {
         if (!dotSource) return { acyclic: false, num_rev: 0, outFile: "" };
-        const graphViz = new this._module.Graphviz();
+        const graphViz = new this._module.CGraphviz();
         let acyclic: boolean = false;
         let num_rev: number = 0;
         let outFile: string = "";
@@ -179,7 +185,7 @@ export class Graphviz {
             } catch (e: any) {
                 errorMsg = e.message;
             };
-            errorMsg = this._module.Graphviz.lastError() || errorMsg;
+            errorMsg = this._module.CGraphviz.lastError() || errorMsg;
         } finally {
             graphViz.delete();
         }
@@ -200,7 +206,7 @@ export class Graphviz {
       */
     tred(dotSource: string, verbose: boolean = false, printRemovedEdges: boolean = false): { out: string, err: string } {
         if (!dotSource) return { out: "", err: "" };
-        const graphViz = new this._module.Graphviz();
+        const graphViz = new this._module.CGraphviz();
         let out: string = "";
         let err: string = "";
         let errorMsg = "";
@@ -212,7 +218,7 @@ export class Graphviz {
             } catch (e: any) {
                 errorMsg = e.message;
             };
-            errorMsg = this._module.Graphviz.lastError() || errorMsg;
+            errorMsg = this._module.CGraphviz.lastError() || errorMsg;
         } finally {
             graphViz.delete();
         }
@@ -234,7 +240,7 @@ export class Graphviz {
      */
     unflatten(dotSource: string, maxMinlen: number = 0, do_fans: boolean = false, chainLimit: number = 0): string {
         if (!dotSource) return "";
-        const graphViz = new this._module.Graphviz();
+        const graphViz = new this._module.CGraphviz();
         let retVal = "";
         let errorMsg = "";
         try {
@@ -243,7 +249,7 @@ export class Graphviz {
             } catch (e: any) {
                 errorMsg = e.message;
             };
-            errorMsg = this._module.Graphviz.lastError() || errorMsg;
+            errorMsg = this._module.CGraphviz.lastError() || errorMsg;
         } finally {
             graphViz.delete();
         }

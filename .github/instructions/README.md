@@ -1,5 +1,5 @@
 # Instructions Summary
-*AI Assistant instructions for hpcc-systems/hpcc-js-wasm - Updated July 2025*
+*AI Assistant instructions for hpcc-systems/hpcc-js-wasm - Updated December 2025*
 
 This directory contains comprehensive instructions for AI assistants working with the HPCC-JS-WASM repository.
 
@@ -29,6 +29,7 @@ This directory contains comprehensive instructions for AI assistants working wit
 - **TypeScript First**: Many operations can be done with TypeScript-only builds
 - **Test Expectations**: Fresh clone tests will fail without WASM builds (expected)
 - **Safe Operations**: Documentation changes, TypeScript modifications don't need full build
+- **Node.js**: CI runs Node.js 22 and 24; docs deploy currently uses Node.js 20
 
 ## Most Common Scenarios
 
@@ -42,7 +43,7 @@ npm run build-ws  # May fail without WASM, but can still work on TS
 ### Full Development Setup
 ```bash
 npm ci
-npm run install-build-deps  # Requires system tools
+npm run install-build-deps  # Installs emsdk, vcpkg, playwright, bundler test deps
 npm run build-cpp          # Compiles C++ to WASM
 npm run build-ws           # Builds TypeScript
 npm run test               # Full test suite

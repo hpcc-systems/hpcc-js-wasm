@@ -6,6 +6,9 @@ import tseslint from "typescript-eslint";
 /** @type {import('eslint').Linter.Config[]} */
 export default [
     {
+        ignores: ["**/__screenshots__/**"]
+    },
+    {
         files: [
             "**/*.{js,mjs,cjs,ts}"
         ]

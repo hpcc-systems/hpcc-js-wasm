@@ -1,12 +1,16 @@
-export default {
+import { resolve } from 'path';
+import { defineConfig } from 'vite'
+
+export default defineConfig({
     title: '@hpcc-js/wasm',
     description: 'HPCC Systems Wasm Libraries',
     base: '/hpcc-js-wasm/',
-    srcExclude: ['**/tests/**'],
+    srcExclude: ['build/', 'cmake/', 'docker/', 'emsdk/', 'vcpkg/', 'vcpkg-overlays/', '**/tests/**'],
+    ignoreDeadLinks: true,
 
     themeConfig: {
         repo: "hpcc-systems/hpcc-js-wasm",
-        docsDir: "docs",
+        docsDir: ".",
         docsBranch: "trunk",
         editLink: {
             pattern: 'https://github.com/hpcc-systems/hpcc-js-wasm/edit/trunk/docs/:path',
@@ -15,7 +19,7 @@ export default {
         lastUpdated: "Last Updated",
 
         nav: [
-            { text: 'Guide', link: '/getting-started' },
+            { text: 'Guide', link: './docs/getting-started' },
             { text: 'GitHub', link: 'https://github.com/hpcc-systems/hpcc-js-wasm' },
             { text: 'Changelog', link: 'https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/CHANGELOG.md' },
         ],
@@ -23,24 +27,24 @@ export default {
             {
                 text: 'General',
                 items: [
-                    { text: 'Getting Started', link: '/getting-started' },
+                    { text: 'Getting Started', link: '/docs/getting-started' },
                 ]
             },
             {
                 text: 'WASM CLI',
                 items: [
-                    { text: 'Graphviz', link: '/graphviz-cli' },
+                    { text: 'Graphviz', link: '/docs/graphviz-cli' },
                 ]
             },
             {
                 text: 'WASM API',
                 items: [
-                    { text: 'Base91', link: '/base91/src/base91/classes/Base91' },
-                    { text: 'DuckDB', link: '/duckdb/src/duckdb/classes/DuckDB' },
-                    { text: 'Expat', link: '/expat/src/expat/classes/Expat' },
-                    { text: 'Graphviz', link: '/graphviz/src/graphviz/classes/Graphviz' },
-                    { text: 'Llama', link: '/llama/src/llama/classes/Llama' },
-                    { text: 'Zstd', link: '/zstd/src/zstd/classes/Zstd' },
+                    { text: 'Base91', link: '/packages/base91/README' },
+                    { text: 'DuckDB', link: '/packages/duckdb/README' },
+                    { text: 'Expat', link: '/packages/expat/README' },
+                    { text: 'Graphviz', link: '/packages/graphviz/README' },
+                    { text: 'Llama', link: '/packages/llama/README' },
+                    { text: 'Zstd', link: '/packages/zstd/README' },
                 ]
             }
 
@@ -50,4 +54,4 @@ export default {
             copyright: 'Copyright © 2019-present hpccsystems.com'
         }
     }
-}
+});

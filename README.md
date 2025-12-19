@@ -1,4 +1,4 @@
-# @hpcc-js/wasm - Version 3
+# @hpcc-js/wasm
 
 [![Test PR](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/test-pr.yml/badge.svg?branch=release-please--branches--trunk)](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/test-pr.yml)
 [![release-please](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/release-please.yml/badge.svg)](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/release-please.yml)
@@ -36,9 +36,9 @@ This repository includes comprehensive instructions for AI assistants and GitHub
 * [Troubleshooting Guide](.github/instructions/troubleshooting.md) - Debugging and problem resolution
 * Package-specific guides in `packages/*/` directories
 
-## Version 3 Changes
+## Packages
 
-Converted this repository to a monorepo with the following packages:
+This repository is a monorepo with the following packages:
 - @hpcc-js/wasm-base91
 - @hpcc-js/wasm-duckdb
 - @hpcc-js/wasm-expat
@@ -153,7 +153,7 @@ To get an idea of what pre-requisites are required, please see the following fil
 
 * [Dockerfile](docker/ubuntu-dev.dockerfile)
 * [GH Action Ubuntu](.github/workflows/test-pr.yml)
-* NodeJS
+* Node.js (CI runs Node.js 22 and 24; docs deploy uses Node.js 20)
 
 ## Steps (Docker)
 

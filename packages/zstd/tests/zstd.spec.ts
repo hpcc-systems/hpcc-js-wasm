@@ -51,4 +51,64 @@ describe("zstd", function () {
         }
     });
 
+    it("compress-chunk", async function () {
+        const zstd = await Zstd.load();
+        const data = new Uint8Array(Array.from({ length: 10000 }, (_, i) => i % 256));
+
+        // Compress using chunks
+        const CHUNK_SIZE = 3000;
+        const compressedChunks: Uint8Array[] = [];
+        zstd.reset();
+        for (let offset = 0; offset < data.length; offset += CHUNK_SIZE) {
+            const chunk = data.subarray(offset, Math.min(offset + CHUNK_SIZE, data.length));
+            compressedChunks.push(zstd.compressChunk(chunk));
+        }
+        compressedChunks.push(zstd.compressEnd());
+
+        // Combine chunks
+        const totalLength = compressedChunks.reduce((sum, chunk) => sum + chunk.length, 0);
+        const compressedData = new Uint8Array(totalLength);
+        let offset = 0;
+        for (const chunk of compressedChunks) {
+            compressedData.set(chunk, offset);
+            offset += chunk.length;
+        }
+
+        // Decompress and verify
+        const decompressedData = zstd.decompress(compressedData);
+        expect(data).to.deep.equal(decompressedData);
+    });
+
+    it("compress-chunk-vs-compress", async function () {
+        const zstd = await Zstd.load();
+        const data = new Uint8Array(Array.from({ length: 100000 }, (_, i) => i % 256));
+
+        // Compress using single call
+        const compressedSingle = zstd.compress(data);
+
+        // Compress using chunks
+        const CHUNK_SIZE = 64 * 1024;
+        const compressedChunks: Uint8Array[] = [];
+        zstd.reset();
+        for (let offset = 0; offset < data.length; offset += CHUNK_SIZE) {
+            const chunk = data.subarray(offset, Math.min(offset + CHUNK_SIZE, data.length));
+            compressedChunks.push(zstd.compressChunk(chunk));
+        }
+        compressedChunks.push(zstd.compressEnd());
+
+        const totalLength = compressedChunks.reduce((sum, chunk) => sum + chunk.length, 0);
+        const compressedChunked = new Uint8Array(totalLength);
+        let offset = 0;
+        for (const chunk of compressedChunks) {
+            compressedChunked.set(chunk, offset);
+            offset += chunk.length;
+        }
+
+        // Both should decompress to the same data
+        const decompressedSingle = zstd.decompress(compressedSingle);
+        const decompressedChunked = zstd.decompress(compressedChunked);
+        expect(data).to.deep.equal(decompressedSingle);
+        expect(data).to.deep.equal(decompressedChunked);
+    });
+
 });

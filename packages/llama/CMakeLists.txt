@@ -6,6 +6,7 @@ find_package(Llama CONFIG REQUIRED)
 
 set(EM_CPP_FLAGS 
     ${EM_CPP_FLAGS}
+
     "-fwasm-exceptions"
 )
 string(REPLACE ";" " " CPP_FLAGS "${EM_CPP_FLAGS}")
@@ -16,7 +17,10 @@ set(EM_LINK_FLAGS
     "-sFILESYSTEM=1"
     "-sFORCE_FILESYSTEM=1"
     "-sWASMFS=1"
-    "-lembind"
+    # "-sALLOW_UNIMPLEMENTED_SYSCALLS=1"
+    #  "-pthread" 
+    #  "-sPROXY_TO_PTHREAD"
+
     "-fwasm-exceptions"
     "--emit-tsd ${CMAKE_CURRENT_BINARY_DIR}/llamalib.d.ts"
 )
@@ -29,9 +33,10 @@ include_directories(
 )
 
 add_executable(llamalib
-    embedding.cpp
-    log_wasm.cpp
-    util.cpp
+    src-cpp/embedding.cpp
+    src-cpp/log_wasm.cpp
+    src-cpp/util.cpp
+    src-cpp/stubs.c
     ${Llama_DIR}/common/common.cpp
     ${Llama_DIR}/common/sampling.cpp
 )
