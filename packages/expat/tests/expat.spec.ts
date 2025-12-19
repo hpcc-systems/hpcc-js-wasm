@@ -65,6 +65,33 @@ describe("expat", function () {
         expect(response).to.be.true;
         expect(parser._meta).to.equal("Some Content!");
     });
+
+    it.skip("parseWithCallbacks", async function () {
+
+        const xml = "<root><child xxx=\"yyy\">content</child></root>";
+        const expat = await Expat.load();
+        const exportsAny = (expat as any)._exports as any;
+
+        const sep = String.fromCharCode(1);
+        const events: Array<[string, string, string?]> = [];
+
+        const ok = exportsAny.parseWithCallbacks(
+            xml,
+            (tag: string, attrs: string) => events.push(["start", tag, attrs]),
+            (tag: string) => events.push(["end", tag]),
+            (content: string) => events.push(["text", content])
+        );
+        expect(ok).to.be.true;
+
+        // characterData can be called multiple times; just assert presence.
+        expect(events.find(e => e[0] === "start" && e[1] === "root")).to.not.be.undefined;
+        expect(events.find(e => e[0] === "start" && e[1] === "child" && e[2] === `xxx${sep}yyy`)).to.not.be.undefined;
+        expect(events.find(e => e[0] === "text" && (e[1] ?? "").includes("content"))).to.not.be.undefined;
+        expect(events.find(e => e[0] === "end" && e[1] === "child")).to.not.be.undefined;
+        expect(events.find(e => e[0] === "end" && e[1] === "root")).to.not.be.undefined;
+
+        Expat.unload();
+    });
 });
 
 function encodedXml() {

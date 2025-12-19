@@ -8,13 +8,15 @@ build/
 coverage/
 dist/
 dist-test/
-/docs/.vitepress/cache
-/docs/.vitepress/dist
+/.vitepress/cache
+/.vitepress/dist
 /docs/base91
 /docs/duckdb
 /docs/expat
 /docs/graphviz
+/docs/llama
 /docs/zstd
+/docs/packages
 /docs/README.md
 /emsdk*
 /lib-*

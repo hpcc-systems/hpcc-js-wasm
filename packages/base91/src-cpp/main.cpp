@@ -1,8 +1,6 @@
-#include <string>
-#include <cstdint>
 #include <base91.hpp>
 
-#include <emscripten/bind.h>
+#include <string>
 
 const char *const version = "0.6.0";
 
@@ -58,9 +56,13 @@ public:
     }
 };
 
+#include <emscripten/bind.h>
+
 EMSCRIPTEN_BINDINGS(base91lib_bindings)
 {
-    emscripten::class_<CBasE91>("CBasE91")
+    using namespace emscripten;
+
+    class_<CBasE91>("CBasE91")
         .constructor<>()
         .function("malloc", &CBasE91::malloc)
         .function("free", &CBasE91::free)

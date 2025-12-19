@@ -1,6 +1,7 @@
 // @ts-expect-error importing from a wasm file is resolved via a custom esbuild plugin
-import load, { reset } from "../../../build/packages/llama/src-cpp/llamalib.wasm";
-import type { MainModule } from "../../../build/packages/llama/src-cpp/llamalib.js";
+import load, { reset } from "../../../build/packages/llama/llamalib.wasm";
+import type { MainModule } from "../../../build/packages/llama/llamalib.js";
+import { MainModuleEx } from "@hpcc-js/wasm-util";
 import llamaMeta from "../../../vcpkg-overlays/llama/vcpkg.json" with { type: "json" };
 
 //  Ref:  https://github.com/ggerganov/llama.cpp
@@ -24,9 +25,10 @@ import llamaMeta from "../../../vcpkg-overlays/llama/vcpkg.json" with { type: "j
  * const embeddings = llama.embedding("Hello and Welcome!", new Uint8Array(data));
  * ```
  */
-export class Llama {
+export class Llama extends MainModuleEx<MainModule> {
 
-    private constructor(protected _module: MainModule) {
+    private constructor(_module: MainModule) {
+        super(_module);
     }
 
     private logRedirectedOutputFiles(fileNames: string[] = ["error.txt", "output.txt"]) {

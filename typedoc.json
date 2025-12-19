@@ -15,7 +15,10 @@
     "excludePrivate": true,
     "hideGenerator": true,
     "hideBreadcrumbs": true,
-    "publicPath": "/",
+    "hidePageTitle": true,
+    "disableSources": true,
+    "hidePageHeader": true,
+    "publicPath": "/docs/",
     "sort": [
         "static-first",
         "source-order"

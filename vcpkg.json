@@ -21,6 +21,9 @@
       "name": "llama"
     },
     {
+      "name": "nlohmann-json"
+    },
+    {
       "name": "triangle"
     },
     {

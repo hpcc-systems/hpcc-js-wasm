@@ -14,8 +14,8 @@
         },
         {
             "type": "npm",
-            "label": "build-ts-watch",
-            "script": "build-ts-watch",
+            "label": "build-watch",
+            "script": "build-watch",
             "problemMatcher": [
                 "$tsc-watch"
             ],
@@ -72,7 +72,7 @@
             "label": "build",
             "dependsOn": [
                 "build-types-watch",
-                "build-ts-watch",
+                "build-watch",
                 "build-cpp-watch"
             ],
             "group": {

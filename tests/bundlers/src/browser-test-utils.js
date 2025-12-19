@@ -130,11 +130,15 @@ export async function testDuckDB() {
         // Test basic SQL query
         const conn = duckdb.connect();
         const result = conn.query("SELECT 42 as answer");
-        const resultStr = result.toString();
-        if (!resultStr.includes("42")) {
-            throw new Error('DuckDB query did not return expected result');
+
+        // Verify result using getValue (column-first indexing)
+        const value = result.getValue(0, 0);
+        if (value !== 42) {
+            throw new Error(`DuckDB query did not return expected result: got ${value}`);
         }
-        conn.close();
+
+        result.delete();
+        conn.delete();
 
         console.log('✓ DuckDB test passed');
         DuckDB.unload();

@@ -10,24 +10,27 @@ message("Graphviz include directories: ${Graphviz_INCLUDE_DIRS}")
 find_package(expat CONFIG REQUIRED)
 
 # See:  https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
+set(EM_CPP_FLAGS 
+    ${EM_CPP_FLAGS}
+    "-fwasm-exceptions"
+)
 string(REPLACE ";" " " CPP_FLAGS "${EM_CPP_FLAGS}")
 
 set(EM_LINK_FLAGS 
     ${EM_LINK_FLAGS}
-    "-sFILESYSTEM=1"
     "-sEXPORT_NAME='${CMAKE_PROJECT_NAME}'"
-    "-sEXPORTED_FUNCTIONS=\"['_free', '_malloc']\""
-    "-sEXPORTED_RUNTIME_METHODS=\"[UTF8ToString]\""
-    "-lembind"
+    "-sFILESYSTEM=1"
+
+    "-fwasm-exceptions"
     "--emit-tsd ${CMAKE_CURRENT_BINARY_DIR}/graphvizlib.d.ts"
 )
 string(REPLACE ";" " " LINK_FLAGS "${EM_LINK_FLAGS}")
 
 set(SRCS
-    main.hpp
-    main.cpp
-    util.hpp
-    util.cpp
+    src-cpp/main.cpp
+    src-cpp/util.hpp
+    src-cpp/util.cpp 
+    # src-cpp/stubs.c
 )
 
 include_directories(

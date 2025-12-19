@@ -28,7 +28,7 @@
     "build-dev": "run-p gen-types bundle-dev",
     "build": "run-p gen-types bundle",
     "lint-skypack": "npx -y @skypack/package-check",
-    "lint-eslint": "eslint src/**/*.ts tests/**/*.ts",
+    "lint-eslint": "eslint \"src/**/*.ts\" \"tests/**/*.ts\"",
     "lint": "run-p lint-eslint",
     "test-browser": "vitest run --project browser",
     "test-node": "vitest run --project node",
@@ -39,7 +39,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@hpcc-js/esbuild-plugins": "1.7.0"
+    "@hpcc-js/esbuild-plugins": "1.7.0",
+    "@hpcc-js/wasm-util": "1.0.0"
   },
   "keywords": [
     "DuckDB",

@@ -1,6 +1,8 @@
 // @ts-expect-error importing from a wasm file is resolved via a custom esbuild plugin
-import load, { reset } from "../../../build/packages/zstd/src-cpp/zstdlib.wasm";
-import { WasmLibrary } from "./wasm-library.ts";
+import load, { reset } from "../../../build/packages/zstd/zstdlib.wasm";
+import type { MainModule, zstd } from "../../../build/packages/zstd/zstdlib.js";
+import { MainModuleEx } from "@hpcc-js/wasm-util";
+type ZstdExports = MainModule["zstd"];
 
 //  Ref:  http://facebook.github.io/zstd/zstd_manual.html
 //  Ref:  https://github.com/facebook/zstd
@@ -24,10 +26,14 @@ let g_zstd: Promise<Zstd>;
  * const decompressed_data = zstd.decompress(compressed_data);
  * ```
  */
-export class Zstd extends WasmLibrary {
+export class Zstd extends MainModuleEx<MainModule> {
+    private _zstdClass: ZstdExports;
+    private _zstd: zstd;
 
-    private constructor(_module: any) {
-        super(_module, _module.zstd);
+    private constructor(_module: MainModule) {
+        super(_module);
+        this._zstdClass = _module.zstd;
+        this._zstd = new this._zstdClass();
     }
 
     /**
@@ -41,9 +47,7 @@ export class Zstd extends WasmLibrary {
      */
     static load(): Promise<Zstd> {
         if (!g_zstd) {
-            g_zstd = load().then((module: any) => {
-                return new Zstd(module)
-            });
+            g_zstd = (load() as Promise<MainModule>).then((module) => new Zstd(module));
         }
         return g_zstd;
     }
@@ -59,7 +63,22 @@ export class Zstd extends WasmLibrary {
      * @returns The Zstd c++ version
      */
     version(): string {
-        return this._exports.version();
+        return this._zstdClass.version();
+    }
+
+    /**
+     * Resets the internal compression/decompression state.
+     */
+    reset(): void {
+        this._zstd.reset();
+    }
+
+    /**
+     * Sets the compression level for streaming compression.
+     * @param level Compression level (use minCLevel() to maxCLevel())
+     */
+    setCompressionLevel(level: number): void {
+        this._zstd.setCompressionLevel(level);
     }
 
     /**
@@ -72,19 +91,76 @@ export class Zstd extends WasmLibrary {
      * :::
      */
     compress(data: Uint8Array, compressionLevel: number = this.defaultCLevel()): Uint8Array {
-        const uncompressed = this.uint8_heapu8(data);
+        const uncompressed = this.dataToHeap(data);
 
-        const compressedSize = this._exports.compressBound(data.length);
-        const compressed = this.malloc_heapu8(compressedSize);
-        compressed.size = this._exports.compress(compressed.ptr, compressedSize, uncompressed.ptr, uncompressed.size, compressionLevel);
+        const compressedSize = this._zstdClass.compressBound(data.length);
+        const compressed = this.malloc(compressedSize);
+        compressed.size = this._zstdClass.compress(compressed.ptr, compressedSize, uncompressed.ptr, uncompressed.size, compressionLevel);
         /* istanbul ignore if  */
-        if (this._exports.isError(compressed.size)) {
-            console.error(this._exports.getErrorName(compressed.size));
+        if (this._zstdClass.isError(compressed.size)) {
+            console.error(this._zstdClass.getErrorName(compressed.size));
         }
-        const retVal = this.heapu8_uint8(compressed);
+        const retVal = this.heapToUint8Array(compressed);
 
-        this.free_heapu8(compressed);
-        this.free_heapu8(uncompressed);
+        this.free(compressed);
+        this.free(uncompressed);
+        return retVal;
+    }
+
+    /**
+     * Compresses a chunk of data in streaming mode.
+     * Call reset() before the first chunk, then compressChunk() for each chunk, and finally compressEnd().
+     * @param data Chunk of data to be compressed
+     * @returns Compressed chunk data
+     */
+    compressChunk(data: Uint8Array): Uint8Array {
+        const uncompressed = this.dataToHeap(data);
+        // For streaming compression, we need enough space for:
+        // 1. The compressed data (compressBound gives worst case)
+        // 2. Additional overhead for frame headers and internal buffering
+        // Use compressBound + CStreamOutSize to ensure we have enough
+        const boundSize = this._zstdClass.compressBound(data.length);
+        const streamOutSize = this._zstdClass.CStreamOutSize();
+        const compressedSize = boundSize + streamOutSize;
+        const compressed = this.malloc(compressedSize);
+
+        compressed.size = this._zstd.compressChunk(compressed.ptr, compressedSize, uncompressed.ptr, uncompressed.size);
+
+        // Check for errors before trying to use the size
+        if (this._zstdClass.isError(compressed.size)) {
+            const errorName = this._zstdClass.getErrorName(compressed.size);
+            this.free(compressed);
+            this.free(uncompressed);
+            throw new Error(`compressChunk failed: ${errorName} (data.length=${data.length}, compressedSize=${compressedSize})`);
+        }
+
+        const retVal = this.heapToUint8Array(compressed);
+
+        this.free(compressed);
+        this.free(uncompressed);
+        return retVal;
+    }
+
+    /**
+     * Finishes the streaming compression and returns any remaining compressed data.
+     * @returns Final compressed data
+     */
+    compressEnd(): Uint8Array {
+        const compressedSize = this._zstdClass.CStreamOutSize(); // Recommended buffer size for output
+        const compressed = this.malloc(compressedSize);
+
+        compressed.size = this._zstd.compressEnd(compressed.ptr, compressedSize);
+
+        // Check for errors before trying to use the size
+        if (this._zstdClass.isError(compressed.size)) {
+            const errorName = this._zstdClass.getErrorName(compressed.size);
+            this.free(compressed);
+            throw new Error(`compressEnd failed: ${errorName} (compressedSize=${compressedSize})`);
+        }
+
+        const retVal = this.heapToUint8Array(compressed);
+
+        this.free(compressed);
         return retVal;
     }
 
@@ -93,23 +169,62 @@ export class Zstd extends WasmLibrary {
      * @returns Uncompressed data.
      */
     decompress(compressedData: Uint8Array): Uint8Array {
-        const compressed = this.uint8_heapu8(compressedData);
-        const uncompressedSize = this._exports.getFrameContentSize(compressed.ptr, compressed.size);
-        /* istanbul ignore if  */
-        if (this._exports.isError(uncompressedSize)) {
-            console.error(this._exports.getErrorName(uncompressedSize));
-        }
-        const uncompressed = this.malloc_heapu8(uncompressedSize);
+        const compressed = this.dataToHeap(compressedData);
+        let uncompressedSize = this._zstdClass.getFrameContentSize(compressed.ptr, compressed.size);
 
-        uncompressed.size = this._exports.decompress(uncompressed.ptr, uncompressedSize, compressed.ptr, compressed.size);
-        /* istanbul ignore if  */
-        if (this._exports.isError(uncompressed.size)) {
-            console.error(this._exports.getErrorName(uncompressed.size));
-        }
-        const retVal = this.heapu8_uint8(uncompressed);
+        // Check if size is unknown (happens with streaming compression)
+        // ZSTD_CONTENTSIZE_UNKNOWN is (uint64_t)-1, which becomes a very large number in JS
+        // Using BigInt to avoid precision loss warning
+        const CONTENTSIZE_UNKNOWN = BigInt("0xFFFFFFFFFFFFFFFF");
 
-        this.free_heapu8(uncompressed);
-        this.free_heapu8(compressed);
+        /* istanbul ignore if  */
+        if (this._zstdClass.isError(uncompressedSize)) {
+            const errorName = this._zstdClass.getErrorName(uncompressedSize);
+            this.free(compressed);
+            throw new Error(`Failed to get frame content size: ${errorName}`);
+        }
+
+        // If content size is unknown, use a reasonable upper bound
+        // For safety, use decompression bound or a multiple of compressed size
+        if (BigInt(uncompressedSize) >= CONTENTSIZE_UNKNOWN || uncompressedSize === 0) {
+            // Use a heuristic: decompressed data is typically 2-10x compressed size for text/structured data
+            // Allocate generously to avoid buffer overflow
+            uncompressedSize = Math.max(compressed.size * 20, 1024 * 1024); // At least 1MB or 20x compressed
+        }
+
+        const uncompressed = this.malloc(uncompressedSize);
+
+        uncompressed.size = this._zstdClass.decompress(uncompressed.ptr, uncompressedSize, compressed.ptr, compressed.size);
+        /* istanbul ignore if  */
+        if (this._zstdClass.isError(uncompressed.size)) {
+            const errorName = this._zstdClass.getErrorName(uncompressed.size);
+            this.free(uncompressed);
+            this.free(compressed);
+            throw new Error(`Decompression failed: ${errorName}`);
+        }
+        const retVal = this.heapToUint8Array(uncompressed);
+
+        this.free(uncompressed);
+        this.free(compressed);
+        return retVal;
+    }
+
+    /**
+     * Decompresses a chunk of data in streaming mode.
+     * Call reset() before the first chunk, then decompressChunk() for each chunk.
+     * @param compressedData Chunk of compressed data
+     * @param outputSize Expected output size for this chunk
+     * @returns Decompressed chunk data
+     */
+    decompressChunk(compressedData: Uint8Array, outputSize: number): Uint8Array {
+        const compressed = this.dataToHeap(compressedData);
+        const uncompressed = this.malloc(outputSize);
+
+        uncompressed.size = this._zstd.decompressChunk(uncompressed.ptr, outputSize, compressed.ptr, compressed.size);
+        const retVal = this.heapToUint8Array(uncompressed);
+
+        this.free(uncompressed);
+        this.free(compressed);
         return retVal;
     }
 
@@ -117,14 +232,14 @@ export class Zstd extends WasmLibrary {
      * @returns Default compression level (see notes above above).
      */
     defaultCLevel(): number {
-        return this._exports.defaultCLevel();
+        return this._zstdClass.defaultCLevel();
     }
 
     minCLevel(): number {
-        return this._exports.minCLevel();
+        return this._zstdClass.minCLevel();
     }
 
     maxCLevel(): number {
-        return this._exports.maxCLevel();
+        return this._zstdClass.maxCLevel();
     }
 }

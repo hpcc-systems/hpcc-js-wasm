@@ -1,35 +1,37 @@
 #include "stack_parser.h"
 
-#include <string>
 #include <expat.h>
 
-#include <emscripten/val.h>
-#include <emscripten/bind.h>
+#include <string>
+#include <map>
 
-class CExpat : public CExpatImpl<CExpat>
+#include <emscripten/val.h>
+
+using Attributes = std::map<std::string, std::string>;
+
+EMSCRIPTEN_DECLARE_VAL_TYPE(IParser);
+
+class CExpatParser : public CExpatImpl<CExpatParser>
 {
 private:
-    typedef CExpatImpl<CExpat> BaseClass;
+    typedef CExpatImpl<CExpatParser> BaseClass;
 
 protected:
     std::string m_tag;
-    std::string m_attrs;
+    Attributes m_attributes;
     std::string m_content;
-    emscripten::val m_callback = emscripten::val::undefined();
+
+    IParser m_callback;
 
 public:
-    static std::string version()
+    CExpatParser(IParser callback) : m_callback(callback)
     {
-        return XML_ExpatVersion();
+        BaseClass::Create();
     }
 
-    CExpat()
+    ~CExpatParser()
     {
-    }
-
-    void setCallback(emscripten::val callback)
-    {
-        m_callback = callback;
+        BaseClass::Destroy();
     }
 
     void OnPostCreate()
@@ -39,41 +41,16 @@ public:
         EnableCharacterDataHandler();
     }
 
-    bool create()
-    {
-        return BaseClass::Create();
-    }
-
-    void destroy()
-    {
-        BaseClass::Destroy();
-    }
-
     bool parse(const std::string &xml)
     {
         return BaseClass::Parse(xml.c_str(), (int)xml.size(), XML_TRUE);
-    }
-
-    std::string tag() const
-    {
-        return m_tag;
-    }
-
-    std::string attrs() const
-    {
-        return m_attrs;
-    }
-
-    std::string content() const
-    {
-        return m_content;
     }
 
     virtual void startElement()
     {
         if (!m_callback.isUndefined() && !m_callback["startElement"].isUndefined())
         {
-            m_callback.call<void>("startElement", m_tag, m_attrs);
+            m_callback.call<void>("startElement", m_tag, m_attributes);
         }
     }
 
@@ -96,16 +73,10 @@ public:
     virtual void OnStartElement(const XML_Char *pszName, const XML_Char **papszAttrs)
     {
         m_tag = pszName;
-        m_attrs = "";
+        m_attributes.clear();
         for (XML_Char **itr = (XML_Char **)papszAttrs; *itr != NULL; itr += 2)
         {
-            if (!m_attrs.empty())
-            {
-                m_attrs += "\1\1";
-            }
-            m_attrs += *itr;
-            m_attrs += "\1";
-            m_attrs += *(itr + 1);
+            m_attributes[*itr] = *(itr + 1);
         }
         startElement();
     }
@@ -123,19 +94,30 @@ public:
     }
 };
 
+namespace CExpatGlobal
+{
+    std::string version()
+    {
+        return XML_ExpatVersion();
+    }
+
+    bool parse(const std::string &xml, IParser callback)
+    {
+        CExpatParser parser(callback);
+        return parser.parse(xml);
+    }
+};
+
+#include <emscripten/bind.h>
+
 EMSCRIPTEN_BINDINGS(expatlib_bindings)
 {
-    emscripten::class_<CExpat>("CExpat")
-        .constructor<>()
-        .class_function("version", &CExpat::version)
-        .function("setCallback", &CExpat::setCallback)
-        .function("create", &CExpat::create)
-        .function("destroy", &CExpat::destroy)
-        .function("parse", &CExpat::parse)
-        .function("tag", &CExpat::tag)
-        .function("attrs", &CExpat::attrs)
-        .function("content", &CExpat::content)
-        .function("startElement", &CExpat::startElement)
-        .function("endElement", &CExpat::endElement)
-        .function("characterData", &CExpat::characterData);
+    using namespace emscripten;
+
+    function("version", &CExpatGlobal::version);
+    function("parse", &CExpatGlobal::parse);
+
+    register_vector<std::string>("vector_string");
+    register_map<std::string, std::string>("map_string_string");
+    register_type<IParser>("IParser", "{startElement: (tag: string, attrs: map_string_string) => void, endElement: (tag: string) => void, characterData: (content: string) => void}");
 }

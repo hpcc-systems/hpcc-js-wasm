@@ -1,5 +1,5 @@
 # Copilot Instructions for HPCC-JS-WASM
-*Last updated: July 2025 | For AI assistants working with hpcc-systems/hpcc-js-wasm*
+*Last updated: December 2025 | For AI assistants working with hpcc-systems/hpcc-js-wasm*
 
 This document provides guidance for AI assistants working with the HPCC-JS-WASM repository.
 
@@ -56,7 +56,7 @@ packages/[name]/
 npm ci
 
 # Install build dependencies (requires system tools)
-npm run install-build-deps  # Installs emsdk, vcpkg, playwright
+npm run install-build-deps  # Installs emsdk, vcpkg, playwright, bundler test deps
 
 # Build C++ to WASM (requires emscripten)
 npm run build-cpp
@@ -64,6 +64,10 @@ npm run build-cpp
 # Build TypeScript packages
 npm run build-ws
 ```
+
+Notes:
+- CI runs Node.js 22 and 24; docs deploy currently uses Node.js 20.
+- Browser tests typically require `npx playwright install --with-deps` on Ubuntu.
 
 ### Quick Development (TypeScript only)
 ```bash

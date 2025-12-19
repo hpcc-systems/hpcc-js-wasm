@@ -11,6 +11,8 @@ The simplest way to include this project is via NPM:
 npm install --save @hpcc-js/wasm
 ```
 
+For smaller installs/bundles you can also install individual packages (e.g. `@hpcc-js/wasm-graphviz`) or import subpaths (e.g. `@hpcc-js/wasm/graphviz`).
+
 It can then be referenced within your source code:
 ```ts
 import { Base91, Graphviz, Zstd } from "@hpcc-js/wasm";

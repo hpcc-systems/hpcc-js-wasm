@@ -1,12 +1,28 @@
+---
+title: Expat
+description: WebAssembly wrapper for the libexpat XML parser
+outline: deep
+---
+
 # @hpcc-js/wasm-expat
 
 This package provides a WebAssembly wrapper around the [libexpat](https://libexpat.github.io/) library.  This provides efficent SAX XML parsing.
 
 ## Installation
 
-```sh
+::: code-group
+```sh [npm]
 npm install @hpcc-js/wasm-expat
 ```
+
+```sh [yarn]
+yarn add @hpcc-js/wasm-expat
+```
+
+```sh [pnpm]
+pnpm add @hpcc-js/wasm-expat
+```
+:::
 
 ## Usage
 
@@ -29,6 +45,8 @@ const callback = {
 
 expat.parse(xml, callback);
 ```
+
+<!--@include: ../../docs/expat/src/expat/README.md-->
 
 ## Reference
 

@@ -22,10 +22,20 @@
             }
         },
         {
+            "label": "build-cpp-watch",
+            "type": "npm",
+            "script": "build-cpp-watch",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "group-build"
+            }
+        },
+        {
             "label": "build",
             "dependsOn": [
                 "gen-types-watch",
-                "bundle-watch"
+                "bundle-watch",
+                "build-cpp-watch"
             ],
             "group": {
                 "kind": "build",
