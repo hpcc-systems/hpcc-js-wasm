@@ -243,8 +243,8 @@ namespace embedding
         // load the model
         auto init = common_init_from_params(params);
 
-        llama_model *model = init ? init->model() : nullptr;
-        llama_context *ctx = init ? init->context() : nullptr;
+        llama_model *model = init.model.get();
+        llama_context *ctx = init.context.get();
         if (model == NULL)
         {
             fprintf(stderr, "%s: error: unable to load model\n", __func__);
@@ -501,8 +501,7 @@ namespace embedding
         // clean up
         llama_batch_free(batch);
 
-        // common_init_result handles model/context lifetime
-        init.reset();
+        // common_init_result's unique_ptrs handle cleanup automatically
         llama_backend_free();
 
         return 0;

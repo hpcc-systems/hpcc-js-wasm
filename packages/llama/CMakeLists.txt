@@ -29,7 +29,14 @@ string(REPLACE ";" " " LINK_FLAGS "${EM_LINK_FLAGS}")
 include_directories(
     ${VCPKG_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${Llama_DIR}/common
+    ${VCPKG_INCLUDE_DIR}/llama-cpp/common
+)
+
+# Find the llama-common library (renamed to avoid conflict with graphviz libcommon)
+find_library(LLAMA_COMMON_LIBRARY llama-common
+    REQUIRED
+    HINTS ${VCPKG_INCLUDE_DIR}/../lib
+    NO_CMAKE_FIND_ROOT_PATH
 )
 
 add_executable(llamalib
@@ -37,8 +44,6 @@ add_executable(llamalib
     src-cpp/log_wasm.cpp
     src-cpp/util.cpp
     src-cpp/stubs.c
-    ${Llama_DIR}/common/common.cpp
-    ${Llama_DIR}/common/sampling.cpp
 )
 
 set_target_properties(llamalib PROPERTIES COMPILE_FLAGS "${CPP_FLAGS}")
@@ -47,4 +52,5 @@ set_target_properties(llamalib PROPERTIES LINK_FLAGS "${LINK_FLAGS}")
 target_link_libraries(llamalib
     PRIVATE llama
     PRIVATE ggml::ggml-cpu
+    PRIVATE ${LLAMA_COMMON_LIBRARY}
 )

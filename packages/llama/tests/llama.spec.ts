@@ -8,7 +8,7 @@ describe("llama", () => {
         const v1 = v;
         expect(v).to.be.a.string;
         expect(v).to.be.not.empty;
-        expect(v).to.equal("b7445");    //  Update README.md with the new version!!!
+        expect(v).to.equal("7146");    //  Update README.md with the new version!!!
 
         llama = await Llama.load();
         v = llama.version();

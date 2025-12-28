@@ -18,7 +18,9 @@
       "name": "graphviz"
     },
     {
-      "name": "llama"
+      "name": "llama-cpp",
+      "default-features": false,
+      "features": []
     },
     {
       "name": "nlohmann-json"
