@@ -1,0 +1,40 @@
+diff --git a/common/arg.cpp b/common/arg.cpp
+index 1234567..abcdefg 100644
+--- a/common/arg.cpp
++++ b/common/arg.cpp
+@@ -38,6 +38,8 @@
+ #   endif
+ #elif defined(_AIX)
+ #include <sys/limits.h>
++#elif defined(__EMSCRIPTEN__)
++#define PATH_MAX 4096
+ #else
+ #include <sys/syslimits.h>
+ #endif
+diff --git a/common/download.cpp b/common/download.cpp
+index 1234567..abcdefg 100644
+--- a/common/download.cpp
++++ b/common/download.cpp
+@@ -32,6 +32,8 @@
+ #   endif
+ #elif defined(_AIX)
+ #include <sys/limits.h>
++#elif defined(__EMSCRIPTEN__)
++#define PATH_MAX 4096
+ #else
+ #include <sys/syslimits.h>
+ #endif
+diff --git a/common/common.cpp b/common/common.cpp
+index 1234567..abcdefg 100644
+--- a/common/common.cpp
++++ b/common/common.cpp
+@@ -893,6 +893,8 @@ std::string fs_get_cache_directory() {
+         cache_directory = std::getenv("HOME") + std::string("/Library/Caches/");
+ #elif defined(_WIN32)
+         cache_directory = std::getenv("LOCALAPPDATA");
++#elif defined(__EMSCRIPTEN__)
++        cache_directory = "/tmp/llama-cache/";
+ #else
+ #  error Unknown architecture
+ #endif
+

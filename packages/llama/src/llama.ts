@@ -2,7 +2,7 @@
 import load, { reset } from "../../../build/packages/llama/llamalib.wasm";
 import type { MainModule } from "../../../build/packages/llama/llamalib.js";
 import { MainModuleEx } from "@hpcc-js/wasm-util";
-import llamaMeta from "../../../vcpkg-overlays/llama/vcpkg.json" with { type: "json" };
+import llamaMeta from "../../../vcpkg-overlays/llama-cpp/vcpkg.json" with { type: "json" };
 
 //  Ref:  https://github.com/ggerganov/llama.cpp
 //  Ref:  http://facebook.github.io/llama/llama_manual.html
@@ -69,7 +69,7 @@ export class Llama extends MainModuleEx<MainModule> {
      * @returns The Llama c++ version
      */
     version(): string {
-        return llamaMeta["version-string"];
+        return llamaMeta.version;
     }
 
     /**
