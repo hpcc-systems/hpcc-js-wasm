@@ -1,5 +1,9 @@
 name: Release Please (release-please.yml)
 
+env:
+  VCPKG_BINARY_SOURCES: "clear;nuget,GitHub,readwrite"
+  VCPKG_NUGET_REPOSITORY: https://github.com/hpcc-systems/hpcc-js-wasm
+
 on:
   push:
     branches:
@@ -8,6 +12,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  packages: write
 
 jobs:
   release-please:
@@ -42,6 +47,7 @@ jobs:
           sudo apt-get install -y git cmake ninja-build wget zip
           sudo apt-get install -y gcc-multilib g++-multilib pkg-config autoconf bison libtool flex
           sudo apt-get install -y python3 python3-pip
+          sudo apt-get install -y mono-complete
 
       - name: Export GitHub Actions cache environment variables
         if: ${{ steps.release.outputs.release_created }}
@@ -57,6 +63,26 @@ jobs:
           npm ci
           sudo npx playwright install chromium --with-deps
           npm run install-build-deps
+
+      - name: Make nuget.exe executable
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          NUGET_PATH=$(./vcpkg/vcpkg fetch nuget | tail -n 1)
+          chmod +x "$NUGET_PATH"
+
+      - name: Setup vcpkg NuGet authentication
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          mono `./vcpkg/vcpkg fetch nuget | tail -n 1` \
+            sources add \
+            -source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+            -storepasswordincleartext \
+            -name "GitHub" \
+            -username "${{ github.repository_owner }}" \
+            -password "${{ secrets.GITHUB_TOKEN }}"
+          mono `./vcpkg/vcpkg fetch nuget | tail -n 1` \
+            setapikey "${{ secrets.GITHUB_TOKEN }}" \
+            -source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
 
       - name: Lint
         if: ${{ steps.release.outputs.release_created }}
