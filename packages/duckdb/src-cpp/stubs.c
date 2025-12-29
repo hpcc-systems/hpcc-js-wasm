@@ -20,6 +20,7 @@
 #include <sys/resource.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <semaphore.h>
 #include <sys/utsname.h>
 #include <emscripten/console.h>
 #include <emscripten/version.h>
@@ -48,6 +49,14 @@
         REPORT(name);              \
         return -ENOSYS;            \
     }
+
+weak int sem_timedwait(sem_t *sem, const struct timespec *abs_timeout)
+{
+    (void)sem;
+    (void)abs_timeout;
+    // Single threaded WASM build: treat waits as immediately satisfied.
+    return 0;
+}
 
 // #define STRINGIFY(s) #s
 // #define STR(s) STRINGIFY(s)

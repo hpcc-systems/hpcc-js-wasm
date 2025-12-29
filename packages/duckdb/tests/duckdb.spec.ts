@@ -447,6 +447,24 @@ describe("duckdb", () => {
         });
     });
 
+    describe("Extensions", () => {
+        it("prints linked extensions", () => {
+            const con = duckdb.connect();
+            const result = con.query(`
+SELECT extension_name, installed, description
+FROM duckdb_extensions();
+`)!;
+
+            expect(Number(result.columnCount())).toBeGreaterThan(0);
+            expect(Number(result.rowCount())).toBeGreaterThan(0);
+
+            // result.print();
+
+            result.delete();
+            con.delete();
+        });
+    });
+
     describe("Print output", () => {
         it("supports print method on QueryResult", () => {
             const con = duckdb.connect();
