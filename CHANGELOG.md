@@ -8,6 +8,23 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.3.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.2.0...wasm-root-v4.3.0) (2025-12-29)
+
+
+### Features
+
+* add semaphore support and extend DuckDB tests for linked extensions ([e17f929](https://github.com/hpcc-systems/hpcc-js-wasm/commit/e17f9296f0ac2ad458b873109e90b324bd618561))
+* bump duckdb and use our own wrappers ([53a950d](https://github.com/hpcc-systems/hpcc-js-wasm/commit/53a950d2c7f0f80edb31ec7d19dcd4297a6a0346))
+* enable  -msimd128 for all packages ([29e7f3e](https://github.com/hpcc-systems/hpcc-js-wasm/commit/29e7f3e481f3cc628d41aa604620c777902b7116))
+* make vcpkg a submodule ([6fb0c32](https://github.com/hpcc-systems/hpcc-js-wasm/commit/6fb0c32dfdf254ab41999cc17ca234363fb597f0))
+* refactor build and build duckdb from source files ([e1d11f5](https://github.com/hpcc-systems/hpcc-js-wasm/commit/e1d11f57ba7934dad9193301edbc2056126cdb84))
+* switch to embind instead of idl ([08829d2](https://github.com/hpcc-systems/hpcc-js-wasm/commit/08829d2820860d087fb77f853da89834d98fc213))
+
+
+### Bug Fixes
+
+* add binary caching to github runners ([a20ee17](https://github.com/hpcc-systems/hpcc-js-wasm/commit/a20ee17c73f073763d08f40b149e91b0cde53d9a))
+
 ## [4.2.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.1.0...wasm-root-v4.2.0) (2025-12-11)
 
 
