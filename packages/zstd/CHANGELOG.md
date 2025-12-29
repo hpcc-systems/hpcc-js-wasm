@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.9.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.8.0...wasm-zstd-v1.9.0) (2025-12-29)
+
+
+### Features
+
+* refactor build and build duckdb from source files ([e1d11f5](https://github.com/hpcc-systems/hpcc-js-wasm/commit/e1d11f57ba7934dad9193301edbc2056126cdb84))
+* switch to embind instead of idl ([08829d2](https://github.com/hpcc-systems/hpcc-js-wasm/commit/08829d2820860d087fb77f853da89834d98fc213))
+
 ## [1.8.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.7.0...wasm-zstd-v1.8.0) (2025-11-23)
 
 
