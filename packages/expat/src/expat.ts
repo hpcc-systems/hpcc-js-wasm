@@ -1,6 +1,6 @@
 // @ts-expect-error importing from a wasm file is resolved via a custom esbuild plugin
 import load, { reset } from "../../../build/packages/expat/expatlib.wasm";
-import type { MainModule, map_string_string } from "../../../build/packages/expat/expatlib.js";
+import type { MainModule, map_string_string } from "../types/expatlib.js";
 import { MainModuleEx } from "@hpcc-js/wasm-util";
 
 export type Attributes = { [key: string]: string };

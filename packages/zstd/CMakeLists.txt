@@ -32,3 +32,11 @@ set_target_properties(zstdlib PROPERTIES LINK_FLAGS "${LINK_FLAGS}")
 target_link_libraries(zstdlib
     PRIVATE $<IF:$<TARGET_EXISTS:zstd::libzstd_shared>,zstd::libzstd_shared,zstd::libzstd_static>
 )
+
+# Copy generated files to source directories
+add_custom_command(TARGET zstdlib POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_BINARY_DIR}/zstdlib.d.ts
+        ${CMAKE_CURRENT_SOURCE_DIR}/types/zstdlib.d.ts
+    COMMENT "Copying generated zstdlib files to source directories"
+)

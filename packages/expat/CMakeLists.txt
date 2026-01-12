@@ -32,3 +32,11 @@ set_target_properties(expatlib PROPERTIES LINK_FLAGS "${LINK_FLAGS}")
 target_link_libraries(expatlib
     expat::expat
 )
+
+# Copy generated files to source directories
+add_custom_command(TARGET expatlib POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_BINARY_DIR}/expatlib.d.ts
+        ${CMAKE_CURRENT_SOURCE_DIR}/types/expatlib.d.ts
+    COMMENT "Copying generated expatlib files to source directories"
+)

@@ -1,6 +1,6 @@
 // @ts-expect-error importing from a wasm file is resolved via a custom esbuild plugin
 import load, { reset } from "../../../build/packages/zstd/zstdlib.wasm";
-import type { MainModule, zstd } from "../../../build/packages/zstd/zstdlib.js";
+import type { MainModule, zstd } from "../types/zstdlib.js";
 import { MainModuleEx } from "@hpcc-js/wasm-util";
 type ZstdExports = MainModule["zstd"];
 

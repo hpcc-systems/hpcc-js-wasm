@@ -1,6 +1,6 @@
 // @ts-expect-error importing from a wasm file is resolved via a custom esbuild plugin
 import load, { reset } from "../../../build/packages/graphviz/graphvizlib.wasm";
-import type { MainModule } from "../../../build/packages/graphviz/graphvizlib.js";
+import type { MainModule } from "../types/graphvizlib.js";
 import { MainModuleEx } from "@hpcc-js/wasm-util";
 
 /**

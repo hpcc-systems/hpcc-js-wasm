@@ -52,3 +52,11 @@ target_link_libraries(duckdblib
     PRIVATE $<IF:$<TARGET_EXISTS:duckdb>,duckdb,duckdb_static>
     PRIVATE nlohmann_json::nlohmann_json
 )
+
+# Copy generated files to source directories
+add_custom_command(TARGET duckdblib POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_BINARY_DIR}/duckdblib.d.ts
+        ${CMAKE_CURRENT_SOURCE_DIR}/types/duckdblib.d.ts
+    COMMENT "Copying generated duckdblib files to source directories"
+)

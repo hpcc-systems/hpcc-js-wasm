@@ -1,6 +1,6 @@
 // @ts-expect-error importing from a wasm file is resolved via a custom esbuild plugin
 import load, { reset } from "../../../build/packages/llama/llamalib.wasm";
-import type { MainModule } from "../../../build/packages/llama/llamalib.js";
+import type { MainModule } from "../types/llamalib.js";
 import { MainModuleEx } from "@hpcc-js/wasm-util";
 import llamaMeta from "../../../vcpkg-overlays/llama-cpp/vcpkg.json" with { type: "json" };
 

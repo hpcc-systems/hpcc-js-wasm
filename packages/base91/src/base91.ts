@@ -1,6 +1,6 @@
 // @ts-expect-error importing from a wasm file is resolved via a custom esbuild plugin
 import load, { reset } from "../../../build/packages/base91/base91lib.wasm";
-import type { MainModule, CBasE91 } from "../../../build/packages/base91/base91lib.js";
+import type { MainModule, CBasE91 } from "../types/base91lib.js";
 import { MainModuleEx } from "@hpcc-js/wasm-util";
 
 //  Ref:  http://base91.sourceforge.net/#a5

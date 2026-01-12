@@ -54,3 +54,11 @@ target_link_libraries(llamalib
     PRIVATE ggml::ggml-cpu
     PRIVATE ${LLAMA_COMMON_LIBRARY}
 )
+
+# Copy generated files to source directories
+add_custom_command(TARGET llamalib POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_BINARY_DIR}/llamalib.d.ts
+        ${CMAKE_CURRENT_SOURCE_DIR}/types/llamalib.d.ts
+    COMMENT "Copying generated llamalib files to source directories"
+)

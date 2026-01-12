@@ -83,6 +83,14 @@ target_link_libraries(graphvizlib PRIVATE
     ${EXPAT_LIBRARIES}
 )
 
+# Copy generated files to source directories
+add_custom_command(TARGET graphvizlib POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_BINARY_DIR}/graphvizlib.d.ts
+        ${CMAKE_CURRENT_SOURCE_DIR}/types/graphvizlib.d.ts
+    COMMENT "Copying generated graphvizlib files to source directories"
+)
+
 # add_executable(graphvizlib-web
 #     ${SRCS}
 # )

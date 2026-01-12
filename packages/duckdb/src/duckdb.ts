@@ -1,6 +1,6 @@
 // @ts-expect-error importing from a wasm file is resolved via a custom esbuild plugin
 import load, { reset } from "../../../build/packages/duckdb/duckdblib.wasm";
-import type { MainModule, DuckDB as CPPDuckDB } from "../../../build/packages/duckdb/duckdblib.js";
+import type { MainModule, DuckDB as CPPDuckDB } from "../types/duckdblib.js";
 import { MainModuleEx } from "@hpcc-js/wasm-util";
 
 let g_duckdb: Promise<DuckDB>;

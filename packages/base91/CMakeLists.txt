@@ -32,3 +32,11 @@ set_target_properties(base91lib PROPERTIES LINK_FLAGS "${LINK_FLAGS}")
 target_link_libraries(base91lib
     unofficial::base91::base91
 )
+
+# Copy generated files to source directories
+add_custom_command(TARGET base91lib POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_BINARY_DIR}/base91lib.d.ts
+        ${CMAKE_CURRENT_SOURCE_DIR}/types/base91lib.d.ts
+    COMMENT "Copying generated base91lib files to source directories"
+)
