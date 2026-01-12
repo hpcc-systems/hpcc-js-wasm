@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.10.0...wasm-expat-v1.10.1) (2026-01-12)
+
+
+### Bug Fixes
+
+* add post-build commands to copy generated files for multiple libraries ([e71a37f](https://github.com/hpcc-systems/hpcc-js-wasm/commit/e71a37fc1f1c3a481b9c95c5bbf901c8a9b2e369))
+
 ## [1.10.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.9.0...wasm-expat-v1.10.0) (2025-12-29)
 
 

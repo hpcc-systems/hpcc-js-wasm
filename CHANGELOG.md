@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.3.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.3.0...wasm-root-v4.3.1) (2026-01-12)
+
+
+### Bug Fixes
+
+* add post-build commands to copy generated files for multiple libraries ([e71a37f](https://github.com/hpcc-systems/hpcc-js-wasm/commit/e71a37fc1f1c3a481b9c95c5bbf901c8a9b2e369))
+
 ## [4.3.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.2.0...wasm-root-v4.3.0) (2025-12-29)
 
 

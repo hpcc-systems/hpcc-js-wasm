@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.18.0...wasm-graphviz-v1.18.1) (2026-01-12)
+
+
+### Bug Fixes
+
+* add post-build commands to copy generated files for multiple libraries ([e71a37f](https://github.com/hpcc-systems/hpcc-js-wasm/commit/e71a37fc1f1c3a481b9c95c5bbf901c8a9b2e369))
+
 ## [1.18.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.17.0...wasm-graphviz-v1.18.0) (2025-12-29)
 
 
