@@ -229,11 +229,59 @@ export class DuckDB extends MainModuleEx<MainModule> {
     registerFile(path: string, content: Uint8Array): void {
         const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
         const split = normalizedPath.lastIndexOf("/");
-        const dir = split > 0 ? normalizedPath.substring(0, split) : "/";
-        if (dir.length > 1 && this._module.FS_createPath) {
-            this._module.FS_createPath(dir, true, true);
+        if (split > 0) {
+            const dir = normalizedPath.substring(0, split);
+            const parts = dir.split("/");
+            let currentPath = "/";
+            for (const part of parts) {
+                if (part && this._module.FS_createPath) {
+                    this._module.FS_createPath(currentPath, part, true, true);
+                    currentPath = currentPath === "/" ? "/" + part : currentPath + "/" + part;
+                }
+            }
         }
         this._module.FS_createDataFile(normalizedPath, undefined, content, true, true, true);
+    }
+
+    /**
+     * Unregisters and removes a file from the virtual file system.
+     * 
+     * This removes a file that was previously registered using {@link registerFile} or
+     * {@link registerFileString}. Once unregistered, the file will no longer be accessible
+     * to DuckDB queries.
+     * 
+     * The path is normalized to remove leading slashes before removal.
+     * 
+     * @param path - The path of the file to remove (e.g., "data/users.csv")
+     * 
+     * @example
+     * ```ts
+     * const duckdb = await DuckDB.load();
+     * 
+     * // Register a file
+     * duckdb.registerFileString("temp.csv", "id,name\n1,Alice");
+     * 
+     * const connection = duckdb.connect();
+     * let result = connection.query("SELECT * FROM read_csv_auto('temp.csv')");
+     * console.log(result.rowCount()); // 1
+     * result.delete();
+     * 
+     * // Unregister the file
+     * duckdb.unregisterFile("temp.csv");
+     * 
+     * // File is no longer accessible
+     * try {
+     *     result = connection.query("SELECT * FROM read_csv_auto('temp.csv')");
+     * } catch (error) {
+     *     console.error("File not found"); // Error: file not accessible
+     * }
+     * 
+     * connection.delete();
+     * ```
+     */
+    unregisterFile(path: string): void {
+        const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
+        this._module.FS_unlink(normalizedPath);
     }
 
     /**

@@ -133,6 +133,24 @@ const progress = connection.getQueryProgress();
 console.log(`Query is ${progress * 100}% complete`);
 ```
 
+##### `queryToJSON(sql: string): string`
+Executes a SQL query and returns the result directly as a JSON string. This is a convenience method that combines `query()` and `toJSON()` into a single call.
+
+```typescript
+const json = connection.queryToJSON("SELECT * FROM users WHERE age > 18");
+// Returns: '[{"id":1,"name":"Alice","age":30},{"id":2,"name":"Bob","age":25}]'
+
+const users = JSON.parse(json);
+console.log(users[0].name); // "Alice"
+```
+
+**Features:**
+- No need to manually delete the result (automatic cleanup)
+- Returns an empty array `[]` for queries with no results
+- Handles all data types including NULL, numbers, strings, and booleans
+- Proper JSON escaping for special characters
+- NaN and Infinity are converted to `null`
+
 #### Transaction Management
 
 ##### `beginTransaction(): void`
@@ -547,6 +565,34 @@ users.forEach(user => {
 });
 
 result.delete();
+```
+
+### Direct JSON Query (queryToJSON)
+
+```typescript
+const connection = duckdb.connect();
+
+// Convenience method: execute query and get JSON in one call
+const json = connection.queryToJSON("SELECT * FROM users ORDER BY age");
+
+// No need to delete result - it's automatic!
+const users = JSON.parse(json);
+users.forEach(user => {
+    console.log(`${user.name} is ${user.age} years old`);
+});
+
+// Use with aggregations
+const stats = connection.queryToJSON(`
+    SELECT 
+        department,
+        COUNT(*) as count,
+        AVG(salary) as avg_salary
+    FROM employees
+    GROUP BY department
+`);
+console.log(stats);
+
+connection.delete();
 ```
 
 ### Error Handling

@@ -334,8 +334,17 @@ namespace ConnectionHelper
     {
         return obj.Query(query).release();
     }
-}
 
+    std::string queryToJSON(Connection &obj, const string &query)
+    {
+        auto result = obj.Query(query);
+        if (!result->HasError())
+        {
+            return MaterializedQueryResultHelper::toJSON(*result);
+        }
+        return std::string();
+    }
+}
 namespace DuckDBHelper
 {
     DuckDB *create()
@@ -476,6 +485,7 @@ EMSCRIPTEN_BINDINGS(duckdblib_bindings)
     class_<Connection>("Connection")
         .function("prepare", &ConnectionHelper::prepare, return_value_policy::take_ownership())
         .function("query", &ConnectionHelper::query, return_value_policy::take_ownership())
+        .function("queryToJSON", &ConnectionHelper::queryToJSON)
         .function("interrupt", &Connection::Interrupt)
         .function("getQueryProgress", &Connection::GetQueryProgress)
         // .function("enableProfiling", &Connection::EnableProfiling)

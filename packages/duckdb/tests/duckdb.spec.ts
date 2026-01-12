@@ -357,6 +357,95 @@ describe("duckdb", () => {
             result.delete();
             con.delete();
         });
+
+        it("can unregister a file", () => {
+            const con = duckdb.connect();
+            const data = [{ id: 1, value: "test" }];
+
+            // Register file
+            duckdb.registerFileString("temp.json", JSON.stringify(data));
+
+            // Verify file is accessible
+            const result1 = con.query("SELECT * FROM read_json_auto('temp.json')");
+            expect(Number(result1.rowCount())).toBe(1);
+            result1.delete();
+
+            // Unregister file
+            duckdb.unregisterFile("temp.json");
+
+            // Verify file is no longer accessible
+            const result2 = con.query("SELECT * FROM read_json_auto('temp.json')");
+            expect(result2.hasError()).toBe(true);
+            expect(result2.getError()).toContain("temp.json");
+            result2.delete();
+
+            con.delete();
+        });
+
+        it("handles unregisterFile with leading slash", () => {
+            const con = duckdb.connect();
+
+            // Register without leading slash
+            duckdb.registerFileString("test.csv", "id\n1");
+
+            // Verify it's accessible
+            const result1 = con.query("SELECT * FROM read_csv_auto('test.csv')");
+            expect(Number(result1.rowCount())).toBe(1);
+            result1.delete();
+
+            // Unregister with leading slash
+            duckdb.unregisterFile("/test.csv");
+
+            // Verify file is no longer accessible
+            const result2 = con.query("SELECT * FROM read_csv_auto('test.csv')");
+            expect(result2.hasError()).toBe(true);
+            result2.delete();
+
+            con.delete();
+        });
+
+        it("can reregister a file after unregistering", () => {
+            const con = duckdb.connect();
+            const data1 = [{ value: "first" }];
+            const data2 = [{ value: "second" }];
+
+            // Register first version
+            duckdb.registerFileString("reuse.json", JSON.stringify(data1));
+            const result1 = con.query("SELECT * FROM read_json_auto('reuse.json')");
+            expect(result1.getValue(0, 0)).toBe("first");
+            result1.delete();
+
+            // Unregister
+            duckdb.unregisterFile("reuse.json");
+
+            // Register new version with same name
+            duckdb.registerFileString("reuse.json", JSON.stringify(data2));
+            const result2 = con.query("SELECT * FROM read_json_auto('reuse.json')");
+            expect(result2.getValue(0, 0)).toBe("second");
+            result2.delete();
+
+            con.delete();
+        });
+
+        it("unregisterFile handles nested paths", () => {
+            const con = duckdb.connect();
+
+            // Register file with nested path
+            duckdb.registerFileString("data/nested/file.json", JSON.stringify([{ id: 42 }]));
+
+            const result1 = con.query("SELECT * FROM read_json_auto('data/nested/file.json')");
+            expect(Number(result1.rowCount())).toBe(1);
+            result1.delete();
+
+            // Unregister nested file
+            duckdb.unregisterFile("data/nested/file.json");
+
+            const result2 = con.query("SELECT * FROM read_json_auto('data/nested/file.json')");
+            expect(result2.hasError()).toBe(true);
+            result2.delete();
+
+            con.delete();
+        });
     });
 
     describe("ErrorData handling", () => {
@@ -474,6 +563,265 @@ FROM duckdb_extensions();
             result.print();
 
             result.delete();
+            con.delete();
+        });
+    });
+
+    describe("queryToJSON", () => {
+        it("returns JSON string directly from query", () => {
+            const con = duckdb.connect();
+            const json = con.queryToJSON("SELECT 1 AS num, 'test' AS str");
+
+            expect(typeof json).toBe("string");
+            const parsed = JSON.parse(json);
+            expect(Array.isArray(parsed)).toBe(true);
+            expect(parsed.length).toBe(1);
+            expect(parsed[0].num).toBe(1);
+            expect(parsed[0].str).toBe("test");
+
+            con.delete();
+        });
+
+        it("handles multiple rows", () => {
+            const con = duckdb.connect();
+            const json = con.queryToJSON(`
+                SELECT * FROM (VALUES 
+                    (1, 'Alice', 30),
+                    (2, 'Bob', 25),
+                    (3, 'Charlie', 35)
+                ) AS t(id, name, age)
+            `);
+
+            const parsed = JSON.parse(json);
+            expect(parsed.length).toBe(3);
+            expect(parsed[0]).toEqual({ id: 1, name: "Alice", age: 30 });
+            expect(parsed[1]).toEqual({ id: 2, name: "Bob", age: 25 });
+            expect(parsed[2]).toEqual({ id: 3, name: "Charlie", age: 35 });
+
+            con.delete();
+        });
+
+        it("handles empty result set", () => {
+            const con = duckdb.connect();
+            const json = con.queryToJSON("SELECT 1 WHERE FALSE");
+
+            const parsed = JSON.parse(json);
+            expect(Array.isArray(parsed)).toBe(true);
+            expect(parsed.length).toBe(0);
+
+            con.delete();
+        });
+
+        it("handles NULL values", () => {
+            const con = duckdb.connect();
+            const json = con.queryToJSON(`
+                SELECT 
+                    NULL AS null_col,
+                    1 AS int_col,
+                    'text' AS str_col
+            `);
+
+            const parsed = JSON.parse(json);
+            expect(parsed[0].null_col).toBeNull();
+            expect(parsed[0].int_col).toBe(1);
+            expect(parsed[0].str_col).toBe("text");
+
+            con.delete();
+        });
+
+        it("handles all basic data types", () => {
+            const con = duckdb.connect();
+            const json = con.queryToJSON(`
+                SELECT 
+                    42::TINYINT AS tiny,
+                    1000::SMALLINT AS small,
+                    100000::INTEGER AS int,
+                    9999999999::BIGINT AS big,
+                    3.14::FLOAT AS float_val,
+                    2.71828::DOUBLE AS double_val,
+                    'hello world' AS str,
+                    TRUE AS bool_true,
+                    FALSE AS bool_false,
+                    NULL AS null_val
+            `);
+
+            const parsed = JSON.parse(json);
+            expect(parsed.length).toBe(1);
+            const row = parsed[0];
+            expect(row.tiny).toBe(42);
+            expect(row.small).toBe(1000);
+            expect(row.int).toBe(100000);
+            expect(row.big).toBe(9999999999);
+            expect(typeof row.float_val).toBe("number");
+            expect(typeof row.double_val).toBe("number");
+            expect(row.str).toBe("hello world");
+            expect(row.bool_true).toBe(true);
+            expect(row.bool_false).toBe(false);
+            expect(row.null_val).toBeNull();
+
+            con.delete();
+        });
+
+        it("handles special characters and escape sequences", () => {
+            const con = duckdb.connect();
+            const json = con.queryToJSON(`
+                SELECT 
+                    'hello\nworld' AS newline,
+                    '"quoted"' AS quotes,
+                    'back\\slash' AS backslash,
+                    'tab\there' AS tab,
+                    '{"key": "value"}' AS json_str
+            `);
+
+            const parsed = JSON.parse(json);
+            expect(parsed[0].newline).toBe("hello\nworld");
+            expect(parsed[0].quotes).toBe('"quoted"');
+            expect(parsed[0].backslash).toBe("back\\slash");
+            expect(parsed[0].tab).toBe("tab\there");
+            expect(parsed[0].json_str).toBe('{"key": "value"}');
+
+            con.delete();
+        });
+
+        it("handles aggregate queries", () => {
+            const con = duckdb.connect();
+            con.query("CREATE TABLE sales (product VARCHAR, amount DOUBLE);")!.delete();
+            con.query(`
+                INSERT INTO sales VALUES 
+                    ('Widget', 100.50),
+                    ('Gadget', 250.75),
+                    ('Widget', 150.25),
+                    ('Gadget', 300.00);
+            `)!.delete();
+
+            const json = con.queryToJSON(`
+                SELECT 
+                    product,
+                    COUNT(*) AS count,
+                    SUM(amount) AS total,
+                    AVG(amount) AS average
+                FROM sales
+                GROUP BY product
+                ORDER BY product
+            `);
+
+            const parsed = JSON.parse(json);
+            expect(parsed.length).toBe(2);
+            expect(parsed[0].product).toBe("Gadget");
+            expect(parsed[0].count).toBe(2);
+            expect(parsed[1].product).toBe("Widget");
+            expect(parsed[1].count).toBe(2);
+
+            con.delete();
+        });
+
+        it("handles JOIN queries", () => {
+            const con = duckdb.connect();
+            con.query("CREATE TABLE users (id INTEGER, name VARCHAR);")!.delete();
+            con.query("CREATE TABLE orders (id INTEGER, user_id INTEGER, amount DOUBLE);")!.delete();
+            con.query("INSERT INTO users VALUES (1, 'Alice'), (2, 'Bob');")!.delete();
+            con.query("INSERT INTO orders VALUES (101, 1, 50.0), (102, 2, 75.0);")!.delete();
+
+            const json = con.queryToJSON(`
+                SELECT 
+                    u.name,
+                    o.id AS order_id,
+                    o.amount
+                FROM users u
+                JOIN orders o ON u.id = o.user_id
+                ORDER BY u.name
+            `);
+
+            const parsed = JSON.parse(json);
+            expect(parsed.length).toBe(2);
+            expect(parsed[0].name).toBe("Alice");
+            expect(parsed[0].order_id).toBe(101);
+            expect(parsed[0].amount).toBe(50.0);
+            expect(parsed[1].name).toBe("Bob");
+            expect(parsed[1].order_id).toBe(102);
+
+            con.delete();
+        });
+
+        it("handles NaN and Infinity in JSON output", () => {
+            const con = duckdb.connect();
+            const json = con.queryToJSON(`
+                SELECT 
+                    'NaN'::DOUBLE AS nan_val,
+                    'Infinity'::DOUBLE AS inf_val,
+                    '-Infinity'::DOUBLE AS neg_inf_val
+            `);
+
+            const parsed = JSON.parse(json);
+            // NaN and Infinity should be converted to null in JSON
+            expect(parsed[0].nan_val).toBeNull();
+            expect(parsed[0].inf_val).toBeNull();
+            expect(parsed[0].neg_inf_val).toBeNull();
+
+            con.delete();
+        });
+
+        it("works with complex queries and CTEs", () => {
+            const con = duckdb.connect();
+            const json = con.queryToJSON(`
+                WITH ranked AS (
+                    SELECT 
+                        unnest(['A', 'B', 'C', 'D']) AS letter,
+                        unnest([4, 2, 3, 1]) AS score
+                )
+                SELECT 
+                    letter,
+                    score,
+                    ROW_NUMBER() OVER (ORDER BY score DESC) AS rank
+                FROM ranked
+                ORDER BY score DESC
+            `);
+
+            const parsed = JSON.parse(json);
+            expect(parsed.length).toBe(4);
+            expect(parsed[0]).toEqual({ letter: "A", score: 4, rank: 1 });
+            expect(parsed[1]).toEqual({ letter: "C", score: 3, rank: 2 });
+            expect(parsed[2]).toEqual({ letter: "B", score: 2, rank: 3 });
+            expect(parsed[3]).toEqual({ letter: "D", score: 1, rank: 4 });
+
+            con.delete();
+        });
+
+        it("handles large result sets", () => {
+            const con = duckdb.connect();
+            const json = con.queryToJSON(`
+                SELECT 
+                    i AS id,
+                    'User_' || i AS name
+                FROM generate_series(1, 100) AS t(i)
+            `);
+
+            const parsed = JSON.parse(json);
+            expect(parsed.length).toBe(100);
+            expect(parsed[0]).toEqual({ id: 1, name: "User_1" });
+            expect(parsed[99]).toEqual({ id: 100, name: "User_100" });
+
+            con.delete();
+        });
+
+        it("preserves column name casing", () => {
+            const con = duckdb.connect();
+            const json = con.queryToJSON(`
+                SELECT 
+                    1 AS "MixedCase",
+                    2 AS "UPPERCASE",
+                    3 AS "lowercase",
+                    4 AS "snake_case",
+                    5 AS "camelCase"
+            `);
+
+            const parsed = JSON.parse(json);
+            expect(parsed[0]).toHaveProperty("MixedCase", 1);
+            expect(parsed[0]).toHaveProperty("UPPERCASE", 2);
+            expect(parsed[0]).toHaveProperty("lowercase", 3);
+            expect(parsed[0]).toHaveProperty("snake_case", 4);
+            expect(parsed[0]).toHaveProperty("camelCase", 5);
+
             con.delete();
         });
     });
