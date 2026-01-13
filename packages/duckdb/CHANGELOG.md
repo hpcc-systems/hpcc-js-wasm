@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.13.1...wasm-duckdb-v1.14.0) (2026-01-13)
+
+
+### Features
+
+* implement unregisterFile method ([1bbe697](https://github.com/hpcc-systems/hpcc-js-wasm/commit/1bbe697a51615c24ec903e34c962777402dc44c2))
+
 ## [1.13.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.13.0...wasm-duckdb-v1.13.1) (2026-01-12)
 
 

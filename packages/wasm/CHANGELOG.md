@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.32.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.31.1...wasm-v2.32.0) (2026-01-13)
+
+
+### Features
+
+* implement unregisterFile method ([1bbe697](https://github.com/hpcc-systems/hpcc-js-wasm/commit/1bbe697a51615c24ec903e34c962777402dc44c2))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.10.1 to ^1.11.0
+    * @hpcc-js/wasm-duckdb bumped from ^1.13.1 to ^1.14.0
+    * @hpcc-js/wasm-expat bumped from ^1.10.1 to ^1.11.0
+    * @hpcc-js/wasm-graphviz bumped from ^1.18.1 to ^1.19.0
+    * @hpcc-js/wasm-graphviz-cli bumped from ^1.8.2 to ^1.8.3
+    * @hpcc-js/wasm-zstd bumped from ^1.9.1 to ^1.10.0
+
 ## [2.31.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.31.0...wasm-v2.31.1) (2026-01-12)
 
 
