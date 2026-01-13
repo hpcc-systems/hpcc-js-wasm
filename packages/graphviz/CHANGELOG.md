@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.18.1...wasm-graphviz-v1.19.0) (2026-01-13)
+
+
+### Features
+
+* implement unregisterFile method ([1bbe697](https://github.com/hpcc-systems/hpcc-js-wasm/commit/1bbe697a51615c24ec903e34c962777402dc44c2))
+
 ## [1.18.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.18.0...wasm-graphviz-v1.18.1) (2026-01-12)
 
 
