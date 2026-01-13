@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.14.0...wasm-duckdb-v1.15.0) (2026-01-13)
+
+
+### Features
+
+* add duckdb.dispose method ([e3d10e2](https://github.com/hpcc-systems/hpcc-js-wasm/commit/e3d10e2e77a119d38cb4323e4fca678772d59ff4))
+
 ## [1.14.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.13.1...wasm-duckdb-v1.14.0) (2026-01-13)
 
 

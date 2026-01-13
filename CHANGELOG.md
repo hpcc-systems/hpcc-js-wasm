@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.5.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.4.0...wasm-root-v4.5.0) (2026-01-13)
+
+
+### Features
+
+* add duckdb.dispose method ([e3d10e2](https://github.com/hpcc-systems/hpcc-js-wasm/commit/e3d10e2e77a119d38cb4323e4fca678772d59ff4))
+
 ## [4.4.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.3.1...wasm-root-v4.4.0) (2026-01-13)
 
 
