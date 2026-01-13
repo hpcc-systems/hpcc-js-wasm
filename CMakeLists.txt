@@ -14,14 +14,12 @@ set(VCPKG_INCLUDE_DIR ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/include)
 
 # See:  https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
 set(EM_CPP_FLAGS 
-    "-flto"
     "-msimd128"
 
     "-sSTRICT=1"
 )
 
 set(EM_LINK_FLAGS 
-    "-flto"
     "--no-entry"
     "-lembind"
 
@@ -78,7 +76,12 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebIn
         )
     endif ()
 else ()
+    set(EM_CPP_FLAGS 
+        "-flto"
+        ${EM_CPP_FLAGS}
+    )
     set(EM_LINK_FLAGS 
+        "-flto"
         ${EM_LINK_FLAGS}
     )
 endif ()

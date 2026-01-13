@@ -544,6 +544,8 @@ SELECT extension_name, installed, description
 FROM duckdb_extensions();
 `)!;
 
+            result.print();
+            console.log("", result.columnCount(), result.rowCount());
             expect(Number(result.columnCount())).toBeGreaterThan(0);
             expect(Number(result.rowCount())).toBeGreaterThan(0);
 

@@ -91,18 +91,57 @@ const textEncoder = new TextEncoder();
  * @see [DuckDB Documentation](https://duckdb.org/docs/)
  * @see [DuckDB GitHub](https://github.com/duckdb/duckdb)
  */
-
-
-
-export class DuckDB extends MainModuleEx<MainModule> {
+export class DuckDB extends MainModuleEx<MainModule> implements Disposable {
 
     db: CPPDuckDB
 
     private constructor(_module: MainModule) {
         super(_module);
         this.db = this._module.create()!;
+        // Special home directory for web_user (needed for some extensions)
         const { FS_createPath } = this._module;
         FS_createPath("/", "home/web_user", true, true);
+    }
+
+    /**
+     * Disposes of the DuckDB database instance and releases resources.
+     * 
+     * This method should be called when you're done using the database to free up
+     * memory and clean up resources. After calling dispose, the instance should not be used.
+     * 
+     * @example
+     * ```ts
+     * const duckdb = await DuckDB.load();
+     * const connection = duckdb.connect();
+     * // ... use the database ...
+     * connection.delete();
+     * duckdb.dispose();
+     * ```
+     * 
+     * @example Using statement (TypeScript 5.2+)
+     * ```ts
+     * {
+     *     using duckdb = await DuckDB.load();
+     *     const connection = duckdb.connect();
+     *     // ... use the database ...
+     *     connection.delete();
+     * } // duckdb.dispose() is called automatically
+     * ```
+     */
+    dispose(): void {
+        try {
+            this.db?.terminate();
+        } finally {
+            this.db?.delete();
+        }
+    }
+
+    /**
+     * Symbol.dispose implementation for use with `using` declarations.
+     * @internal
+     */
+    [Symbol.dispose](): void {
+        this.dispose();
     }
 
     /**
