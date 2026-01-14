@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.19.0...wasm-graphviz-v1.20.0) (2026-01-14)
+
+
+### Features
+
+* add better exception handling ([86ad647](https://github.com/hpcc-systems/hpcc-js-wasm/commit/86ad647ed409c90b1090db4b164d37b32362a7f1))
+
 ## [1.19.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.18.1...wasm-graphviz-v1.19.0) (2026-01-13)
 
 

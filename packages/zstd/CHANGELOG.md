@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.10.0...wasm-zstd-v1.11.0) (2026-01-14)
+
+
+### Features
+
+* add better exception handling ([86ad647](https://github.com/hpcc-systems/hpcc-js-wasm/commit/86ad647ed409c90b1090db4b164d37b32362a7f1))
+
 ## [1.10.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.9.1...wasm-zstd-v1.10.0) (2026-01-13)
 
 
