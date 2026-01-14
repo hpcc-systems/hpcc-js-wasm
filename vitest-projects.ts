@@ -1,8 +1,14 @@
 import { playwright } from "@vitest/browser-playwright";
 
+const isCI = !!process.env.CI;
+const testTimeout = isCI ? 180_000 : 60_000;
+const hookTimeout = isCI ? 120_000 : 60_000;
+
 export const browser = {
     test: {
         name: 'browser',
+        testTimeout,
+        hookTimeout,
         include: [
             '**/*.spec.{ts,js}'
         ],
@@ -32,6 +38,8 @@ export const browser = {
 export const node = {
     test: {
         name: 'node',
+        testTimeout,
+        hookTimeout,
         include: [
             '**/*.spec.{ts,js}'
         ],

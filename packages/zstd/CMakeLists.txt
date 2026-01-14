@@ -14,6 +14,7 @@ set(EM_LINK_FLAGS
     "-sEXPORT_NAME='${CMAKE_PROJECT_NAME}'"
 
     "-fwasm-exceptions"
+    "-sEXCEPTION_STACK_TRACES=1"
     "--emit-tsd ${CMAKE_CURRENT_BINARY_DIR}/zstdlib.d.ts"
 )
 string(REPLACE ";" " " LINK_FLAGS "${EM_LINK_FLAGS}")

@@ -27,6 +27,7 @@
     "bundle-watch": "npm run bundle-dev -- --watch",
     "build-dev": "run-p gen-types bundle-dev",
     "build": "run-p gen-types bundle",
+    "build-all": "run-s build-cpp gen-types bundle",
     "lint-skypack": "npx -y @skypack/package-check",
     "lint-eslint": "eslint \"src/**/*.ts\" \"tests/**/*.ts\"",
     "lint": "run-p lint-eslint",

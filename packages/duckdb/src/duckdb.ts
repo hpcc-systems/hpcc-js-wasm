@@ -3,7 +3,7 @@ import load, { reset } from "../../../build/packages/duckdb/duckdblib.wasm";
 import type { MainModule, DuckDB as CPPDuckDB } from "../types/duckdblib.js";
 import { MainModuleEx } from "@hpcc-js/wasm-util";
 
-let g_duckdb: Promise<DuckDB>;
+let g_duckdb: Promise<DuckDB> | undefined;
 const textEncoder = new TextEncoder();
 
 /**
@@ -91,7 +91,7 @@ const textEncoder = new TextEncoder();
  * @see [DuckDB Documentation](https://duckdb.org/docs/)
  * @see [DuckDB GitHub](https://github.com/duckdb/duckdb)
  */
-export class DuckDB extends MainModuleEx<MainModule> implements Disposable {
+export class DuckDB extends MainModuleEx<MainModule> {
 
     db: CPPDuckDB
 
@@ -101,47 +101,6 @@ export class DuckDB extends MainModuleEx<MainModule> implements Disposable {
         // Special home directory for web_user (needed for some extensions)
         const { FS_createPath } = this._module;
         FS_createPath("/", "home/web_user", true, true);
-    }
-
-    /**
-     * Disposes of the DuckDB database instance and releases resources.
-     * 
-     * This method should be called when you're done using the database to free up
-     * memory and clean up resources. After calling dispose, the instance should not be used.
-     * 
-     * @example
-     * ```ts
-     * const duckdb = await DuckDB.load();
-     * const connection = duckdb.connect();
-     * // ... use the database ...
-     * connection.delete();
-     * duckdb.dispose();
-     * ```
-     * 
-     * @example Using statement (TypeScript 5.2+)
-     * ```ts
-     * {
-     *     using duckdb = await DuckDB.load();
-     *     const connection = duckdb.connect();
-     *     // ... use the database ...
-     *     connection.delete();
-     * } // duckdb.dispose() is called automatically
-     * ```
-     */
-    dispose(): void {
-        try {
-            this.db?.terminate();
-        } finally {
-            this.db?.delete();
-        }
-    }
-
-    /**
-     * Symbol.dispose implementation for use with `using` declarations.
-     * @internal
-     */
-    [Symbol.dispose](): void {
-        this.dispose();
     }
 
     /**
@@ -167,7 +126,7 @@ export class DuckDB extends MainModuleEx<MainModule> implements Disposable {
                 return new DuckDB(module)
             });
         }
-        return g_duckdb;
+        return g_duckdb!;
     }
 
     /**
@@ -182,8 +141,20 @@ export class DuckDB extends MainModuleEx<MainModule> implements Disposable {
      * // The next call to DuckDB.load() will create a fresh instance
      * ```
      */
-    static unload() {
-        reset();
+    static async unload() {
+        try {
+            const duckdb = await g_duckdb;
+            if (duckdb?.db) {
+                try {
+                    duckdb.db.terminate();
+                } finally {
+                    duckdb.db.delete();
+                }
+            }
+        } finally {
+            reset();
+            g_duckdb = undefined;
+        }
     }
 
     /**
@@ -238,6 +209,27 @@ export class DuckDB extends MainModuleEx<MainModule> implements Disposable {
      */
     numberOfThreads(): number {
         return Number(this.db.numberOfThreads());
+    }
+
+    getExceptionMessage(error: unknown): { type: string, message?: string } {
+        const mod: any = this._module as any;
+        try {
+            const result = mod?.getExceptionMessage?.(error);
+            if (Array.isArray(result)) {
+                return {
+                    type: result[0] ?? "",
+                    message: result[1] ?? ""
+                };
+            }
+        } catch (_err) {
+            void _err;
+        }
+
+        const err: any = error;
+        return {
+            type: err?.name ?? "Error",
+            message: typeof err?.message === "string" ? err.message : String(error)
+        };
     }
 
     /**
@@ -371,5 +363,5 @@ export class DuckDB extends MainModuleEx<MainModule> implements Disposable {
         const encoded = textEncoder.encode(content);
         this.registerFile(fileName, encoded);
     }
-
 }
+

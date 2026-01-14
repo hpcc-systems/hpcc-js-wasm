@@ -2,6 +2,23 @@ import { describe, it, expect } from "vitest";
 import { Zstd } from "@hpcc-js/wasm-zstd";
 
 describe("zstd", function () {
+
+    it("unload resets singleton and is idempotent", async function () {
+        await Zstd.unload();
+
+        const zstda = await Zstd.load();
+        expect(await Zstd.load()).to.equal(zstda);
+
+        await Zstd.unload();
+
+        const zstdb = await Zstd.load();
+        expect(zstdb).to.not.equal(zstda);
+        expect(await Zstd.load()).to.equal(zstdb);
+
+        await Zstd.unload();
+        await Zstd.unload();
+    });
+
     it("version", async function () {
         let zstd = await Zstd.load();
         let v = zstd.version();
@@ -13,13 +30,13 @@ describe("zstd", function () {
         v = zstd.version();
         expect(v).to.be.a.string;
         expect(v).to.not.be.empty;
-        Zstd.unload();
+        await Zstd.unload();
 
         zstd = await Zstd.load();
         v = zstd.version();
         expect(v).to.be.a.string;
         expect(v).to.not.be.empty;
-        Zstd.unload();
+        await Zstd.unload();
     });
 
     it("compress", async function () {

@@ -72,7 +72,7 @@ function createFiles(graphviz: any, _options?: Options) {
     [...options.files, ...imagesToFiles(options.images)].forEach(file => graphviz.createFile(file.path, file.data));
 }
 
-let g_graphviz: Promise<Graphviz>;
+let g_graphviz: Promise<Graphviz> | undefined;
 
 /**
  * The Graphviz layout algorithms take descriptions of graphs in a simple text language, and make diagrams in useful formats, such as images and SVG for web pages or display in an interactive graph browser.
@@ -121,6 +121,7 @@ export class Graphviz extends MainModuleEx<MainModule> {
      */
     static unload() {
         reset();
+        g_graphviz = undefined;
     }
 
     /**

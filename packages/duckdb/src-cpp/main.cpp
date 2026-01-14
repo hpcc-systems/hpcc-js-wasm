@@ -334,15 +334,15 @@ namespace ConnectionHelper
     {
         return obj.Query(query).release();
     }
-
     std::string queryToJSON(Connection &obj, const string &query)
     {
         auto result = obj.Query(query);
-        if (!result->HasError())
+        if (result->HasError())
         {
-            return MaterializedQueryResultHelper::toJSON(*result);
+            auto err = result->GetError();
+            throw std::runtime_error(err.c_str());
         }
-        return std::string();
+        return MaterializedQueryResultHelper::toJSON(*result);
     }
 }
 namespace DuckDBHelper

@@ -22,7 +22,7 @@ function parseAttrs(attrs: map_string_string): Attributes {
     return retVal;
 }
 
-let g_expat: Promise<Expat>;
+let g_expat: Promise<Expat> | undefined;
 
 /**
  * Expat XML parser WASM library, provides a simplified wrapper around the Expat XML Parser library.  
@@ -77,6 +77,7 @@ export class Expat extends MainModuleEx<MainModule> {
      */
     static unload() {
         reset();
+        g_expat = undefined;
     }
 
     /**
