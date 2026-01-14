@@ -19,6 +19,7 @@ set(EM_LINK_FLAGS
     # "-sWASM_BIGINT=1"
 
     "-fwasm-exceptions"
+    "-sEXCEPTION_STACK_TRACES=1"
     "--emit-tsd ${CMAKE_CURRENT_BINARY_DIR}/utillib.d.ts"
 )
 string(REPLACE ";" " " LINK_FLAGS "${EM_LINK_FLAGS}")

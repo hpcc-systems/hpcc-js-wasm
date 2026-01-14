@@ -1,11 +1,15 @@
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { DuckDB } from "@hpcc-js/wasm-duckdb";
 
-describe("duckdb", () => {
+describe.sequential("duckdb", () => {
     let duckdb: DuckDB;
 
     beforeAll(async () => {
         duckdb = await DuckDB.load();
+    });
+
+    afterAll(async () => {
+        await DuckDB.unload();
     });
 
     describe("DuckDB static methods", () => {
@@ -825,6 +829,39 @@ FROM duckdb_extensions();
             expect(parsed[0]).toHaveProperty("camelCase", 5);
 
             con.delete();
+        });
+
+        it("exception handline", () => {
+            const con = duckdb.connect();
+            try {
+                const json = con.queryToJSON("Great Big Error!");
+                JSON.parse(json);
+            } catch (e) {
+                const exception = duckdb.getExceptionMessage(e)
+                expect(exception).toBeDefined();
+                expect(exception.type).toBe("std::runtime_error");
+                expect(e).toBeDefined();
+            } finally {
+                con.delete();
+            }
+        });
+    });
+
+    describe("unload", () => {
+        it("resets singleton and is idempotent", async () => {
+            await DuckDB.unload();
+
+            const dba = await DuckDB.load();
+            expect(await DuckDB.load()).toBe(dba);
+
+            await DuckDB.unload();
+
+            const dbb = await DuckDB.load();
+            expect(dbb).not.toBe(dba);
+            expect(await DuckDB.load()).toBe(dbb);
+
+            await DuckDB.unload();
+            await DuckDB.unload();
         });
     });
 });

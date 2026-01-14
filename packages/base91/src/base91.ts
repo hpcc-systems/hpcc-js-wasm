@@ -5,7 +5,7 @@ import { MainModuleEx } from "@hpcc-js/wasm-util";
 
 //  Ref:  http://base91.sourceforge.net/#a5
 
-let g_base91: Promise<Base91>;
+let g_base91: Promise<Base91> | undefined;
 
 /**
  * Base 91 WASM library, similar to Base 64 but uses more characters resulting in smaller strings.
@@ -49,8 +49,14 @@ export class Base91 extends MainModuleEx<MainModule> {
     /**
      * Unloades the compiled wasm instance.
      */
-    static unload() {
-        reset();
+    static async unload() {
+        try {
+            const base91 = await g_base91;
+            base91?._base91?.delete();
+        } finally {
+            reset();
+            g_base91 = undefined;
+        }
     }
 
     /**

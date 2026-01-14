@@ -3,6 +3,22 @@ import { Base91 } from "@hpcc-js/wasm-base91";
 
 describe("base91", function () {
 
+    it("unload resets singleton and is idempotent", async function () {
+        await Base91.unload();
+
+        const base91a = await Base91.load();
+        expect(await Base91.load()).to.equal(base91a);
+
+        await Base91.unload();
+
+        const base91b = await Base91.load();
+        expect(base91b).to.not.equal(base91a);
+        expect(await Base91.load()).to.equal(base91b);
+
+        await Base91.unload();
+        await Base91.unload();
+    });
+
     it("version", async function () {
         let base91 = await Base91.load();
         expect(await Base91.load()).to.equal(base91);
@@ -10,14 +26,14 @@ describe("base91", function () {
         expect(v).to.be.a.string;
         expect(v).to.equal("0.6.0");
         console.log("base91 version: " + v);
-        Base91.unload();
+        await Base91.unload();
 
         base91 = await Base91.load();
         expect(await Base91.load()).to.equal(base91);
         v = base91.version();
         expect(v).to.be.a.string;
         expect(v).to.not.be.empty;
-        Base91.unload();
+        await Base91.unload();
     });
 
     it("simple", async function () {

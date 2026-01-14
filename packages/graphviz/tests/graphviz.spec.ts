@@ -30,6 +30,22 @@ describe("all combos", () => {
 
 describe("graphviz", function () {
 
+    it("unload resets singleton and is idempotent", async function () {
+        Graphviz.unload();
+
+        const graphviza = await Graphviz.load();
+        expect(await Graphviz.load()).to.equal(graphviza);
+
+        Graphviz.unload();
+
+        const graphvizb = await Graphviz.load();
+        expect(graphvizb).to.not.equal(graphviza);
+        expect(await Graphviz.load()).to.equal(graphvizb);
+
+        Graphviz.unload();
+        Graphviz.unload();
+    });
+
     it("version", async function () {
         let graphviz = await Graphviz.load();
         let v = graphviz.version();

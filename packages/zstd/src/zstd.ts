@@ -7,7 +7,7 @@ type ZstdExports = MainModule["zstd"];
 //  Ref:  http://facebook.github.io/zstd/zstd_manual.html
 //  Ref:  https://github.com/facebook/zstd
 
-let g_zstd: Promise<Zstd>;
+let g_zstd: Promise<Zstd> | undefined;
 
 /**
  * The Zstandard WASM library, provides a simplified wrapper around the Zstandard c++ library.
@@ -55,8 +55,14 @@ export class Zstd extends MainModuleEx<MainModule> {
     /**
      * Unloades the compiled wasm instance.
      */
-    static unload() {
-        reset();
+    static async unload() {
+        try {
+            const zstd = await g_zstd;
+            zstd?._zstd?.delete();
+        } finally {
+            reset();
+            g_zstd = undefined;
+        }
     }
 
     /**

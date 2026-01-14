@@ -32,6 +32,22 @@ class KeywordParser extends StackParser {
 }
 
 describe("expat", function () {
+    it("unload resets singleton and is idempotent", async function () {
+        Expat.unload();
+
+        const expata = await Expat.load();
+        expect(await Expat.load()).to.equal(expata);
+
+        Expat.unload();
+
+        const expatb = await Expat.load();
+        expect(expatb).to.not.equal(expata);
+        expect(await Expat.load()).to.equal(expatb);
+
+        Expat.unload();
+        Expat.unload();
+    });
+
     it("version", async function () {
         let expat = await Expat.load();
         let v = await expat.version();
