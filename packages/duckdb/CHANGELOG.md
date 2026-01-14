@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.15.0...wasm-duckdb-v1.16.0) (2026-01-14)
+
+
+### Features
+
+* add better exception handling ([09b29cf](https://github.com/hpcc-systems/hpcc-js-wasm/commit/09b29cf353bdbbaa9a23e63198224177a543dd06))
+
 ## [1.15.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.14.0...wasm-duckdb-v1.15.0) (2026-01-13)
 
 
