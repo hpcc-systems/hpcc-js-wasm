@@ -40,7 +40,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@hpcc-js/esbuild-plugins": "1.8.0"
+    "@hpcc-js/esbuild-plugins": "1.8.1"
   },
   "keywords": [
     "typescript",

@@ -1,5 +1,6 @@
 {
     "cmake.cmakePath": "${workspaceFolder}/scripts/cmake.sh",
     "vitest.maximumConfigs": 20,
-    "vitest.configSearchPatternExclude": "{emsdk/**,node_modules/**}"
+    "vitest.configSearchPatternExclude": "{emsdk/**,node_modules/**}",
+    "git.ignoreLimitWarning": true
 }
