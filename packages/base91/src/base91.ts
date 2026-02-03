@@ -21,13 +21,14 @@ let g_base91: Promise<Base91> | undefined;
  * const decoded_data = await base91.decode(encoded_data);
  * ```
  */
-export class Base91 extends MainModuleEx<MainModule> {
+export class Base91 {
 
+    private _mainModule: MainModuleEx<MainModule>;
     private _base91: CBasE91;
 
     private constructor(_module: MainModule) {
-        super(_module);
-        this._base91 = new this._module.CBasE91();
+        this._mainModule = new MainModuleEx(_module);
+        this._base91 = new _module.CBasE91();
     }
 
     /**
@@ -80,16 +81,16 @@ export class Base91 extends MainModuleEx<MainModule> {
     encode(data: Uint8Array): string {
         this._base91.reset();
 
-        const unencoded = this.dataToHeap(data);
-        const encoded = this.malloc(unencoded.size + Math.ceil(unencoded.size / 4));
+        const unencoded = this._mainModule.dataToHeap(data);
+        const encoded = this._mainModule.malloc(unencoded.size + Math.ceil(unencoded.size / 4));
 
         encoded.size = this._base91.encode(unencoded.ptr, unencoded.size, encoded.ptr);
-        let retVal = this.heapToString(encoded);
+        let retVal = this._mainModule.heapToString(encoded);
         encoded.size = this._base91.encode_end(encoded.ptr);
-        retVal += this.heapToString(encoded);
+        retVal += this._mainModule.heapToString(encoded);
 
-        this.free(encoded);
-        this.free(unencoded);
+        this._mainModule.free(encoded);
+        this._mainModule.free(unencoded);
         return retVal;
     }
 
@@ -98,13 +99,13 @@ export class Base91 extends MainModuleEx<MainModule> {
      * @returns string containing the Base 91 encoded data
      */
     encodeChunk(data: Uint8Array): string {
-        const unencoded = this.dataToHeap(data);
-        const encoded = this.malloc(unencoded.size + Math.ceil(unencoded.size / 4));
+        const unencoded = this._mainModule.dataToHeap(data);
+        const encoded = this._mainModule.malloc(unencoded.size + Math.ceil(unencoded.size / 4));
 
         encoded.size = this._base91.encode(unencoded.ptr, unencoded.size, encoded.ptr);
-        const retVal = this.heapToString(encoded);
-        this.free(encoded);
-        this.free(unencoded);
+        const retVal = this._mainModule.heapToString(encoded);
+        this._mainModule.free(encoded);
+        this._mainModule.free(unencoded);
         return retVal;
     }
 
@@ -114,12 +115,12 @@ export class Base91 extends MainModuleEx<MainModule> {
      * @returns string containing the Base 91 encoded data
      */
     encodeChunkEnd(): string {
-        const encoded = this.malloc(2);
+        const encoded = this._mainModule.malloc(2);
 
         encoded.size = this._base91.encode_end(encoded.ptr);
-        const retVal = this.heapToString(encoded);
+        const retVal = this._mainModule.heapToString(encoded);
 
-        this.free(encoded);
+        this._mainModule.free(encoded);
         return retVal;
     }
 
@@ -130,16 +131,16 @@ export class Base91 extends MainModuleEx<MainModule> {
     decode(base91Str: string): Uint8Array {
         this._base91.reset();
 
-        const encoded = this.stringToHeap(base91Str);
-        const unencoded = this.malloc(encoded.size);
+        const encoded = this._mainModule.stringToHeap(base91Str);
+        const unencoded = this._mainModule.malloc(encoded.size);
 
         unencoded.size = this._base91.decode(encoded.ptr, encoded.size, unencoded.ptr);
-        let retVal = this.heapView(unencoded);
+        let retVal = this._mainModule.heapView(unencoded);
         unencoded.size = this._base91.decode_end(unencoded.ptr);
-        retVal = new Uint8Array([...retVal, ...this.heapView(unencoded)]);
+        retVal = new Uint8Array([...retVal, ...this._mainModule.heapView(unencoded)]);
 
-        this.free(unencoded);
-        this.free(encoded);
+        this._mainModule.free(unencoded);
+        this._mainModule.free(encoded);
         return retVal;
     }
 
@@ -149,14 +150,13 @@ export class Base91 extends MainModuleEx<MainModule> {
      * @returns decoded bytes for the chunk
      */
     decodeChunk(base91Str: string): Uint8Array {
-        const encoded = this.stringToHeap(base91Str);
-        const unencoded = this.malloc(encoded.size);
+        const encoded = this._mainModule.stringToHeap(base91Str);
+        const unencoded = this._mainModule.malloc(encoded.size);
 
         unencoded.size = this._base91.decode(encoded.ptr, encoded.size, unencoded.ptr);
-        const retVal = this.heapToUint8Array(unencoded);
-
-        this.free(unencoded);
-        this.free(encoded);
+        const retVal = this._mainModule.heapToUint8Array(unencoded);
+        this._mainModule.free(unencoded);
+        this._mainModule.free(encoded);
         return retVal;
     }
 
@@ -165,12 +165,11 @@ export class Base91 extends MainModuleEx<MainModule> {
      * @returns remaining decoded bytes
      */
     decodeChunkEnd(): Uint8Array {
-        const unencoded = this.malloc(1);
+        const unencoded = this._mainModule.malloc(1);
 
         unencoded.size = this._base91.decode_end(unencoded.ptr);
-        const retVal = this.heapToUint8Array(unencoded);
-
-        this.free(unencoded);
+        const retVal = this._mainModule.heapToUint8Array(unencoded);
+        this._mainModule.free(unencoded);
         return retVal;
     }
 }

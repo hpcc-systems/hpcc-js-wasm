@@ -1,7 +1,6 @@
 // @ts-expect-error importing from a wasm file is resolved via a custom esbuild plugin
 import load, { reset } from "../../../build/packages/duckdb/duckdblib.wasm";
 import type { MainModule, DuckDB as CPPDuckDB } from "../types/duckdblib.js";
-import { MainModuleEx } from "@hpcc-js/wasm-util";
 
 let g_duckdb: Promise<DuckDB> | undefined;
 const textEncoder = new TextEncoder();
@@ -91,12 +90,13 @@ const textEncoder = new TextEncoder();
  * @see [DuckDB Documentation](https://duckdb.org/docs/)
  * @see [DuckDB GitHub](https://github.com/duckdb/duckdb)
  */
-export class DuckDB extends MainModuleEx<MainModule> {
+export class DuckDB {
 
+    private _module: MainModule;
     db: CPPDuckDB
 
     private constructor(_module: MainModule) {
-        super(_module);
+        this._module = _module;
         this.db = this._module.create()!;
         // Special home directory for web_user (needed for some extensions)
         const { FS_createPath } = this._module;
