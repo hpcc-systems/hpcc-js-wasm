@@ -2,6 +2,7 @@
 import load, { reset } from "../../../build/packages/zstd/zstdlib.wasm";
 import type { MainModule, zstd } from "../types/zstdlib.js";
 import { MainModuleEx } from "@hpcc-js/wasm-util";
+
 type ZstdExports = MainModule["zstd"];
 
 //  Ref:  http://facebook.github.io/zstd/zstd_manual.html
@@ -26,12 +27,14 @@ let g_zstd: Promise<Zstd> | undefined;
  * const decompressed_data = zstd.decompress(compressed_data);
  * ```
  */
-export class Zstd extends MainModuleEx<MainModule> {
+export class Zstd {
+
+    private _mainModule: MainModuleEx<MainModule>;
     private _zstdClass: ZstdExports;
     private _zstd: zstd;
 
     private constructor(_module: MainModule) {
-        super(_module);
+        this._mainModule = new MainModuleEx(_module);
         this._zstdClass = _module.zstd;
         this._zstd = new this._zstdClass();
     }
@@ -97,19 +100,19 @@ export class Zstd extends MainModuleEx<MainModule> {
      * :::
      */
     compress(data: Uint8Array, compressionLevel: number = this.defaultCLevel()): Uint8Array {
-        const uncompressed = this.dataToHeap(data);
+        const uncompressed = this._mainModule.dataToHeap(data);
 
         const compressedSize = this._zstdClass.compressBound(data.length);
-        const compressed = this.malloc(compressedSize);
+        const compressed = this._mainModule.malloc(compressedSize);
         compressed.size = this._zstdClass.compress(compressed.ptr, compressedSize, uncompressed.ptr, uncompressed.size, compressionLevel);
         /* istanbul ignore if  */
         if (this._zstdClass.isError(compressed.size)) {
             console.error(this._zstdClass.getErrorName(compressed.size));
         }
-        const retVal = this.heapToUint8Array(compressed);
+        const retVal = this._mainModule.heapToUint8Array(compressed);
 
-        this.free(compressed);
-        this.free(uncompressed);
+        this._mainModule.free(compressed);
+        this._mainModule.free(uncompressed);
         return retVal;
     }
 
@@ -120,7 +123,7 @@ export class Zstd extends MainModuleEx<MainModule> {
      * @returns Compressed chunk data
      */
     compressChunk(data: Uint8Array): Uint8Array {
-        const uncompressed = this.dataToHeap(data);
+        const uncompressed = this._mainModule.dataToHeap(data);
         // For streaming compression, we need enough space for:
         // 1. The compressed data (compressBound gives worst case)
         // 2. Additional overhead for frame headers and internal buffering
@@ -128,22 +131,22 @@ export class Zstd extends MainModuleEx<MainModule> {
         const boundSize = this._zstdClass.compressBound(data.length);
         const streamOutSize = this._zstdClass.CStreamOutSize();
         const compressedSize = boundSize + streamOutSize;
-        const compressed = this.malloc(compressedSize);
+        const compressed = this._mainModule.malloc(compressedSize);
 
         compressed.size = this._zstd.compressChunk(compressed.ptr, compressedSize, uncompressed.ptr, uncompressed.size);
 
         // Check for errors before trying to use the size
         if (this._zstdClass.isError(compressed.size)) {
             const errorName = this._zstdClass.getErrorName(compressed.size);
-            this.free(compressed);
-            this.free(uncompressed);
+            this._mainModule.free(compressed);
+            this._mainModule.free(uncompressed);
             throw new Error(`compressChunk failed: ${errorName} (data.length=${data.length}, compressedSize=${compressedSize})`);
         }
 
-        const retVal = this.heapToUint8Array(compressed);
+        const retVal = this._mainModule.heapToUint8Array(compressed);
 
-        this.free(compressed);
-        this.free(uncompressed);
+        this._mainModule.free(compressed);
+        this._mainModule.free(uncompressed);
         return retVal;
     }
 
@@ -153,20 +156,20 @@ export class Zstd extends MainModuleEx<MainModule> {
      */
     compressEnd(): Uint8Array {
         const compressedSize = this._zstdClass.CStreamOutSize(); // Recommended buffer size for output
-        const compressed = this.malloc(compressedSize);
+        const compressed = this._mainModule.malloc(compressedSize);
 
         compressed.size = this._zstd.compressEnd(compressed.ptr, compressedSize);
 
         // Check for errors before trying to use the size
         if (this._zstdClass.isError(compressed.size)) {
             const errorName = this._zstdClass.getErrorName(compressed.size);
-            this.free(compressed);
+            this._mainModule.free(compressed);
             throw new Error(`compressEnd failed: ${errorName} (compressedSize=${compressedSize})`);
         }
 
-        const retVal = this.heapToUint8Array(compressed);
+        const retVal = this._mainModule.heapToUint8Array(compressed);
 
-        this.free(compressed);
+        this._mainModule.free(compressed);
         return retVal;
     }
 
@@ -175,7 +178,7 @@ export class Zstd extends MainModuleEx<MainModule> {
      * @returns Uncompressed data.
      */
     decompress(compressedData: Uint8Array): Uint8Array {
-        const compressed = this.dataToHeap(compressedData);
+        const compressed = this._mainModule.dataToHeap(compressedData);
         let uncompressedSize = this._zstdClass.getFrameContentSize(compressed.ptr, compressed.size);
 
         // Check if size is unknown (happens with streaming compression)
@@ -186,7 +189,7 @@ export class Zstd extends MainModuleEx<MainModule> {
         /* istanbul ignore if  */
         if (this._zstdClass.isError(uncompressedSize)) {
             const errorName = this._zstdClass.getErrorName(uncompressedSize);
-            this.free(compressed);
+            this._mainModule.free(compressed);
             throw new Error(`Failed to get frame content size: ${errorName}`);
         }
 
@@ -198,20 +201,20 @@ export class Zstd extends MainModuleEx<MainModule> {
             uncompressedSize = Math.max(compressed.size * 20, 1024 * 1024); // At least 1MB or 20x compressed
         }
 
-        const uncompressed = this.malloc(uncompressedSize);
+        const uncompressed = this._mainModule.malloc(uncompressedSize);
 
         uncompressed.size = this._zstdClass.decompress(uncompressed.ptr, uncompressedSize, compressed.ptr, compressed.size);
         /* istanbul ignore if  */
         if (this._zstdClass.isError(uncompressed.size)) {
             const errorName = this._zstdClass.getErrorName(uncompressed.size);
-            this.free(uncompressed);
-            this.free(compressed);
+            this._mainModule.free(uncompressed);
+            this._mainModule.free(compressed);
             throw new Error(`Decompression failed: ${errorName}`);
         }
-        const retVal = this.heapToUint8Array(uncompressed);
+        const retVal = this._mainModule.heapToUint8Array(uncompressed);
 
-        this.free(uncompressed);
-        this.free(compressed);
+        this._mainModule.free(uncompressed);
+        this._mainModule.free(compressed);
         return retVal;
     }
 
@@ -223,14 +226,14 @@ export class Zstd extends MainModuleEx<MainModule> {
      * @returns Decompressed chunk data
      */
     decompressChunk(compressedData: Uint8Array, outputSize: number): Uint8Array {
-        const compressed = this.dataToHeap(compressedData);
-        const uncompressed = this.malloc(outputSize);
+        const compressed = this._mainModule.dataToHeap(compressedData);
+        const uncompressed = this._mainModule.malloc(outputSize);
 
         uncompressed.size = this._zstd.decompressChunk(uncompressed.ptr, outputSize, compressed.ptr, compressed.size);
-        const retVal = this.heapToUint8Array(uncompressed);
+        const retVal = this._mainModule.heapToUint8Array(uncompressed);
 
-        this.free(uncompressed);
-        this.free(compressed);
+        this._mainModule.free(uncompressed);
+        this._mainModule.free(compressed);
         return retVal;
     }
 

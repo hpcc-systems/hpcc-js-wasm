@@ -1,7 +1,6 @@
 // @ts-expect-error importing from a wasm file is resolved via a custom esbuild plugin
 import load, { reset } from "../../../build/packages/graphviz/graphvizlib.wasm";
 import type { MainModule } from "../types/graphvizlib.js";
-import { MainModuleEx } from "@hpcc-js/wasm-util";
 
 /**
  * Various graphic and data formats for end user, web, documents and other applications.  See [Output Formats](https://graphviz.gitlab.io/docs/outputs/) for more information.
@@ -94,10 +93,12 @@ let g_graphviz: Promise<Graphviz> | undefined;
  * * https://raw.githack.com/hpcc-systems/hpcc-js-wasm/trunk/index.html
  * * https://observablehq.com/@gordonsmith/graphviz
  */
-export class Graphviz extends MainModuleEx<MainModule> {
+export class Graphviz {
+
+    private _module: MainModule;
 
     private constructor(_module: MainModule) {
-        super(_module);
+        this._module = _module;
     }
 
     /**
