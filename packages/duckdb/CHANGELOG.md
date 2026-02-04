@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.16.1...wasm-duckdb-v1.17.0) (2026-02-04)
+
+
+### Features
+
+* refactor classes to remove inheritance from MainModuleEx and improve module handling ([4121eba](https://github.com/hpcc-systems/hpcc-js-wasm/commit/4121eba4ba05e904b11d3888a817648f8d2f1c39)), closes [#365](https://github.com/hpcc-systems/hpcc-js-wasm/issues/365)
+
 ## [1.16.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.16.0...wasm-duckdb-v1.16.1) (2026-01-27)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.21.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.20.1...wasm-graphviz-v1.21.0) (2026-02-04)
+
+
+### Features
+
+* refactor classes to remove inheritance from MainModuleEx and improve module handling ([4121eba](https://github.com/hpcc-systems/hpcc-js-wasm/commit/4121eba4ba05e904b11d3888a817648f8d2f1c39)), closes [#365](https://github.com/hpcc-systems/hpcc-js-wasm/issues/365)
+
 ## [1.20.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.20.0...wasm-graphviz-v1.20.1) (2026-01-27)
 
 
