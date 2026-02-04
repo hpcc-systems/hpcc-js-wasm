@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.33.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.32.3...wasm-v2.33.0) (2026-02-04)
+
+
+### Features
+
+* refactor classes to remove inheritance from MainModuleEx and improve module handling ([4121eba](https://github.com/hpcc-systems/hpcc-js-wasm/commit/4121eba4ba05e904b11d3888a817648f8d2f1c39)), closes [#365](https://github.com/hpcc-systems/hpcc-js-wasm/issues/365)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.12.1 to ^1.13.0
+    * @hpcc-js/wasm-duckdb bumped from ^1.16.1 to ^1.17.0
+    * @hpcc-js/wasm-expat bumped from ^1.12.1 to ^1.13.0
+    * @hpcc-js/wasm-graphviz bumped from ^1.20.1 to ^1.21.0
+    * @hpcc-js/wasm-graphviz-cli bumped from ^1.8.5 to ^1.8.6
+    * @hpcc-js/wasm-zstd bumped from ^1.11.1 to ^1.12.0
+
 ## [2.32.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.32.2...wasm-v2.32.3) (2026-01-27)
 
 
