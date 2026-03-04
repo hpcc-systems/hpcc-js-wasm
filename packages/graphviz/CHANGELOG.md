@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.21.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.21.0...wasm-graphviz-v1.21.1) (2026-03-04)
+
+
+### Bug Fixes
+
+* update branch references from trunk to main in workflow and configuration files ([fd31958](https://github.com/hpcc-systems/hpcc-js-wasm/commit/fd31958509148ac874bb7815f7e7fc6d1c95c572))
+* update dependencies and versions across packages ([a71d883](https://github.com/hpcc-systems/hpcc-js-wasm/commit/a71d883f35f116dfc5fc872c709980e97853f815))
+* update graphviz version to 14.1.3 in README, tests, and vcpkg files ([70fdabc](https://github.com/hpcc-systems/hpcc-js-wasm/commit/70fdabc09be1ffa2a131264c6faf72e6b4b5b5c8))
+
 ## [1.21.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.20.1...wasm-graphviz-v1.21.0) (2026-02-04)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-base91-v1.13.0...wasm-base91-v1.13.1) (2026-03-04)
+
+
+### Bug Fixes
+
+* update dependencies and versions across packages ([a71d883](https://github.com/hpcc-systems/hpcc-js-wasm/commit/a71d883f35f116dfc5fc872c709980e97853f815))
+
 ## [1.13.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-base91-v1.12.1...wasm-base91-v1.13.0) (2026-02-04)
 
 
