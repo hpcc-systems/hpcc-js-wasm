@@ -2,7 +2,7 @@
 
 # List of current version can be found in https://github.com/microsoft/vcpkg/releases  ---
 # UPDATE README.md
-VCPKG_BUILD_TOOLS_VERSION=2026.01.16
+VCPKG_BUILD_TOOLS_VERSION=2026.02.27
 
 if [ ! -d "./vcpkg" ] 
 then

@@ -52,7 +52,7 @@ describe("expat", function () {
         let expat = await Expat.load();
         let v = await expat.version();
         expect(v).to.be.a.string;
-        expect(v).to.equal("expat_2.7.3");  //  Update README if this changes
+        expect(v).to.equal("expat_2.7.4");  //  Update README if this changes
         console.log("expat version: " + v);
         Expat.unload();
 
