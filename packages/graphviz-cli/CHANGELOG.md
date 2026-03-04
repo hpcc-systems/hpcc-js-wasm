@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.8.7](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-cli-v1.8.6...wasm-graphviz-cli-v1.8.7) (2026-03-04)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @hpcc-js/wasm-graphviz bumped from ^1.21.0 to ^1.21.1
+
 ## [1.8.6](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-cli-v1.8.5...wasm-graphviz-cli-v1.8.6) (2026-02-04)
 
 
