@@ -90,7 +90,7 @@ let g_graphviz: Promise<Graphviz> | undefined;
  * ```
  * 
  * ### Online Demos
- * * https://raw.githack.com/hpcc-systems/hpcc-js-wasm/trunk/index.html
+ * * https://raw.githack.com/hpcc-systems/hpcc-js-wasm/main/index.html
  * * https://observablehq.com/@gordonsmith/graphviz
  */
 export class Graphviz {

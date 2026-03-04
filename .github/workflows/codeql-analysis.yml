@@ -13,10 +13,10 @@ name: "CodeQL (codeql-analysis.yml)"
 
 on:
   push:
-    branches: [trunk]
+    branches: [main]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [trunk]
+    branches: [main]
   schedule:
     - cron: "32 5 * * 4"
 

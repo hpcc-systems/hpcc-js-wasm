@@ -61,7 +61,7 @@
     "build-dev": "lerna run build-dev",
     "build-watch": "lerna run bundle-watch",
     "build": "run-s build-cpp build-ws",
-    "git-push": "git push --follow-tags upstream trunk",
+    "git-push": "git push --follow-tags upstream main",
     "serve-docs": "vitepress serve .",
     "serve": "npx http-server",
     "lint-skypack": "lerna run lint-skypack",

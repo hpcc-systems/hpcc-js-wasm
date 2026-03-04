@@ -11,9 +11,9 @@ export default defineConfig({
     themeConfig: {
         repo: "hpcc-systems/hpcc-js-wasm",
         docsDir: ".",
-        docsBranch: "trunk",
+        docsBranch: "main",
         editLink: {
-            pattern: 'https://github.com/hpcc-systems/hpcc-js-wasm/edit/trunk/docs/:path',
+            pattern: 'https://github.com/hpcc-systems/hpcc-js-wasm/edit/main/docs/:path',
             text: 'Edit this page on GitHub'
         },
         lastUpdated: "Last Updated",
@@ -21,7 +21,7 @@ export default defineConfig({
         nav: [
             { text: 'Guide', link: './docs/getting-started' },
             { text: 'GitHub', link: 'https://github.com/hpcc-systems/hpcc-js-wasm' },
-            { text: 'Changelog', link: 'https://github.com/hpcc-systems/hpcc-js-wasm/blob/trunk/CHANGELOG.md' },
+            { text: 'Changelog', link: 'https://github.com/hpcc-systems/hpcc-js-wasm/blob/main/CHANGELOG.md' },
         ],
         sidebar: [
             {
