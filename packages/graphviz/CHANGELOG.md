@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.21.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.21.1...wasm-graphviz-v1.21.2) (2026-03-16)
+
+
+### Bug Fixes
+
+* update dependencies across multiple packages ([8d1659d](https://github.com/hpcc-systems/hpcc-js-wasm/commit/8d1659d30d4271666006956c262423822b241745))
+
 ## [1.21.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.21.0...wasm-graphviz-v1.21.1) (2026-03-04)
 
 
