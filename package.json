@@ -85,22 +85,21 @@
     "update-major": "npm run update-major-root && lerna run update-major"
   },
   "devDependencies": {
-    "@eslint/js": "9.39.3",
+    "@eslint/js": "9.39.4",
     "@types/emscripten": "1.41.5",
-    "@types/node": "22.19.13",
+    "@types/node": "22.19.15",
     "@types/yargs": "17.0.35",
-    "@typescript-eslint/parser": "8.56.1",
-    "@vitest/browser": "4.0.18",
-    "@vitest/browser-playwright": "4.0.18",
-    "@vitest/coverage-istanbul": "4.0.18",
-    "@vitest/coverage-v8": "4.0.18",
-    "assemblyscript": "0.28.9",
+    "@typescript-eslint/parser": "8.57.0",
+    "@vitest/browser-playwright": "4.1.0",
+    "@vitest/coverage-istanbul": "4.1.0",
+    "@vitest/coverage-v8": "4.1.0",
+    "assemblyscript": "0.28.10",
     "chokidar-cli": "3.0.0",
-    "esbuild": "0.27.3",
-    "eslint": "9.39.3",
+    "esbuild": "0.27.4",
+    "eslint": "9.39.4",
     "globals": "17.4.0",
-    "happy-dom": "20.8.3",
-    "lerna": "9.0.6",
+    "happy-dom": "20.8.4",
+    "lerna": "9.0.7",
     "npm-run-all": "4.1.5",
     "playwright": "1.58.2",
     "release-please": "17.3.0",
@@ -110,11 +109,15 @@
     "typedoc": "0.28.17",
     "typedoc-plugin-markdown": "4.10.0",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.56.1",
+    "typescript-eslint": "8.57.0",
     "vitepress": "1.6.4",
-    "vitest": "4.0.18"
+    "vitest": "4.1.0"
   },
-  "overrides": {},
+  "overrides": {
+    "vite": {
+      "esbuild": "0.27.4"
+    }
+  },
   "c8": {
     "exclude-after-remap": []
   },
