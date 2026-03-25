@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.17.2...wasm-duckdb-v1.17.3) (2026-03-25)
+
+
+### Bug Fixes
+
+* update dependencies and fix typos ([2d0ba5e](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2d0ba5e58ae6f6f6e378294601ad202e41da3bd6))
+
 ## [1.17.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.17.1...wasm-duckdb-v1.17.2) (2026-03-16)
 
 
