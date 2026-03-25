@@ -831,7 +831,7 @@ FROM duckdb_extensions();
             con.delete();
         });
 
-        it("exception handline", () => {
+        it("exception handling", () => {
             const con = duckdb.connect();
             try {
                 const json = con.queryToJSON("Great Big Error!");

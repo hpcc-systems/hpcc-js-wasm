@@ -225,9 +225,17 @@ export class DuckDB {
             void _err;
         }
 
-        const err: any = error;
+        const err = error as { name?: unknown; message?: unknown };
+        if (Array.isArray(err?.message)) {
+            const [type, message] = err.message;
+            return {
+                type: typeof type === "string" ? type : "Error",
+                message: typeof message === "string" ? message : String(error)
+            };
+        }
+
         return {
-            type: err?.name ?? "Error",
+            type: typeof err?.name === "string" ? err.name : "Error",
             message: typeof err?.message === "string" ? err.message : String(error)
         };
     }
@@ -364,4 +372,3 @@ export class DuckDB {
         this.registerFile(fileName, encoded);
     }
 }
-

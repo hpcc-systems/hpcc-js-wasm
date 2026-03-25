@@ -79,7 +79,7 @@
     "yargs": "18.0.0"
   },
   "devDependencies": {
-    "@hpcc-js/esbuild-plugins": "1.8.4",
+    "@hpcc-js/esbuild-plugins": "1.8.5",
     "@hpcc-js/wasm-base91": "^1.13.2",
     "@hpcc-js/wasm-duckdb": "^1.17.2",
     "@hpcc-js/wasm-expat": "^1.13.2",

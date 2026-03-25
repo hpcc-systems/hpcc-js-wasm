@@ -233,12 +233,12 @@ weak int sem_timedwait(sem_t *sem, const struct timespec *abs_timeout)
 //     return -EINTR; // we can't pause
 // }
 
-// weak int __syscall_madvise(intptr_t addr, size_t length, int advice)
-// {
-//     REPORT(madvise);
-//     // advice is welcome, but ignored
-//     return 0;
-// }
+weak int __syscall_madvise(intptr_t addr, size_t length, int advice)
+{
+    REPORT(madvise);
+    // advice is welcome, but ignored
+    return 0;
+}
 
 weak int __syscall_mlock(intptr_t addr, size_t len)
 {

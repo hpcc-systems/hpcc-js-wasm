@@ -1,0 +1,226 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -440,12 +440,7 @@
+         "Extension build linking statically with DuckDB. Required for building linux loadable extensions."
+         TRUE)
+ 
+-if(ZOS)
+-  set(EXTENSION_STATIC_BUILD TRUE)
+-endif()
+-
+ if(WIN32)
+-  set(EXTENSION_STATIC_BUILD TRUE)
+   add_definitions(-D_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
+ endif()
+ 
+diff --git a/DuckDBConfig.cmake.in b/DuckDBConfig.cmake.in
+--- a/DuckDBConfig.cmake.in
++++ b/DuckDBConfig.cmake.in
+@@ -9,8 +9,22 @@
+ 
+ include(CMakeFindDependencyMacro)
+ find_dependency(Threads)
+-if("icu" IN_LIST DuckDB_EXTENSIONS AND NOT @WITH_INTERNAL_ICU@)
+-    find_dependency(ICU COMPONENTS i18n uc data)
++if(NOT "@BUILD_SHARED_LIBS@")
++    if("icu" IN_LIST DuckDB_EXTENSIONS AND NOT "@WITH_INTERNAL_ICU@")
++        find_dependency(ICU COMPONENTS i18n uc data)
++    endif()
++    if("excel" IN_LIST DuckDB_EXTENSIONS)
++        find_dependency(EXPAT)
++        find_dependency(ZLIB)
++        find_dependency(minizip-ng CONFIG)
++    endif()
++    if("httpfs" IN_LIST DuckDB_EXTENSIONS)
++        find_dependency(CURL)
++        find_dependency(OpenSSL)
++        if(MINGW)
++            find_dependency(ZLIB)
++        endif()
++    endif()
+ endif()
+ 
+ # Compute paths
+@@ -21,7 +35,7 @@
+     include("${DuckDB_CMAKE_DIR}/DuckDBExports.cmake")
+ endif()
+ 
+-if(DuckDB_USE_STATIC_LIBS)
++if(NOT "@BUILD_SHARED_LIBS@")
+     set(DuckDB_LIBRARIES duckdb_static)
+ else()
+     set(DuckDB_LIBRARIES duckdb)
+diff --git a/extension/extension_build_tools.cmake b/extension/extension_build_tools.cmake
+--- a/extension/extension_build_tools.cmake
++++ b/extension/extension_build_tools.cmake
+@@ -96,6 +96,9 @@
+         message(STATUS "Extensions will be deployed to: ${LOCAL_EXTENSION_REPO_DIR}")
+     endif()
+ endif()
++if(TARGET duckdb_local_extension_repo)
++    set_target_properties(duckdb_local_extension_repo PROPERTIES EXCLUDE_FROM_ALL 1)
++endif()
+ 
+ function(build_loadable_extension_directory NAME ABI_TYPE OUTPUT_DIRECTORY EXTENSION_VERSION CAPI_VERSION PARAMETERS)
+     set(TARGET_NAME ${NAME}_loadable_extension)
+@@ -114,6 +117,8 @@
+ 
+     if(EMSCRIPTEN)
+         add_library(${TARGET_NAME} STATIC ${FILES})
++    elseif(WIN32)
++        add_library(${TARGET_NAME} MODULE ${FILES})
+     else()
+         add_library(${TARGET_NAME} SHARED ${FILES})
+     endif()
+diff --git a/extension/autocomplete/CMakeLists.txt b/extension/autocomplete/CMakeLists.txt
+--- a/extension/autocomplete/CMakeLists.txt
++++ b/extension/autocomplete/CMakeLists.txt
+@@ -16,6 +16,10 @@
+ build_loadable_extension(autocomplete ${PARAMETERS}
+                          ${AUTOCOMPLETE_EXTENSION_FILES})
+ 
++set_target_properties(autocomplete_loadable_extension PROPERTIES EXCLUDE_FROM_ALL 1)
++if(BUILD_SHARED_LIBS)
++  return()
++endif()
+ install(
+   TARGETS autocomplete_extension
+   EXPORT "${DUCKDB_EXPORT_SET}"
+diff --git a/extension/core_functions/CMakeLists.txt b/extension/core_functions/CMakeLists.txt
+--- a/extension/core_functions/CMakeLists.txt
++++ b/extension/core_functions/CMakeLists.txt
+@@ -14,6 +14,10 @@
+ build_loadable_extension(core_functions ${PARAMETERS} ${CORE_FUNCTION_FILES})
+ target_link_libraries(core_functions_loadable_extension duckdb_skiplistlib)
+ 
++set_target_properties(core_functions_loadable_extension PROPERTIES EXCLUDE_FROM_ALL 1)
++if(BUILD_SHARED_LIBS)
++  return()
++endif()
+ install(
+   TARGETS core_functions_extension
+   EXPORT "${DUCKDB_EXPORT_SET}"
+diff --git a/extension/icu/CMakeLists.txt b/extension/icu/CMakeLists.txt
+--- a/extension/icu/CMakeLists.txt
++++ b/extension/icu/CMakeLists.txt
+@@ -42,6 +42,10 @@
+ if(NOT WITH_INTERNAL_ICU)
+   target_link_libraries(icu_loadable_extension ICU::i18n ICU::uc ICU::data)
+ endif()
++set_target_properties(icu_loadable_extension PROPERTIES EXCLUDE_FROM_ALL 1)
++if(BUILD_SHARED_LIBS)
++  return()
++endif()
+ install(
+   TARGETS icu_extension
+   EXPORT "${DUCKDB_EXPORT_SET}"
+diff --git a/extension/jemalloc/CMakeLists.txt b/extension/jemalloc/CMakeLists.txt
+--- a/extension/jemalloc/CMakeLists.txt
++++ b/extension/jemalloc/CMakeLists.txt
+@@ -12,6 +12,9 @@
+ build_static_extension(jemalloc ${JEMALLOC_EXTENSION_FILES})
+ # we do not do build_loadable_extension here because jemalloc is static-only
+ 
++if(BUILD_SHARED_LIBS)
++  return()
++endif()
+ install(
+   TARGETS jemalloc_extension
+   EXPORT "${DUCKDB_EXPORT_SET}"
+diff --git a/extension/json/CMakeLists.txt b/extension/json/CMakeLists.txt
+--- a/extension/json/CMakeLists.txt
++++ b/extension/json/CMakeLists.txt
+@@ -41,6 +41,10 @@
+ build_loadable_extension(json ${PARAMETERS} ${JSON_EXTENSION_FILES})
+ target_link_libraries(json_loadable_extension duckdb_yyjson)
+ 
++set_target_properties(json_loadable_extension PROPERTIES EXCLUDE_FROM_ALL 1)
++if(BUILD_SHARED_LIBS)
++  return()
++endif()
+ install(
+   TARGETS json_extension
+   EXPORT "${DUCKDB_EXPORT_SET}"
+diff --git a/extension/parquet/CMakeLists.txt b/extension/parquet/CMakeLists.txt
+--- a/extension/parquet/CMakeLists.txt
++++ b/extension/parquet/CMakeLists.txt
+@@ -86,6 +86,10 @@
+ build_loadable_extension(parquet ${PARAMETERS} ${PARQUET_EXTENSION_FILES})
+ target_link_libraries(parquet_loadable_extension duckdb_mbedtls duckdb_zstd)
+ 
++set_target_properties(parquet_loadable_extension PROPERTIES EXCLUDE_FROM_ALL 1)
++if(BUILD_SHARED_LIBS)
++  return()
++endif()
+ install(
+   TARGETS parquet_extension
+   EXPORT "${DUCKDB_EXPORT_SET}"
+diff --git a/extension/tpcds/CMakeLists.txt b/extension/tpcds/CMakeLists.txt
+--- a/extension/tpcds/CMakeLists.txt
++++ b/extension/tpcds/CMakeLists.txt
+@@ -11,6 +11,10 @@
+ build_loadable_extension(tpcds ${PARAMETERS} tpcds_extension.cpp
+                          ${DSDGEN_OBJECT_FILES})
+ 
++set_target_properties(tpcds_loadable_extension PROPERTIES EXCLUDE_FROM_ALL 1)
++if(BUILD_SHARED_LIBS)
++  return()
++endif()
+ install(
+   TARGETS tpcds_extension
+   EXPORT "${DUCKDB_EXPORT_SET}"
+diff --git a/extension/tpch/CMakeLists.txt b/extension/tpch/CMakeLists.txt
+--- a/extension/tpch/CMakeLists.txt
++++ b/extension/tpch/CMakeLists.txt
+@@ -11,6 +11,10 @@
+ build_loadable_extension(tpch ${PARAMETERS} tpch_extension.cpp
+                          ${DBGEN_OBJECT_FILES})
+ 
++set_target_properties(tpch_loadable_extension PROPERTIES EXCLUDE_FROM_ALL 1)
++if(BUILD_SHARED_LIBS)
++  return()
++endif()
+ install(
+   TARGETS tpch_extension
+   EXPORT "${DUCKDB_EXPORT_SET}"
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -91,6 +91,7 @@
+ 
+ add_library(duckdb_static STATIC ${ALL_OBJECT_FILES} ${LINK_OBJECTS})
+ target_link_libraries(duckdb_static PUBLIC ${DUCKDB_SYSTEM_LIBS})
++link_extension_libraries(duckdb_static PUBLIC)
+ link_threads(duckdb_static PUBLIC)
+ 
+ #
+@@ -143,8 +144,15 @@
+               "${PROJECT_SOURCE_DIR}/src/include/duckdb.h"
+         DESTINATION "${INSTALL_INCLUDE_DIR}")
+ 
++if(BUILD_SHARED_LIBS)
++  set(INSTALL_TARGET duckdb)
++  set_target_properties(duckdb_static PROPERTIES EXCLUDE_FROM_ALL 1)
++else()
++  set(INSTALL_TARGET duckdb_static)
++  set_target_properties(duckdb PROPERTIES EXCLUDE_FROM_ALL 1)
++endif()
+ install(
+-  TARGETS duckdb duckdb_static
++  TARGETS ${INSTALL_TARGET}
+   EXPORT "${DUCKDB_EXPORT_SET}"
+   LIBRARY DESTINATION "${INSTALL_LIB_DIR}"
+   ARCHIVE DESTINATION "${INSTALL_LIB_DIR}"
+diff --git a/src/parallel/task_scheduler.cpp b/src/parallel/task_scheduler.cpp
+--- a/src/parallel/task_scheduler.cpp
++++ b/src/parallel/task_scheduler.cpp
+@@ -461,7 +461,7 @@
+ }
+ 
+ idx_t TaskScheduler::GetEstimatedCPUId() {
+-#if defined(EMSCRIPTEN)
++#if defined(EMSCRIPTEN) || defined(__EMSCRIPTEN__)
+ 	// FIXME: Wasm + multithreads can likely be implemented as
+ 	//   return return (idx_t)std::hash<std::thread::id>()(std::this_thread::get_id());
+ 	return 0;
