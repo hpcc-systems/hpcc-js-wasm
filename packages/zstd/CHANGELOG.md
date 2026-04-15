@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.4](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.12.3...wasm-zstd-v1.12.4) (2026-04-15)
+
+
+### Bug Fixes
+
+* update dependencies and devDependencies across multiple packages ([9a33974](https://github.com/hpcc-systems/hpcc-js-wasm/commit/9a339746e16bf5f80dc9cfa01982a04323d3258c))
+
 ## [1.12.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.12.2...wasm-zstd-v1.12.3) (2026-03-25)
 
 
