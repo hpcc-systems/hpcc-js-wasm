@@ -212,15 +212,3 @@ diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
    EXPORT "${DUCKDB_EXPORT_SET}"
    LIBRARY DESTINATION "${INSTALL_LIB_DIR}"
    ARCHIVE DESTINATION "${INSTALL_LIB_DIR}"
-diff --git a/src/parallel/task_scheduler.cpp b/src/parallel/task_scheduler.cpp
---- a/src/parallel/task_scheduler.cpp
-+++ b/src/parallel/task_scheduler.cpp
-@@ -461,7 +461,7 @@
- }
- 
- idx_t TaskScheduler::GetEstimatedCPUId() {
--#if defined(EMSCRIPTEN)
-+#if defined(EMSCRIPTEN) || defined(__EMSCRIPTEN__)
- 	// FIXME: Wasm + multithreads can likely be implemented as
- 	//   return return (idx_t)std::hash<std::thread::id>()(std::this_thread::get_id());
- 	return 0;

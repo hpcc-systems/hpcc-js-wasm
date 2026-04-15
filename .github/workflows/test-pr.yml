@@ -111,9 +111,15 @@ jobs:
           npm run test-bundlers
 
       - name: Calculate Coverage
-        if: ${{ matrix.os == 'ubuntu-24.04' && matrix.node == 20 }}
+        if: ${{ matrix.os == 'ubuntu-24.04' && matrix.node == 22 && (github.event_name == 'pull_request' || github.ref == 'refs/heads/main') }}
         run: |
-          npm run coverage
+          npm run coverage -- --coverage.reporter=lcov --coverage.reporter=html --coverage.reporter=json --coverage.reporter=clover
+
+      - name: Update Coveralls
+        if: ${{ matrix.os == 'ubuntu-24.04' && matrix.node == 22 && (github.event_name == 'pull_request' || github.ref == 'refs/heads/main') }}
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload error logs
         if: ${{ failure() || cancelled() }}

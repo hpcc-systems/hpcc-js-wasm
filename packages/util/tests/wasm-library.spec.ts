@@ -72,8 +72,56 @@ describe("MainModuleEx", () => {
         mainModuleEx.free(heapU8);
     });
 
+    it("heapToUint8Array returns a copy", () => {
+        const input = Uint8Array.from([4, 5, 6]);
+        const heapU8 = mainModuleEx.dataToHeap(input);
+
+        const copy = mainModuleEx.heapToUint8Array(heapU8);
+        copy[0] = 99;
+
+        expect(Array.from(copy)).toEqual([99, 5, 6]);
+        expect(Array.from(mainModuleEx.heapView(heapU8))).toEqual([4, 5, 6]);
+
+        mainModuleEx.free(heapU8);
+    });
+
     it("creates, reads, and unlinks files", () => {
         expect(mainModuleEx.hasFilesystem()).toBe(false);
+    });
+
+    it("detects filesystem support when FS helpers exist", () => {
+        const fakeModule = {
+            FS_createPath: vi.fn(),
+            FS_createDataFile: vi.fn(),
+            FS_preloadFile: vi.fn(),
+            FS_unlink: vi.fn(),
+        } as unknown as MainModule;
+
+        const fakeModuleEx = new MainModuleEx(fakeModule);
+
+        expect(fakeModuleEx.hasFilesystem()).toBe(true);
+    });
+
+    it("proxies filesystem helper calls", async () => {
+        const fakeModule = {
+            FS_createPath: vi.fn().mockReturnValue("created-path"),
+            FS_createDataFile: vi.fn().mockReturnValue("created-file"),
+            FS_preloadFile: vi.fn().mockResolvedValue("preloaded-file"),
+            FS_unlink: vi.fn().mockReturnValue("unlinked-file"),
+        } as unknown as MainModule;
+
+        const fakeModuleEx = new MainModuleEx(fakeModule);
+        const data = Uint8Array.from([1, 2, 3]);
+
+        expect(fakeModuleEx.createPath("tmp", false, true)).toBe("created-path");
+        expect(fakeModuleEx.createDataFile("tmp.bin", data, true, false, false)).toBe("created-file");
+        await expect(fakeModuleEx.preloadFile("tmp.bin", data, false, true, true, false, true)).resolves.toBe("preloaded-file");
+        expect(fakeModuleEx.unlink("tmp.bin")).toBe("unlinked-file");
+
+        expect((fakeModule as any).FS_createPath).toHaveBeenCalledWith("/", "tmp", false, true);
+        expect((fakeModule as any).FS_createDataFile).toHaveBeenCalledWith("/", "tmp.bin", data, true, false, false);
+        expect((fakeModule as any).FS_preloadFile).toHaveBeenCalledWith("/", "tmp.bin", data, false, true, true, false, true);
+        expect((fakeModule as any).FS_unlink).toHaveBeenCalledWith("tmp.bin");
     });
 
 });

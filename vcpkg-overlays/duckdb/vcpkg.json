@@ -1,8 +1,8 @@
 {
   "name": "duckdb",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "High-performance in-process analytical database system",
-  "homepage": "https://duckdb.org",
+  "homepage": "https://github.com/duckdb/duckdb/releases",
   "license": null,
   "supports": "!uwp",
   "dependencies": [

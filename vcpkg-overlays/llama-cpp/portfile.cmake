@@ -2,7 +2,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO ggml-org/llama.cpp
     REF b${VERSION}
-    SHA512 879490cdeeef9397b9843730399bd55c7ef57de7e421cfcbaa15bd95416e028e4a0864f237218895a8a1244b7a4dbef9eacda49aa9697628e29774d0fc90d04b
+    SHA512 a2b938fe05d40f4c9413d91e26af27dadff4272bcd556cf51e7cf1c559283d28a026fd355ddba43b774563c1e3986a9a6be0ae84c2be61391b39e3dc97c232c1
     HEAD_REF master
     PATCHES
         cmake-config.diff
