@@ -8,6 +8,15 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.7.4](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.7.3...wasm-root-v4.7.4) (2026-04-29)
+
+
+### Bug Fixes
+
+* add touch script and marker files for release management ([4bbd968](https://github.com/hpcc-systems/hpcc-js-wasm/commit/4bbd9681432c7bd1892ca70e04b80fdc6bda73b7))
+* disable dynamic execution (eval, new function) ([f22c7ec](https://github.com/hpcc-systems/hpcc-js-wasm/commit/f22c7eca47afe9a0b01d3f763648a46475c595c6)), closes [#382](https://github.com/hpcc-systems/hpcc-js-wasm/issues/382)
+* remove unused wasm package dependencies from package-lock.json ([89d8b65](https://github.com/hpcc-systems/hpcc-js-wasm/commit/89d8b65308d91ef66b85ce090d67a5a156646f25))
+
 ## [4.7.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.7.2...wasm-root-v4.7.3) (2026-03-25)
 
 

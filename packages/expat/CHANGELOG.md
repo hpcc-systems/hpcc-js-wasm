@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.4](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.13.3...wasm-expat-v1.13.4) (2026-04-29)
+
+
+### Bug Fixes
+
+* add touch script and marker files for release management ([4bbd968](https://github.com/hpcc-systems/hpcc-js-wasm/commit/4bbd9681432c7bd1892ca70e04b80fdc6bda73b7))
+
 ## [1.13.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.13.2...wasm-expat-v1.13.3) (2026-03-25)
 
 
