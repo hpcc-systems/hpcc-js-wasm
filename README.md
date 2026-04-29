@@ -14,7 +14,7 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 - ...more to follow...
 
 Built with:
-- [emsdk](https://github.com/emscripten-core/emsdk) - v5.0.4
+- [emsdk](https://github.com/emscripten-core/emsdk) - v5.0.5
 - [vcpkg](https://github.com/microsoft/vcpkg) - 2026.03.18
 
 ## Homepage and Documents

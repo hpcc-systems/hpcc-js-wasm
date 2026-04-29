@@ -6,7 +6,7 @@ VCPKG_BUILD_TOOLS_VERSION=2026.03.18
 
 if [ ! -d "./vcpkg" ] 
 then
-    git clone https://github.com/microsoft/vcpkg.git
+    git clone --branch "$VCPKG_BUILD_TOOLS_VERSION" --depth 1 https://github.com/microsoft/vcpkg.git
 fi
 cd ./vcpkg
 git checkout $VCPKG_BUILD_TOOLS_VERSION
