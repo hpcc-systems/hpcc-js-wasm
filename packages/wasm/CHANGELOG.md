@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.33.4](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.33.3...wasm-v2.33.4) (2026-04-29)
+
+
+### Bug Fixes
+
+* add touch script and marker files for release management ([4bbd968](https://github.com/hpcc-systems/hpcc-js-wasm/commit/4bbd9681432c7bd1892ca70e04b80fdc6bda73b7))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.13.3 to ^1.13.4
+    * @hpcc-js/wasm-duckdb bumped from ^1.17.3 to ^1.17.4
+    * @hpcc-js/wasm-expat bumped from ^1.13.3 to ^1.13.4
+    * @hpcc-js/wasm-graphviz bumped from ^1.21.3 to ^1.21.4
+    * @hpcc-js/wasm-graphviz-cli bumped from ^1.8.9 to ^1.8.10
+    * @hpcc-js/wasm-zstd bumped from ^1.12.3 to ^1.12.4
+
 ## [2.33.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.33.2...wasm-v2.33.3) (2026-03-25)
 
 

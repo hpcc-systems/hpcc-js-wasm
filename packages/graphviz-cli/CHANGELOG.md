@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.8.10](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-cli-v1.8.9...wasm-graphviz-cli-v1.8.10) (2026-04-29)
+
+
+### Bug Fixes
+
+* add touch script and marker files for release management ([4bbd968](https://github.com/hpcc-systems/hpcc-js-wasm/commit/4bbd9681432c7bd1892ca70e04b80fdc6bda73b7))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @hpcc-js/wasm-graphviz bumped from ^1.21.3 to ^1.21.4
+
 ## [1.8.9](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-cli-v1.8.8...wasm-graphviz-cli-v1.8.9) (2026-03-25)
 
 
