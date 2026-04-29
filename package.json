@@ -61,6 +61,7 @@
     "build-dev": "lerna run build-dev",
     "build-watch": "lerna run bundle-watch",
     "build": "run-s build-cpp build-ws",
+    "touch": "node ./scripts/touch-packages.mjs",
     "git-push": "git push --follow-tags upstream main",
     "serve-docs": "vitepress serve .",
     "serve": "npx http-server",
