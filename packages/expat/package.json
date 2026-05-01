@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm-expat",
-  "version": "1.13.4",
+  "version": "1.13.5",
   "description": "hpcc-js - WASM expat",
   "type": "module",
   "exports": {
