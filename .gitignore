@@ -30,6 +30,8 @@ node_modules/
 types/
 /wasi-sdk*
 /wit-bindgen
+/vcpkg
+/emsdk
 
 __screenshots__/
 .coveralls.yml
