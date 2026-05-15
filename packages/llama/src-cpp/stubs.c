@@ -13,9 +13,9 @@
 
 #include <errno.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <syscall_arch.h>
 #include <string.h>
 #include <sys/resource.h>
 #include <sys/stat.h>

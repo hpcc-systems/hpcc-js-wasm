@@ -98,8 +98,9 @@ namespace embedding
             }
             else if (arg == "--log-disable")
             {
-                // Disable llama.cpp/common logging so stdout contains only JSON output.
-                common_log_pause(common_log_main());
+                // Prevent any logger initialization on Emscripten by suppressing all log levels.
+                params.verbosity = -1;
+                common_log_set_verbosity_thold(-1);
             }
             else if (arg == "-h" || arg == "--help")
             {
@@ -161,17 +162,31 @@ namespace embedding
         if (llama_model_has_encoder(model) && !llama_model_has_decoder(model))
         {
             // encoder-only model
-            if (llama_encode(ctx, batch) < 0)
+            try
             {
-                fprintf(stderr, "%s : failed to encode\n", __func__);
+                if (llama_encode(ctx, batch) < 0)
+                {
+                    fprintf(stderr, "%s : failed to encode\n", __func__);
+                }
+            }
+            catch (const std::exception &e)
+            {
+                throw std::runtime_error(std::string("batch_decode/llama_encode: ") + e.what());
             }
         }
         else if (!llama_model_has_encoder(model) && llama_model_has_decoder(model))
         {
             // decoder-only model
-            if (llama_decode(ctx, batch) < 0)
+            try
             {
-                fprintf(stderr, "%s : failed to decode\n", __func__);
+                if (llama_decode(ctx, batch) < 0)
+                {
+                    fprintf(stderr, "%s : failed to decode\n", __func__);
+                }
+            }
+            catch (const std::exception &e)
+            {
+                throw std::runtime_error(std::string("batch_decode/llama_decode: ") + e.what());
             }
         }
 
@@ -209,6 +224,11 @@ namespace embedding
     {
         common_params params;
 
+        auto rethrow_with_phase = [](const char *phase, const std::exception &e) -> void
+        {
+            throw std::runtime_error(std::string(phase) + ": " + e.what());
+        };
+
         if (!parse_args(argc, argv, params))
         {
             return 1;
@@ -237,14 +257,37 @@ namespace embedding
             params.embd_out = "array";
         }
 
-        llama_backend_init();
-        llama_numa_init(params.numa);
+        try
+        {
+            llama_backend_init();
+        }
+        catch (const std::exception &e)
+        {
+            rethrow_with_phase("llama_backend_init", e);
+        }
+
+        try
+        {
+            llama_numa_init(params.numa);
+        }
+        catch (const std::exception &e)
+        {
+            rethrow_with_phase("llama_numa_init", e);
+        }
 
         // load the model
-        auto init = common_init_from_params(params);
+        common_init_result_ptr init;
+        try
+        {
+            init = common_init_from_params(params);
+        }
+        catch (const std::exception &e)
+        {
+            rethrow_with_phase("common_init_from_params", e);
+        }
 
-        llama_model *model = init.model.get();
-        llama_context *ctx = init.context.get();
+        llama_model *model = init->model();
+        llama_context *ctx = init->context();
         if (model == NULL)
         {
             fprintf(stderr, "%s: error: unable to load model\n", __func__);
@@ -272,7 +315,15 @@ namespace embedding
         std::vector<std::vector<int32_t>> inputs;
         for (const auto &prompt : prompts)
         {
-            auto inp = common_tokenize(ctx, prompt, true, false);
+            std::vector<int32_t> inp;
+            try
+            {
+                inp = common_tokenize(ctx, prompt, true, false);
+            }
+            catch (const std::exception &e)
+            {
+                rethrow_with_phase("common_tokenize", e);
+            }
             if (inp.size() > n_batch)
             {
                 fprintf(stderr, "%s: error: number of tokens in input line (%lld) exceeds batch size (%lld), increase batch size and re-run\n",
