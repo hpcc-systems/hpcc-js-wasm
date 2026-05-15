@@ -17,9 +17,6 @@ set(EM_LINK_FLAGS
     "-sFILESYSTEM=1"
     "-sFORCE_FILESYSTEM=1"
     "-sWASMFS=1"
-    # "-sALLOW_UNIMPLEMENTED_SYSCALLS=1"
-    #  "-pthread" 
-    #  "-sPROXY_TO_PTHREAD"
 
     "-fwasm-exceptions"
     "-sEXCEPTION_STACK_TRACES=1"
@@ -42,7 +39,6 @@ find_library(LLAMA_COMMON_LIBRARY llama-common
 
 add_executable(llamalib
     src-cpp/embedding.cpp
-    src-cpp/log_wasm.cpp
     src-cpp/util.cpp
     src-cpp/stubs.c
 )
@@ -52,7 +48,6 @@ set_target_properties(llamalib PROPERTIES LINK_FLAGS "${LINK_FLAGS}")
 
 target_link_libraries(llamalib
     PRIVATE llama
-    PRIVATE ggml::ggml-cpu
     PRIVATE ${LLAMA_COMMON_LIBRARY}
 )
 

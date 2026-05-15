@@ -50,7 +50,7 @@ describe("graphviz", function () {
         let graphviz = await Graphviz.load();
         let v = graphviz.version();
         expect(v).to.be.a.string;
-        expect(v).to.equal("14.1.4");       //  Update README.md with the new version!!!
+        expect(v).to.equal("14.1.5");       //  Update README.md with the new version!!!
         console.log("graphviz version: " + v);
         Graphviz.unload();
 

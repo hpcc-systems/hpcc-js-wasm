@@ -1,11 +1,10 @@
 {
   "name": "llama-cpp",
-  "version": "7146",
+  "version": "9159",
   "description": "LLM inference in C/C++",
   "homepage": "https://github.com/ggml-org/llama.cpp",
   "license": "MIT",
   "dependencies": [
-    "ggml",
     {
       "name": "vcpkg-cmake",
       "host": true
