@@ -8,6 +8,14 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.7.6](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.7.5...wasm-root-v4.7.6) (2026-05-17)
+
+
+### Bug Fixes
+
+* add vcpkg and emsdk to .gitignore ([0b4c8a6](https://github.com/hpcc-systems/hpcc-js-wasm/commit/0b4c8a65b3765e2b0cf71b9e6e1fb0965a143779))
+* update @types/node and eslint versions; add test for repeated layout with self-loop ([10a57a5](https://github.com/hpcc-systems/hpcc-js-wasm/commit/10a57a5e8edfdd54b757d9df92ad87f464c8ef69))
+
 ## [4.7.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.7.4...wasm-root-v4.7.5) (2026-05-01)
 
 
