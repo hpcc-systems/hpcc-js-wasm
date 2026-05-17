@@ -202,6 +202,37 @@ describe("graphviz", function () {
         }
     });
 
+    it("repeated layout with self-loop (GH-389)", async function () {
+        const g = await Graphviz.load();
+        const a = await Graphviz.load();
+        expect(g).to.equal(a); // load() is memoized (same instance)
+
+        const selfLoopDot = `digraph "Sales Decline Analysis" {
+  rankdir="BT";
+  label="\\nSales Decline Analysis";
+  ude1 [shape=box,color=red,height=0.95,fontsize=13,fixedsize=true,fontname="DM Sans",label="Sales revenue\\ndeclining",width=1.57];
+  ude2 [shape=box,color=red,height=1.17,fixedsize=true,fontsize=13,fontname="DM Sans",label="Customer\\ncomplaints\\nincreasing",width=1.27];
+  ie1  [shape=box,color=blue,height=1.17,fixedsize=true,fontsize=13,fontname="DM Sans",label="Customers\\nswitching to\\ncompetitors",width=1.47];
+  and1 [width=0.44,fixedsize=true,height=0.44,color=black,label="Change Me"];
+  ie1 -> and1 [id="100007"]; and1 -> ie1 [id="100008"];
+  ie1 -> ude2 [id="100009"]; ie1 -> ude1 [id="100011"];
+}`;
+
+        const results: (number | string)[] = [];
+        for (let i = 0; i < 6; i++) {
+            try {
+                results.push(g.layout(selfLoopDot, "json", "dot").length);
+            } catch (e: any) {
+                results.push("ERR#" + i + ": " + e.message);
+                break;
+            }
+        }
+        expect(results).to.have.length(6);
+        for (const r of results) {
+            expect(r).to.be.a("number");
+        }
+    });
+
     it("nop", async function () {
         const graphviz = await Graphviz.load();
         const dot = "digraph { a -> b; c->d; }";
