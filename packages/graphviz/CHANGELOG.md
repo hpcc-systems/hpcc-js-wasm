@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.21.6](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.21.5...wasm-graphviz-v1.21.6) (2026-05-17)
+
+
+### Bug Fixes
+
+* update @types/node and eslint versions; add test for repeated layout with self-loop ([10a57a5](https://github.com/hpcc-systems/hpcc-js-wasm/commit/10a57a5e8edfdd54b757d9df92ad87f464c8ef69))
+
 ## [1.21.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.21.4...wasm-graphviz-v1.21.5) (2026-05-01)
 
 
