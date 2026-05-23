@@ -135,9 +135,12 @@ export class Base91 {
         const unencoded = this._mainModule.malloc(encoded.size);
 
         unencoded.size = this._base91.decode(encoded.ptr, encoded.size, unencoded.ptr);
-        let retVal = this._mainModule.heapView(unencoded);
+        const mainVal = this._mainModule.heapToUint8Array(unencoded);
         unencoded.size = this._base91.decode_end(unencoded.ptr);
-        retVal = new Uint8Array([...retVal, ...this._mainModule.heapView(unencoded)]);
+        const endVal = this._mainModule.heapToUint8Array(unencoded);
+        const retVal = new Uint8Array(mainVal.length + endVal.length);
+        retVal.set(mainVal);
+        retVal.set(endVal, mainVal.length);
 
         this._mainModule.free(unencoded);
         this._mainModule.free(encoded);
