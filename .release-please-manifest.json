@@ -1,10 +1,10 @@
 {
-    ".": "4.7.6",
-    "packages/base91": "1.13.5",
+    ".": "4.7.7",
+    "packages/base91": "1.13.6",
     "packages/duckdb": "1.17.5",
     "packages/expat": "1.13.5",
     "packages/graphviz": "1.21.6",
     "packages/graphviz-cli": "1.8.12",
     "packages/zstd": "1.12.5",
-    "packages/wasm": "2.33.6"
+    "packages/wasm": "2.33.7"
 }
