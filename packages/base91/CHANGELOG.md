@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.6](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-base91-v1.13.5...wasm-base91-v1.13.6) (2026-05-23)
+
+
+### Bug Fixes
+
+* improve decoding logic and add test for 100-byte data encoding/decoding ([eed1987](https://github.com/hpcc-systems/hpcc-js-wasm/commit/eed1987ab69b8611af46412718017c1b03c25221)), closes [#391](https://github.com/hpcc-systems/hpcc-js-wasm/issues/391)
+
 ## [1.13.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-base91-v1.13.4...wasm-base91-v1.13.5) (2026-05-01)
 
 

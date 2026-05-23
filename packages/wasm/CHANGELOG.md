@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.33.7](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.33.6...wasm-v2.33.7) (2026-05-23)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.13.5 to ^1.13.6
+
 ## [2.33.6](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.33.5...wasm-v2.33.6) (2026-05-17)
 
 
