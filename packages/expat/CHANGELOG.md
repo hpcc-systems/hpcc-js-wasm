@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.6](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.13.5...wasm-expat-v1.13.6) (2026-05-24)
+
+
+### Bug Fixes
+
+* bump versions ([e0c32db](https://github.com/hpcc-systems/hpcc-js-wasm/commit/e0c32db3a0a5002d95c35e5330ba687dad3657cc))
+
 ## [1.13.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.13.4...wasm-expat-v1.13.5) (2026-05-01)
 
 

@@ -1,10 +1,10 @@
 {
-    ".": "4.7.7",
-    "packages/base91": "1.13.6",
-    "packages/duckdb": "1.17.5",
-    "packages/expat": "1.13.5",
-    "packages/graphviz": "1.21.6",
-    "packages/graphviz-cli": "1.8.12",
-    "packages/zstd": "1.12.5",
-    "packages/wasm": "2.33.7"
+    ".": "4.7.8",
+    "packages/base91": "1.13.7",
+    "packages/duckdb": "1.17.6",
+    "packages/expat": "1.13.6",
+    "packages/graphviz": "1.21.7",
+    "packages/graphviz-cli": "1.8.13",
+    "packages/zstd": "1.12.6",
+    "packages/wasm": "2.33.8"
 }
