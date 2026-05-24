@@ -115,19 +115,6 @@ diff --git a/extension/icu/CMakeLists.txt b/extension/icu/CMakeLists.txt
  install(
    TARGETS icu_extension
    EXPORT "${DUCKDB_EXPORT_SET}"
-diff --git a/extension/jemalloc/CMakeLists.txt b/extension/jemalloc/CMakeLists.txt
---- a/extension/jemalloc/CMakeLists.txt
-+++ b/extension/jemalloc/CMakeLists.txt
-@@ -12,6 +12,9 @@
- build_static_extension(jemalloc ${JEMALLOC_EXTENSION_FILES})
- # we do not do build_loadable_extension here because jemalloc is static-only
- 
-+if(BUILD_SHARED_LIBS)
-+  return()
-+endif()
- install(
-   TARGETS jemalloc_extension
-   EXPORT "${DUCKDB_EXPORT_SET}"
 diff --git a/extension/json/CMakeLists.txt b/extension/json/CMakeLists.txt
 --- a/extension/json/CMakeLists.txt
 +++ b/extension/json/CMakeLists.txt

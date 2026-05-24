@@ -2,7 +2,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO ggml-org/llama.cpp
     REF b${VERSION}
-    SHA512 c48ed1a60e744e33d1cac09d7dcd87c503067e4f5cc5128c190dcfa7835dfae55ab1abe7ffa72b4455cb309efa4eee162de4fe654a3e809708accc496fb3a65d
+    SHA512 2841087a2e000c6d6897248c1531de19ac313f33d6b22103a7aa7db5babc51b4954988a290658e0a6a0cef58c88d1df7b4b92de45c793bdfcf7c3a4af99fcbdb
     HEAD_REF master
     PATCHES
         wasm-fixes.diff
@@ -148,6 +148,7 @@ vcpkg_cmake_configure(
         ${options}
         -DGGML_CCACHE=OFF
         -DLLAMA_ALL_WARNINGS=OFF
+        -DLLAMA_BUILD_APP=OFF
         -DLLAMA_BUILD_TESTS=OFF
         -DLLAMA_BUILD_EXAMPLES=OFF
         -DLLAMA_BUILD_SERVER=OFF
@@ -168,11 +169,11 @@ vcpkg_fixup_pkgconfig()
 
 set(llama_config "${CURRENT_PACKAGES_DIR}/share/${PORT}/llama-config.cmake")
 vcpkg_replace_string("${llama_config}"
-"set_and_check(LLAMA_BIN_DIR     \"\${PACKAGE_PREFIX_DIR}/bin\")
+"set(LLAMA_BIN_DIR \"\${PACKAGE_PREFIX_DIR}/bin\")
 
 find_package(ggml REQUIRED HINTS \${LLAMA_LIB_DIR}/cmake)
 "
-"#set_and_check(LLAMA_BIN_DIR     \"\${PACKAGE_PREFIX_DIR}/bin\")
+"set(LLAMA_BIN_DIR \"\${PACKAGE_PREFIX_DIR}/bin\")
 
 find_library(ggml_LIBRARY
     NAMES ggml
@@ -203,11 +204,18 @@ foreach(pkgconfig_path IN ITEMS
     "${CURRENT_PACKAGES_DIR}/lib/pkgconfig/llama.pc"
     "${CURRENT_PACKAGES_DIR}/debug/lib/pkgconfig/llama.pc")
     vcpkg_replace_string("${pkgconfig_path}" "Requires: ggml\n" "")
-    vcpkg_replace_string("${pkgconfig_path}" "Libs: \"-L\${libdir}\" -lllama" "Libs: \"-L\${libdir}\" -lllama -lggml-cpu -lggml -lggml-base")
+    vcpkg_replace_string("${pkgconfig_path}" "Libs: \"-L\${libdir}\" -lggml -lggml-base -lllama" "Libs: \"-L\${libdir}\" -lllama -lggml-cpu -lggml -lggml-base")
 endforeach()
 
 file(INSTALL "${SOURCE_PATH}/gguf-py/gguf" DESTINATION "${CURRENT_PACKAGES_DIR}/tools/${PORT}/gguf-py")
-file(RENAME "${CURRENT_PACKAGES_DIR}/bin/convert_hf_to_gguf.py" "${CURRENT_PACKAGES_DIR}/tools/${PORT}/convert-hf-to-gguf.py")
+set(convert_hf_to_gguf_installed "${CURRENT_PACKAGES_DIR}/bin/convert_hf_to_gguf.py")
+set(convert_hf_to_gguf_tool "${CURRENT_PACKAGES_DIR}/tools/${PORT}/convert-hf-to-gguf.py")
+if(EXISTS "${convert_hf_to_gguf_installed}")
+    file(RENAME "${convert_hf_to_gguf_installed}" "${convert_hf_to_gguf_tool}")
+else()
+    file(INSTALL "${SOURCE_PATH}/convert_hf_to_gguf.py" DESTINATION "${CURRENT_PACKAGES_DIR}/tools/${PORT}")
+    file(RENAME "${CURRENT_PACKAGES_DIR}/tools/${PORT}/convert_hf_to_gguf.py" "${convert_hf_to_gguf_tool}")
+endif()
 file(REMOVE "${CURRENT_PACKAGES_DIR}/debug/bin/convert_hf_to_gguf.py")
 
 if("tools" IN_LIST FEATURES)

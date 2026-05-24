@@ -1,5 +1,4 @@
-import { resolve } from 'path';
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitepress'
 
 export default defineConfig({
     title: '@hpcc-js/wasm',
@@ -7,6 +6,12 @@ export default defineConfig({
     base: '/hpcc-js-wasm/',
     srcExclude: ['build/', 'cmake/', 'docker/', 'emsdk/', 'vcpkg/', 'vcpkg-overlays/', '**/tests/**'],
     ignoreDeadLinks: true,
+
+    vite: {
+        build: {
+            target: 'esnext'
+        }
+    },
 
     themeConfig: {
         repo: "hpcc-systems/hpcc-js-wasm",
