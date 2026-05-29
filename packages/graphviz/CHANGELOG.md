@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.22.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.21.7...wasm-graphviz-v1.22.0) (2026-05-29)
+
+
+### Features
+
+* switch to typescript v7 ([671aa5a](https://github.com/hpcc-systems/hpcc-js-wasm/commit/671aa5aee146d8d2a05d80aae616a2143274e56e))
+
 ## [1.21.7](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.21.6...wasm-graphviz-v1.21.7) (2026-05-24)
 
 

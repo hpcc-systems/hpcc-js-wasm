@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.9.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-cli-v1.8.13...wasm-graphviz-cli-v1.9.0) (2026-05-29)
+
+
+### Features
+
+* switch to typescript v7 ([671aa5a](https://github.com/hpcc-systems/hpcc-js-wasm/commit/671aa5aee146d8d2a05d80aae616a2143274e56e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @hpcc-js/wasm-graphviz bumped from ^1.21.7 to ^1.22.0
+
 ## [1.8.13](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-cli-v1.8.12...wasm-graphviz-cli-v1.8.13) (2026-05-24)
 
 
