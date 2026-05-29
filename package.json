@@ -90,6 +90,7 @@
     "@types/emscripten": "1.41.5",
     "@types/node": "24.12.4",
     "@types/yargs": "17.0.35",
+    "@typescript/native-preview": "7.0.0-dev.20260527.2",
     "@typescript-eslint/parser": "8.60.0",
     "@vitest/browser-playwright": "4.1.7",
     "@vitest/coverage-istanbul": "4.1.7",

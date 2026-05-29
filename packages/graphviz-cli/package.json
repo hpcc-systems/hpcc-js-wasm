@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "clean": "rimraf bin types .nyc_output",
-    "gen-types": "tsc --project tsconfig.json --emitDeclarationOnly",
+    "gen-types": "tsgo --project tsconfig.json --emitDeclarationOnly",
     "gen-types-watch": "npm run gen-types -- --watch",
     "bundle": "npm run bundle-dev --minify",
     "bundle-dev": "esbuild ./src/index.ts --platform=node --format=esm --bundle --packages=external --sourcemap  --outfile=./bin/index.js --banner:js='#!/usr/bin/env node'",
