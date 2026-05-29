@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-base91-v1.13.7...wasm-base91-v1.14.0) (2026-05-29)
+
+
+### Features
+
+* switch to typescript v7 ([671aa5a](https://github.com/hpcc-systems/hpcc-js-wasm/commit/671aa5aee146d8d2a05d80aae616a2143274e56e))
+
 ## [1.13.7](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-base91-v1.13.6...wasm-base91-v1.13.7) (2026-05-24)
 
 

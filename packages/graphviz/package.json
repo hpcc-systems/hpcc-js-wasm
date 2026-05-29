@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm-graphviz",
-  "version": "1.21.7",
+  "version": "1.22.0",
   "description": "hpcc-js - WASM Graphviz",
   "type": "module",
   "exports": {

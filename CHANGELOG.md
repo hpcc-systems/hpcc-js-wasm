@@ -8,6 +8,18 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.8.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.7.8...wasm-root-v4.8.0) (2026-05-29)
+
+
+### Features
+
+* switch to typescript v7 ([671aa5a](https://github.com/hpcc-systems/hpcc-js-wasm/commit/671aa5aee146d8d2a05d80aae616a2143274e56e))
+
+
+### Bug Fixes
+
+* update dependencies in package.json and tests/bundlers/package.json ([c8ed4dc](https://github.com/hpcc-systems/hpcc-js-wasm/commit/c8ed4dc4f0dec92da768965573b3ddf133fd8e7d))
+
 ## [4.7.8](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.7.7...wasm-root-v4.7.8) (2026-05-24)
 
 
