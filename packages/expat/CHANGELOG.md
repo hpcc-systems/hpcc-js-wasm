@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.14.0...wasm-expat-v1.14.1) (2026-06-01)
+
+
+### Bug Fixes
+
+* update dependencies and tools ([a06f371](https://github.com/hpcc-systems/hpcc-js-wasm/commit/a06f371ab7274e921f5cdd149cd6806eb76cebf1))
+
 ## [1.14.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.13.6...wasm-expat-v1.14.0) (2026-05-29)
 
 

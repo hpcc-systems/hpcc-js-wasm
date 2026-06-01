@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.34.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.0...wasm-v2.34.1) (2026-06-01)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-expat bumped from ^1.14.0 to ^1.14.1
+
 ## [2.34.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.33.8...wasm-v2.34.0) (2026-05-29)
 
 
