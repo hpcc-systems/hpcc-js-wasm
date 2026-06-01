@@ -30,7 +30,7 @@
         "@rollup/plugin-commonjs": "29.0.3",
         "deepmerge": "4.3.1",
         "is-module": "1.0.0",
-        "rollup": "4.60.4",
+        "rollup": "4.61.0",
         "webpack": "5.107.2",
         "webpack-cli": "7.0.3"
     }
