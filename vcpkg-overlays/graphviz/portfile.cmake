@@ -24,23 +24,50 @@ file(COPY ${CMAKE_CURRENT_LIST_DIR}/cmake/config_checks.cmake DESTINATION ${SOUR
 
 # file(COPY ${CMAKE_CURRENT_LIST_DIR}/lib DESTINATION "${SOURCE_PATH}/lib")
 
+set(graphviz_options
+  -DENABLE_LTDL=OFF
+  -DWITH_EXPAT=ON
+  -DWITH_GVEDIT=OFF
+  -WITH_SMYRNA=OFF
+  -DWITH_ZLIB=OFF
+  -Duse_win_pre_inst_libs=OFF
+  -DBUILD_SHARED_LIBS=OFF
+  -DENABLE_TCL=OFF
+  -DENABLE_SWIG=OFF
+  -DENABLE_SHARP=OFF
+  -DENABLE_D=OFF
+  -DENABLE_GO=OFF
+  -DENABLE_JAVASCRIPT=OFF
+  -DGRAPHVIZ_CLI=OFF
+)
+
+# Prefer the vcpkg host-built bison/flex (version 3.8+) over the macOS
+# system bison (/usr/bin/bison is only 2.3 and too old for graphviz).
+find_program(BISON bison
+  PATHS "${CURRENT_INSTALLED_DIR}/../arm64-osx/tools/bison/bin"
+  NO_DEFAULT_PATH
+)
+if(NOT BISON)
+  vcpkg_find_acquire_program(BISON)
+endif()
+
+find_program(FLEX flex
+  PATHS "${CURRENT_INSTALLED_DIR}/../arm64-osx/tools/flex/bin"
+  NO_DEFAULT_PATH
+)
+if(NOT FLEX)
+  vcpkg_find_acquire_program(FLEX)
+endif()
+
+list(APPEND graphviz_options
+  "-DBISON_EXECUTABLE=${BISON}"
+  "-DFLEX_EXECUTABLE=${FLEX}"
+)
+
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
-    OPTIONS
-        -DENABLE_LTDL=OFF
-        -DWITH_EXPAT=ON
-        -DWITH_GVEDIT=OFF
-        -WITH_SMYRNA=OFF
-        -DWITH_ZLIB=OFF
-        -Duse_win_pre_inst_libs=OFF
-        -DBUILD_SHARED_LIBS=OFF
-        -DENABLE_TCL=OFF
-        -DENABLE_SWIG=OFF
-        -DENABLE_SHARP=OFF
-        -DENABLE_D=OFF
-        -DENABLE_GO=OFF
-        -DENABLE_JAVASCRIPT=OFF
-        -DGRAPHVIZ_CLI=OFF
+  OPTIONS
+    ${graphviz_options}
 )
 vcpkg_cmake_install()
 # vcpkg_cmake_config_fixup(PACKAGE_NAME "graphviz" CONFIG_PATH "share/cmake/graphviz")
