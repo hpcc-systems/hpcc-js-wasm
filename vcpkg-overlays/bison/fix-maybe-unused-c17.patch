@@ -1,0 +1,30 @@
+diff --git a/m4/gnulib-common.m4 b/m4/gnulib-common.m4
+index 1234567..abcdefg 100644
+--- a/m4/gnulib-common.m4
++++ b/m4/gnulib-common.m4
+@@ -297,7 +297,9 @@
+ /* In C++ and C2x, this is spelled [[__maybe_unused__]].
+    GCC's syntax is __attribute__ ((__unused__)).
+    clang supports both syntaxes.  */
+-#if _GL_HAS_C_ATTRIBUTE (maybe_unused)
++/* Use [[__maybe_unused__]] only in C23+ mode; in older modes clang may report
++   __has_c_attribute(maybe_unused) but reject the attribute in some positions.  */
++#if _GL_HAS_C_ATTRIBUTE (maybe_unused) && defined __STDC_VERSION__ && __STDC_VERSION__ >= 202311L
+ # define _GL_ATTRIBUTE_MAYBE_UNUSED [[__maybe_unused__]]
+ #else
+ # define _GL_ATTRIBUTE_MAYBE_UNUSED _GL_ATTRIBUTE_UNUSED
+diff --git a/lib/config.in.h b/lib/config.in.h
+index 1234567..abcdefg 100644
+--- a/lib/config.in.h
++++ b/lib/config.in.h
+@@ -2226,7 +2226,9 @@
+ /* In C++ and C2x, this is spelled [[__maybe_unused__]].
+    GCC's syntax is __attribute__ ((__unused__)).
+    clang supports both syntaxes.  */
+-#if _GL_HAS_C_ATTRIBUTE (maybe_unused)
++/* Use [[__maybe_unused__]] only in C23+ mode; in older modes clang may report
++   __has_c_attribute(maybe_unused) but reject the attribute in some positions.  */
++#if _GL_HAS_C_ATTRIBUTE (maybe_unused) && defined __STDC_VERSION__ && __STDC_VERSION__ >= 202311L
+ # define _GL_ATTRIBUTE_MAYBE_UNUSED [[__maybe_unused__]]
+ #else
+ # define _GL_ATTRIBUTE_MAYBE_UNUSED _GL_ATTRIBUTE_UNUSED

@@ -7,6 +7,14 @@
   "dependencies": [
     "expat",
     {
+      "name": "bison",
+      "host": true
+    },
+    {
+      "name": "flex",
+      "host": true
+    },
+    {
       "name": "vcpkg-cmake",
       "host": true
     },
