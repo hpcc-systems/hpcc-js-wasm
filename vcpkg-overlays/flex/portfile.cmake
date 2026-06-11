@@ -11,6 +11,11 @@ vcpkg_extract_source_archive(
     ARCHIVE "${ARCHIVE}"
 )
 
+set(_flex_saved_ldflags "$ENV{LDFLAGS}")
+if(VCPKG_TARGET_IS_OSX)
+    set(ENV{LDFLAGS} "$ENV{LDFLAGS} -Wl,-headerpad_max_install_names")
+endif()
+
 vcpkg_configure_make(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
@@ -20,6 +25,7 @@ vcpkg_configure_make(
 )
 
 vcpkg_install_make()
+set(ENV{LDFLAGS} "${_flex_saved_ldflags}")
 vcpkg_fixup_pkgconfig()
 
 if(NOT EXISTS "${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin/lex")

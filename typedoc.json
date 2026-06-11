@@ -23,6 +23,7 @@
         "static-first",
         "source-order"
     ],
+    "tsconfig": "./typedoc.tsconfig.json",
     "plugin": [
         "typedoc-plugin-markdown"
     ]
