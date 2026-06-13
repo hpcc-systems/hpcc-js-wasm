@@ -97,7 +97,7 @@
     "@vitest/coverage-v8": "4.1.8",
     "assemblyscript": "0.28.18",
     "chokidar-cli": "3.0.0",
-    "esbuild": "0.28.0",
+    "esbuild": "0.28.1",
     "eslint": "10.4.1",
     "globals": "17.6.0",
     "happy-dom": "20.10.2",
@@ -119,7 +119,7 @@
     "is-reference": "3.0.3"
   },
   "overrides": {
-    "esbuild": "0.28.0",
+    "esbuild": "0.28.1",
     "vite": "7.3.5"
   },
   "c8": {
