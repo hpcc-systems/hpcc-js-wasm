@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.14.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.14.0...wasm-expat-v1.14.1) (2026-06-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependencies for improved stability and performance ([43640c1](https://github.com/hpcc-systems/hpcc-js-wasm/commit/43640c10b174431f5de8578c45cda9249ca1f926))
+* update dependencies and add vcpkg overlays for bison and flex ([e79f6ce](https://github.com/hpcc-systems/hpcc-js-wasm/commit/e79f6ceab4da3062c43bc69d9d87947c48e1020e))
+
 ## [1.14.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.13.6...wasm-expat-v1.14.0) (2026-05-29)
 
 
