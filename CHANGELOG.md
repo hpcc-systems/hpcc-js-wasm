@@ -8,6 +8,14 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.8.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.8.0...wasm-root-v4.8.1) (2026-06-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependencies for improved stability and performance ([0a270ae](https://github.com/hpcc-systems/hpcc-js-wasm/commit/0a270aeb89bde59ee8f5e662d5e68fa2ca387b42))
+* update dependencies and add vcpkg overlays for bison and flex ([e79f6ce](https://github.com/hpcc-systems/hpcc-js-wasm/commit/e79f6ceab4da3062c43bc69d9d87947c48e1020e))
+
 ## [4.8.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.7.8...wasm-root-v4.8.0) (2026-05-29)
 
 
