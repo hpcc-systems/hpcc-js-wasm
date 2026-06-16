@@ -3,6 +3,6 @@
   "version": "3.8.2",
   "port-version": 0,
   "description": "GNU parser generator",
-  "homepage": "https://www.gnu.org/software/bison/",
+  "homepage": "https://ftp.gnu.org/gnu/bison/",
   "supports": "!windows & !uwp & !android & !ios & !emscripten"
 }
