@@ -2,7 +2,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO ggml-org/llama.cpp
     REF b${VERSION}
-    SHA512 2841087a2e000c6d6897248c1531de19ac313f33d6b22103a7aa7db5babc51b4954988a290658e0a6a0cef58c88d1df7b4b92de45c793bdfcf7c3a4af99fcbdb
+    SHA512 59bec4892460568609d19c39777ef66dfc72c7c57e1ac5dda25c15b8f5357f5d8d1e9c00d3961af9479cfef9ac4f8825342d9b61a191bc05b2161953c411c1bf
     HEAD_REF master
     PATCHES
         wasm-fixes.diff
