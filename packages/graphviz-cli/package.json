@@ -9,12 +9,13 @@
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "default": "./dist/index.js"
+      "default": "./bin/index.js"
     }
   },
-  "main": "./dist/index.js",
+  "main": "./bin/index.js",
   "types": "./types/index.d.ts",
   "files": [
+    "bin/**/*",
     "dist/**/*",
     "src/**/*",
     "types/**/*"
