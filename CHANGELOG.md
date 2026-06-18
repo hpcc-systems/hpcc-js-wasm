@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.9.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.8.2...wasm-root-v4.9.0) (2026-06-18)
+
+
+### Features
+
+* **graphviz:** bump version ([3dd5db7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/3dd5db7b8220f5bd96bb55f1a3952f177f603199))
+
 ## [4.8.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.8.1...wasm-root-v4.8.2) (2026-06-17)
 
 

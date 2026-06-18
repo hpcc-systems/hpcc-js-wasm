@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.34.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.2...wasm-v2.34.3) (2026-06-18)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-graphviz bumped from ^1.22.2 to ^1.23.0
+    * @hpcc-js/wasm-graphviz-cli bumped from ^1.9.2 to ^1.10.0
+
 ## [2.34.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.1...wasm-v2.34.2) (2026-06-17)
 
 
