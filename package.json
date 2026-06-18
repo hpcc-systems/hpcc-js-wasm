@@ -34,7 +34,7 @@
     "install-bundler-deps": "./scripts/install-bundler-deps.sh",
     "install-build-deps": "run-s install-emsdk install-vcpkg install-playright install-bundler-deps",
     "uninstall-build-deps": "rimraf ./emsdk ./vcpkg ./src-expat ./src-vcpkg ./wasi-sdk ./wit-bindgen",
-    "uninstall": "rimraf --glob ./node_modules ./packages/**/node_modules ./package-lock.json",
+    "uninstall": "rimraf --glob ./node_modules ./packages/**/node_modules ./tests/**/node_modules ./package-lock.json ./packages/**/package-lock.json ./tests/**/package-lock.json",
     "clean-build": "rimraf --glob .nyc_output bin build coverage output-* tmp vcpkg/vcpkg .nx",
     "clean-vcpkg": "rimraf --glob vcpkg/buildtrees vcpkg/packages vcpkg/installed vcpkg/downloads",
     "clean-docs": "rimraf .vitepress/dist .vitepress/cache docs/base91 docs/duckdb docs/expat docs/graphviz docs/llama docs/zstd",

@@ -9,13 +9,13 @@
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "default": "./dist/index.js"
+      "default": "./bin/index.js"
     }
   },
-  "main": "./dist/index.js",
+  "main": "./bin/index.js",
   "types": "./types/index.d.ts",
   "files": [
-    "dist/**/*",
+    "bin/**/*",
     "src/**/*",
     "types/**/*"
   ],
@@ -25,6 +25,8 @@
     "gen-types-watch": "npm run gen-types -- --watch",
     "bundle": "npm run bundle-dev --minify",
     "bundle-dev": "esbuild ./src/index.ts --platform=node --format=esm --bundle --packages=external --sourcemap  --outfile=./bin/index.js --banner:js='#!/usr/bin/env node'",
+    "postbundle": "chmod +x ./bin/index.js",
+    "postbundle-dev": "chmod +x ./bin/index.js",
     "bundle-watch": "npm run bundle-dev -- --watch",
     "build-dev": "run-p gen-types bundle-dev",
     "build": "run-p gen-types bundle",
@@ -37,7 +39,7 @@
     "update-major": "npx -y npm-check-updates -u"
   },
   "dependencies": {
-    "@hpcc-js/wasm-graphviz": "^1.22.2",
+    "@hpcc-js/wasm-graphviz": "1.22.2",
     "yargs": "18.0.0"
   },
   "devDependencies": {},

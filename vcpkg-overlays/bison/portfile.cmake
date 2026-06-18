@@ -13,6 +13,14 @@ vcpkg_extract_source_archive(
         fix-maybe-unused-c17.patch
 )
 
+# The local patch touches autotools inputs like m4/gnulib-common.m4. Refresh the
+# generated files so make does not try to rerun missing host automake tooling.
+file(TOUCH_NOCREATE
+    "${SOURCE_PATH}/aclocal.m4"
+    "${SOURCE_PATH}/configure"
+    "${SOURCE_PATH}/Makefile.in"
+)
+
 set(ENV{CFLAGS} "$ENV{CFLAGS} -std=gnu17")
 set(ENV{CXXFLAGS} "$ENV{CXXFLAGS} -std=gnu++17")
 set(ENV{ac_cv_prog_cc_c23} "no")

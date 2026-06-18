@@ -1,0 +1,13 @@
+{
+    "name": "@hpcc-js/wasm-bundler-tests",
+    "version": "1.0.0",
+    "description": "Integration tests for bundler compatibility",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "test": "wasm-graphviz-cli --help"
+    },
+    "devDependencies": {
+        "@hpcc-js/wasm-graphviz-cli": "file:../../packages/graphviz-cli"
+    }
+}
