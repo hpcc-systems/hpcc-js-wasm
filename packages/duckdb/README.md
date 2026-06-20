@@ -641,7 +641,7 @@ This package includes full TypeScript type definitions for type-safe development
 
 ## Reference
 
-* [API Documentation](https://hpcc-systems.github.io/hpcc-js-wasm/duckdb/src/duckdb/classes/DuckDB.html)
+* [API Documentation](https://hpcc-systems.github.io/hpcc-js-wasm/docs/duckdb/src/duckdb/classes/DuckDB.html)
 * [DuckDB Documentation](https://duckdb.org/docs/)
 * [DuckDB WASM](https://github.com/duckdb/duckdb-wasm)
 

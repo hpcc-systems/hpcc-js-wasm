@@ -39,4 +39,4 @@ const decoded_data = await base91.decode(encoded_data);
 
 ## Reference
 
-* [API Documentation](https://hpcc-systems.github.io/hpcc-js-wasm/base91/src/base91/classes/Base91.html)
+* [API Documentation](https://hpcc-systems.github.io/hpcc-js-wasm/docs/base91/src/base91/classes/Base91.html)

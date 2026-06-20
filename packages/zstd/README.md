@@ -42,4 +42,4 @@ const decompressed_data = zstd.decompress(compressed_data);
 
 ## Reference
 
-* [API Documentation](https://hpcc-systems.github.io/hpcc-js-wasm/zstd/src/zstd/classes/Zstd.html)
+* [API Documentation](https://hpcc-systems.github.io/hpcc-js-wasm/docs/zstd/src/zstd/classes/Zstd.html)

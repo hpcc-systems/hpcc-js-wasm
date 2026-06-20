@@ -40,4 +40,4 @@ const embeddings = llama.embedding("Hello and Welcome!", new Uint8Array(data));
 
 ## Reference
 
-* [API Documentation](https://hpcc-systems.github.io/hpcc-js-wasm/llama/src/llama/classes/llama.html)
+* [API Documentation](https://hpcc-systems.github.io/hpcc-js-wasm/docs/llama/src/llama/classes/Llama.html)

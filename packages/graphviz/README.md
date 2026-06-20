@@ -38,4 +38,4 @@ document.body.innerHTML = svg;
 
 ## Reference
 
-* [API Documentation](https://hpcc-systems.github.io/hpcc-js-wasm/graphviz/src/graphviz/classes/Graphviz.html)
+* [API Documentation](https://hpcc-systems.github.io/hpcc-js-wasm/docs/graphviz/src/graphviz/classes/Graphviz.html)

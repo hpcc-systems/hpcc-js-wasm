@@ -50,4 +50,4 @@ expat.parse(xml, callback);
 
 ## Reference
 
-* [API Documentation](https://hpcc-systems.github.io/hpcc-js-wasm/expat/src/expat/classes/Expat.html)
+* [API Documentation](https://hpcc-systems.github.io/hpcc-js-wasm/docs/expat/src/expat/classes/Expat.html)
