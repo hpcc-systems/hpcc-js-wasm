@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.24.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.23.0...wasm-graphviz-v1.24.0) (2026-07-01)
+
+
+### Features
+
+* **graphviz:** add CGraph support ([c09cfc1](https://github.com/hpcc-systems/hpcc-js-wasm/commit/c09cfc1fd175dbaddf041f90a4d77eea7406446b))
+
+
+### Bug Fixes
+
+* update API documentation links to use the /docs/ path ([2dd1e48](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2dd1e48bf23c1187d3413cb0b0777ef410b7d3bf))
+
 ## [1.23.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.22.2...wasm-graphviz-v1.23.0) (2026-06-18)
 
 
