@@ -10,8 +10,8 @@
         "allowImportingTsExtensions": true,
         "lib": [
             "DOM",
-            "ES2020",
-            "ES2020.BigInt"
+            "ES2022",
+            "ESNext.Disposable"
         ],
         "types": []
     }
