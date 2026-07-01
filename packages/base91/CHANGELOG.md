@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-base91-v1.14.2...wasm-base91-v1.14.3) (2026-07-01)
+
+
+### Bug Fixes
+
+* update API documentation links to use the /docs/ path ([2dd1e48](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2dd1e48bf23c1187d3413cb0b0777ef410b7d3bf))
+
 ## [1.14.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-base91-v1.14.1...wasm-base91-v1.14.2) (2026-06-17)
 
 

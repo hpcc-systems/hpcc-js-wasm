@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.13.2...wasm-zstd-v1.13.3) (2026-07-01)
+
+
+### Bug Fixes
+
+* update API documentation links to use the /docs/ path ([2dd1e48](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2dd1e48bf23c1187d3413cb0b0777ef410b7d3bf))
+
 ## [1.13.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.13.1...wasm-zstd-v1.13.2) (2026-06-17)
 
 

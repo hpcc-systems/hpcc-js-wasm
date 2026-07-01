@@ -8,6 +8,18 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.10.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.9.0...wasm-root-v4.10.0) (2026-07-01)
+
+
+### Features
+
+* **graphviz:** add CGraph support ([c09cfc1](https://github.com/hpcc-systems/hpcc-js-wasm/commit/c09cfc1fd175dbaddf041f90a4d77eea7406446b))
+
+
+### Bug Fixes
+
+* update API documentation links to use the /docs/ path ([2dd1e48](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2dd1e48bf23c1187d3413cb0b0777ef410b7d3bf))
+
 ## [4.9.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.8.2...wasm-root-v4.9.0) (2026-06-18)
 
 
