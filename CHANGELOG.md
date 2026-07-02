@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.10.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.10.0...wasm-root-v4.10.1) (2026-07-02)
+
+
+### Bug Fixes
+
+* **graphviz:** add missign id attr ([0671c86](https://github.com/hpcc-systems/hpcc-js-wasm/commit/0671c86375057486e7cd68199c211fd3a18223c1))
+
 ## [4.10.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.9.0...wasm-root-v4.10.0) (2026-07-01)
 
 
