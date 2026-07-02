@@ -9,7 +9,7 @@ import type {
 } from "./types.ts";
 
 /**
- * Various graphic and data formats for end user, web, documents and other applications.  See [Output Formats](https://graphviz.gitlab.io/docs/outputs/) for more information.
+ * Various graphic and data formats for end user, web, documents and other applications.  See [Output Formats](https://graphviz.org/docs/outputs/) for more information.
  */
 export type Format = "svg" | "svg_inline" | "dot" | "json" | "dot_json" | "xdot_json" | "plain" | "plain-ext" | "canon";
 
@@ -43,7 +43,7 @@ function parseEdges(json: string): EdgeInfo[] {
 }
 
 /**
- * Various algorithms for projecting abstract graphs into a space for visualization.  See [Layout Engines](https://graphviz.gitlab.io/docs/layouts/) for more details.
+ * Various algorithms for projecting abstract graphs into a space for visualization.  See [Layout Engines](https://graphviz.org/docs/layouts/) for more details.
  */
 export type Engine = "circo" | "dot" | "fdp" | "sfdp" | "neato" | "osage" | "patchwork" | "twopi" | "nop" | "nop2";
 
@@ -183,16 +183,50 @@ export class Subgraph {
 
     /**
      * Set an attribute on the subgraph itself (e.g. `"label"`, `"style"`,
-     * `"color"`, `"bgcolor"`).
+     * `"color"`, `"bgcolor"`).  See the official Graphviz
+     * [attribute reference](https://graphviz.org/docs/attrs/) for supported
+     * attributes and values.
      *
      * When `attr` is a known cluster attribute the value type is inferred
      * automatically.  A generic `string | number | boolean` fallback is
-     * provided for custom or less-common attributes.
+     * provided for custom or less-common attributes.  Omit `value` to reset
+     * the attribute to Graphviz's default empty value.  `defaultValue` is
+     * passed to Graphviz as the default for this attribute if it has not
+     * already been declared.
      */
-    setAttr<K extends ClusterDotAttr>(attr: K, value: NonNullable<ClusterAttrs[K]>): this;
-    setAttr(attr: string, value: string | number | boolean): this;
-    setAttr(attr: string, value: unknown): this {
-        this._sg.setAttr(attr, String(value));
+    setAttr<K extends ClusterDotAttr>(attr: K, value?: NonNullable<ClusterAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setAttr(attr: string, value?: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setAttr(attr: string, value: unknown = "", defaultValue?: unknown): this {
+        if (defaultValue === undefined) {
+            this._sg.setAttr(attr, String(value));
+        } else {
+            this._sg.setAttr(attr, String(value), String(defaultValue));
+        }
+        return this;
+    }
+
+    setHtmlAttr<K extends ClusterDotAttr>(attr: K, value: NonNullable<ClusterAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setHtmlAttr(attr: string, value: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setHtmlAttr(attr: string, value: unknown, defaultValue?: unknown): this {
+        if (defaultValue === undefined) {
+            this._sg.setHtmlAttr(attr, String(value));
+        } else {
+            this._sg.setHtmlAttr(attr, String(value), String(defaultValue));
+        }
+        return this;
+    }
+
+    setDefaultAttr<K extends ClusterDotAttr>(attr: K, value: NonNullable<ClusterAttrs[K]>): this;
+    setDefaultAttr(attr: string, value: string | number | boolean): this;
+    setDefaultAttr(attr: string, value: unknown): this {
+        this._sg.setDefaultAttr(attr, String(value));
+        return this;
+    }
+
+    setDefaultHtmlAttr<K extends ClusterDotAttr>(attr: K, value: NonNullable<ClusterAttrs[K]>): this;
+    setDefaultHtmlAttr(attr: string, value: string | number | boolean): this;
+    setDefaultHtmlAttr(attr: string, value: unknown): this {
+        this._sg.setDefaultHtmlAttr(attr, String(value));
         return this;
     }
 
@@ -209,12 +243,43 @@ export class Subgraph {
      *
      * When `attr` is a known node attribute the value type is inferred
      * automatically.  A generic `string | number | boolean` fallback is
-     * provided for custom attributes.
+     * provided for custom attributes.  Omit `value` to reset the attribute to
+     * Graphviz's default empty value.  `defaultValue` is passed to Graphviz as
+     * the default for this attribute if it has not already been declared.
      */
-    setNodeAttr<K extends NodeDotAttr>(node: string, attr: K, value: NonNullable<NodeAttrs[K]>): this;
-    setNodeAttr(node: string, attr: string, value: string | number | boolean): this;
-    setNodeAttr(node: string, attr: string, value: unknown): this {
-        this._sg.setNodeAttr(node, attr, String(value));
+    setNodeAttr<K extends NodeDotAttr>(node: string, attr: K, value?: NonNullable<NodeAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setNodeAttr(node: string, attr: string, value?: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setNodeAttr(node: string, attr: string, value: unknown = "", defaultValue?: unknown): this {
+        if (defaultValue === undefined) {
+            this._sg.setNodeAttr(node, attr, String(value));
+        } else {
+            this._sg.setNodeAttr(node, attr, String(value), String(defaultValue));
+        }
+        return this;
+    }
+
+    setNodeHtmlAttr<K extends NodeDotAttr>(node: string, attr: K, value: NonNullable<NodeAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setNodeHtmlAttr(node: string, attr: string, value: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setNodeHtmlAttr(node: string, attr: string, value: unknown, defaultValue?: unknown): this {
+        if (defaultValue === undefined) {
+            this._sg.setNodeHtmlAttr(node, attr, String(value));
+        } else {
+            this._sg.setNodeHtmlAttr(node, attr, String(value), String(defaultValue));
+        }
+        return this;
+    }
+
+    setDefaultNodeAttr<K extends NodeDotAttr>(attr: K, value: NonNullable<NodeAttrs[K]>): this;
+    setDefaultNodeAttr(attr: string, value: string | number | boolean): this;
+    setDefaultNodeAttr(attr: string, value: unknown): this {
+        this._sg.setDefaultNodeAttr(attr, String(value));
+        return this;
+    }
+
+    setDefaultNodeHtmlAttr<K extends NodeDotAttr>(attr: K, value: NonNullable<NodeAttrs[K]>): this;
+    setDefaultNodeHtmlAttr(attr: string, value: string | number | boolean): this;
+    setDefaultNodeHtmlAttr(attr: string, value: unknown): this {
+        this._sg.setDefaultNodeHtmlAttr(attr, String(value));
         return this;
     }
 
@@ -232,12 +297,43 @@ export class Subgraph {
      *
      * When `attr` is a known edge attribute the value type is inferred
      * automatically.  A generic `string | number | boolean` fallback is
-     * provided for custom attributes.
+     * provided for custom attributes.  Omit `value` to reset the attribute to
+     * Graphviz's default empty value.  `defaultValue` is passed to Graphviz as
+     * the default for this attribute if it has not already been declared.
      */
-    setEdgeAttr<K extends EdgeDotAttr>(tail: string, head: string, key: string, attr: K, value: NonNullable<EdgeAttrs[K]>): this;
-    setEdgeAttr(tail: string, head: string, key: string, attr: string, value: string | number | boolean): this;
-    setEdgeAttr(tail: string, head: string, key: string, attr: string, value: unknown): this {
-        this._sg.setEdgeAttr(tail, head, key, attr, String(value));
+    setEdgeAttr<K extends EdgeDotAttr>(tail: string, head: string, key: string, attr: K, value?: NonNullable<EdgeAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setEdgeAttr(tail: string, head: string, key: string, attr: string, value?: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setEdgeAttr(tail: string, head: string, key: string, attr: string, value: unknown = "", defaultValue?: unknown): this {
+        if (defaultValue === undefined) {
+            this._sg.setEdgeAttr(tail, head, key, attr, String(value));
+        } else {
+            this._sg.setEdgeAttr(tail, head, key, attr, String(value), String(defaultValue));
+        }
+        return this;
+    }
+
+    setEdgeHtmlAttr<K extends EdgeDotAttr>(tail: string, head: string, key: string, attr: K, value: NonNullable<EdgeAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setEdgeHtmlAttr(tail: string, head: string, key: string, attr: string, value: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setEdgeHtmlAttr(tail: string, head: string, key: string, attr: string, value: unknown, defaultValue?: unknown): this {
+        if (defaultValue === undefined) {
+            this._sg.setEdgeHtmlAttr(tail, head, key, attr, String(value));
+        } else {
+            this._sg.setEdgeHtmlAttr(tail, head, key, attr, String(value), String(defaultValue));
+        }
+        return this;
+    }
+
+    setDefaultEdgeAttr<K extends EdgeDotAttr>(attr: K, value: NonNullable<EdgeAttrs[K]>): this;
+    setDefaultEdgeAttr(attr: string, value: string | number | boolean): this;
+    setDefaultEdgeAttr(attr: string, value: unknown): this {
+        this._sg.setDefaultEdgeAttr(attr, String(value));
+        return this;
+    }
+
+    setDefaultEdgeHtmlAttr<K extends EdgeDotAttr>(attr: K, value: NonNullable<EdgeAttrs[K]>): this;
+    setDefaultEdgeHtmlAttr(attr: string, value: string | number | boolean): this;
+    setDefaultEdgeHtmlAttr(attr: string, value: unknown): this {
+        this._sg.setDefaultEdgeHtmlAttr(attr, String(value));
         return this;
     }
 
@@ -274,6 +370,11 @@ export class Subgraph {
 
     /** Returns the number of edges in this subgraph. */
     edgeCount(): number { return this._sg.edgeCount(); }
+
+    /** Returns the degree of a named node in this subgraph. */
+    nodeDegree(node: string, inDegree: number = 1, outDegree: number = 1): number {
+        return this._sg.nodeDegree(node, inDegree, outDegree);
+    }
 
     // ---- Attribute reading ----------------------------------------------
 
@@ -413,16 +514,61 @@ export class Graph {
     }
 
     /**
+     * Replace this graph with one parsed from DOT source using Graphviz cgraph
+     * reading support.
+     */
+    read(dotSource: string): this {
+        if (!this._graph.read(dotSource)) {
+            throw new Error("Invalid DOT source");
+        }
+        return this;
+    }
+
+    /**
      * Set a graph-level attribute (e.g. `"rankdir"`, `"label"`, `"bgcolor"`).
+     * See the official Graphviz [attribute reference](https://graphviz.org/docs/attrs/)
+     * for supported attributes and values.
      *
      * When `attr` is a known graph attribute the value type is inferred
      * automatically.  A generic `string | number | boolean` fallback is
-     * provided for custom or less-common attributes.
+     * provided for custom or less-common attributes.  Omit `value` to reset
+     * the attribute to Graphviz's default empty value.  `defaultValue` is
+     * passed to Graphviz as the default for this attribute if it has not
+     * already been declared.
      */
-    setGraphAttr<K extends GraphDotAttr>(attr: K, value: NonNullable<GraphAttrs[K]>): this;
-    setGraphAttr(attr: string, value: string | number | boolean): this;
-    setGraphAttr(attr: string, value: unknown): this {
-        this._graph.setGraphAttr(attr, String(value));
+    setGraphAttr<K extends GraphDotAttr>(attr: K, value?: NonNullable<GraphAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setGraphAttr(attr: string, value?: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setGraphAttr(attr: string, value: unknown = "", defaultValue?: unknown): this {
+        if (defaultValue === undefined) {
+            this._graph.setGraphAttr(attr, String(value));
+        } else {
+            this._graph.setGraphAttr(attr, String(value), String(defaultValue));
+        }
+        return this;
+    }
+
+    setGraphHtmlAttr<K extends GraphDotAttr>(attr: K, value: NonNullable<GraphAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setGraphHtmlAttr(attr: string, value: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setGraphHtmlAttr(attr: string, value: unknown, defaultValue?: unknown): this {
+        if (defaultValue === undefined) {
+            this._graph.setGraphHtmlAttr(attr, String(value));
+        } else {
+            this._graph.setGraphHtmlAttr(attr, String(value), String(defaultValue));
+        }
+        return this;
+    }
+
+    setDefaultGraphAttr<K extends GraphDotAttr>(attr: K, value: NonNullable<GraphAttrs[K]>): this;
+    setDefaultGraphAttr(attr: string, value: string | number | boolean): this;
+    setDefaultGraphAttr(attr: string, value: unknown): this {
+        this._graph.setDefaultGraphAttr(attr, String(value));
+        return this;
+    }
+
+    setDefaultGraphHtmlAttr<K extends GraphDotAttr>(attr: K, value: NonNullable<GraphAttrs[K]>): this;
+    setDefaultGraphHtmlAttr(attr: string, value: string | number | boolean): this;
+    setDefaultGraphHtmlAttr(attr: string, value: unknown): this {
+        this._graph.setDefaultGraphHtmlAttr(attr, String(value));
         return this;
     }
 
@@ -432,12 +578,43 @@ export class Graph {
      *
      * When `attr` is a known node attribute the value type is inferred
      * automatically.  A generic `string | number | boolean` fallback is
-     * provided for custom attributes.
+     * provided for custom attributes.  Omit `value` to reset the attribute to
+     * Graphviz's default empty value.  `defaultValue` is passed to Graphviz as
+     * the default for this attribute if it has not already been declared.
      */
-    setNodeAttr<K extends NodeDotAttr>(node: string, attr: K, value: NonNullable<NodeAttrs[K]>): this;
-    setNodeAttr(node: string, attr: string, value: string | number | boolean): this;
-    setNodeAttr(node: string, attr: string, value: unknown): this {
-        this._graph.setNodeAttr(node, attr, String(value));
+    setNodeAttr<K extends NodeDotAttr>(node: string, attr: K, value?: NonNullable<NodeAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setNodeAttr(node: string, attr: string, value?: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setNodeAttr(node: string, attr: string, value: unknown = "", defaultValue?: unknown): this {
+        if (defaultValue === undefined) {
+            this._graph.setNodeAttr(node, attr, String(value));
+        } else {
+            this._graph.setNodeAttr(node, attr, String(value), String(defaultValue));
+        }
+        return this;
+    }
+
+    setNodeHtmlAttr<K extends NodeDotAttr>(node: string, attr: K, value: NonNullable<NodeAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setNodeHtmlAttr(node: string, attr: string, value: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setNodeHtmlAttr(node: string, attr: string, value: unknown, defaultValue?: unknown): this {
+        if (defaultValue === undefined) {
+            this._graph.setNodeHtmlAttr(node, attr, String(value));
+        } else {
+            this._graph.setNodeHtmlAttr(node, attr, String(value), String(defaultValue));
+        }
+        return this;
+    }
+
+    setDefaultNodeAttr<K extends NodeDotAttr>(attr: K, value: NonNullable<NodeAttrs[K]>): this;
+    setDefaultNodeAttr(attr: string, value: string | number | boolean): this;
+    setDefaultNodeAttr(attr: string, value: unknown): this {
+        this._graph.setDefaultNodeAttr(attr, String(value));
+        return this;
+    }
+
+    setDefaultNodeHtmlAttr<K extends NodeDotAttr>(attr: K, value: NonNullable<NodeAttrs[K]>): this;
+    setDefaultNodeHtmlAttr(attr: string, value: string | number | boolean): this;
+    setDefaultNodeHtmlAttr(attr: string, value: unknown): this {
+        this._graph.setDefaultNodeHtmlAttr(attr, String(value));
         return this;
     }
 
@@ -448,12 +625,43 @@ export class Graph {
      *
      * When `attr` is a known edge attribute the value type is inferred
      * automatically.  A generic `string | number | boolean` fallback is
-     * provided for custom attributes.
+     * provided for custom attributes.  Omit `value` to reset the attribute to
+     * Graphviz's default empty value.  `defaultValue` is passed to Graphviz as
+     * the default for this attribute if it has not already been declared.
      */
-    setEdgeAttr<K extends EdgeDotAttr>(tail: string, head: string, key: string, attr: K, value: NonNullable<EdgeAttrs[K]>): this;
-    setEdgeAttr(tail: string, head: string, key: string, attr: string, value: string | number | boolean): this;
-    setEdgeAttr(tail: string, head: string, key: string, attr: string, value: unknown): this {
-        this._graph.setEdgeAttr(tail, head, key, attr, String(value));
+    setEdgeAttr<K extends EdgeDotAttr>(tail: string, head: string, key: string, attr: K, value?: NonNullable<EdgeAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setEdgeAttr(tail: string, head: string, key: string, attr: string, value?: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setEdgeAttr(tail: string, head: string, key: string, attr: string, value: unknown = "", defaultValue?: unknown): this {
+        if (defaultValue === undefined) {
+            this._graph.setEdgeAttr(tail, head, key, attr, String(value));
+        } else {
+            this._graph.setEdgeAttr(tail, head, key, attr, String(value), String(defaultValue));
+        }
+        return this;
+    }
+
+    setEdgeHtmlAttr<K extends EdgeDotAttr>(tail: string, head: string, key: string, attr: K, value: NonNullable<EdgeAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setEdgeHtmlAttr(tail: string, head: string, key: string, attr: string, value: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setEdgeHtmlAttr(tail: string, head: string, key: string, attr: string, value: unknown, defaultValue?: unknown): this {
+        if (defaultValue === undefined) {
+            this._graph.setEdgeHtmlAttr(tail, head, key, attr, String(value));
+        } else {
+            this._graph.setEdgeHtmlAttr(tail, head, key, attr, String(value), String(defaultValue));
+        }
+        return this;
+    }
+
+    setDefaultEdgeAttr<K extends EdgeDotAttr>(attr: K, value: NonNullable<EdgeAttrs[K]>): this;
+    setDefaultEdgeAttr(attr: string, value: string | number | boolean): this;
+    setDefaultEdgeAttr(attr: string, value: unknown): this {
+        this._graph.setDefaultEdgeAttr(attr, String(value));
+        return this;
+    }
+
+    setDefaultEdgeHtmlAttr<K extends EdgeDotAttr>(attr: K, value: NonNullable<EdgeAttrs[K]>): this;
+    setDefaultEdgeHtmlAttr(attr: string, value: string | number | boolean): this;
+    setDefaultEdgeHtmlAttr(attr: string, value: unknown): this {
+        this._graph.setDefaultEdgeHtmlAttr(attr, String(value));
         return this;
     }
 
@@ -546,6 +754,11 @@ export class Graph {
 
     /** Returns the number of direct subgraphs of this graph. */
     subgraphCount(): number { return this._graph.subgraphCount(); }
+
+    /** Returns the degree of a named node in the graph. */
+    nodeDegree(node: string, inDegree: number = 1, outDegree: number = 1): number {
+        return this._graph.nodeDegree(node, inDegree, outDegree);
+    }
 
     // ---- Attribute reading ----------------------------------------------
 
@@ -700,8 +913,15 @@ export class Graph {
     /**
      * Serialise the graph to a DOT-language string.
      */
+    write(): string {
+        return this._graph.write();
+    }
+
+    /**
+     * Serialise the graph to a DOT-language string.
+     */
     toDot(): string {
-        return this._graph.toDot();
+        return this.write();
     }
 
     /**
@@ -1071,5 +1291,21 @@ export class Graphviz {
         const directed = !type.includes("undirected") ? 1 : 0;
         const strict = type.startsWith("strict") ? 1 : 0;
         return new Graph(new this._module.CGraph(name, directed, strict), this._module);
+    }
+
+    /**
+     * Parse DOT source into a mutable {@link Graph}.  The returned graph can
+     * be queried, modified, rendered directly, or serialised back to DOT with
+     * {@link Graph.toDot}.
+     */
+    read(dotSource: string): Graph {
+        const graph = this.createGraph();
+        try {
+            graph.read(dotSource);
+            return graph;
+        } catch (e) {
+            graph.delete();
+            throw e;
+        }
     }
 }

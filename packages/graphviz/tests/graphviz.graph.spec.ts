@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { EdgeInfo, Graph, GraphType, Graphviz, Subgraph } from "@hpcc-js/wasm-graphviz";
+import type { MainModule } from "../types/graphvizlib.js";
 
 describe("Graph (programmatic graph creation)", function () {
 
@@ -33,6 +34,23 @@ describe("Graph (programmatic graph creation)", function () {
 
         // undirected graphs use "graph" keyword, not "digraph"
         expect(dot).toMatch(/^graph\s/m);
+    });
+
+    it("read parses DOT and toDot writes it back", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.read(`digraph G { a -> b [label="hello"]; }`);
+
+        expect(graph.hasNode("a")).toBe(true);
+        expect(graph.hasNode("b")).toBe(true);
+        expect(graph.hasEdge("a", "b")).toBe(true);
+        expect(graph.getEdgeAttr("a", "b", "", "label")).toBe("hello");
+        expect(graph.write()).toContain("hello");
+        expect(graph.toDot()).toContain("hello");
+    });
+
+    it("read throws for invalid DOT", async function () {
+        const graphviz = await Graphviz.load();
+        expect(() => graphviz.read(`digraph G { a -> }`)).toThrow("Invalid DOT source");
     });
 
     it("setGraphAttr appears in DOT output", async function () {
@@ -71,6 +89,76 @@ describe("Graph (programmatic graph creation)", function () {
 
         expect(dot).toContain("label");
         expect(dot).toContain("hello");
+    });
+
+    it("attribute setters reset to default when value is omitted", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph
+            .addNode("n1")
+            .addEdge("a", "b")
+            .setGraphAttr("rankdir", "LR")
+            .setNodeAttr("n1", "color", "red")
+            .setEdgeAttr("a", "b", "", "label", "hello")
+            .setGraphAttr("rankdir")
+            .setNodeAttr("n1", "color")
+            .setEdgeAttr("a", "b", "", "label");
+
+        expect(graph.getGraphAttr("rankdir")).toBe("");
+        expect(graph.getNodeAttr("n1", "color")).toBe("");
+        expect(graph.getEdgeAttr("a", "b", "", "label")).toBe("");
+    });
+
+    it("setNodeAttr and setEdgeAttr accept a Graphviz default value", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph
+            .addNode("n1")
+            .addNode("n2")
+            .addEdge("a", "b")
+            .addEdge("c", "d")
+            .setNodeAttr("n1", "color", "red", "blue")
+            .setEdgeAttr("a", "b", "", "label", "hello", "default-label");
+
+        expect(graph.getNodeAttr("n1", "color")).toBe("red");
+        expect(graph.getNodeAttr("n2", "color")).toBe("blue");
+        expect(graph.getEdgeAttr("a", "b", "", "label")).toBe("hello");
+        expect(graph.getEdgeAttr("c", "d", "", "label")).toBe("default-label");
+    });
+
+    it("default attribute setters apply to existing and new objects", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph
+            .addNode("n1")
+            .addEdge("a", "b")
+            .setDefaultGraphAttr("label", "Graph Label")
+            .setDefaultNodeAttr("shape", "box")
+            .setDefaultEdgeAttr("color", "red")
+            .addNode("n2")
+            .addEdge("c", "d");
+
+        expect(graph.getGraphAttr("label")).toBe("Graph Label");
+        expect(graph.getNodeAttr("n1", "shape")).toBe("box");
+        expect(graph.getNodeAttr("n2", "shape")).toBe("box");
+        expect(graph.getEdgeAttr("a", "b", "", "color")).toBe("red");
+        expect(graph.getEdgeAttr("c", "d", "", "color")).toBe("red");
+    });
+
+    it("HTML-like attributes serialize without quoted DOT strings", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph
+            .addNode("n1")
+            .addEdge("a", "b")
+            .setGraphHtmlAttr("label", "<B>Graph</B>")
+            .setNodeHtmlAttr("n1", "label", "<I>Node</I>")
+            .setEdgeHtmlAttr("a", "b", "", "label", "<U>Edge</U>");
+
+        const dot = graph.toDot();
+        expect(dot).toContain("label=<<B>Graph</B>>");
+        expect(dot).toContain("label=<<I>Node</I>>");
+        expect(dot).toContain("label=<<U>Edge</U>>");
     });
 
     it("fluent API (method chaining) works", async function () {
@@ -183,9 +271,12 @@ describe("Graph.layout (direct render without DOT round-trip)", function () {
             .addNode("B")
             .addEdge("A", "B")
             .setNodeAttr("A", "color", "red")
+            .setNodeAttr("A", "color", "navy")
             .setGraphAttr("rankdir", "LR");
 
+        const dot = graph.toDot();
         const direct = graph.layout("svg", "dot");
+        console.log(dot);
 
         // Re-create identical graph and go via toDot path
         using graph2 = graphviz.createGraph("G");
@@ -193,7 +284,7 @@ describe("Graph.layout (direct render without DOT round-trip)", function () {
             .addNode("A")
             .addNode("B")
             .addEdge("A", "B")
-            .setNodeAttr("A", "color", "red")
+            .setNodeAttr("A", "color", "navy")
             .setGraphAttr("rankdir", "LR");
         const viaDot = graphviz.layout(graph2.toDot(), "svg", "dot");
 
@@ -345,6 +436,73 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
             sg.setEdgeAttr("p", "q", "", "label", "edge-label");
         }
         expect(graph.toDot()).toContain("edge-label");
+    });
+
+    it("subgraph attribute setters reset to default when value is omitted", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        {
+            using sg = graph.addSubgraph("cluster_x");
+            sg
+                .addNode("n1")
+                .addEdge("p", "q")
+                .setAttr("label", "Cluster")
+                .setNodeAttr("n1", "shape", "box")
+                .setEdgeAttr("p", "q", "", "label", "edge-label")
+                .setAttr("label")
+                .setNodeAttr("n1", "shape")
+                .setEdgeAttr("p", "q", "", "label");
+
+            expect(sg.getAttr("label")).toBe("");
+            expect(sg.getNodeAttr("n1", "shape")).toBe("");
+            expect(sg.getEdgeAttr("p", "q", "", "label")).toBe("");
+        }
+    });
+
+    it("subgraph node and edge setters accept a Graphviz default value", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        {
+            using sg = graph.addSubgraph("cluster_x");
+            sg
+                .addNode("n1")
+                .addNode("n2")
+                .addEdge("a", "b")
+                .addEdge("c", "d")
+                .setNodeAttr("n1", "shape", "box", "ellipse")
+                .setEdgeAttr("a", "b", "", "label", "hello", "default-label");
+
+            expect(sg.getNodeAttr("n1", "shape")).toBe("box");
+            expect(sg.getNodeAttr("n2", "shape")).toBe("ellipse");
+            expect(sg.getEdgeAttr("a", "b", "", "label")).toBe("hello");
+            expect(sg.getEdgeAttr("c", "d", "", "label")).toBe("default-label");
+        }
+    });
+
+    it("subgraph default and HTML-like attribute setters work", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        {
+            using sg = graph.addSubgraph("cluster_x");
+            sg
+                .addNode("n1")
+                .addEdge("a", "b")
+                .setDefaultAttr("label", "Cluster Label")
+                .setDefaultNodeAttr("shape", "box")
+                .setDefaultEdgeAttr("color", "blue")
+                .setHtmlAttr("label", "<B>Cluster</B>")
+                .setNodeHtmlAttr("n1", "label", "<I>Node</I>")
+                .setEdgeHtmlAttr("a", "b", "", "label", "<U>Edge</U>");
+
+            expect(sg.getAttr("label")).toBe("<B>Cluster</B>");
+            expect(sg.getNodeAttr("n1", "shape")).toBe("box");
+            expect(sg.getEdgeAttr("a", "b", "", "color")).toBe("blue");
+        }
+
+        const dot = graph.toDot();
+        expect(dot).toContain("label=<<B>Cluster</B>>");
+        expect(dot).toContain("label=<<I>Node</I>>");
+        expect(dot).toContain("label=<<U>Edge</U>>");
     });
 
     it("Symbol.dispose frees the subgraph wrapper without losing graph data", async function () {
@@ -538,6 +696,94 @@ describe("Memory cleanup", function () {
         const heapAfterSecond = module.HEAPU8.byteLength;
 
         expect(heapAfterSecond).toBe(heapAfterFirst);
+    });
+});
+
+describe("Raw Embind default parameters", function () {
+
+    it("CGraphviz omitted parameters match explicitly passed C++ defaults", async function () {
+        const graphviz = await Graphviz.load();
+        const module = (graphviz as unknown as { _module: MainModule })._module;
+
+        const dot = "digraph G { a -> b; b -> c; a -> c }";
+        const graphVizDefault = new module.CGraphviz(1);
+        const graphVizExplicit = new module.CGraphviz(1, 0);
+        try {
+            expect(graphVizDefault.acyclic(dot)).toBe(graphVizExplicit.acyclic(dot, false, false));
+
+            graphVizDefault.tred(dot);
+            graphVizExplicit.tred(dot, false, false);
+            expect(graphVizDefault.tred_out).toBe(graphVizExplicit.tred_out);
+            expect(graphVizDefault.tred_err).toBe(graphVizExplicit.tred_err);
+
+            expect(graphVizDefault.unflatten(dot)).toBe(graphVizExplicit.unflatten(dot, 0, false, 0));
+        } finally {
+            graphVizDefault.delete();
+            graphVizExplicit.delete();
+        }
+    });
+
+    it("CGraph and CSubgraph omitted parameters match explicitly passed C++ defaults", async function () {
+        const graphviz = await Graphviz.load();
+        const module = (graphviz as unknown as { _module: MainModule })._module;
+
+        const graph = new module.CGraph("G");
+        try {
+            graph.addEdge("a", "b");
+            graph.addEdge("a", "c");
+            graph.addEdge("d", "a");
+            graph.addNode("n_default");
+
+            expect(graph.hasEdge("a", "b")).toBe(graph.hasEdge("a", "b", ""));
+            expect(graph.nodeDegree("a")).toBe(graph.nodeDegree("a", 1, 1));
+
+            graph.setGraphAttr("rankdir", "LR", "TB");
+            graph.setNodeAttr("a", "color", "red", "blue");
+            graph.setEdgeAttr("a", "b", "", "label", "hello", "default-label");
+            expect(graph.getGraphAttr("rankdir")).toBe("LR");
+            expect(graph.getNodeAttr("a", "color")).toBe("red");
+            expect(graph.getNodeAttr("n_default", "color")).toBe("blue");
+            expect(graph.getEdgeAttr("a", "b", "", "label")).toBe("hello");
+            expect(graph.getEdgeAttr("a", "c", "", "label")).toBe("default-label");
+
+            graph.removeEdge("a", "b");
+            expect(graph.hasEdge("a", "b")).toBe(false);
+
+            graph.addEdge("a", "b");
+            graph.removeEdge("a", "b", "");
+            expect(graph.hasEdge("a", "b", "")).toBe(false);
+
+            const subgraph = graph.addSubgraph("cluster_0")!;
+            try {
+                subgraph.addEdge("c", "d");
+                subgraph.addEdge("c", "e");
+                subgraph.addEdge("f", "c");
+                subgraph.addNode("sg_default");
+
+                expect(subgraph.hasEdge("c", "d")).toBe(subgraph.hasEdge("c", "d", ""));
+                expect(subgraph.nodeDegree("c")).toBe(subgraph.nodeDegree("c", 1, 1));
+
+                subgraph.setAttr("label", "Cluster", "Default Cluster");
+                subgraph.setNodeAttr("c", "shape", "box", "ellipse");
+                subgraph.setEdgeAttr("c", "e", "", "tooltip", "edge", "default-edge");
+                expect(subgraph.getAttr("label")).toBe("Cluster");
+                expect(subgraph.getNodeAttr("c", "shape")).toBe("box");
+                expect(subgraph.getNodeAttr("sg_default", "shape")).toBe("ellipse");
+                expect(subgraph.getEdgeAttr("c", "e", "", "tooltip")).toBe("edge");
+                expect(subgraph.getEdgeAttr("f", "c", "", "tooltip")).toBe("default-edge");
+
+                subgraph.removeEdge("c", "d");
+                expect(subgraph.hasEdge("c", "d")).toBe(false);
+
+                subgraph.addEdge("c", "d");
+                subgraph.removeEdge("c", "d", "");
+                expect(subgraph.hasEdge("c", "d", "")).toBe(false);
+            } finally {
+                subgraph.delete();
+            }
+        } finally {
+            graph.delete();
+        }
     });
 });
 
@@ -1062,5 +1308,150 @@ describe("Graph traversal and existence checks", function () {
         expect(sg.inEdges("st_b")).toHaveLength(2);
         expect(sg.nodeEdges("st_b")).toHaveLength(2);
         expect(sg.outEdges("ghost_node")).toEqual([]);
+    });
+});
+
+describe("nodeDegree (degree queries)", function () {
+
+    it("nodeDegree returns total degree (in + out) by default", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph.addEdge("a", "b");
+        graph.addEdge("a", "c");
+        graph.addEdge("d", "a");
+
+        expect(graph.nodeDegree("a")).toBe(3); // 2 out-edges + 1 in-edge
+        expect(graph.nodeDegree("b")).toBe(1); // 1 in-edge
+        expect(graph.nodeDegree("c")).toBe(1); // 1 in-edge
+        expect(graph.nodeDegree("d")).toBe(1); // 1 out-edge
+    });
+
+    it("nodeDegree with in=1, out=0 returns in-degree only", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph.addEdge("a", "b");
+        graph.addEdge("c", "b");
+        graph.addEdge("b", "d");
+
+        expect(graph.nodeDegree("b", 1, 0)).toBe(2); // 2 in-edges
+        expect(graph.nodeDegree("a", 1, 0)).toBe(0); // 0 in-edges
+        expect(graph.nodeDegree("d", 1, 0)).toBe(1); // 1 in-edge
+    });
+
+    it("nodeDegree with in=0, out=1 returns out-degree only", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph.addEdge("a", "b");
+        graph.addEdge("a", "c");
+        graph.addEdge("d", "a");
+
+        expect(graph.nodeDegree("a", 0, 1)).toBe(2); // 2 out-edges
+        expect(graph.nodeDegree("b", 0, 1)).toBe(0); // 0 out-edges
+        expect(graph.nodeDegree("d", 0, 1)).toBe(1); // 1 out-edge
+    });
+
+    it("nodeDegree returns 0 for non-existent nodes", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph.addEdge("a", "b");
+
+        expect(graph.nodeDegree("ghost")).toBe(0);
+        expect(graph.nodeDegree("phantom", 1, 0)).toBe(0);
+        expect(graph.nodeDegree("phantom", 0, 1)).toBe(0);
+    });
+
+    it("nodeDegree works with undirected graphs", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("UG", "undirected");
+        graph.addEdge("a", "b");
+        graph.addEdge("b", "c");
+        graph.addEdge("a", "c");
+
+        // In undirected graphs, all edges are bidirectional
+        expect(graph.nodeDegree("a")).toBe(2); // connected to b and c
+        expect(graph.nodeDegree("b")).toBe(2); // connected to a and c
+        expect(graph.nodeDegree("c")).toBe(2); // connected to a and b
+    });
+
+    it("nodeDegree handles self-loops correctly", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph.addEdge("a", "a"); // self-loop
+        graph.addEdge("a", "b");
+
+        // Self-loop should contribute to degree
+        expect(graph.nodeDegree("a")).toBeGreaterThanOrEqual(2);
+        expect(graph.nodeDegree("b")).toBe(1);
+    });
+
+    it("nodeDegree with isolated node (no edges)", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph.addNode("isolated");
+        graph.addEdge("a", "b");
+
+        expect(graph.nodeDegree("isolated")).toBe(0);
+        expect(graph.nodeDegree("a")).toBe(1);
+    });
+
+    it("Subgraph.nodeDegree returns degree within subgraph scope", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        // Create edges in graph root
+        graph.addEdge("a", "b");
+        graph.addEdge("b", "c");
+
+        using sg = graph.addSubgraph("cluster_deg");
+        sg.addEdge("b", "d");
+        sg.addEdge("e", "b");
+
+        // Subgraph degree only counts edges within the subgraph
+        expect(sg.nodeDegree("b", 1, 1)).toBe(2); // 1 in-edge (e->b) + 1 out-edge (b->d)
+        expect(sg.nodeDegree("b", 1, 0)).toBe(1); // 1 in-edge only
+        expect(sg.nodeDegree("b", 0, 1)).toBe(1); // 1 out-edge only
+    });
+
+    it("nodeDegree increments correctly after adding edges", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph.addNode("x");
+
+        expect(graph.nodeDegree("x")).toBe(0);
+
+        graph.addEdge("a", "x");
+        expect(graph.nodeDegree("x")).toBe(1);
+
+        graph.addEdge("x", "b");
+        expect(graph.nodeDegree("x")).toBe(2);
+
+        graph.addEdge("c", "x");
+        expect(graph.nodeDegree("x")).toBe(3);
+    });
+
+    it("nodeDegree decrements correctly after removing edges", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph.addEdge("a", "x");
+        graph.addEdge("b", "x");
+        graph.addEdge("x", "c");
+
+        expect(graph.nodeDegree("x")).toBe(3);
+
+        graph.removeEdge("a", "x");
+        expect(graph.nodeDegree("x")).toBe(2);
+
+        graph.removeEdge("x", "c");
+        expect(graph.nodeDegree("x")).toBe(1);
+    });
+
+    it("nodeDegree with both in and out counts parallel edges", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        // Add multiple edges from a to b
+        graph.addEdge("a", "b", "edge1");
+        graph.addEdge("a", "b", "edge2");
+        graph.addEdge("c", "b", "edge3");
+
+        expect(graph.nodeDegree("b", 1, 1)).toBe(3); // 2 in-edges from a + 1 in-edge from c
     });
 });

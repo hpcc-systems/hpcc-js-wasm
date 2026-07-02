@@ -58,11 +58,26 @@ namespace
         for (; s && *s; ++s)
         {
             const unsigned char c = static_cast<unsigned char>(*s);
-            if      (c == '"')  { out += "\\\""; }
-            else if (c == '\\') { out += "\\\\"; }
-            else if (c == '\n') { out += "\\n";  }
-            else if (c == '\r') { out += "\\r";  }
-            else if (c == '\t') { out += "\\t";  }
+            if (c == '"')
+            {
+                out += "\\\"";
+            }
+            else if (c == '\\')
+            {
+                out += "\\\\";
+            }
+            else if (c == '\n')
+            {
+                out += "\\n";
+            }
+            else if (c == '\r')
+            {
+                out += "\\r";
+            }
+            else if (c == '\t')
+            {
+                out += "\\t";
+            }
             else if (c < 0x20)
             {
                 // U+00xx control character → \u00xx
@@ -71,7 +86,10 @@ namespace
                 out += hex[(c >> 4) & 0xf];
                 out += hex[c & 0xf];
             }
-            else { out += static_cast<char>(c); }
+            else
+            {
+                out += static_cast<char>(c);
+            }
         }
         out += '"';
         return out;
@@ -275,29 +293,50 @@ public:
     }
 
     /** Set a graph-level attribute (e.g. "rankdir", "label"). */
-    void setGraphAttr(const std::string &attr, const std::string &value)
+    void setGraphAttr(const std::string &attr, const std::string &value, const std::string &defaultValue = "")
     {
         if (_graph)
-            agsafeset(_graph,
-                      const_cast<char *>(attr.c_str()),
-                      const_cast<char *>(value.c_str()),
-                      const_cast<char *>(value.c_str()));
+            agsafeset_text(_graph,
+                           const_cast<char *>(attr.c_str()),
+                           value.c_str(),
+                           defaultValue.c_str());
+    }
+
+    void setGraphHtmlAttr(const std::string &attr, const std::string &value, const std::string &defaultValue = "")
+    {
+        if (_graph)
+            agsafeset_html(_graph,
+                           const_cast<char *>(attr.c_str()),
+                           value.c_str(),
+                           defaultValue.c_str());
     }
 
     /**
      * Set an attribute on a named node.  The node must already exist (call
      * addNode first, or it will be created implicitly by addEdge).
      */
-    void setNodeAttr(const std::string &node, const std::string &attr, const std::string &value)
+    void setNodeAttr(const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue = "")
     {
         if (!_graph)
             return;
         Agnode_t *n = agnode(_graph, const_cast<char *>(node.c_str()), 0);
         if (n)
-            agsafeset(n,
-                      const_cast<char *>(attr.c_str()),
-                      const_cast<char *>(value.c_str()),
-                      "");
+            agsafeset_text(n,
+                           const_cast<char *>(attr.c_str()),
+                           value.c_str(),
+                           defaultValue.c_str());
+    }
+
+    void setNodeHtmlAttr(const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue = "")
+    {
+        if (!_graph)
+            return;
+        Agnode_t *n = agnode(_graph, const_cast<char *>(node.c_str()), 0);
+        if (n)
+            agsafeset_html(n,
+                           const_cast<char *>(attr.c_str()),
+                           value.c_str(),
+                           defaultValue.c_str());
     }
 
     /**
@@ -306,7 +345,7 @@ public:
      */
     void setEdgeAttr(const std::string &tail, const std::string &head,
                      const std::string &key,
-                     const std::string &attr, const std::string &value)
+                     const std::string &attr, const std::string &value, const std::string &defaultValue = "")
     {
         if (!_graph)
             return;
@@ -317,10 +356,76 @@ public:
         char *k = key.empty() ? nullptr : const_cast<char *>(key.c_str());
         Agedge_t *e = agedge(_graph, t, h, k, 0);
         if (e)
-            agsafeset(e,
-                      const_cast<char *>(attr.c_str()),
-                      const_cast<char *>(value.c_str()),
-                      "");
+            agsafeset_text(e,
+                           const_cast<char *>(attr.c_str()),
+                           value.c_str(),
+                           defaultValue.c_str());
+    }
+
+    void setEdgeHtmlAttr(const std::string &tail, const std::string &head,
+                         const std::string &key,
+                         const std::string &attr, const std::string &value, const std::string &defaultValue = "")
+    {
+        if (!_graph)
+            return;
+        Agnode_t *t = agnode(_graph, const_cast<char *>(tail.c_str()), 0);
+        Agnode_t *h = agnode(_graph, const_cast<char *>(head.c_str()), 0);
+        if (!t || !h)
+            return;
+        char *k = key.empty() ? nullptr : const_cast<char *>(key.c_str());
+        Agedge_t *e = agedge(_graph, t, h, k, 0);
+        if (e)
+            agsafeset_html(e,
+                           const_cast<char *>(attr.c_str()),
+                           value.c_str(),
+                           defaultValue.c_str());
+    }
+
+    void setDefaultGraphAttr(const std::string &attr, const std::string &value)
+    {
+        if (_graph)
+            agattr_text(_graph, AGRAPH, const_cast<char *>(attr.c_str()), value.c_str());
+    }
+
+    void setDefaultGraphHtmlAttr(const std::string &attr, const std::string &value)
+    {
+        if (_graph)
+            agattr_html(_graph, AGRAPH, const_cast<char *>(attr.c_str()), value.c_str());
+    }
+
+    void setDefaultNodeAttr(const std::string &attr, const std::string &value)
+    {
+        if (_graph)
+            agattr_text(_graph, AGNODE, const_cast<char *>(attr.c_str()), value.c_str());
+    }
+
+    void setDefaultNodeHtmlAttr(const std::string &attr, const std::string &value)
+    {
+        if (_graph)
+            agattr_html(_graph, AGNODE, const_cast<char *>(attr.c_str()), value.c_str());
+    }
+
+    void setDefaultEdgeAttr(const std::string &attr, const std::string &value)
+    {
+        if (_graph)
+            agattr_text(_graph, AGEDGE, const_cast<char *>(attr.c_str()), value.c_str());
+    }
+
+    void setDefaultEdgeHtmlAttr(const std::string &attr, const std::string &value)
+    {
+        if (_graph)
+            agattr_html(_graph, AGEDGE, const_cast<char *>(attr.c_str()), value.c_str());
+    }
+
+    bool read(const std::string &src)
+    {
+        Agraph_t *graph = agmemread(src.c_str());
+        if (!graph)
+            return false;
+        if (_graph)
+            agclose(_graph);
+        _graph = graph;
+        return true;
     }
 
     /** Serialise the graph to a DOT-language string. */
@@ -377,7 +482,8 @@ public:
     /** Returns true if a node with the given name exists in the graph. */
     bool hasNode(const std::string &name)
     {
-        if (!_graph) return false;
+        if (!_graph)
+            return false;
         return agnode(_graph, const_cast<char *>(name.c_str()), 0) != nullptr;
     }
 
@@ -388,10 +494,12 @@ public:
      */
     bool hasEdge(const std::string &tail, const std::string &head, const std::string &key = "")
     {
-        if (!_graph) return false;
+        if (!_graph)
+            return false;
         Agnode_t *t = agnode(_graph, const_cast<char *>(tail.c_str()), 0);
         Agnode_t *h = agnode(_graph, const_cast<char *>(head.c_str()), 0);
-        if (!t || !h) return false;
+        if (!t || !h)
+            return false;
         char *k = key.empty() ? nullptr : const_cast<char *>(key.c_str());
         return agedge(_graph, t, h, k, 0) != nullptr;
     }
@@ -399,7 +507,8 @@ public:
     /** Returns true if a subgraph with the given name exists. */
     bool hasSubgraph(const std::string &name)
     {
-        if (!_graph) return false;
+        if (!_graph)
+            return false;
         return agsubg(_graph, const_cast<char *>(name.c_str()), 0) != nullptr;
     }
 
@@ -414,12 +523,28 @@ public:
     /** Returns the number of direct subgraphs of this graph. */
     int subgraphCount() { return _graph ? agnsubg(_graph) : 0; }
 
+    /** Returns the degree of a named node. in and out select the edge sets:
+     *  in=true, out=false returns in-degree
+     *  in=false, out=true returns out-degree
+     *  in=true, out=true returns total degree (default)
+     *  Returns 0 if the node does not exist. */
+    int nodeDegree(const std::string &node, int in = 1, int out = 1)
+    {
+        if (!_graph)
+            return 0;
+        Agnode_t *n = agnode(_graph, const_cast<char *>(node.c_str()), 0);
+        if (!n)
+            return 0;
+        return agdegree(_graph, n, in, out);
+    }
+
     // ---- Attribute reading ----------------------------------------------
 
     /** Returns the current value of a graph-level attribute, or `""`. */
     std::string getGraphAttr(const std::string &attr)
     {
-        if (!_graph) return "";
+        if (!_graph)
+            return "";
         char *val = agget(_graph, const_cast<char *>(attr.c_str()));
         return val ? val : "";
     }
@@ -427,9 +552,11 @@ public:
     /** Returns the current value of an attribute on the named node, or `""`. */
     std::string getNodeAttr(const std::string &node, const std::string &attr)
     {
-        if (!_graph) return "";
+        if (!_graph)
+            return "";
         Agnode_t *n = agnode(_graph, const_cast<char *>(node.c_str()), 0);
-        if (!n) return "";
+        if (!n)
+            return "";
         char *val = agget(n, const_cast<char *>(attr.c_str()));
         return val ? val : "";
     }
@@ -441,13 +568,16 @@ public:
     std::string getEdgeAttr(const std::string &tail, const std::string &head,
                             const std::string &key, const std::string &attr)
     {
-        if (!_graph) return "";
+        if (!_graph)
+            return "";
         Agnode_t *t = agnode(_graph, const_cast<char *>(tail.c_str()), 0);
         Agnode_t *h = agnode(_graph, const_cast<char *>(head.c_str()), 0);
-        if (!t || !h) return "";
+        if (!t || !h)
+            return "";
         char *k = key.empty() ? nullptr : const_cast<char *>(key.c_str());
         Agedge_t *e = agedge(_graph, t, h, k, 0);
-        if (!e) return "";
+        if (!e)
+            return "";
         char *val = agget(e, const_cast<char *>(attr.c_str()));
         return val ? val : "";
     }
@@ -462,7 +592,8 @@ public:
         if (_graph)
             for (Agnode_t *n = agfstnode(_graph); n; n = agnxtnode(_graph, n))
             {
-                if (!first) result += ',';
+                if (!first)
+                    result += ',';
                 result += jsonStr(agnameof(n));
                 first = false;
             }
@@ -478,7 +609,8 @@ public:
         if (_graph)
             for (Agraph_t *sg = agfstsubg(_graph); sg; sg = agnxtsubg(sg))
             {
-                if (!first) result += ',';
+                if (!first)
+                    result += ',';
                 result += jsonStr(agnameof(sg));
                 first = false;
             }
@@ -500,11 +632,15 @@ public:
             for (Agnode_t *n = agfstnode(_graph); n; n = agnxtnode(_graph, n))
                 for (Agedge_t *e = agfstout(_graph, n); e; e = agnxtout(_graph, e))
                 {
-                    if (agtail(e) != n) continue;
+                    if (agtail(e) != n)
+                        continue;
                     const char *k = agnameof(e);
-                    if (!first) result += ',';
-                    result += jsonStr(agnameof(agtail(e))); result += ',';
-                    result += jsonStr(agnameof(aghead(e))); result += ',';
+                    if (!first)
+                        result += ',';
+                    result += jsonStr(agnameof(agtail(e)));
+                    result += ',';
+                    result += jsonStr(agnameof(aghead(e)));
+                    result += ',';
                     result += jsonStr(k ? k : "");
                     first = false;
                 }
@@ -527,9 +663,12 @@ public:
                 for (Agedge_t *e = agfstout(_graph, n); e; e = agnxtout(_graph, e))
                 {
                     const char *k = agnameof(e);
-                    if (!first) result += ',';
-                    result += jsonStr(agnameof(agtail(e))); result += ',';
-                    result += jsonStr(agnameof(aghead(e))); result += ',';
+                    if (!first)
+                        result += ',';
+                    result += jsonStr(agnameof(agtail(e)));
+                    result += ',';
+                    result += jsonStr(agnameof(aghead(e)));
+                    result += ',';
                     result += jsonStr(k ? k : "");
                     first = false;
                 }
@@ -553,9 +692,12 @@ public:
                 for (Agedge_t *e = agfstin(_graph, n); e; e = agnxtin(_graph, e))
                 {
                     const char *k = agnameof(e);
-                    if (!first) result += ',';
-                    result += jsonStr(agnameof(agtail(e))); result += ',';
-                    result += jsonStr(agnameof(aghead(e))); result += ',';
+                    if (!first)
+                        result += ',';
+                    result += jsonStr(agnameof(agtail(e)));
+                    result += ',';
+                    result += jsonStr(agnameof(aghead(e)));
+                    result += ',';
                     result += jsonStr(k ? k : "");
                     first = false;
                 }
@@ -580,9 +722,12 @@ public:
                 for (Agedge_t *e = agfstedge(_graph, n); e; e = agnxtedge(_graph, e, n))
                 {
                     const char *k = agnameof(e);
-                    if (!first) result += ',';
-                    result += jsonStr(agnameof(agtail(e))); result += ',';
-                    result += jsonStr(agnameof(aghead(e))); result += ',';
+                    if (!first)
+                        result += ',';
+                    result += jsonStr(agnameof(agtail(e)));
+                    result += ',';
+                    result += jsonStr(agnameof(aghead(e)));
+                    result += ',';
                     result += jsonStr(k ? k : "");
                     first = false;
                 }
@@ -699,32 +844,53 @@ public:
      * Set an attribute on the subgraph itself (e.g. "label", "style",
      * "color", "bgcolor").
      */
-    void setAttr(const std::string &attr, const std::string &value)
+    void setAttr(const std::string &attr, const std::string &value, const std::string &defaultValue = "")
     {
         if (_subgraph)
-            agsafeset(_subgraph,
-                      const_cast<char *>(attr.c_str()),
-                      const_cast<char *>(value.c_str()),
-                      const_cast<char *>(value.c_str()));
+            agsafeset_text(_subgraph,
+                           const_cast<char *>(attr.c_str()),
+                           value.c_str(),
+                           defaultValue.c_str());
+    }
+
+    void setHtmlAttr(const std::string &attr, const std::string &value, const std::string &defaultValue = "")
+    {
+        if (_subgraph)
+            agsafeset_html(_subgraph,
+                           const_cast<char *>(attr.c_str()),
+                           value.c_str(),
+                           defaultValue.c_str());
     }
 
     /** Set an attribute on a node that lives in this subgraph. */
-    void setNodeAttr(const std::string &node, const std::string &attr, const std::string &value)
+    void setNodeAttr(const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue = "")
     {
         if (!_subgraph)
             return;
         Agnode_t *n = agnode(_subgraph, const_cast<char *>(node.c_str()), 0);
         if (n)
-            agsafeset(n,
-                      const_cast<char *>(attr.c_str()),
-                      const_cast<char *>(value.c_str()),
-                      "");
+            agsafeset_text(n,
+                           const_cast<char *>(attr.c_str()),
+                           value.c_str(),
+                           defaultValue.c_str());
+    }
+
+    void setNodeHtmlAttr(const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue = "")
+    {
+        if (!_subgraph)
+            return;
+        Agnode_t *n = agnode(_subgraph, const_cast<char *>(node.c_str()), 0);
+        if (n)
+            agsafeset_html(n,
+                           const_cast<char *>(attr.c_str()),
+                           value.c_str(),
+                           defaultValue.c_str());
     }
 
     /** Set an attribute on an edge inside this subgraph (identified by tail/head/key). */
     void setEdgeAttr(const std::string &tail, const std::string &head,
                      const std::string &key,
-                     const std::string &attr, const std::string &value)
+                     const std::string &attr, const std::string &value, const std::string &defaultValue = "")
     {
         if (!_subgraph)
             return;
@@ -735,10 +901,65 @@ public:
         char *k = key.empty() ? nullptr : const_cast<char *>(key.c_str());
         Agedge_t *e = agedge(_subgraph, t, h, k, 0);
         if (e)
-            agsafeset(e,
-                      const_cast<char *>(attr.c_str()),
-                      const_cast<char *>(value.c_str()),
-                      "");
+            agsafeset_text(e,
+                           const_cast<char *>(attr.c_str()),
+                           value.c_str(),
+                           defaultValue.c_str());
+    }
+
+    void setEdgeHtmlAttr(const std::string &tail, const std::string &head,
+                         const std::string &key,
+                         const std::string &attr, const std::string &value, const std::string &defaultValue = "")
+    {
+        if (!_subgraph)
+            return;
+        Agnode_t *t = agnode(_subgraph, const_cast<char *>(tail.c_str()), 0);
+        Agnode_t *h = agnode(_subgraph, const_cast<char *>(head.c_str()), 0);
+        if (!t || !h)
+            return;
+        char *k = key.empty() ? nullptr : const_cast<char *>(key.c_str());
+        Agedge_t *e = agedge(_subgraph, t, h, k, 0);
+        if (e)
+            agsafeset_html(e,
+                           const_cast<char *>(attr.c_str()),
+                           value.c_str(),
+                           defaultValue.c_str());
+    }
+
+    void setDefaultAttr(const std::string &attr, const std::string &value)
+    {
+        if (_subgraph)
+            agattr_text(_subgraph, AGRAPH, const_cast<char *>(attr.c_str()), value.c_str());
+    }
+
+    void setDefaultHtmlAttr(const std::string &attr, const std::string &value)
+    {
+        if (_subgraph)
+            agattr_html(_subgraph, AGRAPH, const_cast<char *>(attr.c_str()), value.c_str());
+    }
+
+    void setDefaultNodeAttr(const std::string &attr, const std::string &value)
+    {
+        if (_subgraph)
+            agattr_text(_subgraph, AGNODE, const_cast<char *>(attr.c_str()), value.c_str());
+    }
+
+    void setDefaultNodeHtmlAttr(const std::string &attr, const std::string &value)
+    {
+        if (_subgraph)
+            agattr_html(_subgraph, AGNODE, const_cast<char *>(attr.c_str()), value.c_str());
+    }
+
+    void setDefaultEdgeAttr(const std::string &attr, const std::string &value)
+    {
+        if (_subgraph)
+            agattr_text(_subgraph, AGEDGE, const_cast<char *>(attr.c_str()), value.c_str());
+    }
+
+    void setDefaultEdgeHtmlAttr(const std::string &attr, const std::string &value)
+    {
+        if (_subgraph)
+            agattr_html(_subgraph, AGEDGE, const_cast<char *>(attr.c_str()), value.c_str());
     }
 
     /**
@@ -779,7 +1000,8 @@ public:
     /** Returns true if a node with the given name exists in this subgraph. */
     bool hasNode(const std::string &name)
     {
-        if (!_subgraph) return false;
+        if (!_subgraph)
+            return false;
         return agnode(_subgraph, const_cast<char *>(name.c_str()), 0) != nullptr;
     }
 
@@ -789,10 +1011,12 @@ public:
      */
     bool hasEdge(const std::string &tail, const std::string &head, const std::string &key = "")
     {
-        if (!_subgraph) return false;
+        if (!_subgraph)
+            return false;
         Agnode_t *t = agnode(_subgraph, const_cast<char *>(tail.c_str()), 0);
         Agnode_t *h = agnode(_subgraph, const_cast<char *>(head.c_str()), 0);
-        if (!t || !h) return false;
+        if (!t || !h)
+            return false;
         char *k = key.empty() ? nullptr : const_cast<char *>(key.c_str());
         return agedge(_subgraph, t, h, k, 0) != nullptr;
     }
@@ -805,12 +1029,28 @@ public:
     /** Returns the number of edges in this subgraph. */
     int edgeCount() { return _subgraph ? agnedges(_subgraph) : 0; }
 
+    /** Returns the degree of a named node in this subgraph. in and out select the edge sets:
+     *  in=true, out=false returns in-degree
+     *  in=false, out=true returns out-degree
+     *  in=true, out=true returns total degree (default)
+     *  Returns 0 if the node does not exist. */
+    int nodeDegree(const std::string &node, int in = 1, int out = 1)
+    {
+        if (!_subgraph)
+            return 0;
+        Agnode_t *n = agnode(_subgraph, const_cast<char *>(node.c_str()), 0);
+        if (!n)
+            return 0;
+        return agdegree(_subgraph, n, in, out);
+    }
+
     // ---- Attribute reading ----------------------------------------------
 
     /** Returns the current value of a subgraph-level attribute, or `""`. */
     std::string getAttr(const std::string &attr)
     {
-        if (!_subgraph) return "";
+        if (!_subgraph)
+            return "";
         char *val = agget(_subgraph, const_cast<char *>(attr.c_str()));
         return val ? val : "";
     }
@@ -818,9 +1058,11 @@ public:
     /** Returns the current value of an attribute on the named node, or `""`. */
     std::string getNodeAttr(const std::string &node, const std::string &attr)
     {
-        if (!_subgraph) return "";
+        if (!_subgraph)
+            return "";
         Agnode_t *n = agnode(_subgraph, const_cast<char *>(node.c_str()), 0);
-        if (!n) return "";
+        if (!n)
+            return "";
         char *val = agget(n, const_cast<char *>(attr.c_str()));
         return val ? val : "";
     }
@@ -832,13 +1074,16 @@ public:
     std::string getEdgeAttr(const std::string &tail, const std::string &head,
                             const std::string &key, const std::string &attr)
     {
-        if (!_subgraph) return "";
+        if (!_subgraph)
+            return "";
         Agnode_t *t = agnode(_subgraph, const_cast<char *>(tail.c_str()), 0);
         Agnode_t *h = agnode(_subgraph, const_cast<char *>(head.c_str()), 0);
-        if (!t || !h) return "";
+        if (!t || !h)
+            return "";
         char *k = key.empty() ? nullptr : const_cast<char *>(key.c_str());
         Agedge_t *e = agedge(_subgraph, t, h, k, 0);
-        if (!e) return "";
+        if (!e)
+            return "";
         char *val = agget(e, const_cast<char *>(attr.c_str()));
         return val ? val : "";
     }
@@ -853,7 +1098,8 @@ public:
         if (_subgraph)
             for (Agnode_t *n = agfstnode(_subgraph); n; n = agnxtnode(_subgraph, n))
             {
-                if (!first) result += ',';
+                if (!first)
+                    result += ',';
                 result += jsonStr(agnameof(n));
                 first = false;
             }
@@ -873,11 +1119,15 @@ public:
             for (Agnode_t *n = agfstnode(_subgraph); n; n = agnxtnode(_subgraph, n))
                 for (Agedge_t *e = agfstout(_subgraph, n); e; e = agnxtout(_subgraph, e))
                 {
-                    if (agtail(e) != n) continue;
+                    if (agtail(e) != n)
+                        continue;
                     const char *k = agnameof(e);
-                    if (!first) result += ',';
-                    result += jsonStr(agnameof(agtail(e))); result += ',';
-                    result += jsonStr(agnameof(aghead(e))); result += ',';
+                    if (!first)
+                        result += ',';
+                    result += jsonStr(agnameof(agtail(e)));
+                    result += ',';
+                    result += jsonStr(agnameof(aghead(e)));
+                    result += ',';
                     result += jsonStr(k ? k : "");
                     first = false;
                 }
@@ -897,9 +1147,12 @@ public:
                 for (Agedge_t *e = agfstout(_subgraph, n); e; e = agnxtout(_subgraph, e))
                 {
                     const char *k = agnameof(e);
-                    if (!first) result += ',';
-                    result += jsonStr(agnameof(agtail(e))); result += ',';
-                    result += jsonStr(agnameof(aghead(e))); result += ',';
+                    if (!first)
+                        result += ',';
+                    result += jsonStr(agnameof(agtail(e)));
+                    result += ',';
+                    result += jsonStr(agnameof(aghead(e)));
+                    result += ',';
                     result += jsonStr(k ? k : "");
                     first = false;
                 }
@@ -920,9 +1173,12 @@ public:
                 for (Agedge_t *e = agfstin(_subgraph, n); e; e = agnxtin(_subgraph, e))
                 {
                     const char *k = agnameof(e);
-                    if (!first) result += ',';
-                    result += jsonStr(agnameof(agtail(e))); result += ',';
-                    result += jsonStr(agnameof(aghead(e))); result += ',';
+                    if (!first)
+                        result += ',';
+                    result += jsonStr(agnameof(agtail(e)));
+                    result += ',';
+                    result += jsonStr(agnameof(aghead(e)));
+                    result += ',';
                     result += jsonStr(k ? k : "");
                     first = false;
                 }
@@ -943,9 +1199,12 @@ public:
                 for (Agedge_t *e = agfstedge(_subgraph, n); e; e = agnxtedge(_subgraph, e, n))
                 {
                     const char *k = agnameof(e);
-                    if (!first) result += ',';
-                    result += jsonStr(agnameof(agtail(e))); result += ',';
-                    result += jsonStr(agnameof(aghead(e))); result += ',';
+                    if (!first)
+                        result += ',';
+                    result += jsonStr(agnameof(agtail(e)));
+                    result += ',';
+                    result += jsonStr(agnameof(aghead(e)));
+                    result += ',';
                     result += jsonStr(k ? k : "");
                     first = false;
                 }
@@ -972,7 +1231,6 @@ CSubgraph *CGraph::getSubgraph(const std::string &name)
     return sg ? new CSubgraph(sg) : nullptr;
 }
 
-
 #include <emscripten/bind.h>
 
 EMSCRIPTEN_BINDINGS(graphvizlib_bindings)
@@ -981,6 +1239,7 @@ EMSCRIPTEN_BINDINGS(graphvizlib_bindings)
 
     class_<CGraphviz>("CGraphviz")
         .constructor<>()
+        .constructor<int>()
         .constructor<int, int>()
         .class_function("version", &CGraphviz::version)
         .class_function("lastError", &CGraphviz::lastError)
@@ -989,11 +1248,25 @@ EMSCRIPTEN_BINDINGS(graphvizlib_bindings)
         .function("layout", &CGraphviz::layout)
         .property("acyclic_outFile", &CGraphviz::acyclic_outFile)
         .property("acyclic_num_rev", &CGraphviz::acyclic_num_rev)
+        .function("acyclic", optional_override([](CGraphviz &self, const std::string &src)
+                                               { return self.acyclic(src); }))
+        .function("acyclic", optional_override([](CGraphviz &self, const std::string &src, bool doWrite)
+                                               { return self.acyclic(src, doWrite); }))
         .function("acyclic", &CGraphviz::acyclic)
         .property("tred_out", &CGraphviz::tred_out)
         .property("tred_err", &CGraphviz::tred_err)
+        .function("tred", optional_override([](CGraphviz &self, const std::string &src)
+                                            { self.tred(src); }))
+        .function("tred", optional_override([](CGraphviz &self, const std::string &src, bool verbose)
+                                            { self.tred(src, verbose); }))
         .function("tred", &CGraphviz::tred)
         .property("unflatten_out", &CGraphviz::unflatten_out)
+        .function("unflatten", optional_override([](CGraphviz &self, const std::string &src)
+                                                 { return self.unflatten(src); }))
+        .function("unflatten", optional_override([](CGraphviz &self, const std::string &src, int maxMinlen)
+                                                 { return self.unflatten(src, maxMinlen); }))
+        .function("unflatten", optional_override([](CGraphviz &self, const std::string &src, int maxMinlen, bool do_fans)
+                                                 { return self.unflatten(src, maxMinlen, do_fans); }))
         .function("unflatten", &CGraphviz::unflatten)
 
         ;
@@ -1004,21 +1277,60 @@ EMSCRIPTEN_BINDINGS(graphvizlib_bindings)
         .constructor<const std::string &, int>()
         .constructor<const std::string &, int, int>()
         .function("addNode", &CGraph::addNode)
+        .function("addEdge", optional_override([](CGraph &self, const std::string &tail, const std::string &head)
+                                               { self.addEdge(tail, head); }))
         .function("addEdge", &CGraph::addEdge)
-        .function("setGraphAttr", &CGraph::setGraphAttr)
-        .function("setNodeAttr", &CGraph::setNodeAttr)
-        .function("setEdgeAttr", &CGraph::setEdgeAttr)
+        .function("setGraphAttr", optional_override([](CGraph &self, const std::string &attr, const std::string &value)
+                                                    { self.setGraphAttr(attr, value); }))
+        .function("setGraphAttr", optional_override([](CGraph &self, const std::string &attr, const std::string &value, const std::string &defaultValue)
+                                                    { self.setGraphAttr(attr, value, defaultValue); }))
+        .function("setGraphHtmlAttr", optional_override([](CGraph &self, const std::string &attr, const std::string &value)
+                                                        { self.setGraphHtmlAttr(attr, value); }))
+        .function("setGraphHtmlAttr", optional_override([](CGraph &self, const std::string &attr, const std::string &value, const std::string &defaultValue)
+                                                        { self.setGraphHtmlAttr(attr, value, defaultValue); }))
+        .function("setNodeAttr", optional_override([](CGraph &self, const std::string &node, const std::string &attr, const std::string &value)
+                                                   { self.setNodeAttr(node, attr, value); }))
+        .function("setNodeAttr", optional_override([](CGraph &self, const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue)
+                                                   { self.setNodeAttr(node, attr, value, defaultValue); }))
+        .function("setNodeHtmlAttr", optional_override([](CGraph &self, const std::string &node, const std::string &attr, const std::string &value)
+                                                       { self.setNodeHtmlAttr(node, attr, value); }))
+        .function("setNodeHtmlAttr", optional_override([](CGraph &self, const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue)
+                                                       { self.setNodeHtmlAttr(node, attr, value, defaultValue); }))
+        .function("setEdgeAttr", optional_override([](CGraph &self, const std::string &tail, const std::string &head, const std::string &key, const std::string &attr, const std::string &value)
+                                                   { self.setEdgeAttr(tail, head, key, attr, value); }))
+        .function("setEdgeAttr", optional_override([](CGraph &self, const std::string &tail, const std::string &head, const std::string &key, const std::string &attr, const std::string &value, const std::string &defaultValue)
+                                                   { self.setEdgeAttr(tail, head, key, attr, value, defaultValue); }))
+        .function("setEdgeHtmlAttr", optional_override([](CGraph &self, const std::string &tail, const std::string &head, const std::string &key, const std::string &attr, const std::string &value)
+                                                       { self.setEdgeHtmlAttr(tail, head, key, attr, value); }))
+        .function("setEdgeHtmlAttr", optional_override([](CGraph &self, const std::string &tail, const std::string &head, const std::string &key, const std::string &attr, const std::string &value, const std::string &defaultValue)
+                                                       { self.setEdgeHtmlAttr(tail, head, key, attr, value, defaultValue); }))
+        .function("setDefaultGraphAttr", &CGraph::setDefaultGraphAttr)
+        .function("setDefaultGraphHtmlAttr", &CGraph::setDefaultGraphHtmlAttr)
+        .function("setDefaultNodeAttr", &CGraph::setDefaultNodeAttr)
+        .function("setDefaultNodeHtmlAttr", &CGraph::setDefaultNodeHtmlAttr)
+        .function("setDefaultEdgeAttr", &CGraph::setDefaultEdgeAttr)
+        .function("setDefaultEdgeHtmlAttr", &CGraph::setDefaultEdgeHtmlAttr)
+        .function("read", &CGraph::read)
         .function("addSubgraph", &CGraph::addSubgraph, allow_raw_pointers())
         .function("getSubgraph", &CGraph::getSubgraph, allow_raw_pointers())
         .function("removeNode", &CGraph::removeNode)
+        .function("removeEdge", optional_override([](CGraph &self, const std::string &tail, const std::string &head)
+                                                  { self.removeEdge(tail, head); }))
         .function("removeEdge", &CGraph::removeEdge)
         .function("removeSubgraph", &CGraph::removeSubgraph)
         .function("hasNode", &CGraph::hasNode)
+        .function("hasEdge", optional_override([](CGraph &self, const std::string &tail, const std::string &head)
+                                               { return self.hasEdge(tail, head); }))
         .function("hasEdge", &CGraph::hasEdge)
         .function("hasSubgraph", &CGraph::hasSubgraph)
         .function("nodeCount", &CGraph::nodeCount)
         .function("edgeCount", &CGraph::edgeCount)
         .function("subgraphCount", &CGraph::subgraphCount)
+        .function("nodeDegree", optional_override([](CGraph &self, const std::string &node)
+                                                  { return self.nodeDegree(node); }))
+        .function("nodeDegree", optional_override([](CGraph &self, const std::string &node, int in)
+                                                  { return self.nodeDegree(node, in); }))
+        .function("nodeDegree", &CGraph::nodeDegree)
         .function("getGraphAttr", &CGraph::getGraphAttr)
         .function("getNodeAttr", &CGraph::getNodeAttr)
         .function("getEdgeAttr", &CGraph::getEdgeAttr)
@@ -1029,24 +1341,62 @@ EMSCRIPTEN_BINDINGS(graphvizlib_bindings)
         .function("inEdges", &CGraph::inEdges)
         .function("nodeEdges", &CGraph::nodeEdges)
         .property("dot_out", &CGraph::_dot_out)
+        .function("write", &CGraph::toDot)
         .function("toDot", &CGraph::toDot)
         .property("layout_result", &CGraph::layout_result)
-        .function("layout", &CGraph::layout)
-        ;
+        .function("layout", &CGraph::layout);
 
     class_<CSubgraph>("CSubgraph")
         // No constructor — instances are only created via CGraph::addSubgraph.
         .function("addNode", &CSubgraph::addNode)
+        .function("addEdge", optional_override([](CSubgraph &self, const std::string &tail, const std::string &head)
+                                               { self.addEdge(tail, head); }))
         .function("addEdge", &CSubgraph::addEdge)
-        .function("setAttr", &CSubgraph::setAttr)
-        .function("setNodeAttr", &CSubgraph::setNodeAttr)
-        .function("setEdgeAttr", &CSubgraph::setEdgeAttr)
+        .function("setAttr", optional_override([](CSubgraph &self, const std::string &attr, const std::string &value)
+                                               { self.setAttr(attr, value); }))
+        .function("setAttr", optional_override([](CSubgraph &self, const std::string &attr, const std::string &value, const std::string &defaultValue)
+                                               { self.setAttr(attr, value, defaultValue); }))
+        .function("setHtmlAttr", optional_override([](CSubgraph &self, const std::string &attr, const std::string &value)
+                                                   { self.setHtmlAttr(attr, value); }))
+        .function("setHtmlAttr", optional_override([](CSubgraph &self, const std::string &attr, const std::string &value, const std::string &defaultValue)
+                                                   { self.setHtmlAttr(attr, value, defaultValue); }))
+        .function("setNodeAttr", optional_override([](CSubgraph &self, const std::string &node, const std::string &attr, const std::string &value)
+                                                   { self.setNodeAttr(node, attr, value); }))
+        .function("setNodeAttr", optional_override([](CSubgraph &self, const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue)
+                                                   { self.setNodeAttr(node, attr, value, defaultValue); }))
+        .function("setNodeHtmlAttr", optional_override([](CSubgraph &self, const std::string &node, const std::string &attr, const std::string &value)
+                                                       { self.setNodeHtmlAttr(node, attr, value); }))
+        .function("setNodeHtmlAttr", optional_override([](CSubgraph &self, const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue)
+                                                       { self.setNodeHtmlAttr(node, attr, value, defaultValue); }))
+        .function("setEdgeAttr", optional_override([](CSubgraph &self, const std::string &tail, const std::string &head, const std::string &key, const std::string &attr, const std::string &value)
+                                                   { self.setEdgeAttr(tail, head, key, attr, value); }))
+        .function("setEdgeAttr", optional_override([](CSubgraph &self, const std::string &tail, const std::string &head, const std::string &key, const std::string &attr, const std::string &value, const std::string &defaultValue)
+                                                   { self.setEdgeAttr(tail, head, key, attr, value, defaultValue); }))
+        .function("setEdgeHtmlAttr", optional_override([](CSubgraph &self, const std::string &tail, const std::string &head, const std::string &key, const std::string &attr, const std::string &value)
+                                                       { self.setEdgeHtmlAttr(tail, head, key, attr, value); }))
+        .function("setEdgeHtmlAttr", optional_override([](CSubgraph &self, const std::string &tail, const std::string &head, const std::string &key, const std::string &attr, const std::string &value, const std::string &defaultValue)
+                                                       { self.setEdgeHtmlAttr(tail, head, key, attr, value, defaultValue); }))
+        .function("setDefaultAttr", &CSubgraph::setDefaultAttr)
+        .function("setDefaultHtmlAttr", &CSubgraph::setDefaultHtmlAttr)
+        .function("setDefaultNodeAttr", &CSubgraph::setDefaultNodeAttr)
+        .function("setDefaultNodeHtmlAttr", &CSubgraph::setDefaultNodeHtmlAttr)
+        .function("setDefaultEdgeAttr", &CSubgraph::setDefaultEdgeAttr)
+        .function("setDefaultEdgeHtmlAttr", &CSubgraph::setDefaultEdgeHtmlAttr)
         .function("removeNode", &CSubgraph::removeNode)
+        .function("removeEdge", optional_override([](CSubgraph &self, const std::string &tail, const std::string &head)
+                                                  { self.removeEdge(tail, head); }))
         .function("removeEdge", &CSubgraph::removeEdge)
         .function("hasNode", &CSubgraph::hasNode)
+        .function("hasEdge", optional_override([](CSubgraph &self, const std::string &tail, const std::string &head)
+                                               { return self.hasEdge(tail, head); }))
         .function("hasEdge", &CSubgraph::hasEdge)
         .function("nodeCount", &CSubgraph::nodeCount)
         .function("edgeCount", &CSubgraph::edgeCount)
+        .function("nodeDegree", optional_override([](CSubgraph &self, const std::string &node)
+                                                  { return self.nodeDegree(node); }))
+        .function("nodeDegree", optional_override([](CSubgraph &self, const std::string &node, int in)
+                                                  { return self.nodeDegree(node, in); }))
+        .function("nodeDegree", &CSubgraph::nodeDegree)
         .function("getAttr", &CSubgraph::getAttr)
         .function("getNodeAttr", &CSubgraph::getNodeAttr)
         .function("getEdgeAttr", &CSubgraph::getEdgeAttr)
@@ -1054,6 +1404,5 @@ EMSCRIPTEN_BINDINGS(graphvizlib_bindings)
         .function("edges", &CSubgraph::edges)
         .function("outEdges", &CSubgraph::outEdges)
         .function("inEdges", &CSubgraph::inEdges)
-        .function("nodeEdges", &CSubgraph::nodeEdges)
-        ;
+        .function("nodeEdges", &CSubgraph::nodeEdges);
 }

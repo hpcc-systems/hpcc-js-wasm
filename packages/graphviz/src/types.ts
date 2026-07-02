@@ -81,6 +81,7 @@ export interface NodeAttrs {
     group?: string;
     height?: number;
     href?: string;
+    id?: string;
     image?: string;
     imagepos?: string;
     imagescale?: boolean | string;
@@ -146,6 +147,7 @@ export interface EdgeAttrs {
     headtooltip?: string;
     headURL?: string;
     href?: string;
+    id?: string;
     label?: string;
     labelangle?: number;
     labeldistance?: number;
@@ -204,6 +206,7 @@ export interface ClusterAttrs {
     fontsize?: number;
     gradientangle?: number;
     href?: string;
+    id?: string;
     K?: number;
     label?: string;
     labeljust?: string;
@@ -374,6 +377,7 @@ export const NODE_DOT_ATTRS: readonly NodeDotAttr[] = attrsOf<NodeDotAttr>({
     group: true,
     height: true,
     href: true,
+    id: true,
     image: true,
     imagepos: true,
     imagescale: true,
@@ -434,6 +438,7 @@ export const EDGE_DOT_ATTRS: readonly EdgeDotAttr[] = attrsOf<EdgeDotAttr>({
     headtooltip: true,
     headURL: true,
     href: true,
+    id: true,
     label: true,
     labelangle: true,
     labeldistance: true,
@@ -486,6 +491,7 @@ export const CLUSTER_DOT_ATTRS: readonly ClusterDotAttr[] = attrsOf<ClusterDotAt
     fontsize: true,
     gradientangle: true,
     href: true,
+    id: true,
     K: true,
     label: true,
     labeljust: true,
