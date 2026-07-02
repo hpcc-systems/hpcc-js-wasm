@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.24.0...wasm-graphviz-v1.24.1) (2026-07-02)
+
+
+### Bug Fixes
+
+* **graphviz:** add missign id attr ([0671c86](https://github.com/hpcc-systems/hpcc-js-wasm/commit/0671c86375057486e7cd68199c211fd3a18223c1))
+
 ## [1.24.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.23.0...wasm-graphviz-v1.24.0) (2026-07-01)
 
 
