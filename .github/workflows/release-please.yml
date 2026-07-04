@@ -13,6 +13,7 @@ permissions:
   contents: write
   pull-requests: write
   packages: write
+  pages: write
 
 jobs:
   release-please:
@@ -125,6 +126,21 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         run: |
           npm run publish
+
+      - name: Build Docs
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          npm run build-docs
+
+      - name: Deploy Docs
+        if: ${{ steps.release.outputs.release_created }}
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./.vitepress/dist
+          force_orphan: true
+        env:
+          CI: true
 
       - name: Purge jsdelivr
         if: ${{ steps.release.outputs.release_created }}

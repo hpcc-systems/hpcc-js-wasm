@@ -22,10 +22,6 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         node: [22, 24]
-        include:
-          - os: ubuntu-latest
-            node: 24
-            deploy_docs: true
 
     runs-on: ${{ matrix.os }}
     name: Node ${{ matrix.os }}, node-${{ matrix.node }} sample
@@ -108,21 +104,6 @@ jobs:
       - name: Test Bundler Integration
         run: |
           npm run test-bundlers
-
-      - name: Build Docs
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && matrix.deploy_docs == true }}
-        run: |
-          npm run build-docs
-
-      - name: Deploy Docs
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && matrix.deploy_docs == true }}
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./.vitepress/dist
-          force_orphan: true
-        env:
-          CI: true
 
       - name: Calculate Coverage
         if: ${{ matrix.os == 'ubuntu-24.04' && matrix.node == 20 }}
