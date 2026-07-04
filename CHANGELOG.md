@@ -8,6 +8,16 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.10.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.10.0...wasm-root-v4.10.1) (2026-07-04)
+
+
+### Bug Fixes
+
+* **graphviz:** improve node degree calculation and add tests for nodeDegree functionality ([7cdb133](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7cdb13368dc8b2cfc304816fb14f4dcacccb1528))
+* **llama:** update version to 9860 in package.json and related tests ([7cdb133](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7cdb13368dc8b2cfc304816fb14f4dcacccb1528))
+* update @hpcc-js/esbuild-plugins to version 1.9.4 across multiple packages ([7cdb133](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7cdb13368dc8b2cfc304816fb14f4dcacccb1528))
+* **vcpkg:** update llama-cpp portfile SHA512 for new version ([7cdb133](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7cdb13368dc8b2cfc304816fb14f4dcacccb1528))
+
 ## [4.10.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.9.0...wasm-root-v4.10.0) (2026-07-01)
 
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.14.4](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-base91-v1.14.3...wasm-base91-v1.14.4) (2026-07-04)
+
+
+### Bug Fixes
+
+* **graphviz:** improve node degree calculation and add tests for nodeDegree functionality ([7cdb133](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7cdb13368dc8b2cfc304816fb14f4dcacccb1528))
+* **llama:** update version to 9860 in package.json and related tests ([7cdb133](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7cdb13368dc8b2cfc304816fb14f4dcacccb1528))
+* update @hpcc-js/esbuild-plugins to version 1.9.4 across multiple packages ([7cdb133](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7cdb13368dc8b2cfc304816fb14f4dcacccb1528))
+* **vcpkg:** update llama-cpp portfile SHA512 for new version ([7cdb133](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7cdb13368dc8b2cfc304816fb14f4dcacccb1528))
+
 ## [1.14.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-base91-v1.14.2...wasm-base91-v1.14.3) (2026-07-01)
 
 
