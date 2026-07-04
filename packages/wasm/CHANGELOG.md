@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.34.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.4...wasm-v2.34.5) (2026-07-04)
+
+
+### Bug Fixes
+
+* **graphviz:** improve node degree calculation and add tests for nodeDegree functionality ([7cdb133](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7cdb13368dc8b2cfc304816fb14f4dcacccb1528))
+* **llama:** update version to 9860 in package.json and related tests ([7cdb133](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7cdb13368dc8b2cfc304816fb14f4dcacccb1528))
+* update @hpcc-js/esbuild-plugins to version 1.9.4 across multiple packages ([7cdb133](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7cdb13368dc8b2cfc304816fb14f4dcacccb1528))
+* **vcpkg:** update llama-cpp portfile SHA512 for new version ([7cdb133](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7cdb13368dc8b2cfc304816fb14f4dcacccb1528))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.14.3 to ^1.14.4
+    * @hpcc-js/wasm-duckdb bumped from ^1.18.3 to ^1.18.4
+    * @hpcc-js/wasm-expat bumped from ^1.14.3 to ^1.14.4
+    * @hpcc-js/wasm-graphviz bumped from ^1.24.0 to ^1.24.1
+    * @hpcc-js/wasm-graphviz-cli bumped from ^1.10.1 to ^1.10.2
+    * @hpcc-js/wasm-zstd bumped from ^1.13.3 to ^1.13.4
+
 ## [2.34.4](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.3...wasm-v2.34.4) (2026-07-01)
 
 
