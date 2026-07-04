@@ -1,5 +1,5 @@
 {
-    ".": "4.10.1",
+    ".": "4.11.0",
     "packages/base91": "1.14.4",
     "packages/duckdb": "1.18.4",
     "packages/expat": "1.14.4",
