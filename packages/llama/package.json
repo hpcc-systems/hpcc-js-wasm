@@ -20,7 +20,7 @@
     "clean": "rimraf coverage dist dist-test types .nyc_output",
     "build-cpp": "cmake --build ../../build --target llamalib",
     "build-cpp-watch": "chokidar 'src-cpp/**.*' -c 'npm run build-cpp'",
-    "gen-types": "tsgo --project tsconfig.json --emitDeclarationOnly",
+    "gen-types": "tsc --project tsconfig.json --emitDeclarationOnly",
     "gen-types-watch": "npm run gen-types -- --watch",
     "bundle": "node esbuild.js",
     "bundle-dev": "npm run bundle -- --development",
