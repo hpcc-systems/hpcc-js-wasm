@@ -8,6 +8,22 @@ import type {
     GraphDotAttr, GraphAttrs as GraphAttrs
 } from "./types.ts";
 
+type AttrValues<T> = Partial<{ [K in keyof T]: NonNullable<T[K]> }>;
+
+function applyAttrs<T extends object>(
+    attrs: AttrValues<T> | undefined,
+    apply: (attr: string, value: string | number | boolean) => void
+): void {
+    if (!attrs) {
+        return;
+    }
+    for (const [attr, value] of Object.entries(attrs)) {
+        if (value !== undefined) {
+            apply(attr, value as string | number | boolean);
+        }
+    }
+}
+
 /**
  * Various graphic and data formats for end user, web, documents and other applications.  See [Output Formats](https://graphviz.org/docs/outputs/) for more information.
  */
@@ -117,6 +133,35 @@ let g_graphviz: Promise<Graphviz> | undefined;
  */
 export type GraphType = "directed" | "undirected" | "strict directed" | "strict undirected";
 
+export interface GraphInit {
+    name?: string;
+    type?: GraphType;
+    attrs?: AttrValues<GraphAttrs>;
+    htmlAttrs?: AttrValues<GraphAttrs>;
+}
+
+export interface NodeInit {
+    name: string;
+    attrs?: AttrValues<NodeAttrs>;
+    htmlAttrs?: AttrValues<NodeAttrs>;
+}
+
+export interface EdgeInit {
+    tail: string;
+    head: string;
+    key?: string;
+    attrs?: AttrValues<EdgeAttrs>;
+    htmlAttrs?: AttrValues<EdgeAttrs>;
+}
+
+export interface SubgraphInit {
+    name: string;
+    attrs?: AttrValues<ClusterAttrs>;
+    htmlAttrs?: AttrValues<ClusterAttrs>;
+}
+
+export type ClusterInit = SubgraphInit;
+
 /**
  * A subgraph (or cluster) inside a {@link Graph}.
  *
@@ -148,8 +193,15 @@ export class Subgraph {
     /**
      * Create (or find) a node and add it to this subgraph.
      */
-    addNode(name: string): this {
+    addNode(name: string): this;
+    addNode(init: NodeInit): this;
+    addNode(nameOrInit: string | NodeInit): this {
+        const init = typeof nameOrInit === "string" ? { name: nameOrInit } : nameOrInit;
+        const { name, attrs, htmlAttrs } = init;
+
         this._sg.addNode(name);
+        applyAttrs<NodeAttrs>(attrs, (attr, value) => this.setNodeAttr(name, attr, value));
+        applyAttrs<NodeAttrs>(htmlAttrs, (attr, value) => this.setNodeHtmlAttr(name, attr, value));
         return this;
     }
 
@@ -157,8 +209,23 @@ export class Subgraph {
      * Create an edge inside this subgraph.  Both endpoints are created
      * automatically if they do not already exist.
      */
-    addEdge(tail: string, head: string, key: string = ""): this {
-        this._sg.addEdge(tail, head, key);
+    addEdge(tail: string, head: string, key?: string): this;
+    addEdge(init: EdgeInit): this;
+    addEdge(tailOrInit: string | EdgeInit, head?: string, key: string = ""): this {
+        const init = typeof tailOrInit === "string"
+            ? { tail: tailOrInit, head: head!, key }
+            : tailOrInit;
+        const { tail, head: resolvedHead, key: resolvedKey = "", attrs, htmlAttrs } = init;
+
+        this._sg.addEdge(tail, resolvedHead, resolvedKey);
+        applyAttrs<EdgeAttrs>(attrs, (attr, value) => this.setEdgeAttr(tail, resolvedHead, resolvedKey, attr, value));
+        applyAttrs<EdgeAttrs>(htmlAttrs, (attr, value) => this.setEdgeHtmlAttr(tail, resolvedHead, resolvedKey, attr, value));
+        return this;
+    }
+
+    applyInit(init: SubgraphInit): this {
+        applyAttrs<ClusterAttrs>(init.attrs, (attr, value) => this.setAttr(attr, value));
+        applyAttrs<ClusterAttrs>(init.htmlAttrs, (attr, value) => this.setHtmlAttr(attr, value));
         return this;
     }
 
@@ -497,8 +564,15 @@ export class Graph {
      * Create a node.  If a node with this name already exists it is returned
      * unchanged.
      */
-    addNode(name: string): this {
+    addNode(name: string): this;
+    addNode(init: NodeInit): this;
+    addNode(nameOrInit: string | NodeInit): this {
+        const init = typeof nameOrInit === "string" ? { name: nameOrInit } : nameOrInit;
+        const { name, attrs, htmlAttrs } = init;
+
         this._graph.addNode(name);
+        applyAttrs<NodeAttrs>(attrs, (attr, value) => this.setNodeAttr(name, attr, value));
+        applyAttrs<NodeAttrs>(htmlAttrs, (attr, value) => this.setNodeHtmlAttr(name, attr, value));
         return this;
     }
 
@@ -508,8 +582,23 @@ export class Graph {
      * parallel edges between the same pair of nodes; omit (or pass `""`) for
      * an anonymous edge.
      */
-    addEdge(tail: string, head: string, key: string = ""): this {
-        this._graph.addEdge(tail, head, key);
+    addEdge(tail: string, head: string, key?: string): this;
+    addEdge(init: EdgeInit): this;
+    addEdge(tailOrInit: string | EdgeInit, head?: string, key: string = ""): this {
+        const init = typeof tailOrInit === "string"
+            ? { tail: tailOrInit, head: head!, key }
+            : tailOrInit;
+        const { tail, head: resolvedHead, key: resolvedKey = "", attrs, htmlAttrs } = init;
+
+        this._graph.addEdge(tail, resolvedHead, resolvedKey);
+        applyAttrs<EdgeAttrs>(attrs, (attr, value) => this.setEdgeAttr(tail, resolvedHead, resolvedKey, attr, value));
+        applyAttrs<EdgeAttrs>(htmlAttrs, (attr, value) => this.setEdgeHtmlAttr(tail, resolvedHead, resolvedKey, attr, value));
+        return this;
+    }
+
+    applyInit(init: GraphInit): this {
+        applyAttrs<GraphAttrs>(init.attrs, (attr, value) => this.setGraphAttr(attr, value));
+        applyAttrs<GraphAttrs>(init.htmlAttrs, (attr, value) => this.setGraphHtmlAttr(attr, value));
         return this;
     }
 
@@ -849,10 +938,13 @@ export class Graph {
      * cluster.setAttr("label", "My Cluster").addEdge("a", "b");
      * ```
      */
-    addSubgraph(name: string): Subgraph {
+    addSubgraph(name: string): Subgraph;
+    addSubgraph(init: SubgraphInit): Subgraph;
+    addSubgraph(nameOrInit: string | SubgraphInit): Subgraph {
+        const init = typeof nameOrInit === "string" ? { name: nameOrInit } : nameOrInit;
         // addSubgraph only returns null when the internal graph pointer is null,
         // which cannot happen while this Graph instance is alive.
-        return new Subgraph(this._graph.addSubgraph(name)!);
+        return new Subgraph(this._graph.addSubgraph(init.name)!).applyInit(init);
     }
 
     /**
@@ -1287,10 +1379,17 @@ export class Graphviz {
      * const svg = graphviz.dot(graph.toDot());
      * ```
      */
-    createGraph(name: string = "G", type: GraphType = "directed"): Graph {
-        const directed = !type.includes("undirected") ? 1 : 0;
-        const strict = type.startsWith("strict") ? 1 : 0;
-        return new Graph(new this._module.CGraph(name, directed, strict), this._module);
+    createGraph(name?: string, type?: GraphType): Graph;
+    createGraph(init: GraphInit): Graph;
+    createGraph(nameOrInit: string | GraphInit = "G", type: GraphType = "directed"): Graph {
+        const init = typeof nameOrInit === "string"
+            ? { name: nameOrInit, type }
+            : nameOrInit;
+        const resolvedName = init.name ?? "G";
+        const resolvedType = init.type ?? "directed";
+        const directed = !resolvedType.includes("undirected") ? 1 : 0;
+        const strict = resolvedType.startsWith("strict") ? 1 : 0;
+        return new Graph(new this._module.CGraph(resolvedName, directed, strict), this._module).applyInit(init);
     }
 
     /**

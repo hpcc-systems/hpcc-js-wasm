@@ -8,6 +8,9 @@ build/
 coverage/
 dist/
 dist-test/
+target/
+/packages-java/base91/src/main/resources/base91lib.wasm
+/packages-java/graphviz/src/main/resources/graphvizlib.wasm
 /.vitepress/cache
 /.vitepress/dist
 /docs/base91

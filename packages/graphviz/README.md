@@ -72,6 +72,38 @@ const svg = graph.layout("svg", "dot");
 document.body.innerHTML = svg;
 ```
 
+### One-shot JSON init objects
+
+You can also create graphs, clusters, nodes, and edges from a single object
+that includes their attributes.
+
+```typescript
+using graph = graphviz.createGraph({
+  name: "G",
+  type: "directed",
+  attrs: { rankdir: "LR" }
+});
+
+{
+  using cluster = graph.addSubgraph({
+    name: "cluster_0",
+    attrs: { label: "Group A", style: "filled", color: "lightgrey" }
+  });
+
+  cluster.addNode({
+    name: "a",
+    attrs: { shape: "box", color: "red" },
+    htmlAttrs: { label: "<B>A</B>" }
+  });
+
+  cluster.addEdge({
+    tail: "a",
+    head: "b",
+    attrs: { label: "hello" }
+  });
+}
+```
+
 ```typescript
 using graph = graphviz.read(`digraph G { a -> b [label="hello"] }`);
 graph.setGraphAttr("rankdir", "LR");

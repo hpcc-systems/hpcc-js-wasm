@@ -91,6 +91,38 @@ describe("Graph (programmatic graph creation)", function () {
         expect(dot).toContain("hello");
     });
 
+    it("createGraph, addNode, and addEdge accept init objects with attrs", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph({
+            name: "G",
+            type: "directed",
+            attrs: { rankdir: "LR" }
+        });
+
+        graph
+            .addNode({
+                name: "a",
+                attrs: { color: "red", shape: "box" },
+                htmlAttrs: { label: "<B>A</B>" }
+            })
+            .addEdge({
+                tail: "a",
+                head: "b",
+                attrs: { label: "hello", color: "blue" },
+                htmlAttrs: { headlabel: "<I>B</I>" }
+            });
+
+        const dot = graph.toDot();
+
+        expect(dot).toContain("rankdir=LR");
+        expect(dot).toContain("color=red");
+        expect(dot).toContain("shape=box");
+        expect(dot).toContain("label=<<B>A</B>>");
+        expect(dot).toContain("hello");
+        expect(dot).toContain("color=blue");
+        expect(dot).toContain("headlabel=<<I>B</I>>");
+    });
+
     it("attribute setters reset to default when value is omitted", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
@@ -381,6 +413,26 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         const dot = graph.toDot();
         expect(dot).toContain("My Label");
         expect(dot).toContain("dashed");
+    });
+
+    it("addSubgraph accepts an init object with attrs", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        {
+            using sg = graph.addSubgraph({
+                name: "cluster_json",
+                attrs: { label: "JSON Cluster", color: "lightblue", style: "filled" },
+                htmlAttrs: { tooltip: "<B>cluster tooltip</B>" }
+            });
+            sg.addNode({ name: "x", attrs: { shape: "ellipse" } });
+        }
+
+        const dot = graph.toDot();
+        expect(dot).toContain("cluster_json");
+        expect(dot).toContain("JSON Cluster");
+        expect(dot).toContain("lightblue");
+        expect(dot).toContain("filled");
+        expect(dot).toContain("tooltip=<<B>cluster tooltip</B>>");
     });
 
     it("cluster subgraph with attributes can be laid out", async function () {
