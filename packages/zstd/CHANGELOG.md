@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.13.4...wasm-zstd-v1.13.5) (2026-07-14)
+
+
+### Bug Fixes
+
+* bump typescript to official v7 ([f0d75b6](https://github.com/hpcc-systems/hpcc-js-wasm/commit/f0d75b68b9e3bb482ddf0267bbb29c03acbbf5dd))
+
 ## [1.13.4](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.13.3...wasm-zstd-v1.13.4) (2026-07-04)
 
 

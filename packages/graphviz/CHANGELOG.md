@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.25.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.24.1...wasm-graphviz-v1.25.0) (2026-07-14)
+
+
+### Features
+
+* enhance graph creation with init objects for nodes, edges, and subgraphs ([c395687](https://github.com/hpcc-systems/hpcc-js-wasm/commit/c3956870791f97092af598ee14f7e6ec3595875b))
+
+
+### Bug Fixes
+
+* bump typescript to official v7 ([f0d75b6](https://github.com/hpcc-systems/hpcc-js-wasm/commit/f0d75b68b9e3bb482ddf0267bbb29c03acbbf5dd))
+
 ## [1.24.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.24.0...wasm-graphviz-v1.24.1) (2026-07-04)
 
 
