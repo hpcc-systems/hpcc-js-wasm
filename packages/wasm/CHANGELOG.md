@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.34.6](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.5...wasm-v2.34.6) (2026-07-14)
+
+
+### Bug Fixes
+
+* bump typescript to official v7 ([f0d75b6](https://github.com/hpcc-systems/hpcc-js-wasm/commit/f0d75b68b9e3bb482ddf0267bbb29c03acbbf5dd))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.14.4 to ^1.14.5
+    * @hpcc-js/wasm-duckdb bumped from ^1.18.4 to ^1.18.5
+    * @hpcc-js/wasm-expat bumped from ^1.14.4 to ^1.14.5
+    * @hpcc-js/wasm-graphviz bumped from ^1.24.1 to ^1.25.0
+    * @hpcc-js/wasm-graphviz-cli bumped from ^1.10.2 to ^1.10.3
+    * @hpcc-js/wasm-zstd bumped from ^1.13.4 to ^1.13.5
+
 ## [2.34.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.4...wasm-v2.34.5) (2026-07-04)
 
 

@@ -8,6 +8,18 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.12.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.11.0...wasm-root-v4.12.0) (2026-07-14)
+
+
+### Features
+
+* enhance graph creation with init objects for nodes, edges, and subgraphs ([c395687](https://github.com/hpcc-systems/hpcc-js-wasm/commit/c3956870791f97092af598ee14f7e6ec3595875b))
+
+
+### Bug Fixes
+
+* bump typescript to official v7 ([f0d75b6](https://github.com/hpcc-systems/hpcc-js-wasm/commit/f0d75b68b9e3bb482ddf0267bbb29c03acbbf5dd))
+
 ## [4.11.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.10.1...wasm-root-v4.11.0) (2026-07-04)
 
 
