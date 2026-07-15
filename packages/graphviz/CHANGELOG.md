@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.25.0...wasm-graphviz-v1.26.0) (2026-07-15)
+
+
+### Features
+
+* implement subgraph attribute management and default font settings ([4890569](https://github.com/hpcc-systems/hpcc-js-wasm/commit/48905691e8f05aa28f7c1ced034e4e93de1248d0))
+
 ## [1.25.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.24.1...wasm-graphviz-v1.25.0) (2026-07-14)
 
 
