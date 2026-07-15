@@ -611,3 +611,13 @@ export const GRAPH_DOT_ATTRS: readonly GraphDotAttr[] = attrsOf<GraphDotAttr>({
     voro_margin: true,
     xdotversion: true,
 });
+
+/**
+ * Various graphic and data formats for end user, web, documents and other applications.  See [Output Formats](https://graphviz.org/docs/outputs/) for more information.
+ */
+export type Format = "svg" | "svg_inline" | "dot" | "json" | "dot_json" | "xdot_json" | "plain" | "plain-ext" | "canon";
+
+/**
+ * Various algorithms for projecting abstract graphs into a space for visualization.  See [Layout Engines](https://graphviz.org/docs/layouts/) for more details.
+ */
+export type Engine = "circo" | "dot" | "fdp" | "sfdp" | "neato" | "osage" | "patchwork" | "twopi" | "nop" | "nop2";

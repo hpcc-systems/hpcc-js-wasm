@@ -64,6 +64,50 @@ describe("Graph (programmatic graph creation)", function () {
         expect(dot).toContain("LR");
     });
 
+    it("defaults graph fontname to Arial when omitted", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+
+        expect(graph.getGraphAttr("fontname")).toBe("Arial");
+        expect(graph.toDot()).toContain("fontname=Arial");
+    });
+
+    it("defaults node and edge fontname to Arial via global defaults", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph.addNode("n1").addEdge("a", "b");
+
+        expect(graph.getNodeAttr("n1", "fontname")).toBe("Arial");
+        expect(graph.getEdgeAttr("a", "b", "", "fontname")).toBe("Arial");
+        const dot = graph.toDot();
+        expect(dot).toContain("node [fontname=Arial]");
+        expect(dot).toContain("edge [fontname=Arial]");
+    });
+
+    it("keeps explicit graph fontname when provided", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph({
+            name: "G",
+            attrs: { fontname: "Helvetica" }
+        });
+
+        expect(graph.getGraphAttr("fontname")).toBe("Helvetica");
+        expect(graph.toDot()).toContain("fontname=Helvetica");
+    });
+
+    it("allows overriding default node and edge fontname", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph
+            .setDefaultNodeAttr("fontname", "Helvetica")
+            .setDefaultEdgeAttr("fontname", "Helvetica")
+            .addNode("n1")
+            .addEdge("a", "b");
+
+        expect(graph.getNodeAttr("n1", "fontname")).toBe("Helvetica");
+        expect(graph.getEdgeAttr("a", "b", "", "fontname")).toBe("Helvetica");
+    });
+
     it("setNodeAttr appears in DOT output", async function () {
         const graphviz = await Graphviz.load();
         const graph = graphviz.createGraph("G");
@@ -74,6 +118,19 @@ describe("Graph (programmatic graph creation)", function () {
 
         expect(dot).toContain("color");
         expect(dot).toContain("red");
+    });
+
+    it("setting one node label preserves implicit labels on other nodes", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        graph.addNode("A").addNode("B").addNode("C").addEdge("A", "B").addEdge("A", "C");
+
+        graph.setNodeAttr("A", "label", "G-Node");
+
+        const svg = graph.layout("svg", "dot");
+        expect(svg).toContain("G&#45;Node");
+        expect(svg).toContain(">B<");
+        expect(svg).toContain(">C<");
     });
 
     it("setEdgeAttr appears in DOT output", async function () {
@@ -415,6 +472,18 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         expect(dot).toContain("dashed");
     });
 
+    it("cluster fontname defaults to Arial via graph default", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        {
+            using sg = graph.addSubgraph("cluster_font");
+            sg.setAttr("label", "ClusterFontCheck").addNode("n1");
+        }
+
+        const dot = graph.toDot();
+        expect(dot).toContain("graph [fontname=Arial]");
+    });
+
     it("addSubgraph accepts an init object with attrs", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
@@ -468,6 +537,65 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         expect(svg).toContain("Process #2");
     });
 
+    it("supports nested subgraphs via Subgraph.addSubgraph", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+
+        {
+            using outer = graph.addSubgraph("cluster_outer");
+            outer.setAttr("label", "Outer");
+            {
+                using inner = outer.addSubgraph({
+                    name: "cluster_inner",
+                    attrs: { label: "Inner", color: "red" }
+                });
+                inner.addEdge("x", "y");
+            }
+        }
+
+        const dot = graph.toDot();
+        expect(dot).toContain("cluster_outer");
+        expect(dot).toContain("cluster_inner");
+        expect(dot).toContain("Outer");
+        expect(dot).toContain("Inner");
+    });
+
+    it("nested subgraphs inherit parent cluster attrs except label", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+
+        using outer = graph.addSubgraph("cluster_outer");
+        outer
+            .setAttr("label", "Outer")
+            .setAttr("color", "red")
+            .setAttr("style", "filled");
+
+        using inner = outer.addSubgraph("cluster_inner");
+
+        // Subgraph label starts empty (not inherited)
+        expect(inner.getAttr("label")).toBe("");
+        // But other cluster attrs are inherited from parent
+        expect(inner.getAttr("color")).toBe("red");
+        expect(inner.getAttr("style")).toBe("filled");
+    });
+
+    it("nested subgraphs inherit parent node and edge defaults", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+
+        using outer = graph.addSubgraph("cluster_outer");
+        outer
+            .setDefaultNodeAttr("shape", "box")
+            .setDefaultEdgeAttr("color", "blue");
+
+        using inner = outer.addSubgraph("cluster_inner");
+        inner.addNode("n1").addNode("n2").addEdge("n1", "n2");
+
+        // Nested subgraph inherits parent node and edge defaults
+        expect(inner.getNodeAttr("n1", "shape")).toBe("box");
+        expect(inner.getEdgeAttr("n1", "n2", "", "color")).toBe("blue");
+    });
+
     it("setNodeAttr inside subgraph appears in DOT output", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
@@ -477,6 +605,20 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
             sg.setNodeAttr("n1", "shape", "box");
         }
         expect(graph.toDot()).toContain("box");
+    });
+
+    it("setting one subgraph node label preserves implicit labels on sibling nodes", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        using sg = graph.addSubgraph("cluster_x");
+
+        sg.addNode("A").addNode("B").addNode("C").addEdge("A", "B").addEdge("A", "C");
+        sg.setNodeAttr("A", "label", "G-Node");
+
+        const svg = graph.layout("svg", "dot");
+        expect(svg).toContain("G&#45;Node");
+        expect(svg).toContain(">B<");
+        expect(svg).toContain(">C<");
     });
 
     it("setEdgeAttr inside subgraph appears in DOT output", async function () {

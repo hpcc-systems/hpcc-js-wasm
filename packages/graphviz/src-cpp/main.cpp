@@ -40,6 +40,89 @@ namespace
 {
     std::string lastErrorStr;
 
+    const char *implicitAttrDefault(int kind, const std::string &attr)
+    {
+        if (kind == AGNODE && attr == "label")
+            return "\\N";
+        return "";
+    }
+
+    void setObjectAttrText(void *obj, const std::string &attr, const std::string &value, int kind)
+    {
+        Agsym_t *sym = agattrsym(obj, const_cast<char *>(attr.c_str()));
+        if (sym)
+        {
+            agxset_text(obj, sym, value.c_str());
+        }
+        else
+        {
+            agsafeset_text(obj,
+                           const_cast<char *>(attr.c_str()),
+                           value.c_str(),
+                           implicitAttrDefault(kind, attr));
+        }
+    }
+
+    void setObjectAttrHtml(void *obj, const std::string &attr, const std::string &value, int kind)
+    {
+        Agsym_t *sym = agattrsym(obj, const_cast<char *>(attr.c_str()));
+        if (sym)
+        {
+            agxset_html(obj, sym, value.c_str());
+        }
+        else
+        {
+            agsafeset_html(obj,
+                           const_cast<char *>(attr.c_str()),
+                           value.c_str(),
+                           implicitAttrDefault(kind, attr));
+        }
+    }
+
+    void resetSubgraphAttrDefaults(Agraph_t *parent, Agraph_t *subgraph)
+    {
+        if (!parent || !subgraph)
+            return;
+
+        Agraph_t *root = agroot(parent);
+
+        // New subgraphs inherit parent attributes/defaults, except the
+        // subgraph/cluster label which should start empty.
+        for (int kind : {AGRAPH, AGNODE, AGEDGE})
+        {
+            for (Agsym_t *attr = agnxtattr(root, kind, nullptr); attr; attr = agnxtattr(root, kind, attr))
+            {
+                const char *name = attr->name;
+                Agsym_t *parentSym = agattr(parent, kind, const_cast<char *>(name), nullptr);
+                const char *defaultValue = (parentSym && parentSym->defval)
+                                               ? parentSym->defval
+                                               : (attr->defval ? attr->defval : implicitAttrDefault(kind, name));
+
+                if (kind == AGRAPH)
+                {
+                    if (std::string(name) == "label")
+                    {
+                        agattr(subgraph, kind, const_cast<char *>(name), implicitAttrDefault(kind, name));
+                        continue;
+                    }
+
+                    const char *parentValue = agget(parent, const_cast<char *>(name));
+                    const char *value = (parentValue && *parentValue) ? parentValue : defaultValue;
+                    agsafeset_text(subgraph,
+                                   const_cast<char *>(name),
+                                   value,
+                                   defaultValue);
+                }
+                else
+                {
+                    if (!parentSym)
+                        continue;
+                    agattr(subgraph, kind, const_cast<char *>(name), defaultValue);
+                }
+            }
+        }
+    }
+
     int vizErrorf(char *buf)
     {
         lastErrorStr = buf ? buf : "";
@@ -315,7 +398,16 @@ public:
      * Set an attribute on a named node.  The node must already exist (call
      * addNode first, or it will be created implicitly by addEdge).
      */
-    void setNodeAttr(const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue = "")
+    void setNodeAttr(const std::string &node, const std::string &attr, const std::string &value)
+    {
+        if (!_graph)
+            return;
+        Agnode_t *n = agnode(_graph, const_cast<char *>(node.c_str()), 0);
+        if (n)
+            setObjectAttrText(n, attr, value, AGNODE);
+    }
+
+    void setNodeAttr(const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue)
     {
         if (!_graph)
             return;
@@ -327,7 +419,16 @@ public:
                            defaultValue.c_str());
     }
 
-    void setNodeHtmlAttr(const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue = "")
+    void setNodeHtmlAttr(const std::string &node, const std::string &attr, const std::string &value)
+    {
+        if (!_graph)
+            return;
+        Agnode_t *n = agnode(_graph, const_cast<char *>(node.c_str()), 0);
+        if (n)
+            setObjectAttrHtml(n, attr, value, AGNODE);
+    }
+
+    void setNodeHtmlAttr(const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue)
     {
         if (!_graph)
             return;
@@ -841,6 +942,24 @@ public:
     }
 
     /**
+     * Create (or return an existing) named subgraph under this subgraph.
+     * Returns a heap-allocated CSubgraph wrapper whose lifetime is managed by
+     * the caller.
+     */
+    CSubgraph *addSubgraph(const std::string &name)
+    {
+        if (!_subgraph)
+            return nullptr;
+        Agraph_t *sg = agsubg(_subgraph, const_cast<char *>(name.c_str()), 0);
+        if (!sg)
+        {
+            sg = agsubg(_subgraph, const_cast<char *>(name.c_str()), 1);
+            resetSubgraphAttrDefaults(_subgraph, sg);
+        }
+        return sg ? new CSubgraph(sg) : nullptr;
+    }
+
+    /**
      * Set an attribute on the subgraph itself (e.g. "label", "style",
      * "color", "bgcolor").
      */
@@ -863,7 +982,16 @@ public:
     }
 
     /** Set an attribute on a node that lives in this subgraph. */
-    void setNodeAttr(const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue = "")
+    void setNodeAttr(const std::string &node, const std::string &attr, const std::string &value)
+    {
+        if (!_subgraph)
+            return;
+        Agnode_t *n = agnode(_subgraph, const_cast<char *>(node.c_str()), 0);
+        if (n)
+            setObjectAttrText(n, attr, value, AGNODE);
+    }
+
+    void setNodeAttr(const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue)
     {
         if (!_subgraph)
             return;
@@ -875,7 +1003,16 @@ public:
                            defaultValue.c_str());
     }
 
-    void setNodeHtmlAttr(const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue = "")
+    void setNodeHtmlAttr(const std::string &node, const std::string &attr, const std::string &value)
+    {
+        if (!_subgraph)
+            return;
+        Agnode_t *n = agnode(_subgraph, const_cast<char *>(node.c_str()), 0);
+        if (n)
+            setObjectAttrHtml(n, attr, value, AGNODE);
+    }
+
+    void setNodeHtmlAttr(const std::string &node, const std::string &attr, const std::string &value, const std::string &defaultValue)
     {
         if (!_subgraph)
             return;
@@ -1219,7 +1356,12 @@ CSubgraph *CGraph::addSubgraph(const std::string &name)
 {
     if (!_graph)
         return nullptr;
-    Agraph_t *sg = agsubg(_graph, const_cast<char *>(name.c_str()), 1);
+    Agraph_t *sg = agsubg(_graph, const_cast<char *>(name.c_str()), 0);
+    if (!sg)
+    {
+        sg = agsubg(_graph, const_cast<char *>(name.c_str()), 1);
+        resetSubgraphAttrDefaults(_graph, sg);
+    }
     return sg ? new CSubgraph(sg) : nullptr;
 }
 
@@ -1352,6 +1494,7 @@ EMSCRIPTEN_BINDINGS(graphvizlib_bindings)
         .function("addEdge", optional_override([](CSubgraph &self, const std::string &tail, const std::string &head)
                                                { self.addEdge(tail, head); }))
         .function("addEdge", &CSubgraph::addEdge)
+        .function("addSubgraph", &CSubgraph::addSubgraph, allow_raw_pointers())
         .function("setAttr", optional_override([](CSubgraph &self, const std::string &attr, const std::string &value)
                                                { self.setAttr(attr, value); }))
         .function("setAttr", optional_override([](CSubgraph &self, const std::string &attr, const std::string &value, const std::string &defaultValue)

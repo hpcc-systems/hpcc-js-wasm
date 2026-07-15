@@ -5,7 +5,8 @@ import type {
     NodeDotAttr, NodeAttrs,
     EdgeDotAttr, EdgeAttrs,
     ClusterDotAttr, ClusterAttrs,
-    GraphDotAttr, GraphAttrs as GraphAttrs
+    GraphDotAttr, GraphAttrs,
+    Format, Engine
 } from "./types.ts";
 
 type AttrValues<T> = Partial<{ [K in keyof T]: NonNullable<T[K]> }>;
@@ -23,11 +24,6 @@ function applyAttrs<T extends object>(
         }
     }
 }
-
-/**
- * Various graphic and data formats for end user, web, documents and other applications.  See [Output Formats](https://graphviz.org/docs/outputs/) for more information.
- */
-export type Format = "svg" | "svg_inline" | "dot" | "json" | "dot_json" | "xdot_json" | "plain" | "plain-ext" | "canon";
 
 /**
  * An edge returned by graph-traversal methods.
@@ -57,11 +53,6 @@ function parseEdges(json: string): EdgeInfo[] {
         result.push({ tail: flat[i]!, head: flat[i + 1]!, key: flat[i + 2]! });
     return result;
 }
-
-/**
- * Various algorithms for projecting abstract graphs into a space for visualization.  See [Layout Engines](https://graphviz.org/docs/layouts/) for more details.
- */
-export type Engine = "circo" | "dot" | "fdp" | "sfdp" | "neato" | "osage" | "patchwork" | "twopi" | "nop" | "nop2";
 
 /**
  * Example:  Passing a web hosted Image to GraphViz:
@@ -165,7 +156,7 @@ export type ClusterInit = SubgraphInit;
 /**
  * A subgraph (or cluster) inside a {@link Graph}.
  *
- * Obtain via {@link Graph.addSubgraph}.  All mutation methods return `this`
+ * Obtain via {@link Graph.addSubgraph} or {@link Subgraph.addSubgraph}.  All mutation methods return `this`
  * for chaining.  **Call {@link Subgraph.delete} (or use the `using` keyword)
  * when finished** to free the underlying WASM wrapper — the actual subgraph
  * data is owned by the parent {@link Graph} and is freed with it.
@@ -221,6 +212,18 @@ export class Subgraph {
         applyAttrs<EdgeAttrs>(attrs, (attr, value) => this.setEdgeAttr(tail, resolvedHead, resolvedKey, attr, value));
         applyAttrs<EdgeAttrs>(htmlAttrs, (attr, value) => this.setEdgeHtmlAttr(tail, resolvedHead, resolvedKey, attr, value));
         return this;
+    }
+
+    /**
+     * Create (or return an existing) named subgraph under this subgraph.
+     */
+    addSubgraph(name: string): Subgraph;
+    addSubgraph(init: SubgraphInit): Subgraph;
+    addSubgraph(nameOrInit: string | SubgraphInit): Subgraph {
+        const init = typeof nameOrInit === "string" ? { name: nameOrInit } : nameOrInit;
+        // addSubgraph only returns null when the internal subgraph pointer is null,
+        // which cannot happen while this Subgraph instance is alive.
+        return new Subgraph(this._sg.addSubgraph(init.name)!).applyInit(init);
     }
 
     applyInit(init: SubgraphInit): this {
@@ -560,6 +563,17 @@ export class Graph {
         this._module = module;
     }
 
+    private ensureDefaultFonts(includeNodeAndEdgeDefaults: boolean): void {
+        if (this.getGraphAttr("fontname") === "") {
+            this.setGraphAttr("fontname", "Arial");
+        }
+        this.setDefaultGraphAttr("fontname", "Arial");
+        if (includeNodeAndEdgeDefaults) {
+            this.setDefaultNodeAttr("fontname", "Arial");
+            this.setDefaultEdgeAttr("fontname", "Arial");
+        }
+    }
+
     /**
      * Create a node.  If a node with this name already exists it is returned
      * unchanged.
@@ -597,6 +611,7 @@ export class Graph {
     }
 
     applyInit(init: GraphInit): this {
+        this.ensureDefaultFonts(true);
         applyAttrs<GraphAttrs>(init.attrs, (attr, value) => this.setGraphAttr(attr, value));
         applyAttrs<GraphAttrs>(init.htmlAttrs, (attr, value) => this.setGraphHtmlAttr(attr, value));
         return this;
@@ -610,6 +625,7 @@ export class Graph {
         if (!this._graph.read(dotSource)) {
             throw new Error("Invalid DOT source");
         }
+        this.ensureDefaultFonts(false);
         return this;
     }
 
@@ -879,18 +895,18 @@ export class Graph {
     // ---- Graph traversal ------------------------------------------------
 
     /**
+     * Returns the names of all direct subgraphs.
+     */
+    subgraphNames(): string[] {
+        return parseNames(this._graph.subgraphNames());
+    }
+
+    /**
      * Returns the names of all nodes in the graph (in internal iteration
      * order).
      */
     nodeNames(): string[] {
         return parseNames(this._graph.nodeNames());
-    }
-
-    /**
-     * Returns the names of all direct subgraphs.
-     */
-    subgraphNames(): string[] {
-        return parseNames(this._graph.subgraphNames());
     }
 
     /**
