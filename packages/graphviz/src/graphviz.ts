@@ -184,10 +184,10 @@ export class Subgraph {
     /**
      * Create (or find) a node and add it to this subgraph.
      */
-    addNode(name: string): this;
+    addNode(name: string, attrs?: AttrValues<NodeAttrs>, htmlAttrs?: AttrValues<NodeAttrs>): this;
     addNode(init: NodeInit): this;
-    addNode(nameOrInit: string | NodeInit): this {
-        const init = typeof nameOrInit === "string" ? { name: nameOrInit } : nameOrInit;
+    addNode(nameOrInit: string | NodeInit, nodeAttrs?: AttrValues<NodeAttrs>, nodeHtmlAttrs?: AttrValues<NodeAttrs>): this {
+        const init = typeof nameOrInit === "string" ? { name: nameOrInit, attrs: nodeAttrs, htmlAttrs: nodeHtmlAttrs } : nameOrInit;
         const { name, attrs, htmlAttrs } = init;
 
         this._sg.addNode(name);
@@ -200,11 +200,14 @@ export class Subgraph {
      * Create an edge inside this subgraph.  Both endpoints are created
      * automatically if they do not already exist.
      */
-    addEdge(tail: string, head: string, key?: string): this;
+    addEdge(tail: string, head: string, attrs?: AttrValues<EdgeAttrs>, htmlAttrs?: AttrValues<EdgeAttrs>): this;
+    addEdge(tail: string, head: string, key: string, attrs?: AttrValues<EdgeAttrs>, htmlAttrs?: AttrValues<EdgeAttrs>): this;
     addEdge(init: EdgeInit): this;
-    addEdge(tailOrInit: string | EdgeInit, head?: string, key: string = ""): this {
+    addEdge(tailOrInit: string | EdgeInit, head?: string, keyOrAttrs: string | AttrValues<EdgeAttrs> = "", attrsOrHtmlAttrs?: AttrValues<EdgeAttrs>, maybeHtmlAttrs?: AttrValues<EdgeAttrs>): this {
         const init = typeof tailOrInit === "string"
-            ? { tail: tailOrInit, head: head!, key }
+            ? typeof keyOrAttrs === "string"
+                ? { tail: tailOrInit, head: head!, key: keyOrAttrs, attrs: attrsOrHtmlAttrs, htmlAttrs: maybeHtmlAttrs }
+                : { tail: tailOrInit, head: head!, attrs: keyOrAttrs, htmlAttrs: attrsOrHtmlAttrs }
             : tailOrInit;
         const { tail, head: resolvedHead, key: resolvedKey = "", attrs, htmlAttrs } = init;
 
@@ -217,10 +220,10 @@ export class Subgraph {
     /**
      * Create (or return an existing) named subgraph under this subgraph.
      */
-    addSubgraph(name: string): Subgraph;
+    addSubgraph(name: string, attrs?: AttrValues<ClusterAttrs>, htmlAttrs?: AttrValues<ClusterAttrs>): Subgraph;
     addSubgraph(init: SubgraphInit): Subgraph;
-    addSubgraph(nameOrInit: string | SubgraphInit): Subgraph {
-        const init = typeof nameOrInit === "string" ? { name: nameOrInit } : nameOrInit;
+    addSubgraph(nameOrInit: string | SubgraphInit, attrs?: AttrValues<ClusterAttrs>, htmlAttrs?: AttrValues<ClusterAttrs>): Subgraph {
+        const init = typeof nameOrInit === "string" ? { name: nameOrInit, attrs, htmlAttrs } : nameOrInit;
         // addSubgraph only returns null when the internal subgraph pointer is null,
         // which cannot happen while this Subgraph instance is alive.
         return new Subgraph(this._sg.addSubgraph(init.name)!).applyInit(init);
@@ -578,10 +581,10 @@ export class Graph {
      * Create a node.  If a node with this name already exists it is returned
      * unchanged.
      */
-    addNode(name: string): this;
+    addNode(name: string, attrs?: AttrValues<NodeAttrs>, htmlAttrs?: AttrValues<NodeAttrs>): this;
     addNode(init: NodeInit): this;
-    addNode(nameOrInit: string | NodeInit): this {
-        const init = typeof nameOrInit === "string" ? { name: nameOrInit } : nameOrInit;
+    addNode(nameOrInit: string | NodeInit, nodeAttrs?: AttrValues<NodeAttrs>, nodeHtmlAttrs?: AttrValues<NodeAttrs>): this {
+        const init = typeof nameOrInit === "string" ? { name: nameOrInit, attrs: nodeAttrs, htmlAttrs: nodeHtmlAttrs } : nameOrInit;
         const { name, attrs, htmlAttrs } = init;
 
         this._graph.addNode(name);
@@ -596,11 +599,14 @@ export class Graph {
      * parallel edges between the same pair of nodes; omit (or pass `""`) for
      * an anonymous edge.
      */
-    addEdge(tail: string, head: string, key?: string): this;
+    addEdge(tail: string, head: string, attrs?: AttrValues<EdgeAttrs>, htmlAttrs?: AttrValues<EdgeAttrs>): this;
+    addEdge(tail: string, head: string, key: string, attrs?: AttrValues<EdgeAttrs>, htmlAttrs?: AttrValues<EdgeAttrs>): this;
     addEdge(init: EdgeInit): this;
-    addEdge(tailOrInit: string | EdgeInit, head?: string, key: string = ""): this {
+    addEdge(tailOrInit: string | EdgeInit, head?: string, keyOrAttrs: string | AttrValues<EdgeAttrs> = "", attrsOrHtmlAttrs?: AttrValues<EdgeAttrs>, maybeHtmlAttrs?: AttrValues<EdgeAttrs>): this {
         const init = typeof tailOrInit === "string"
-            ? { tail: tailOrInit, head: head!, key }
+            ? typeof keyOrAttrs === "string"
+                ? { tail: tailOrInit, head: head!, key: keyOrAttrs, attrs: attrsOrHtmlAttrs, htmlAttrs: maybeHtmlAttrs }
+                : { tail: tailOrInit, head: head!, attrs: keyOrAttrs, htmlAttrs: attrsOrHtmlAttrs }
             : tailOrInit;
         const { tail, head: resolvedHead, key: resolvedKey = "", attrs, htmlAttrs } = init;
 
@@ -954,10 +960,10 @@ export class Graph {
      * cluster.setAttr("label", "My Cluster").addEdge("a", "b");
      * ```
      */
-    addSubgraph(name: string): Subgraph;
+    addSubgraph(name: string, attrs?: AttrValues<ClusterAttrs>, htmlAttrs?: AttrValues<ClusterAttrs>): Subgraph;
     addSubgraph(init: SubgraphInit): Subgraph;
-    addSubgraph(nameOrInit: string | SubgraphInit): Subgraph {
-        const init = typeof nameOrInit === "string" ? { name: nameOrInit } : nameOrInit;
+    addSubgraph(nameOrInit: string | SubgraphInit, attrs?: AttrValues<ClusterAttrs>, htmlAttrs?: AttrValues<ClusterAttrs>): Subgraph {
+        const init = typeof nameOrInit === "string" ? { name: nameOrInit, attrs, htmlAttrs } : nameOrInit;
         // addSubgraph only returns null when the internal graph pointer is null,
         // which cannot happen while this Graph instance is alive.
         return new Subgraph(this._graph.addSubgraph(init.name)!).applyInit(init);

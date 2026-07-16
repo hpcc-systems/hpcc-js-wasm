@@ -180,6 +180,27 @@ describe("graphviz", function () {
 
     });
 
+    it("html table label", async function () {
+        const graphviz = await Graphviz.load();
+        const tableDot = `\
+digraph {
+    node [shape=plain];
+    a [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD><B>Name</B></TD><TD>Value</TD></TR>
+            <TR><TD>foo</TD><TD>42</TD></TR>
+        </TABLE>
+    >];
+}`;
+        const svg = graphviz.dot(tableDot, "svg");
+        expect(svg).to.be.a("string");
+        expect(svg).to.not.be.empty;
+        expect(svg).to.contain("Name");
+        expect(svg).to.contain("Value");
+        expect(svg).to.contain("foo");
+        expect(svg).to.contain("42");
+    });
+
     it("ortho", async function () {
         const graphviz = await Graphviz.load();
         const svg = graphviz.dot(ortho, "svg");
@@ -512,4 +533,6 @@ graph {node[label="\\N"];
             expect(e.message).to.contain("syntax error in line");
         }
     });
+
+
 });
