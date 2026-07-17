@@ -10,13 +10,13 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 - [duckdb](https://github.com/duckdb/duckdb) - v1.5.4
 - [expat](https://libexpat.github.io/) - v2.8.1
 - [graphviz](https://www.graphviz.org/) - 15.1.0
-- [llama.cpp](https://github.com/ggml-org/llama.cpp) - b9860
+- [llama.cpp](https://github.com/ggml-org/llama.cpp) - b10058
 - [zstd](https://github.com/facebook/zstd) - v1.5.7
 - ...more to follow...
 
 Built with:
 
-- [emsdk](https://github.com/emscripten-core/emsdk) - v6.0.1
+- [emsdk](https://github.com/emscripten-core/emsdk) - v6.0.3
 - [vcpkg](https://github.com/microsoft/vcpkg) - 2026.06.24
 
 ## Homepage and Documents

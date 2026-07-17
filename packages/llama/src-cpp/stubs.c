@@ -49,30 +49,30 @@
         return -ENOSYS;            \
     }
 
-// #define STRINGIFY(s) #s
-// #define STR(s) STRINGIFY(s)
+#define STRINGIFY(s) #s
+#define STR(s) STRINGIFY(s)
 
-// weak int __syscall_uname(intptr_t buf)
-// {
-//     if (!buf)
-//     {
-//         return -EFAULT;
-//     }
-//     const char *full_version = STR(__EMSCRIPTEN_major__) "." STR(__EMSCRIPTEN_minor__) "." STR(__EMSCRIPTEN_tiny__);
+weak int __syscall_uname(intptr_t buf)
+{
+    if (!buf)
+    {
+        return -EFAULT;
+    }
+    const char *full_version = STR(__EMSCRIPTEN_MAJOR__) "." STR(__EMSCRIPTEN_MINOR__) "." STR(__EMSCRIPTEN_TINY__);
 
-//     struct utsname *utsname = (struct utsname *)buf;
+    struct utsname *utsname = (struct utsname *)buf;
 
-//     strcpy(utsname->sysname, "Emscripten");
-//     strcpy(utsname->nodename, "emscripten");
-//     strcpy(utsname->release, full_version);
-//     strcpy(utsname->version, "#1");
-// #ifdef __wasm64__
-//     strcpy(utsname->machine, "wasm64");
-// #else
-//     strcpy(utsname->machine, "wasm32");
-// #endif
-//     return 0;
-// }
+    strcpy(utsname->sysname, "Emscripten");
+    strcpy(utsname->nodename, "emscripten");
+    strcpy(utsname->release, full_version);
+    strcpy(utsname->version, "#1");
+#ifdef __wasm64__
+    strcpy(utsname->machine, "wasm64");
+#else
+    strcpy(utsname->machine, "wasm32");
+#endif
+    return 0;
+}
 
 // weak int __syscall_setpgid(int pid, int pgid)
 // {
@@ -299,6 +299,15 @@ weak int __syscall_prlimit64(int pid, int resource, intptr_t new_limit, intptr_t
             old->rlim_max = RLIM_INFINITY;
         }
     }
+    return 0;
+}
+
+weak int __syscall_setpriority(int which, int who, int prio)
+{
+    REPORT(setpriority);
+    (void)which;
+    (void)who;
+    (void)prio;
     return 0;
 }
 

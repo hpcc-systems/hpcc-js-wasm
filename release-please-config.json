@@ -8,6 +8,7 @@
         "packages/expat": {},
         "packages/graphviz": {},
         "packages/graphviz-cli": {},
+        "packages/llama": {},
         "packages/zstd": {},
         "packages/wasm": {}
     },
