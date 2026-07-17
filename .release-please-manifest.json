@@ -1,12 +1,12 @@
 {
-    ".": "4.14.0",
+    ".": "4.15.0",
     "packages/base91": "1.14.5",
     "packages/duckdb": "1.18.5",
     "packages/expat": "1.14.5",
     "packages/graphviz": "1.27.0",
     "packages/graphviz-cli": "1.10.5",
-    "packages/llama": "1.1.0",
-    "packages/llama-cli": "1.0.0",
+    "packages/llama": "1.2.0",
+    "packages/llama-cli": "1.1.0",
     "packages/zstd": "1.13.5",
     "packages/wasm": "2.34.8"
 }

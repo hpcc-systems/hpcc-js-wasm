@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.15.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.14.0...wasm-root-v4.15.0) (2026-07-17)
+
+
+### Features
+
+* add Llama CLI package with command line interface and model loading capabilities ([c3dae9f](https://github.com/hpcc-systems/hpcc-js-wasm/commit/c3dae9f3432d84a18e73504e754624998501e1b4))
+
 ## [4.14.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.13.0...wasm-root-v4.14.0) (2026-07-17)
 
 
