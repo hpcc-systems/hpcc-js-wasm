@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.16.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.15.0...wasm-root-v4.16.0) (2026-07-17)
+
+
+### Features
+
+* update Llama CLI documentation and examples, enhance argument normalization, and improve logging ([c74b589](https://github.com/hpcc-systems/hpcc-js-wasm/commit/c74b589d6c3c30365a19001e556973d883731688))
+
 ## [4.15.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.14.0...wasm-root-v4.15.0) (2026-07-17)
 
 
