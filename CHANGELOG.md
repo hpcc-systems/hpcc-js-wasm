@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.14.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.13.0...wasm-root-v4.14.0) (2026-07-17)
+
+
+### Features
+
+* enhance Subgraph and Graph classes with additional attributes for nodes, edges, and subgraphs ([40e2e4c](https://github.com/hpcc-systems/hpcc-js-wasm/commit/40e2e4cad68dbc11501cdb9bd956e6c767a223c1))
+
 ## [4.13.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.12.0...wasm-root-v4.13.0) (2026-07-15)
 
 

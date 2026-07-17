@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.27.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.26.0...wasm-graphviz-v1.27.0) (2026-07-17)
+
+
+### Features
+
+* enhance Subgraph and Graph classes with additional attributes for nodes, edges, and subgraphs ([40e2e4c](https://github.com/hpcc-systems/hpcc-js-wasm/commit/40e2e4cad68dbc11501cdb9bd956e6c767a223c1))
+
 ## [1.26.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.25.0...wasm-graphviz-v1.26.0) (2026-07-15)
 
 
