@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-v1.2.0...wasm-llama-v1.3.0) (2026-07-17)
+
+
+### Features
+
+* update Llama CLI documentation and examples, enhance argument normalization, and improve logging ([c74b589](https://github.com/hpcc-systems/hpcc-js-wasm/commit/c74b589d6c3c30365a19001e556973d883731688))
+
 ## [1.2.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-v1.1.0...wasm-llama-v1.2.0) (2026-07-17)
 
 
