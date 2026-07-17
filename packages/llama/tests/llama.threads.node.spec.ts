@@ -6,14 +6,14 @@ describe("llama threading in node", () => {
     it("supports threads > 1 when Worker is available", async () => {
         const originalWorker = (globalThis as { Worker?: unknown }).Worker;
         const sawThreadLog: string[] = [];
-        const originalLog = console.log;
+        const originalError = console.error;
 
-        console.log = (...args: unknown[]) => {
+        console.error = (...args: unknown[]) => {
             const txt = args.map(arg => String(arg)).join(" ");
             if (txt.includes("[Llama] Effective threads:")) {
                 sawThreadLog.push(txt);
             }
-            originalLog(...args);
+            originalError(...args);
         };
 
         try {
@@ -27,7 +27,7 @@ describe("llama threading in node", () => {
             expect(sawThreadLog.some(line => line.includes("[Llama] Effective threads: 4, batch threads: 4"))).to.equal(true);
         } finally {
             (globalThis as { Worker?: unknown }).Worker = originalWorker;
-            console.log = originalLog;
+            console.error = originalError;
         }
     });
 });

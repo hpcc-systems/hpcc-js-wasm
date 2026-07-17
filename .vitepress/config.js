@@ -36,13 +36,6 @@ export default defineConfig({
                 ]
             },
             {
-                text: 'WASM CLI',
-                items: [
-                    { text: 'Graphviz', link: '/docs/graphviz-cli' },
-                    { text: 'Llama', link: '/docs/llama-cli' },
-                ]
-            },
-            {
                 text: 'WASM API',
                 items: [
                     { text: 'Base91', link: '/packages/base91/README' },
@@ -51,6 +44,13 @@ export default defineConfig({
                     { text: 'Graphviz', link: '/packages/graphviz/README' },
                     { text: 'Llama', link: '/packages/llama/README' },
                     { text: 'Zstd', link: '/packages/zstd/README' },
+                ]
+            },
+            {
+                text: 'WASM CLI',
+                items: [
+                    { text: 'Graphviz', link: '/docs/graphviz-cli' },
+                    { text: 'Llama', link: '/docs/llama-cli' },
                 ]
             }
 

@@ -32,9 +32,9 @@ Options:
 Examples:
 
 ```sh
-wasm-llama-cli -m ./model.gguf -p "Hello" -n 64
-wasm-llama-cli --model https://huggingface.co/user/repo/resolve/main/model.gguf -p "Hello" -n 64
-wasm-llama-cli --llama-help
+npx @hpcc-js/wasm-llama-cli --model https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf -p "Tell me a short friendly story about a tiny llama." -n 96
+npx @hpcc-js/wasm-llama-cli -m ./model.gguf -p "Tell me a short friendly story about a tiny llama." -n 96
+npx @hpcc-js/wasm-llama-cli --llama-help
 ```
 
 All arguments other than the wrapper options above are forwarded to llama.cpp `main` unchanged. If `--model` is supplied, the model is loaded into the WASM filesystem and passed to `main` automatically. The `--` separator is optional; use it only when a llama.cpp argument must be protected from wrapper option parsing.

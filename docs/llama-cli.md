@@ -36,7 +36,7 @@ protected from wrapper option parsing.
 Examples:
 
 ```sh
-wasm-llama-cli -m ./model.gguf --single-turn --no-conversation --log-disable --no-display-prompt -p "Hello" -n 64
-wasm-llama-cli --model https://huggingface.co/ggml-org/models/resolve/main/tinyllamas/stories260K.gguf -p "Hello" -n 64
-wasm-llama-cli --llama-help
+npx @hpcc-js/wasm-llama-cli --model https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf -p "Tell me a short friendly story about a tiny llama." -n 96
+npx @hpcc-js/wasm-llama-cli -m ./model.gguf -p "Tell me a short friendly story about a tiny llama." -n 96
+npx @hpcc-js/wasm-llama-cli --llama-help
 ```

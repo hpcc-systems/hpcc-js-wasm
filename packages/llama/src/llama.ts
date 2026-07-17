@@ -249,7 +249,7 @@ export class Llama {
         const threads = this.readThreadCount(args, "-t", "--threads");
         const threadsBatch = this.readThreadCount(args, "-tb", "--threads-batch");
         if (threads !== undefined || threadsBatch !== undefined) {
-            console.log(`[Llama] Effective threads: ${threads ?? "default"}, batch threads: ${threadsBatch ?? "default"}`);
+            console.error(`[Llama] Effective threads: ${threads ?? "default"}, batch threads: ${threadsBatch ?? "default"}`);
         }
         const mountedModelPath = "/mainModel.gguf";
         let mountedModel = false;

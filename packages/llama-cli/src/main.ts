@@ -1,6 +1,6 @@
 import fs from "fs";
 import { Worker } from "worker_threads";
-import { Llama } from "@hpcc-js/wasm-llama";
+import { Llama, WebBlob } from "@hpcc-js/wasm-llama";
 import { HELP_TEXT, parseArgs } from "./cliArgs.ts";
 
 export async function main() {
@@ -29,7 +29,7 @@ export async function main() {
         }
 
         const model = parsed.model ? await loadModel(parsed.model) : undefined;
-        const result = llama.main(parsed.mainArgs, model);
+        const result = llama.main(normalizeMainArgs(parsed.mainArgs), model);
         writeResult(result.stdout, result.stderr);
         process.exitCode = result.exitCode;
     } catch (e: any) {
@@ -47,14 +47,50 @@ function ensureWorkerGlobal() {
     (globalThis as any).Worker ??= Worker;
 }
 
+export function normalizeMainArgs(args: string[]): string[] {
+    if (!hasValueOption(args, "-p", "--prompt")) {
+        return args;
+    }
+
+    const defaults: string[] = [];
+    if (!hasAnyFlag(args, ["-i", "--interactive", "-cnv", "--conversation", "--single-turn", "--no-conversation"])) {
+        defaults.push("--single-turn", "--no-conversation", "--no-display-prompt");
+    }
+    if (!hasAnyFlag(args, ["--log-disable"])) {
+        defaults.push("--log-disable");
+    }
+    if (!hasValueOption(args, "-t", "--threads")) {
+        defaults.push("-t", "1");
+    }
+    if (!hasValueOption(args, "-tb", "--threads-batch")) {
+        defaults.push("-tb", "1");
+    }
+
+    return defaults.length ? [...defaults, ...args] : args;
+}
+
+function hasAnyFlag(args: string[], flags: string[]): boolean {
+    return args.some(arg => flags.includes(arg));
+}
+
+function hasValueOption(args: string[], shortFlag: string, longFlag: string): boolean {
+    for (let i = 0; i < args.length; ++i) {
+        const arg = args[i];
+        if (arg === shortFlag || arg === longFlag || arg.startsWith(`${longFlag}=`)) {
+            return true;
+        }
+        if (arg.startsWith(shortFlag) && arg.length > shortFlag.length && !(shortFlag === "-t" && arg.startsWith("-tb"))) {
+            return true;
+        }
+    }
+    return false;
+}
+
 async function loadModel(model: string): Promise<Uint8Array> {
     const url = parseUrl(model);
     if (url) {
-        const response = await fetch(normalizeModelUrl(url));
-        if (!response.ok) {
-            throw new Error(`Failed to download model: ${response.status} ${response.statusText}`);
-        }
-        return new Uint8Array(await response.arrayBuffer());
+        const webBlob = await WebBlob.create(normalizeModelUrl(url));
+        return new Uint8Array(await webBlob.arrayBuffer());
     }
 
     if (!fs.existsSync(model)) {

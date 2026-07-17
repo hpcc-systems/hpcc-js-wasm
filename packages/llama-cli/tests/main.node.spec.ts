@@ -6,6 +6,7 @@ import { promisify } from "util";
 import { fileURLToPath } from "url";
 import { WebBlob } from "@hpcc-js/wasm-llama";
 import { HELP_TEXT, parseArgs } from "../src/cliArgs.ts";
+import { normalizeMainArgs } from "../src/main.ts";
 
 const execFileAsync = promisify(execFile);
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -69,6 +70,34 @@ describe("parseArgs", () => {
     });
 });
 
+describe("normalizeMainArgs", () => {
+    it("makes prompt-only llama.cpp invocations non-interactive by default", () => {
+        expect(normalizeMainArgs(["-p", "Hello", "-n", "64"])).toEqual([
+            "--single-turn",
+            "--no-conversation",
+            "--no-display-prompt",
+            "--log-disable",
+            "-t",
+            "1",
+            "-tb",
+            "1",
+            "-p",
+            "Hello",
+            "-n",
+            "64",
+        ]);
+    });
+
+    it("preserves explicit conversation and interactive modes", () => {
+        expect(normalizeMainArgs(["--conversation", "-p", "Hello", "-t", "2", "-tb", "2"])).toEqual(["--log-disable", "--conversation", "-p", "Hello", "-t", "2", "-tb", "2"]);
+        expect(normalizeMainArgs(["-i", "-p", "Hello", "--threads", "2", "--threads-batch", "2"])).toEqual(["--log-disable", "-i", "-p", "Hello", "--threads", "2", "--threads-batch", "2"]);
+    });
+
+    it("does not treat threads-batch as an explicit threads value", () => {
+        expect(normalizeMainArgs(["-p", "Hello", "-tb", "2"])).toContain("-t");
+    });
+});
+
 describe("llama-cli", () => {
     it("uses -- to pass protected arguments to llama.cpp", async () => {
         const { stdout } = await execFileAsync("npx", [".", "--", "--help"], {
@@ -87,10 +116,6 @@ describe("llama-cli", () => {
             ".",
             "-m",
             storiesModelArg,
-            "--single-turn",
-            "--no-conversation",
-            "--log-disable",
-            "--no-display-prompt",
             "-p",
             "hello",
             "-n",
@@ -99,6 +124,25 @@ describe("llama-cli", () => {
             "1",
             "-tb",
             "1",
+        ], {
+            cwd: packageRoot,
+            maxBuffer: 1024 * 1024 * 10,
+            timeout: 180000
+        });
+
+        expect(stdout).to.be.a("string");
+        expect(stdout.trim().length).to.be.greaterThan(0);
+    }, 180000);
+
+    it("runs llama.cpp main with a Hugging Face model URL", async () => {
+        const { stdout } = await execFileAsync("npx", [
+            ".",
+            "--model",
+            storiesModelUrl,
+            "-p",
+            "Hello",
+            "-n",
+            "64",
         ], {
             cwd: packageRoot,
             maxBuffer: 1024 * 1024 * 10,
