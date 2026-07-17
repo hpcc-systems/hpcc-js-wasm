@@ -1,0 +1,62 @@
+{
+    "name": "@hpcc-js/wasm-llama-cli",
+    "version": "1.0.0",
+    "description": "hpcc-js - WASM llama Cli",
+    "type": "module",
+    "bin": {
+        "wasm-llama-cli": "bin/index.js"
+    },
+    "exports": {
+        ".": {
+            "types": "./types/index.d.ts",
+            "default": "./bin/index.js"
+        }
+    },
+    "main": "./bin/index.js",
+    "types": "./types/index.d.ts",
+    "files": [
+        "bin/**/*",
+        "src/**/*",
+        "types/**/*"
+    ],
+    "scripts": {
+        "clean": "rimraf bin types .nyc_output",
+        "gen-types": "tsc --project tsconfig.json --emitDeclarationOnly",
+        "gen-types-watch": "npm run gen-types -- --watch",
+        "bundle": "npm run bundle-dev --minify",
+        "bundle-dev": "esbuild ./src/index.ts --platform=node --format=esm --bundle --packages=external --sourcemap --outfile=./bin/index.js --banner:js='#!/usr/bin/env node'",
+        "postbundle": "chmod +x ./bin/index.js",
+        "postbundle-dev": "chmod +x ./bin/index.js",
+        "bundle-watch": "npm run bundle-dev -- --watch",
+        "build-dev": "run-p gen-types bundle-dev",
+        "build": "run-p gen-types bundle",
+        "lint-skypack": "npx -y @skypack/package-check",
+        "lint-eslint": "eslint src/**/*.ts tests/**/*.ts",
+        "lint": "run-p lint-eslint",
+        "test:unit": "vitest run",
+        "test": "npm run test:unit && node bin/index.js --help",
+        "update": "npx -y npm-check-updates -u -t minor",
+        "update-major": "npx -y npm-check-updates -u"
+    },
+    "dependencies": {
+        "@hpcc-js/wasm-llama": "1.1.0"
+    },
+    "devDependencies": {},
+    "keywords": [
+        "llama",
+        "llama.cpp",
+        "typescript",
+        "webassembly",
+        "wasm",
+        "cli",
+        "gguf",
+        "huggingface"
+    ],
+    "author": "hpcc-systems",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/hpcc-systems/hpcc-js-wasm.git"
+    },
+    "homepage": "https://hpcc-systems.github.io/hpcc-js-wasm/",
+    "license": "Apache-2.0"
+}

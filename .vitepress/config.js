@@ -39,6 +39,7 @@ export default defineConfig({
                 text: 'WASM CLI',
                 items: [
                     { text: 'Graphviz', link: '/docs/graphviz-cli' },
+                    { text: 'Llama', link: '/docs/llama-cli' },
                 ]
             },
             {

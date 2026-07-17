@@ -9,6 +9,7 @@
         "packages/graphviz": {},
         "packages/graphviz-cli": {},
         "packages/llama": {},
+        "packages/llama-cli": {},
         "packages/zstd": {},
         "packages/wasm": {}
     },

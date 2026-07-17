@@ -26,7 +26,9 @@ Built with:
   - [DuckDB](https://hpcc-systems.github.io/hpcc-js-wasm/docs/duckdb/src/duckdb/classes/DuckDB.html)
   - [Expat](https://hpcc-systems.github.io/hpcc-js-wasm/docs/expat/src/expat/classes/Expat.html)
   - [Graphviz](https://hpcc-systems.github.io/hpcc-js-wasm/docs/graphviz/src/graphviz/classes/Graphviz.html)
+  - [Graphviz CLI](https://hpcc-systems.github.io/hpcc-js-wasm/docs/graphviz-cli.html)
   - [Llama](https://hpcc-systems.github.io/hpcc-js-wasm/docs/llama/src/llama/classes/Llama.html)
+  - [Llama CLI](https://hpcc-systems.github.io/hpcc-js-wasm/docs/llama-cli.html)
   - [Zstd](https://hpcc-systems.github.io/hpcc-js-wasm/docs/zstd/src/zstd/classes/Zstd.html)
 
 ## AI Assistant / Copilot Instructions
@@ -48,6 +50,8 @@ This repository is a monorepo with the following packages:
 - @hpcc-js/wasm-expat
 - @hpcc-js/wasm-graphviz
 - @hpcc-js/wasm-graphviz-cli
+- @hpcc-js/wasm-llama
+- @hpcc-js/wasm-llama-cli
 - @hpcc-js/wasm-zstd
 - @hpcc-js/wasm (meta package for backward compatibility)
 
