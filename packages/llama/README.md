@@ -34,6 +34,22 @@ const webBlob: Blob = await WebBlob.create(new URL(model));
 const data: ArrayBuffer = await webBlob.arrayBuffer();
 
 const embeddings = llama.embedding("Hello and Welcome!", new Uint8Array(data));
+
+const reply = llama.chat("Summarize this package in one sentence.", new Uint8Array(data), {
+	systemPrompt: "You are a concise assistant.",
+	args: ["--temp", "0.2"]
+});
+
+const session = llama.createChatSession(new Uint8Array(data), {
+	systemPrompt: "You are a concise assistant.",
+	args: ["--temp", "0.2"]
+});
+
+const firstReply = session.send("Summarize this package in one sentence.");
+const followUp = session.send("Now restate that as three bullet points.");
+
+const result = llama.main(["--help"]);
+console.log(result.stdout);
 ```
 
 <!--@include: ../../docs/llama/src/llama/README.md-->

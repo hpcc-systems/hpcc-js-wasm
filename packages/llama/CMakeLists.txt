@@ -7,6 +7,7 @@ find_package(Llama CONFIG REQUIRED)
 set(EM_CPP_FLAGS 
     ${EM_CPP_FLAGS}
 
+    "-fopenmp"
     "-fwasm-exceptions"
 )
 string(REPLACE ";" " " CPP_FLAGS "${EM_CPP_FLAGS}")
@@ -18,6 +19,7 @@ set(EM_LINK_FLAGS
     "-sFORCE_FILESYSTEM=1"
     "-sWASMFS=1"
 
+    "-fopenmp"
     "-fwasm-exceptions"
     "-sEXCEPTION_STACK_TRACES=1"
     "--emit-tsd ${CMAKE_CURRENT_BINARY_DIR}/llamalib.d.ts"
@@ -39,6 +41,7 @@ find_library(LLAMA_COMMON_LIBRARY llama-common
 
 add_executable(llamalib
     src-cpp/embedding.cpp
+    src-cpp/main.cpp
     src-cpp/util.cpp
     src-cpp/stubs.c
 )
