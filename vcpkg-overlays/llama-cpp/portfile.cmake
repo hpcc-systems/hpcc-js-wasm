@@ -2,7 +2,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO ggml-org/llama.cpp
     REF b${VERSION}
-    SHA512 02e8013d391e9c5f3733b54bd78d8c8fcddb0d06b1eb469bf5ddc1506a3deace9446b249ac05c8e9236632143007919e098df71743efa503f58b7b072d666980
+    SHA512 d58a69aeb927e45e976a35f0118b38c5484d8d0f2efcc8f20e746b2ab96ea264d946602f7d1ca1f124f316a356f032c885ac39486682b542202f65f100982fc2
     HEAD_REF master
     PATCHES
         wasm-fixes.diff
@@ -147,6 +147,7 @@ vcpkg_cmake_configure(
     OPTIONS
         ${options}
         -DGGML_CCACHE=OFF
+        -DGGML_OPENMP=ON
         -DLLAMA_ALL_WARNINGS=OFF
         -DLLAMA_BUILD_APP=OFF
         -DLLAMA_BUILD_TESTS=OFF
