@@ -24,14 +24,16 @@ export async function main() {
         if (parsed.llamaHelp) {
             const result = llama.main(["--help"]);
             writeResult(result.stdout, result.stderr);
-            process.exitCode = result.exitCode;
+            // llama.cpp returns 0 when --help is successfully printed (no model run)
+            // and 1 when there's a parse error.
+            process.exitCode = result.exitCode === 1 ? 1 : 0;
             return;
         }
 
         const model = parsed.model ? await loadModel(parsed.model) : undefined;
         const result = llama.main(normalizeMainArgs(parsed.mainArgs), model);
         writeResult(result.stdout, result.stderr);
-        process.exitCode = result.exitCode;
+        process.exitCode = result.exitCode === 1 ? 1 : 0;
     } catch (e: any) {
         console.error(`Error:  ${e?.message}\n`);
         console.error(HELP_TEXT);

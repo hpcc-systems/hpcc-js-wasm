@@ -34,7 +34,7 @@
         "lint-eslint": "eslint src/**/*.ts tests/**/*.ts",
         "lint": "run-p lint-eslint",
         "test:unit": "vitest run",
-        "test": "npm run test:unit && node bin/index.js --help",
+        "test": "npm run build-dev && npm run test:unit && node bin/index.js --help",
         "update": "npx -y npm-check-updates -u -t minor",
         "update-major": "npx -y npm-check-updates -u"
     },

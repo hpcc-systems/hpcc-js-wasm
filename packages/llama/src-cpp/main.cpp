@@ -1,5 +1,6 @@
 //  See:  https://github.com/ggerganov/llama.cpp/blob/master/examples/main/main.cpp  ---
 #include "common.h"
+#include "arg.h"
 #include "console.h"
 #include "log.h"
 #include "sampling.h"
@@ -44,6 +45,9 @@
         LOG(__VA_ARGS__); \
         LOG("\n");        \
     } while (0)
+
+// Global variable that tracks if help was printed (used by arg.cpp overlay)
+bool g_help_was_printed = false;
 
 namespace main
 {
@@ -157,228 +161,10 @@ namespace main
     static bool is_interacting = false;
     static bool need_insert_eot = false;
 
-    static void print_usage(int, char **argv)
-    {
-        printf("\nexample usage:\n");
-        printf("\n  text generation:     %s -m your_model.gguf -p \"I believe the meaning of life is\" -n 128\n", argv[0]);
-        printf("\n  chat (conversation): %s -m your_model.gguf -p \"You are a helpful assistant\" -cnv\n", argv[0]);
-        printf("\n");
-    }
-
     static int parse_args(int argc, char **argv, common_params &params)
     {
-        for (int i = 1; i < argc; ++i)
+        if (!common_params_parse(argc, argv, params, LLAMA_EXAMPLE_CLI))
         {
-            const std::string arg = argv[i];
-
-            auto require_value = [&](const char *name) -> std::string
-            {
-                if (i + 1 >= argc)
-                {
-                    fprintf(stderr, "%s: missing value for %s\n", argv[0], name);
-                    return {};
-                }
-                return std::string(argv[++i]);
-            };
-
-            if (arg == "-m" || arg == "--model")
-            {
-                const auto v = require_value(arg.c_str());
-                if (v.empty())
-                    return -1;
-                params.model.path = v;
-            }
-            else if (arg == "-p" || arg == "--prompt")
-            {
-                const auto v = require_value(arg.c_str());
-                if (v.empty())
-                    return -1;
-                params.prompt = v;
-            }
-            else if (arg == "-sys" || arg == "--system-prompt")
-            {
-                const auto v = require_value(arg.c_str());
-                if (v.empty())
-                    return -1;
-                params.system_prompt = v;
-            }
-            else if (arg == "-n" || arg == "--predict")
-            {
-                const auto v = require_value(arg.c_str());
-                if (v.empty())
-                    return -1;
-                params.n_predict = std::stoi(v);
-            }
-            else if (arg == "-c" || arg == "--ctx-size")
-            {
-                const auto v = require_value(arg.c_str());
-                if (v.empty())
-                    return -1;
-                params.n_ctx = std::stoi(v);
-            }
-            else if (arg == "-b" || arg == "--batch-size")
-            {
-                const auto v = require_value(arg.c_str());
-                if (v.empty())
-                    return -1;
-                params.n_batch = std::stoi(v);
-            }
-            else if (arg == "-ub" || arg == "--ubatch-size")
-            {
-                const auto v = require_value(arg.c_str());
-                if (v.empty())
-                    return -1;
-                params.n_ubatch = std::stoi(v);
-            }
-            else if (arg == "-t" || arg == "--threads")
-            {
-                const auto v = require_value(arg.c_str());
-                if (v.empty())
-                    return -1;
-                params.cpuparams.n_threads = std::stoi(v);
-            }
-            else if (arg == "-tb" || arg == "--threads-batch")
-            {
-                const auto v = require_value(arg.c_str());
-                if (v.empty())
-                    return -1;
-                params.cpuparams_batch.n_threads = std::stoi(v);
-            }
-            else if (arg == "--temp")
-            {
-                const auto v = require_value("--temp");
-                if (v.empty())
-                    return -1;
-                params.sampling.temp = std::stof(v);
-            }
-            else if (arg == "--top-k")
-            {
-                const auto v = require_value("--top-k");
-                if (v.empty())
-                    return -1;
-                params.sampling.top_k = std::stoi(v);
-            }
-            else if (arg == "--top-p")
-            {
-                const auto v = require_value("--top-p");
-                if (v.empty())
-                    return -1;
-                params.sampling.top_p = std::stof(v);
-            }
-            else if (arg == "--min-p")
-            {
-                const auto v = require_value("--min-p");
-                if (v.empty())
-                    return -1;
-                params.sampling.min_p = std::stof(v);
-            }
-            else if (arg == "-s" || arg == "--seed")
-            {
-                const auto v = require_value(arg.c_str());
-                if (v.empty())
-                    return -1;
-                params.sampling.seed = std::stoul(v);
-            }
-            else if (arg == "-cnv" || arg == "--conversation")
-            {
-                params.conversation_mode = COMMON_CONVERSATION_MODE_ENABLED;
-            }
-            else if (arg == "-no-cnv" || arg == "--no-conversation")
-            {
-                params.conversation_mode = COMMON_CONVERSATION_MODE_DISABLED;
-            }
-            else if (arg == "-i" || arg == "--interactive")
-            {
-                params.interactive = true;
-            }
-            else if (arg == "-if" || arg == "--interactive-first")
-            {
-                params.interactive_first = true;
-            }
-            else if (arg == "-st" || arg == "--single-turn")
-            {
-                params.single_turn = true;
-            }
-            else if (arg == "--display-prompt")
-            {
-                params.display_prompt = true;
-            }
-            else if (arg == "--no-display-prompt")
-            {
-                params.display_prompt = false;
-            }
-            else if (arg == "--jinja")
-            {
-                params.use_jinja = true;
-            }
-            else if (arg == "--chat-template")
-            {
-                const auto v = require_value("--chat-template");
-                if (v.empty())
-                    return -1;
-                params.chat_template = v;
-            }
-            else if (arg == "--in-prefix")
-            {
-                const auto v = require_value("--in-prefix");
-                if (v.empty())
-                    return -1;
-                params.input_prefix = v;
-            }
-            else if (arg == "--in-suffix")
-            {
-                const auto v = require_value("--in-suffix");
-                if (v.empty())
-                    return -1;
-                params.input_suffix = v;
-            }
-            else if (arg == "--prompt-cache")
-            {
-                const auto v = require_value("--prompt-cache");
-                if (v.empty())
-                    return -1;
-                params.path_prompt_cache = v;
-            }
-            else if (arg == "--prompt-cache-all")
-            {
-                params.prompt_cache_all = true;
-            }
-            else if (arg == "--prompt-cache-ro")
-            {
-                params.prompt_cache_ro = true;
-            }
-            else if (arg == "--warmup")
-            {
-                params.warmup = true;
-            }
-            else if (arg == "--no-warmup")
-            {
-                params.warmup = false;
-            }
-            else if (arg == "--log-disable")
-            {
-                params.verbosity = -1;
-                common_log_set_verbosity_thold(-1);
-            }
-            else if (arg == "-h" || arg == "--help")
-            {
-                print_usage(0, argv);
-                return 0;
-            }
-            else if (arg == "--version")
-            {
-                printf("%d\n", LLAMA_BUILD_NUMBER);
-                return 0;
-            }
-            else
-            {
-                // ignore unknown args for forward compatibility
-            }
-        }
-
-        if (params.model.path.empty())
-        {
-            fprintf(stderr, "%s: missing model path (-m)\n", argv[0]);
             return -1;
         }
 
@@ -512,10 +298,24 @@ namespace main
     {
         common_params params;
         g_params = &params;
+
+        // Reset the help flag before parsing (in case main is called multiple times)
+        g_help_was_printed = false;
+
         const int parse_rc = parse_args(argc, argv, params);
         if (parse_rc <= 0)
         {
-            return parse_rc == 0 ? 0 : 1;
+            // parse_rc == 0: normal success (shouldn't happen)
+            // parse_rc == -1: parse failed
+            // Check if help was printed: if so, return 0 (success); else return 1 (error)
+            if (g_help_was_printed)
+            {
+                return 0; // Help was successfully printed, exit cleanly
+            }
+            else
+            {
+                return 1; // Parse error occurred, exit with error code
+            }
         }
 #ifdef __EMSCRIPTEN__
         params.fit_params = false;

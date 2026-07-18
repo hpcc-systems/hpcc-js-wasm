@@ -91,7 +91,7 @@ describe("llama", () => {
             "1",
         ], model);
         expect(mainResult.exitCode).to.equal(0);
-        expect(mainResult.stdout).to.contain("usage:");
+        expect(mainResult.stdout).to.contain("common params");
         expect(mainResult.stderr).to.be.a("string");
 
         const session = llama.createChatSession(model, {

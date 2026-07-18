@@ -106,7 +106,7 @@ describe("llama-cli", () => {
             timeout: 180000
         });
 
-        expect(stdout).toContain("usage:");
+        expect(stdout).toContain("common params");
     }, 180000);
 
     it("runs llama.cpp main with a local model", async () => {

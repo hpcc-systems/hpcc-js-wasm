@@ -37,9 +37,10 @@ void common_log_set_verbosity_thold(int verbosity)
 "
 )
 
-vcpkg_replace_string("${SOURCE_PATH}/common/arg.cpp"
-"        [](common_params &) {\n            common_log_pause(common_log_main());\n        }"
-"        [](common_params & params) {\n            params.verbosity = -1;\n            common_log_set_verbosity_thold(-1);\n        }"
+configure_file(
+    "${CMAKE_CURRENT_LIST_DIR}/arg.cpp"
+    "${SOURCE_PATH}/common/arg.cpp"
+    COPYONLY
 )
 
 vcpkg_replace_string("${SOURCE_PATH}/ggml/src/ggml-backend-dl.h"
@@ -159,6 +160,25 @@ vcpkg_cmake_configure(
 )
 
 vcpkg_cmake_install()
+
+# llama-common has static dependencies not installed by upstream CMake install.
+# Install them so downstream consumers can link parser symbols from arg.cpp.
+file(INSTALL
+    "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel/common/libllama-common-base.a"
+    DESTINATION "${CURRENT_PACKAGES_DIR}/lib"
+)
+file(INSTALL
+    "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel/vendor/cpp-httplib/libcpp-httplib.a"
+    DESTINATION "${CURRENT_PACKAGES_DIR}/lib"
+)
+file(INSTALL
+    "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-dbg/common/libllama-common-base.a"
+    DESTINATION "${CURRENT_PACKAGES_DIR}/debug/lib"
+)
+file(INSTALL
+    "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-dbg/vendor/cpp-httplib/libcpp-httplib.a"
+    DESTINATION "${CURRENT_PACKAGES_DIR}/debug/lib"
+)
 
 # Install common header files
 file(GLOB COMMON_HEADERS "${SOURCE_PATH}/common/*.h")

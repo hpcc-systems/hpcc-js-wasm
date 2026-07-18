@@ -21,6 +21,7 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <sys/utsname.h>
+#include <pwd.h>
 #include <emscripten/console.h>
 #include <emscripten/version.h>
 #include <emscripten/stack.h>
@@ -181,10 +182,16 @@ weak int __syscall_uname(intptr_t buf)
 //     return -EPERM;
 // }
 
-// weak int __syscall_getuid32(void)
-// {
-//     return 0;
-// }
+weak int __syscall_getuid32(void)
+{
+    return 0;
+}
+
+weak struct passwd *getpwuid(uid_t uid)
+{
+    (void)uid;
+    return NULL;
+}
 
 // weak int __syscall_getgid32(void)
 // {

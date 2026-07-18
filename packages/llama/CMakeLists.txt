@@ -38,6 +38,16 @@ find_library(LLAMA_COMMON_LIBRARY llama-common
     HINTS ${VCPKG_INCLUDE_DIR}/../lib
     NO_CMAKE_FIND_ROOT_PATH
 )
+find_library(LLAMA_COMMON_BASE_LIBRARY llama-common-base
+    REQUIRED
+    HINTS ${VCPKG_INCLUDE_DIR}/../lib
+    NO_CMAKE_FIND_ROOT_PATH
+)
+find_library(CPP_HTTPLIB_LIBRARY cpp-httplib
+    REQUIRED
+    HINTS ${VCPKG_INCLUDE_DIR}/../lib
+    NO_CMAKE_FIND_ROOT_PATH
+)
 
 add_executable(llamalib
     src-cpp/embedding.cpp
@@ -52,6 +62,8 @@ set_target_properties(llamalib PROPERTIES LINK_FLAGS "${LINK_FLAGS}")
 target_link_libraries(llamalib
     PRIVATE llama
     PRIVATE ${LLAMA_COMMON_LIBRARY}
+    PRIVATE ${LLAMA_COMMON_BASE_LIBRARY}
+    PRIVATE ${CPP_HTTPLIB_LIBRARY}
 )
 
 # Copy generated files to source directories
