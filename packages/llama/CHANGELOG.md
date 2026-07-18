@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-v1.3.0...wasm-llama-v1.4.0) (2026-07-18)
+
+
+### Features
+
+* replace arg.cpp and install static dependencies ([40a5753](https://github.com/hpcc-systems/hpcc-js-wasm/commit/40a575369f7fc2a02f55a6e70e4dd2b431c709eb))
+
 ## [1.3.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-v1.2.0...wasm-llama-v1.3.0) (2026-07-17)
 
 
