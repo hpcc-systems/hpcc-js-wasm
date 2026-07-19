@@ -110,6 +110,30 @@ describe("zstd", function () {
         expect(def).to.be.lessThan(max);
     });
 
+    it("rejecting a streaming compression level does not poison the next reset", async function () {
+        const zstd = await Zstd.load();
+        const native = (zstd as any)._zstd;
+        const originalSetCompressionLevel = native.setCompressionLevel.bind(native);
+
+        native.setCompressionLevel = () => ({
+            consumed: 0,
+            produced: 0,
+            remaining: 0,
+            error: true,
+            errorName: "stubbed compression failure"
+        });
+
+        expect(() => zstd.setCompressionLevel(zstd.maxCLevel())).to.throw("setCompressionLevel failed: stubbed compression failure");
+        expect((zstd as any)._compressionLevel).to.equal(zstd.defaultCLevel());
+
+        native.setCompressionLevel = originalSetCompressionLevel;
+        expect(() => zstd.resetCompression()).not.to.throw();
+
+        const data = new Uint8Array(Array.from({ length: 1024 }, (_, i) => i % 256));
+        const compressed = streamCompress(zstd, data, 128);
+        expect(zstd.decompress(compressed)).to.deep.equal(data);
+    });
+
     it("compress-levels", async function () {
         const zstd = await Zstd.load();
         const rand = mulberry32(7);

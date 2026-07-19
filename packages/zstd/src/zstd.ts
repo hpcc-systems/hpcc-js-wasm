@@ -1,37 +1,14 @@
+// @ts-expect-error importing from a wasm file is resolved via a custom esbuild plugin
+import load, { reset } from "../../../build/packages/zstd/zstdlib.wasm";
 import type { MainModule, zstd, StreamResult, FrameContentSizeResult } from "../types/zstdlib.js";
 import { MainModuleEx, type HeapU8 } from "@hpcc-js/wasm-util";
 
 type ZstdExports = MainModule["zstd"];
 
-export interface ZstdLoadOptions {
-    /**
-     * Explicit URL of the separately deployed `zstdlib.wasm` asset.
-     * Required when loading via `@hpcc-js/wasm-zstd/external` unless `wasmBinary` is provided.
-     */
-    wasmUrl?: string | URL;
-    /**
-     * Pre-fetched WASM bytes. Useful in Node tests or hosts that already loaded the asset.
-     * When set, `wasmUrl` is only used for `locateFile` (optional).
-     */
-    wasmBinary?: Uint8Array;
-}
-
-type ModuleLoader = (options?: ZstdLoadOptions) => Promise<MainModule>;
-type ModuleReset = () => void;
+//  Ref:  http://facebook.github.io/zstd/zstd_manual.html
+//  Ref:  https://github.com/facebook/zstd
 
 let g_zstd: Promise<Zstd> | undefined;
-let g_loadModule: ModuleLoader | undefined;
-let g_resetModule: ModuleReset | undefined;
-
-/**
- * Bind the WASM module loader for the active package entry point.
- * Called once from `index.ts` (embedded) or `external.ts` (fetchable WASM).
- * @internal
- */
-export function bindZstdModule(loadModule: ModuleLoader, resetModule: ModuleReset): void {
-    g_loadModule = loadModule;
-    g_resetModule = resetModule;
-}
 
 const WASM32_MAX = 0xffffffff;
 
@@ -63,17 +40,17 @@ function concatUint8Arrays(chunks: Uint8Array[]): Uint8Array {
 
 /**
  * The Zstandard WASM library, provides a simplified wrapper around the Zstandard c++ library.
- *
+ * 
  * See [Zstandard](https://facebook.github.io/zstd/) for more details.
- *
+ * 
  * ```ts
  * import { Zstd } from "@hpcc-js/wasm-zstd";
- *
+ * 
  * const zstd = await Zstd.load();
- *
+ * 
  * //  Generate some "data"
  * const data = new Uint8Array(Array.from({ length: 100000 }, (_, i) => i % 256));
- *
+ * 
  * const compressed_data = zstd.compress(data);
  * const decompressed_data = zstd.decompress(compressed_data);
  * ```
@@ -103,26 +80,16 @@ export class Zstd {
 
     /**
      * Compiles and instantiates the raw wasm.
-     *
+     * 
      * ::: info
      * In general WebAssembly compilation is disallowed on the main thread if the buffer size is larger than 4KB, hence forcing `load` to be asynchronous;
      * :::
-     *
-     * @param options Optional loader options. External entry requires `{ wasmUrl }`.
+     * 
      * @returns A promise to an instance of the Zstd class.
      */
-    static load(options?: ZstdLoadOptions): Promise<Zstd> {
-        if (!g_loadModule) {
-            throw new Error("Zstd module loader is not configured");
-        }
+    static load(): Promise<Zstd> {
         if (!g_zstd) {
-            g_zstd = g_loadModule(options)
-                .then((module) => new Zstd(module))
-                .catch((err) => {
-                    g_zstd = undefined;
-                    g_resetModule?.();
-                    throw err;
-                });
+            g_zstd = (load() as Promise<MainModule>).then((module) => new Zstd(module));
         }
         return g_zstd;
     }
@@ -135,7 +102,7 @@ export class Zstd {
             const zstd = await g_zstd;
             zstd?._zstd?.delete();
         } finally {
-            g_resetModule?.();
+            reset();
             g_zstd = undefined;
         }
     }
@@ -212,9 +179,9 @@ export class Zstd {
      * @param level Compression level (use minCLevel() to maxCLevel())
      */
     setCompressionLevel(level: number): void {
-        this._compressionLevel = level;
         const result = this._zstd.setCompressionLevel(level);
         this.ensureStreamOk("setCompressionLevel", result);
+        this._compressionLevel = level;
     }
 
     /**
@@ -276,7 +243,7 @@ export class Zstd {
             while (offset < data.length) {
                 const compressed = this.mallocChecked(outCapacity, "compressChunk output");
                 try {
-                    const result = this._zstd.compressContinue(
+                    const result = this._zstd.compressChunk(
                         compressed.ptr,
                         outCapacity,
                         uncompressed.ptr + offset,
@@ -314,7 +281,7 @@ export class Zstd {
         while (remaining !== 0) {
             const compressed = this.mallocChecked(outCapacity, "compressEnd output");
             try {
-                const result = this._zstd.compressFinish(compressed.ptr, outCapacity);
+                const result = this._zstd.compressEnd(compressed.ptr, outCapacity);
                 this.ensureStreamOk("compressEnd", result);
                 if (result.produced === 0 && result.remaining !== 0) {
                     throw new Error("compressEnd failed: no progress while finishing stream");
@@ -433,7 +400,7 @@ export class Zstd {
                     const srcPtr = srcSize > 0
                         ? compressed.ptr + offset
                         : 0;
-                    const result = this._zstd.decompressContinue(
+                    const result = this._zstd.decompressChunk(
                         uncompressed.ptr,
                         outCapacity,
                         srcPtr,

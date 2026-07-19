@@ -56,6 +56,7 @@ protected:
 public:
     zstd() : m_cstream(nullptr), m_dstream(nullptr), m_compressionLevel(ZSTD_defaultCLevel())
     {
+        reset();
     }
 
     ~zstd()
@@ -124,25 +125,42 @@ public:
     StreamResult reset()
     {
         StreamResult compression = resetCompression(m_compressionLevel);
+        StreamResult decompression = resetDecompression();
+
+        if (compression.error && decompression.error)
+        {
+            return makeErrorResult(
+                std::string("compression reset failed: ") + compression.errorName +
+                std::string("; decompression reset failed: ") + decompression.errorName);
+        }
+
         if (compression.error)
         {
             return compression;
         }
-        return resetDecompression();
+
+        if (decompression.error)
+        {
+            return decompression;
+        }
+
+        return makeStreamResult(0, 0, 0);
     }
 
     StreamResult setCompressionLevel(int level)
     {
-        m_compressionLevel = level;
         if (!m_cstream)
         {
-            return makeStreamResult(0, 0, 0);
+            return makeErrorResult("compression context is not initialized");
         }
-        size_t const paramResult = ZSTD_CCtx_setParameter(m_cstream, ZSTD_c_compressionLevel, m_compressionLevel);
+
+        size_t const paramResult = ZSTD_CCtx_setParameter(m_cstream, ZSTD_c_compressionLevel, level);
         if (ZSTD_isError(paramResult))
         {
             return makeStreamResult(paramResult, 0, 0);
         }
+
+        m_compressionLevel = level;
         return makeStreamResult(0, 0, 0);
     }
 
@@ -171,7 +189,7 @@ public:
             compressionLevel);
     }
 
-    StreamResult compressContinue(uintptr_t dst, size_t dstCapacity, uintptr_t src, size_t srcSize)
+    StreamResult compressChunk(uintptr_t dst, size_t dstCapacity, uintptr_t src, size_t srcSize)
     {
         if (!m_cstream)
         {
@@ -185,7 +203,7 @@ public:
         return makeStreamResult(result, input.pos, output.pos);
     }
 
-    StreamResult compressFinish(uintptr_t dst, size_t dstCapacity)
+    StreamResult compressEnd(uintptr_t dst, size_t dstCapacity)
     {
         if (!m_cstream)
         {
@@ -208,7 +226,7 @@ public:
             compressedSize);
     }
 
-    StreamResult decompressContinue(uintptr_t dst, size_t dstCapacity, uintptr_t src, size_t srcSize)
+    StreamResult decompressChunk(uintptr_t dst, size_t dstCapacity, uintptr_t src, size_t srcSize)
     {
         if (!m_dstream)
         {
@@ -328,10 +346,10 @@ EMSCRIPTEN_BINDINGS(zstdlib_bindings)
         .function("resetDecompression", &zstd::resetDecompression)
         .function("setCompressionLevel", &zstd::setCompressionLevel)
         .class_function("compress", &zstd::compress)
-        .function("compressContinue", &zstd::compressContinue)
-        .function("compressFinish", &zstd::compressFinish)
+        .function("compressChunk", &zstd::compressChunk)
+        .function("compressEnd", &zstd::compressEnd)
         .class_function("decompress", &zstd::decompress)
-        .function("decompressContinue", &zstd::decompressContinue)
+        .function("decompressChunk", &zstd::decompressChunk)
         .class_function("getFrameContentSize", &zstd::getFrameContentSize)
         .class_function("findFrameCompressedSize", &zstd::findFrameCompressedSize)
         .class_function("compressBound", &zstd::compressBound)
