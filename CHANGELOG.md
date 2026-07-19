@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.18.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.17.0...wasm-root-v4.18.0) (2026-07-19)
+
+
+### Features
+
+* **zstd:** add streaming APIs and external WASM entry ([#414](https://github.com/hpcc-systems/hpcc-js-wasm/issues/414)) ([32cf509](https://github.com/hpcc-systems/hpcc-js-wasm/commit/32cf5094c31a765aa1eb92b27bbcba4685377310))
+
 ## [4.17.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.16.0...wasm-root-v4.17.0) (2026-07-18)
 
 

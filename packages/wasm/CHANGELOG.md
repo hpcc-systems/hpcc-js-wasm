@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.34.9](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.8...wasm-v2.34.9) (2026-07-19)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-zstd bumped from ^1.13.5 to ^1.14.0
+
 ## [2.34.8](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.7...wasm-v2.34.8) (2026-07-17)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.13.5...wasm-zstd-v1.14.0) (2026-07-19)
+
+
+### Features
+
+* **zstd:** add streaming APIs and external WASM entry ([#414](https://github.com/hpcc-systems/hpcc-js-wasm/issues/414)) ([32cf509](https://github.com/hpcc-systems/hpcc-js-wasm/commit/32cf5094c31a765aa1eb92b27bbcba4685377310))
+
 ## [1.13.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.13.4...wasm-zstd-v1.13.5) (2026-07-14)
 
 
