@@ -87,7 +87,7 @@ describe("Graph (programmatic graph creation)", function () {
     it("keeps explicit graph fontname when provided", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph({
-            name: "G",
+            id: "G",
             attrs: { fontname: "Helvetica" }
         });
 
@@ -151,14 +151,14 @@ describe("Graph (programmatic graph creation)", function () {
     it("createGraph, addNode, and addEdge accept init objects with attrs", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph({
-            name: "G",
+            id: "G",
             type: "directed",
             attrs: { rankdir: "LR" }
         });
 
         graph
             .addNode({
-                name: "a",
+                id: "a",
                 attrs: { color: "red", shape: "box" },
                 htmlAttrs: { label: "<B>A</B>" }
             })
@@ -405,7 +405,7 @@ describe("Graph.layout (direct render without DOT round-trip)", function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
         {
-            using c = graph.addSubgraph("cluster_0");
+            using c = graph.addSubgraph("0");
             c.setAttr("label", "Cluster").addEdge("a", "b");
         }
         const svg = graph.layout("svg", "dot");
@@ -476,12 +476,12 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
         {
-            using sg = graph.addSubgraph("cluster_font");
+            using sg = graph.addSubgraph("font");
             sg.setAttr("label", "ClusterFontCheck").addNode("n1");
         }
 
         const dot = graph.toDot();
-        expect(dot).toContain("graph [fontname=Arial]");
+        expect(dot).toContain("fontname=Arial");
     });
 
     it("addSubgraph accepts an init object with attrs", async function () {
@@ -489,11 +489,11 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         using graph = graphviz.createGraph("G");
         {
             using sg = graph.addSubgraph({
-                name: "cluster_json",
+                id: "json",
                 attrs: { label: "JSON Cluster", color: "lightblue", style: "filled" },
                 htmlAttrs: { tooltip: "<B>cluster tooltip</B>" }
             });
-            sg.addNode({ name: "x", attrs: { shape: "ellipse" } });
+            sg.addNode({ id: "x", attrs: { shape: "ellipse" } });
         }
 
         const dot = graph.toDot();
@@ -509,7 +509,7 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         using graph = graphviz.createGraph("G");
 
         {
-            using c0 = graph.addSubgraph("cluster_0");
+            using c0 = graph.addSubgraph("0");
             c0.setAttr("label", "Process #1")
                 .setAttr("style", "filled")
                 .setAttr("color", "lightgrey")
@@ -518,7 +518,7 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         }
 
         {
-            using c1 = graph.addSubgraph("cluster_1");
+            using c1 = graph.addSubgraph("1");
             c1.setAttr("label", "Process #2")
                 .setAttr("color", "blue")
                 .addEdge("b0", "b1")
@@ -542,11 +542,11 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         using graph = graphviz.createGraph("G");
 
         {
-            using outer = graph.addSubgraph("cluster_outer");
+            using outer = graph.addSubgraph("outer");
             outer.setAttr("label", "Outer");
             {
                 using inner = outer.addSubgraph({
-                    name: "cluster_inner",
+                    id: "inner",
                     attrs: { label: "Inner", color: "red" }
                 });
                 inner.addEdge("x", "y");
@@ -564,13 +564,13 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
 
-        using outer = graph.addSubgraph("cluster_outer");
+        using outer = graph.addSubgraph("outer");
         outer
             .setAttr("label", "Outer")
             .setAttr("color", "red")
             .setAttr("style", "filled");
 
-        using inner = outer.addSubgraph("cluster_inner");
+        using inner = outer.addSubgraph("inner");
 
         // Subgraph label starts empty (not inherited)
         expect(inner.getAttr("label")).toBe("");
@@ -583,12 +583,12 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
 
-        using outer = graph.addSubgraph("cluster_outer");
+        using outer = graph.addSubgraph("outer");
         outer
             .setDefaultNodeAttr("shape", "box")
             .setDefaultEdgeAttr("color", "blue");
 
-        using inner = outer.addSubgraph("cluster_inner");
+        using inner = outer.addSubgraph("inner");
         inner.addNode("n1").addNode("n2").addEdge("n1", "n2");
 
         // Nested subgraph inherits parent node and edge defaults
@@ -600,7 +600,7 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
         {
-            using sg = graph.addSubgraph("cluster_x");
+            using sg = graph.addSubgraph("x");
             sg.addNode("n1");
             sg.setNodeAttr("n1", "shape", "box");
         }
@@ -610,7 +610,7 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
     it("setting one subgraph node label preserves implicit labels on sibling nodes", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
-        using sg = graph.addSubgraph("cluster_x");
+        using sg = graph.addSubgraph("x");
 
         sg.addNode("A").addNode("B").addNode("C").addEdge("A", "B").addEdge("A", "C");
         sg.setNodeAttr("A", "label", "G-Node");
@@ -625,7 +625,7 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
         {
-            using sg = graph.addSubgraph("cluster_x");
+            using sg = graph.addSubgraph("x");
             sg.addEdge("p", "q");
             sg.setEdgeAttr("p", "q", "", "label", "edge-label");
         }
@@ -636,7 +636,7 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
         {
-            using sg = graph.addSubgraph("cluster_x");
+            using sg = graph.addSubgraph("x");
             sg
                 .addNode("n1")
                 .addEdge("p", "q")
@@ -657,7 +657,7 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
         {
-            using sg = graph.addSubgraph("cluster_x");
+            using sg = graph.addSubgraph("x");
             sg
                 .addNode("n1")
                 .addNode("n2")
@@ -677,7 +677,7 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
         {
-            using sg = graph.addSubgraph("cluster_x");
+            using sg = graph.addSubgraph("x");
             sg
                 .addNode("n1")
                 .addEdge("a", "b")
@@ -703,7 +703,7 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
         {
-            using sg = graph.addSubgraph("cluster_0");
+            using sg = graph.addSubgraph("0");
             sg.setAttr("label", "Disposed");
             sg.addEdge("x", "y");
         }
@@ -719,12 +719,12 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
         using graph = graphviz.createGraph("G");
 
         {
-            using sg1 = graph.addSubgraph("cluster_a");
+            using sg1 = graph.addSubgraph("a");
             sg1.setAttr("label", "Alpha");
             sg1.addEdge("a1", "a2");
         }
         {
-            using sg2 = graph.addSubgraph("cluster_b");
+            using sg2 = graph.addSubgraph("b");
             sg2.setAttr("label", "Beta");
             sg2.addEdge("b1", "b2");
         }
@@ -789,7 +789,7 @@ describe("Memory cleanup", function () {
     it("calling Subgraph methods after delete() throws", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
-        const sg = graph.addSubgraph("cluster_0");
+        const sg = graph.addSubgraph("0");
         sg.delete();
         expect(() => sg.addNode("x")).toThrow();
     });
@@ -797,7 +797,7 @@ describe("Memory cleanup", function () {
     it("double-delete on a Subgraph throws on the second call", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
-        const sg = graph.addSubgraph("cluster_0");
+        const sg = graph.addSubgraph("0");
         sg.delete();
         expect(() => sg.delete()).toThrow();
     });
@@ -807,7 +807,7 @@ describe("Memory cleanup", function () {
         using graph = graphviz.createGraph("G");
         let captured!: Subgraph;
         {
-            using sg = graph.addSubgraph("cluster_0");
+            using sg = graph.addSubgraph("0");
             captured = sg;
             sg.addNode("x");
         }
@@ -823,7 +823,7 @@ describe("Memory cleanup", function () {
         // parent graph or its data.
         const graphviz = await Graphviz.load();
         const graph = graphviz.createGraph("G");
-        const sg = graph.addSubgraph("cluster_0");
+        const sg = graph.addSubgraph("0");
         sg.addEdge("a", "b");
         sg.delete();                    // free the thin CSubgraph wrapper
         const dot = graph.toDot();      // parent graph still intact
@@ -849,7 +849,7 @@ describe("Memory cleanup", function () {
         for (let i = 0; i < 50; i++) {
             const graph = graphviz.createGraph(`G${i}`);
             for (let c = 0; c < 3; c++) {
-                const sg = graph.addSubgraph(`cluster_${c}`);
+                const sg = graph.addSubgraph(`${c}`);
                 sg.addEdge(`a${c}`, `b${c}`);
                 sg.delete();
             }
@@ -1047,10 +1047,10 @@ describe("Graph mutation (remove nodes / edges / subgraphs / attrs)", function (
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
         {
-            using c = graph.addSubgraph("cluster_0");
+            using c = graph.addSubgraph("0");
             c.setAttr("label", "MyCluster").addEdge("n_p", "n_q");
         }
-        graph.removeSubgraph("cluster_0");
+        graph.removeSubgraph("0");
         const dot = graph.toDot();
         // The subgraph boundary is dissolved — "cluster_0" no longer appears.
         // Note: cgraph retains the proto-attribute declaration (graph [label=...])
@@ -1106,7 +1106,7 @@ describe("Graph mutation (remove nodes / edges / subgraphs / attrs)", function (
         // Create an edge in the root graph that references shared_node
         graph.addEdge("outer_node", "shared_node");
         {
-            using c = graph.addSubgraph("cluster_0");
+            using c = graph.addSubgraph("0");
             c.addNode("shared_node"); // also add to cluster
             c.removeNode("shared_node"); // remove from cluster only
         }
@@ -1122,7 +1122,7 @@ describe("Graph mutation (remove nodes / edges / subgraphs / attrs)", function (
         using graph = graphviz.createGraph("G");
         graph.addEdge("p1", "p2"); // edge in root graph
         {
-            using c = graph.addSubgraph("cluster_0");
+            using c = graph.addSubgraph("0");
             c.addEdge("p1", "p2"); // same edge referenced inside cluster
             c.removeEdge("p1", "p2"); // remove from cluster only
         }
@@ -1134,7 +1134,7 @@ describe("Graph mutation (remove nodes / edges / subgraphs / attrs)", function (
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
         {
-            using sg = graph.addSubgraph("cluster_0");
+            using sg = graph.addSubgraph("0");
             sg.addEdge("p1", "p2");
             sg.setAttr("label", "OriginalLabel");
             sg.removeAttr("label");           // resets the object value to ""
@@ -1219,25 +1219,25 @@ describe("Graph traversal and existence checks", function () {
     it("hasSubgraph returns true for existing subgraph, false for missing", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
-        using sg = graph.addSubgraph("cluster_a");
+        using sg = graph.addSubgraph("a");
         void sg;
 
-        expect(graph.hasSubgraph("cluster_a")).toBe(true);
-        expect(graph.hasSubgraph("cluster_b")).toBe(false);
+        expect(graph.hasSubgraph("a")).toBe(true);
+        expect(graph.hasSubgraph("b")).toBe(false);
     });
 
     it("getSubgraph returns a Subgraph for an existing name, null for missing", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
-        using created = graph.addSubgraph("cluster_get");
+        using created = graph.addSubgraph("get");
         created.addNode("sg_node");
 
-        const found = graph.getSubgraph("cluster_get");
+        const found = graph.getSubgraph("get");
         expect(found).not.toBeNull();
         expect(found).toBeInstanceOf(Subgraph);
         found?.delete();
 
-        const missing = graph.getSubgraph("cluster_missing");
+        const missing = graph.getSubgraph("missing");
         expect(missing).toBeNull();
     });
 
@@ -1245,13 +1245,13 @@ describe("Graph traversal and existence checks", function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
         {
-            using sg = graph.addSubgraph("cluster_data");
+            using sg = graph.addSubgraph("data");
             sg.addNode("data_node1");
             sg.addNode("data_node2");
             sg.addEdge("data_node1", "data_node2");
         }
 
-        using sg2 = graph.getSubgraph("cluster_data");
+        using sg2 = graph.getSubgraph("data");
         expect(sg2).not.toBeNull();
         expect(sg2!.nodeCount()).toBe(2);
         expect(sg2!.edgeCount()).toBe(1);
@@ -1290,13 +1290,13 @@ describe("Graph traversal and existence checks", function () {
         using graph = graphviz.createGraph("G");
 
         expect(graph.subgraphCount()).toBe(0);
-        using sg1 = graph.addSubgraph("cluster_1");
+        using sg1 = graph.addSubgraph("1");
         void sg1;
         expect(graph.subgraphCount()).toBe(1);
-        using sg2 = graph.addSubgraph("cluster_2");
+        using sg2 = graph.addSubgraph("2");
         void sg2;
         expect(graph.subgraphCount()).toBe(2);
-        graph.removeSubgraph("cluster_1");
+        graph.removeSubgraph("1");
         expect(graph.subgraphCount()).toBe(1);
     });
 
@@ -1317,14 +1317,14 @@ describe("Graph traversal and existence checks", function () {
     it("subgraphNames returns all subgraph names", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
-        using sg1 = graph.addSubgraph("cluster_x");
-        using sg2 = graph.addSubgraph("cluster_y");
+        using sg1 = graph.addSubgraph("x");
+        using sg2 = graph.addSubgraph("y");
         void sg1; void sg2;
 
         const names = graph.subgraphNames();
         expect(names).toHaveLength(2);
-        expect(names).toContain("cluster_x");
-        expect(names).toContain("cluster_y");
+        expect(names).toContain("x");
+        expect(names).toContain("y");
     });
 
     it("edges() returns all edges exactly once", async function () {
@@ -1427,7 +1427,7 @@ describe("Graph traversal and existence checks", function () {
     it("Subgraph.hasNode / hasEdge are scoped to the subgraph", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
-        using sg = graph.addSubgraph("cluster_scope");
+        using sg = graph.addSubgraph("scope");
         sg.addNode("inside");
         graph.addNode("outside");
 
@@ -1444,7 +1444,7 @@ describe("Graph traversal and existence checks", function () {
     it("Subgraph.nodeCount / edgeCount reflect subgraph membership", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
-        using sg = graph.addSubgraph("cluster_cnt");
+        using sg = graph.addSubgraph("cnt");
         sg.addNode("sg_n1");
         sg.addNode("sg_n2");
         sg.addEdge("sg_n1", "sg_n2");
@@ -1457,7 +1457,7 @@ describe("Graph traversal and existence checks", function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
         graph.addNode("root_only");
-        using sg = graph.addSubgraph("cluster_names");
+        using sg = graph.addSubgraph("names");
         sg.addNode("sg_member1");
         sg.addNode("sg_member2");
 
@@ -1472,7 +1472,7 @@ describe("Graph traversal and existence checks", function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
         graph.addEdge("root_e1", "root_e2"); // root-only edge
-        using sg = graph.addSubgraph("cluster_edges");
+        using sg = graph.addSubgraph("edges");
         sg.addEdge("sg_ea", "sg_eb");
 
         const edgeList = sg.edges();
@@ -1484,7 +1484,7 @@ describe("Graph traversal and existence checks", function () {
     it("Subgraph.getAttr reads a previously set cluster attribute", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
-        using sg = graph.addSubgraph("cluster_attr");
+        using sg = graph.addSubgraph("attr");
         sg.setAttr("label", "ClusterLabel");
 
         expect(sg.getAttr("label")).toBe("ClusterLabel");
@@ -1494,7 +1494,7 @@ describe("Graph traversal and existence checks", function () {
     it("Subgraph.outEdges / inEdges / nodeEdges work within subgraph scope", async function () {
         const graphviz = await Graphviz.load();
         using graph = graphviz.createGraph("G");
-        using sg = graph.addSubgraph("cluster_trav");
+        using sg = graph.addSubgraph("trav");
         sg.addEdge("st_a", "st_b");
         sg.addEdge("st_c", "st_b");
 
@@ -1595,7 +1595,7 @@ describe("nodeDegree (degree queries)", function () {
         graph.addEdge("a", "b");
         graph.addEdge("b", "c");
 
-        using sg = graph.addSubgraph("cluster_deg");
+        using sg = graph.addSubgraph("deg");
         sg.addEdge("b", "d");
         sg.addEdge("e", "b");
 

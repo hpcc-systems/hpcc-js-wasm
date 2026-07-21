@@ -29,9 +29,9 @@ function applyAttrs<T extends object>(
  * An edge returned by graph-traversal methods.
  */
 export interface EdgeInfo {
-    /** The tail (source) node name. */
+    /** The tail (source) node id. */
     tail: string;
-    /** The head (target) node name. */
+    /** The head (target) node id. */
     head: string;
     /**
      * The cgraph edge key that distinguishes parallel edges.
@@ -52,6 +52,16 @@ function parseEdges(json: string): EdgeInfo[] {
     for (let i = 0; i + 2 < flat.length; i += 3)
         result.push({ tail: flat[i]!, head: flat[i + 1]!, key: flat[i + 2]! });
     return result;
+}
+
+/** @internal Returns the C++ cgraph name for a subgraph id (always cluster-prefixed). */
+function subgraphCppName(id: string): string {
+    return `cluster_${id}`;
+}
+
+/** @internal Strips the cluster_ prefix from a C++ subgraph name to recover the user-facing id. */
+function subgraphIdFromCppName(name: string): string {
+    return name.startsWith("cluster_") ? name.slice("cluster_".length) : name;
 }
 
 /**
@@ -125,14 +135,16 @@ let g_graphviz: Promise<Graphviz> | undefined;
 export type GraphType = "directed" | "undirected" | "strict directed" | "strict undirected";
 
 export interface GraphInit {
-    name?: string;
+    /** The graph id, used as the cgraph name and set as the `id` Graphviz attribute. */
+    id?: string;
     type?: GraphType;
     attrs?: AttrValues<GraphAttrs>;
     htmlAttrs?: AttrValues<GraphAttrs>;
 }
 
 export interface NodeInit {
-    name: string;
+    /** The node id, used as the cgraph node name and set as the `id` Graphviz attribute. */
+    id: string;
     attrs?: AttrValues<NodeAttrs>;
     htmlAttrs?: AttrValues<NodeAttrs>;
 }
@@ -146,7 +158,13 @@ export interface EdgeInit {
 }
 
 export interface SubgraphInit {
-    name: string;
+    /**
+     * The subgraph id.  The `cluster_` prefix is added automatically when
+     * communicating with the underlying cgraph library; users never need to
+     * include it.  The id is also set as the `id` Graphviz attribute on the
+     * subgraph.
+     */
+    id: string;
     attrs?: AttrValues<ClusterAttrs>;
     htmlAttrs?: AttrValues<ClusterAttrs>;
 }
@@ -154,18 +172,20 @@ export interface SubgraphInit {
 export type ClusterInit = SubgraphInit;
 
 /**
- * A subgraph (or cluster) inside a {@link Graph}.
+ * A subgraph (cluster) inside a {@link Graph}.
  *
  * Obtain via {@link Graph.addSubgraph} or {@link Subgraph.addSubgraph}.  All mutation methods return `this`
  * for chaining.  **Call {@link Subgraph.delete} (or use the `using` keyword)
  * when finished** to free the underlying WASM wrapper — the actual subgraph
  * data is owned by the parent {@link Graph} and is freed with it.
  *
- * Clusters are subgraphs whose name starts with `"cluster"`.  Layout engines
- * draw them as a bounded rectangle:
+ * Every subgraph is automatically rendered as a cluster (the `cluster_` prefix
+ * is added to the id when communicating with the underlying cgraph library).
+ * The `id` Graphviz attribute on the subgraph is set to the user-supplied id
+ * (without the prefix):
  *
  * ```ts
- * using cluster = graph.addSubgraph("cluster_0");
+ * using cluster = graph.addSubgraph("0");
  * cluster
  *   .setAttr("label", "My Cluster")
  *   .setAttr("style", "filled")
@@ -182,23 +202,33 @@ export class Subgraph {
     }
 
     /**
-     * Create (or find) a node and add it to this subgraph.
+     * Create (or find) a node and add it to this subgraph.  The node's `id`
+     * Graphviz attribute is automatically set to match `id`.
      */
-    addNode(name: string, attrs?: AttrValues<NodeAttrs>, htmlAttrs?: AttrValues<NodeAttrs>): this;
+    addNode(id: string, attrs?: AttrValues<NodeAttrs>, htmlAttrs?: AttrValues<NodeAttrs>): this;
     addNode(init: NodeInit): this;
-    addNode(nameOrInit: string | NodeInit, nodeAttrs?: AttrValues<NodeAttrs>, nodeHtmlAttrs?: AttrValues<NodeAttrs>): this {
-        const init = typeof nameOrInit === "string" ? { name: nameOrInit, attrs: nodeAttrs, htmlAttrs: nodeHtmlAttrs } : nameOrInit;
-        const { name, attrs, htmlAttrs } = init;
+    addNode(idOrInit: string | NodeInit, nodeAttrs?: AttrValues<NodeAttrs>, nodeHtmlAttrs?: AttrValues<NodeAttrs>): this {
+        const init = typeof idOrInit === "string" ? { id: idOrInit, attrs: nodeAttrs, htmlAttrs: nodeHtmlAttrs } : idOrInit;
+        const { id, attrs, htmlAttrs } = init;
 
-        this._sg.addNode(name);
-        applyAttrs<NodeAttrs>(attrs, (attr, value) => this.setNodeAttr(name, attr, value));
-        applyAttrs<NodeAttrs>(htmlAttrs, (attr, value) => this.setNodeHtmlAttr(name, attr, value));
+        this._sg.addNode(id);
+        this.setNodeAttr(id, "id", id);
+        applyAttrs<NodeAttrs>(attrs, (attr, value) => this.setNodeAttr(id, attr, value));
+        applyAttrs<NodeAttrs>(htmlAttrs, (attr, value) => this.setNodeHtmlAttr(id, attr, value));
         return this;
+    }
+
+    /** Alias for {@link addNode}. */
+    addVertex(id: string, attrs?: AttrValues<NodeAttrs>, htmlAttrs?: AttrValues<NodeAttrs>): this;
+    addVertex(init: NodeInit): this;
+    addVertex(idOrInit: string | NodeInit, nodeAttrs?: AttrValues<NodeAttrs>, nodeHtmlAttrs?: AttrValues<NodeAttrs>): this {
+        return this.addNode(idOrInit as any, nodeAttrs, nodeHtmlAttrs);
     }
 
     /**
      * Create an edge inside this subgraph.  Both endpoints are created
-     * automatically if they do not already exist.
+     * automatically if they do not already exist, and their `id` Graphviz
+     * attribute is set to their node id.
      */
     addEdge(tail: string, head: string, attrs?: AttrValues<EdgeAttrs>, htmlAttrs?: AttrValues<EdgeAttrs>): this;
     addEdge(tail: string, head: string, key: string, attrs?: AttrValues<EdgeAttrs>, htmlAttrs?: AttrValues<EdgeAttrs>): this;
@@ -212,24 +242,30 @@ export class Subgraph {
         const { tail, head: resolvedHead, key: resolvedKey = "", attrs, htmlAttrs } = init;
 
         this._sg.addEdge(tail, resolvedHead, resolvedKey);
+        this.setNodeAttr(tail, "id", tail);
+        this.setNodeAttr(resolvedHead, "id", resolvedHead);
         applyAttrs<EdgeAttrs>(attrs, (attr, value) => this.setEdgeAttr(tail, resolvedHead, resolvedKey, attr, value));
         applyAttrs<EdgeAttrs>(htmlAttrs, (attr, value) => this.setEdgeHtmlAttr(tail, resolvedHead, resolvedKey, attr, value));
         return this;
     }
 
     /**
-     * Create (or return an existing) named subgraph under this subgraph.
+     * Create (or return an existing) subgraph under this subgraph.  The
+     * `cluster_` prefix is added to `id` internally so that layout engines
+     * render it as a bounded cluster.  The subgraph's `id` Graphviz attribute
+     * is set to the user-supplied `id` (without the prefix).
      */
-    addSubgraph(name: string, attrs?: AttrValues<ClusterAttrs>, htmlAttrs?: AttrValues<ClusterAttrs>): Subgraph;
+    addSubgraph(id: string, attrs?: AttrValues<ClusterAttrs>, htmlAttrs?: AttrValues<ClusterAttrs>): Subgraph;
     addSubgraph(init: SubgraphInit): Subgraph;
-    addSubgraph(nameOrInit: string | SubgraphInit, attrs?: AttrValues<ClusterAttrs>, htmlAttrs?: AttrValues<ClusterAttrs>): Subgraph {
-        const init = typeof nameOrInit === "string" ? { name: nameOrInit, attrs, htmlAttrs } : nameOrInit;
+    addSubgraph(idOrInit: string | SubgraphInit, attrs?: AttrValues<ClusterAttrs>, htmlAttrs?: AttrValues<ClusterAttrs>): Subgraph {
+        const init = typeof idOrInit === "string" ? { id: idOrInit, attrs, htmlAttrs } : idOrInit;
         // addSubgraph only returns null when the internal subgraph pointer is null,
         // which cannot happen while this Subgraph instance is alive.
-        return new Subgraph(this._sg.addSubgraph(init.name)!).applyInit(init);
+        return new Subgraph(this._sg.addSubgraph(subgraphCppName(init.id))!).applyInit(init);
     }
 
     applyInit(init: SubgraphInit): this {
+        this.setAttr("id", init.id);
         applyAttrs<ClusterAttrs>(init.attrs, (attr, value) => this.setAttr(attr, value));
         applyAttrs<ClusterAttrs>(init.htmlAttrs, (attr, value) => this.setHtmlAttr(attr, value));
         return this;
@@ -240,9 +276,14 @@ export class Subgraph {
      * connecting it) remains in the root graph and all other subgraphs.
      * No-op if the node is not in this subgraph.
      */
-    removeNode(name: string): this {
-        this._sg.removeNode(name);
+    removeNode(id: string): this {
+        this._sg.removeNode(id);
         return this;
+    }
+
+    /** Alias for {@link removeNode}. */
+    removeVertex(id: string): this {
+        return this.removeNode(id);
     }
 
     /**
@@ -331,6 +372,13 @@ export class Subgraph {
         return this;
     }
 
+    /** Alias for {@link setNodeAttr}. */
+    setVertexAttr<K extends NodeDotAttr>(node: string, attr: K, value?: NonNullable<NodeAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setVertexAttr(node: string, attr: string, value?: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setVertexAttr(node: string, attr: string, value: unknown = "", defaultValue?: unknown): this {
+        return this.setNodeAttr(node, attr, value as any, defaultValue as any);
+    }
+
     setNodeHtmlAttr<K extends NodeDotAttr>(node: string, attr: K, value: NonNullable<NodeAttrs[K]>, defaultValue?: string | number | boolean): this;
     setNodeHtmlAttr(node: string, attr: string, value: string | number | boolean, defaultValue?: string | number | boolean): this;
     setNodeHtmlAttr(node: string, attr: string, value: unknown, defaultValue?: unknown): this {
@@ -342,11 +390,25 @@ export class Subgraph {
         return this;
     }
 
+    /** Alias for {@link setNodeHtmlAttr}. */
+    setVertexHtmlAttr<K extends NodeDotAttr>(node: string, attr: K, value: NonNullable<NodeAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setVertexHtmlAttr(node: string, attr: string, value: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setVertexHtmlAttr(node: string, attr: string, value: unknown, defaultValue?: unknown): this {
+        return this.setNodeHtmlAttr(node, attr, value as any, defaultValue as any);
+    }
+
     setDefaultNodeAttr<K extends NodeDotAttr>(attr: K, value: NonNullable<NodeAttrs[K]>): this;
     setDefaultNodeAttr(attr: string, value: string | number | boolean): this;
     setDefaultNodeAttr(attr: string, value: unknown): this {
         this._sg.setDefaultNodeAttr(attr, String(value));
         return this;
+    }
+
+    /** Alias for {@link setDefaultNodeAttr}. */
+    setDefaultVertexAttr<K extends NodeDotAttr>(attr: K, value: NonNullable<NodeAttrs[K]>): this;
+    setDefaultVertexAttr(attr: string, value: string | number | boolean): this;
+    setDefaultVertexAttr(attr: string, value: unknown): this {
+        return this.setDefaultNodeAttr(attr, value as any);
     }
 
     setDefaultNodeHtmlAttr<K extends NodeDotAttr>(attr: K, value: NonNullable<NodeAttrs[K]>): this;
@@ -356,12 +418,24 @@ export class Subgraph {
         return this;
     }
 
+    /** Alias for {@link setDefaultNodeHtmlAttr}. */
+    setDefaultVertexHtmlAttr<K extends NodeDotAttr>(attr: K, value: NonNullable<NodeAttrs[K]>): this;
+    setDefaultVertexHtmlAttr(attr: string, value: string | number | boolean): this;
+    setDefaultVertexHtmlAttr(attr: string, value: unknown): this {
+        return this.setDefaultNodeHtmlAttr(attr, value as any);
+    }
+
     /**
      * Clear a node attribute inside this subgraph by resetting it to its
      * default (empty) value.  Equivalent to `setNodeAttr(node, attr, "")`.
      */
     removeNodeAttr(node: string, attr: string): this {
         return this.setNodeAttr(node, attr, "");
+    }
+
+    /** Alias for {@link removeNodeAttr}. */
+    removeVertexAttr(node: string, attr: string): this {
+        return this.removeNodeAttr(node, attr);
     }
 
     /**
@@ -421,10 +495,15 @@ export class Subgraph {
     // ---- Existence checks -----------------------------------------------
 
     /**
-     * Returns `true` if a node with the given name exists in this subgraph.
+     * Returns `true` if a node with the given id exists in this subgraph.
      */
-    hasNode(name: string): boolean {
-        return this._sg.hasNode(name);
+    hasNode(id: string): boolean {
+        return this._sg.hasNode(id);
+    }
+
+    /** Alias for {@link hasNode}. */
+    hasVertex(id: string): boolean {
+        return this.hasNode(id);
     }
 
     /**
@@ -441,12 +520,20 @@ export class Subgraph {
     /** Returns the number of nodes in this subgraph. */
     nodeCount(): number { return this._sg.nodeCount(); }
 
+    /** Alias for {@link nodeCount}. */
+    vertexCount(): number { return this.nodeCount(); }
+
     /** Returns the number of edges in this subgraph. */
     edgeCount(): number { return this._sg.edgeCount(); }
 
-    /** Returns the degree of a named node in this subgraph. */
+    /** Returns the degree of the node with the given id in this subgraph. */
     nodeDegree(node: string, inDegree: number = 1, outDegree: number = 1): number {
         return this._sg.nodeDegree(node, inDegree, outDegree);
+    }
+
+    /** Alias for {@link nodeDegree}. */
+    vertexDegree(node: string, inDegree: number = 1, outDegree: number = 1): number {
+        return this.nodeDegree(node, inDegree, outDegree);
     }
 
     // ---- Attribute reading ----------------------------------------------
@@ -467,6 +554,11 @@ export class Subgraph {
         return this._sg.getNodeAttr(node, attr);
     }
 
+    /** Alias for {@link getNodeAttr}. */
+    getVertexAttr(node: string, attr: string): string {
+        return this.getNodeAttr(node, attr);
+    }
+
     /**
      * Returns the current value of the named attribute on an edge in this
      * subgraph, or `""` if the edge or attribute does not exist.
@@ -479,11 +571,16 @@ export class Subgraph {
     // ---- Graph traversal ------------------------------------------------
 
     /**
-     * Returns the names of all nodes in this subgraph (in internal iteration
+     * Returns the ids of all nodes in this subgraph (in internal iteration
      * order).
      */
     nodeNames(): string[] {
         return parseNames(this._sg.nodeNames());
+    }
+
+    /** Alias for {@link nodeNames}. */
+    vertexNames(): string[] {
+        return this.nodeNames();
     }
 
     /**
@@ -495,24 +592,24 @@ export class Subgraph {
     }
 
     /**
-     * Returns the out-edges of the named node in this subgraph.  Returns `[]`
-     * if the node does not exist.
+     * Returns the out-edges of the node with the given id in this subgraph.
+     * Returns `[]` if the node does not exist.
      */
     outEdges(node: string): EdgeInfo[] {
         return parseEdges(this._sg.outEdges(node));
     }
 
     /**
-     * Returns the in-edges of the named node in this subgraph.  Returns `[]`
-     * if the node does not exist.
+     * Returns the in-edges of the node with the given id in this subgraph.
+     * Returns `[]` if the node does not exist.
      */
     inEdges(node: string): EdgeInfo[] {
         return parseEdges(this._sg.inEdges(node));
     }
 
     /**
-     * Returns all edges incident to the named node in this subgraph (both in
-     * and out).  Returns `[]` if the node does not exist.
+     * Returns all edges incident to the node with the given id in this
+     * subgraph (both in and out).  Returns `[]` if the node does not exist.
      */
     nodeEdges(node: string): EdgeInfo[] {
         return parseEdges(this._sg.nodeEdges(node));
@@ -553,7 +650,7 @@ export class Subgraph {
  * graph.setEdgeAttr("a", "b", "", "label", "hello");
  * graph.setGraphAttr("rankdir", "LR");
  *
- * const svg = graphviz.dot(graph.toDot());
+ * const svg = graph.layout(); // render without a DOT round-trip
  * ```
  */
 export class Graph {
@@ -578,26 +675,35 @@ export class Graph {
     }
 
     /**
-     * Create a node.  If a node with this name already exists it is returned
-     * unchanged.
+     * Create a node with the given `id`.  If a node with this id already
+     * exists it is returned unchanged.  The node's `id` Graphviz attribute is
+     * automatically set to match.
      */
-    addNode(name: string, attrs?: AttrValues<NodeAttrs>, htmlAttrs?: AttrValues<NodeAttrs>): this;
+    addNode(id: string, attrs?: AttrValues<NodeAttrs>, htmlAttrs?: AttrValues<NodeAttrs>): this;
     addNode(init: NodeInit): this;
-    addNode(nameOrInit: string | NodeInit, nodeAttrs?: AttrValues<NodeAttrs>, nodeHtmlAttrs?: AttrValues<NodeAttrs>): this {
-        const init = typeof nameOrInit === "string" ? { name: nameOrInit, attrs: nodeAttrs, htmlAttrs: nodeHtmlAttrs } : nameOrInit;
-        const { name, attrs, htmlAttrs } = init;
+    addNode(idOrInit: string | NodeInit, nodeAttrs?: AttrValues<NodeAttrs>, nodeHtmlAttrs?: AttrValues<NodeAttrs>): this {
+        const init = typeof idOrInit === "string" ? { id: idOrInit, attrs: nodeAttrs, htmlAttrs: nodeHtmlAttrs } : idOrInit;
+        const { id, attrs, htmlAttrs } = init;
 
-        this._graph.addNode(name);
-        applyAttrs<NodeAttrs>(attrs, (attr, value) => this.setNodeAttr(name, attr, value));
-        applyAttrs<NodeAttrs>(htmlAttrs, (attr, value) => this.setNodeHtmlAttr(name, attr, value));
+        this._graph.addNode(id);
+        this.setNodeAttr(id, "id", id);
+        applyAttrs<NodeAttrs>(attrs, (attr, value) => this.setNodeAttr(id, attr, value));
+        applyAttrs<NodeAttrs>(htmlAttrs, (attr, value) => this.setNodeHtmlAttr(id, attr, value));
         return this;
+    }
+
+    /** Alias for {@link addNode}. */
+    addVertex(id: string, attrs?: AttrValues<NodeAttrs>, htmlAttrs?: AttrValues<NodeAttrs>): this;
+    addVertex(init: NodeInit): this;
+    addVertex(idOrInit: string | NodeInit, nodeAttrs?: AttrValues<NodeAttrs>, nodeHtmlAttrs?: AttrValues<NodeAttrs>): this {
+        return this.addNode(idOrInit as any, nodeAttrs, nodeHtmlAttrs);
     }
 
     /**
      * Create an edge from `tail` to `head`.  Both nodes are created
-     * automatically if they do not already exist.  `key` distinguishes
-     * parallel edges between the same pair of nodes; omit (or pass `""`) for
-     * an anonymous edge.
+     * automatically if they do not already exist, and their `id` Graphviz
+     * attribute is set to their node id.  `key` distinguishes parallel edges
+     * between the same pair of nodes; omit (or pass `""`) for an anonymous edge.
      */
     addEdge(tail: string, head: string, attrs?: AttrValues<EdgeAttrs>, htmlAttrs?: AttrValues<EdgeAttrs>): this;
     addEdge(tail: string, head: string, key: string, attrs?: AttrValues<EdgeAttrs>, htmlAttrs?: AttrValues<EdgeAttrs>): this;
@@ -611,6 +717,8 @@ export class Graph {
         const { tail, head: resolvedHead, key: resolvedKey = "", attrs, htmlAttrs } = init;
 
         this._graph.addEdge(tail, resolvedHead, resolvedKey);
+        this.setNodeAttr(tail, "id", tail);
+        this.setNodeAttr(resolvedHead, "id", resolvedHead);
         applyAttrs<EdgeAttrs>(attrs, (attr, value) => this.setEdgeAttr(tail, resolvedHead, resolvedKey, attr, value));
         applyAttrs<EdgeAttrs>(htmlAttrs, (attr, value) => this.setEdgeHtmlAttr(tail, resolvedHead, resolvedKey, attr, value));
         return this;
@@ -618,6 +726,9 @@ export class Graph {
 
     applyInit(init: GraphInit): this {
         this.ensureDefaultFonts(true);
+        if (init.id !== undefined) {
+            this.setGraphAttr("id", init.id);
+        }
         applyAttrs<GraphAttrs>(init.attrs, (attr, value) => this.setGraphAttr(attr, value));
         applyAttrs<GraphAttrs>(init.htmlAttrs, (attr, value) => this.setGraphHtmlAttr(attr, value));
         return this;
@@ -704,6 +815,13 @@ export class Graph {
         return this;
     }
 
+    /** Alias for {@link setNodeAttr}. */
+    setVertexAttr<K extends NodeDotAttr>(node: string, attr: K, value?: NonNullable<NodeAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setVertexAttr(node: string, attr: string, value?: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setVertexAttr(node: string, attr: string, value: unknown = "", defaultValue?: unknown): this {
+        return this.setNodeAttr(node, attr, value as any, defaultValue as any);
+    }
+
     setNodeHtmlAttr<K extends NodeDotAttr>(node: string, attr: K, value: NonNullable<NodeAttrs[K]>, defaultValue?: string | number | boolean): this;
     setNodeHtmlAttr(node: string, attr: string, value: string | number | boolean, defaultValue?: string | number | boolean): this;
     setNodeHtmlAttr(node: string, attr: string, value: unknown, defaultValue?: unknown): this {
@@ -715,6 +833,13 @@ export class Graph {
         return this;
     }
 
+    /** Alias for {@link setNodeHtmlAttr}. */
+    setVertexHtmlAttr<K extends NodeDotAttr>(node: string, attr: K, value: NonNullable<NodeAttrs[K]>, defaultValue?: string | number | boolean): this;
+    setVertexHtmlAttr(node: string, attr: string, value: string | number | boolean, defaultValue?: string | number | boolean): this;
+    setVertexHtmlAttr(node: string, attr: string, value: unknown, defaultValue?: unknown): this {
+        return this.setNodeHtmlAttr(node, attr, value as any, defaultValue as any);
+    }
+
     setDefaultNodeAttr<K extends NodeDotAttr>(attr: K, value: NonNullable<NodeAttrs[K]>): this;
     setDefaultNodeAttr(attr: string, value: string | number | boolean): this;
     setDefaultNodeAttr(attr: string, value: unknown): this {
@@ -722,11 +847,25 @@ export class Graph {
         return this;
     }
 
+    /** Alias for {@link setDefaultNodeAttr}. */
+    setDefaultVertexAttr<K extends NodeDotAttr>(attr: K, value: NonNullable<NodeAttrs[K]>): this;
+    setDefaultVertexAttr(attr: string, value: string | number | boolean): this;
+    setDefaultVertexAttr(attr: string, value: unknown): this {
+        return this.setDefaultNodeAttr(attr, value as any);
+    }
+
     setDefaultNodeHtmlAttr<K extends NodeDotAttr>(attr: K, value: NonNullable<NodeAttrs[K]>): this;
     setDefaultNodeHtmlAttr(attr: string, value: string | number | boolean): this;
     setDefaultNodeHtmlAttr(attr: string, value: unknown): this {
         this._graph.setDefaultNodeHtmlAttr(attr, String(value));
         return this;
+    }
+
+    /** Alias for {@link setDefaultNodeHtmlAttr}. */
+    setDefaultVertexHtmlAttr<K extends NodeDotAttr>(attr: K, value: NonNullable<NodeAttrs[K]>): this;
+    setDefaultVertexHtmlAttr(attr: string, value: string | number | boolean): this;
+    setDefaultVertexHtmlAttr(attr: string, value: unknown): this {
+        return this.setDefaultNodeHtmlAttr(attr, value as any);
     }
 
     /**
@@ -781,9 +920,14 @@ export class Graph {
      * graph also removes the node from every subgraph.
      * No-op if the node does not exist.
      */
-    removeNode(name: string): this {
-        this._graph.removeNode(name);
+    removeNode(id: string): this {
+        this._graph.removeNode(id);
         return this;
+    }
+
+    /** Alias for {@link removeNode}. */
+    removeVertex(id: string): this {
+        return this.removeNode(id);
     }
 
     /**
@@ -797,12 +941,12 @@ export class Graph {
     }
 
     /**
-     * Dissolve a subgraph / cluster boundary.  Nodes and edges that belonged
-     * to the subgraph remain in the parent graph.
-     * No-op if no subgraph with that name exists.
+     * Dissolve the cluster boundary for the subgraph with the given `id`.
+     * Nodes and edges that belonged to the subgraph remain in the parent graph.
+     * No-op if no subgraph with that id exists.
      */
-    removeSubgraph(name: string): this {
-        this._graph.removeSubgraph(name);
+    removeSubgraph(id: string): this {
+        this._graph.removeSubgraph(subgraphCppName(id));
         return this;
     }
 
@@ -822,6 +966,11 @@ export class Graph {
         return this.setNodeAttr(node, attr, "");
     }
 
+    /** Alias for {@link removeNodeAttr}. */
+    removeVertexAttr(node: string, attr: string): this {
+        return this.removeNodeAttr(node, attr);
+    }
+
     /**
      * Clear an edge attribute by resetting it to its default (empty) value.
      * Equivalent to `setEdgeAttr(tail, head, key, attr, "")`.
@@ -833,10 +982,15 @@ export class Graph {
     // ---- Existence checks -----------------------------------------------
 
     /**
-     * Returns `true` if a node with the given name exists in the graph.
+     * Returns `true` if a node with the given id exists in the graph.
      */
-    hasNode(name: string): boolean {
-        return this._graph.hasNode(name);
+    hasNode(id: string): boolean {
+        return this._graph.hasNode(id);
+    }
+
+    /** Alias for {@link hasNode}. */
+    hasVertex(id: string): boolean {
+        return this.hasNode(id);
     }
 
     /**
@@ -849,10 +1003,10 @@ export class Graph {
     }
 
     /**
-     * Returns `true` if a subgraph with the given name exists.
+     * Returns `true` if a subgraph with the given id exists.
      */
-    hasSubgraph(name: string): boolean {
-        return this._graph.hasSubgraph(name);
+    hasSubgraph(id: string): boolean {
+        return this._graph.hasSubgraph(subgraphCppName(id));
     }
 
     // ---- Count queries --------------------------------------------------
@@ -860,15 +1014,23 @@ export class Graph {
     /** Returns the number of nodes in the graph. */
     nodeCount(): number { return this._graph.nodeCount(); }
 
+    /** Alias for {@link nodeCount}. */
+    vertexCount(): number { return this.nodeCount(); }
+
     /** Returns the number of edges in the graph. */
     edgeCount(): number { return this._graph.edgeCount(); }
 
     /** Returns the number of direct subgraphs of this graph. */
     subgraphCount(): number { return this._graph.subgraphCount(); }
 
-    /** Returns the degree of a named node in the graph. */
+    /** Returns the degree of the node with the given id in the graph. */
     nodeDegree(node: string, inDegree: number = 1, outDegree: number = 1): number {
         return this._graph.nodeDegree(node, inDegree, outDegree);
+    }
+
+    /** Alias for {@link nodeDegree}. */
+    vertexDegree(node: string, inDegree: number = 1, outDegree: number = 1): number {
+        return this.nodeDegree(node, inDegree, outDegree);
     }
 
     // ---- Attribute reading ----------------------------------------------
@@ -889,6 +1051,11 @@ export class Graph {
         return this._graph.getNodeAttr(node, attr);
     }
 
+    /** Alias for {@link getNodeAttr}. */
+    getVertexAttr(node: string, attr: string): string {
+        return this.getNodeAttr(node, attr);
+    }
+
     /**
      * Returns the current value of the named attribute on an edge, or `""` if
      * the edge or attribute does not exist.
@@ -901,18 +1068,23 @@ export class Graph {
     // ---- Graph traversal ------------------------------------------------
 
     /**
-     * Returns the names of all direct subgraphs.
+     * Returns the ids of all direct subgraphs (the `cluster_` prefix is
+     * stripped from the underlying cgraph names).
      */
     subgraphNames(): string[] {
-        return parseNames(this._graph.subgraphNames());
+        return parseNames(this._graph.subgraphNames()).map(subgraphIdFromCppName);
     }
 
     /**
-     * Returns the names of all nodes in the graph (in internal iteration
-     * order).
+     * Returns the ids of all nodes in the graph (in internal iteration order).
      */
     nodeNames(): string[] {
         return parseNames(this._graph.nodeNames());
+    }
+
+    /** Alias for {@link nodeNames}. */
+    vertexNames(): string[] {
+        return this.nodeNames();
     }
 
     /**
@@ -924,66 +1096,83 @@ export class Graph {
     }
 
     /**
-     * Returns the out-edges of the named node.  Returns `[]` if the node does
-     * not exist.
+     * Returns the out-edges of the node with the given id.  Returns `[]` if
+     * the node does not exist.
      */
     outEdges(node: string): EdgeInfo[] {
         return parseEdges(this._graph.outEdges(node));
     }
 
+    /** Alias for {@link outEdges}. */
+    outEdgesFrom(node: string): EdgeInfo[] {
+        return this.outEdges(node);
+    }
+
     /**
-     * Returns the in-edges of the named node.  Returns `[]` if the node does
-     * not exist.
+     * Returns the in-edges of the node with the given id.  Returns `[]` if
+     * the node does not exist.
      */
     inEdges(node: string): EdgeInfo[] {
         return parseEdges(this._graph.inEdges(node));
     }
 
+    /** Alias for {@link inEdges}. */
+    inEdgesTo(node: string): EdgeInfo[] {
+        return this.inEdges(node);
+    }
+
     /**
-     * Returns all edges incident to the named node (both in and out).
-     * Returns `[]` if the node does not exist.
+     * Returns all edges incident to the node with the given id (both in and
+     * out).  Returns `[]` if the node does not exist.
      */
     nodeEdges(node: string): EdgeInfo[] {
         return parseEdges(this._graph.nodeEdges(node));
     }
 
+    /** Alias for {@link nodeEdges}. */
+    vertexEdges(node: string): EdgeInfo[] {
+        return this.nodeEdges(node);
+    }
+
     /**
-     * Create (or return an existing) named subgraph.  Use a name beginning
-     * with `"cluster"` to have layout engines render it as a bounded cluster.
+     * Create (or return an existing) subgraph with the given `id`.  The
+     * `cluster_` prefix is added to `id` internally so that layout engines
+     * render it as a bounded cluster.  The subgraph's `id` Graphviz attribute
+     * is set to the user-supplied `id` (without the prefix).
      *
      * Returns a {@link Subgraph} wrapper.  **Call {@link Subgraph.delete} (or
      * use the `using` keyword) when finished** to free the WASM wrapper.  The
      * subgraph data itself is owned by this graph.
      *
      * ```ts
-     * using cluster = graph.addSubgraph("cluster_0");
+     * using cluster = graph.addSubgraph("0");
      * cluster.setAttr("label", "My Cluster").addEdge("a", "b");
      * ```
      */
-    addSubgraph(name: string, attrs?: AttrValues<ClusterAttrs>, htmlAttrs?: AttrValues<ClusterAttrs>): Subgraph;
+    addSubgraph(id: string, attrs?: AttrValues<ClusterAttrs>, htmlAttrs?: AttrValues<ClusterAttrs>): Subgraph;
     addSubgraph(init: SubgraphInit): Subgraph;
-    addSubgraph(nameOrInit: string | SubgraphInit, attrs?: AttrValues<ClusterAttrs>, htmlAttrs?: AttrValues<ClusterAttrs>): Subgraph {
-        const init = typeof nameOrInit === "string" ? { name: nameOrInit, attrs, htmlAttrs } : nameOrInit;
+    addSubgraph(idOrInit: string | SubgraphInit, attrs?: AttrValues<ClusterAttrs>, htmlAttrs?: AttrValues<ClusterAttrs>): Subgraph {
+        const init = typeof idOrInit === "string" ? { id: idOrInit, attrs, htmlAttrs } : idOrInit;
         // addSubgraph only returns null when the internal graph pointer is null,
         // which cannot happen while this Graph instance is alive.
-        return new Subgraph(this._graph.addSubgraph(init.name)!).applyInit(init);
+        return new Subgraph(this._graph.addSubgraph(subgraphCppName(init.id))!).applyInit(init);
     }
 
     /**
-     * Look up an existing subgraph by name without creating a new one.
-     * Returns a {@link Subgraph} wrapper if a subgraph with that name exists,
-     * or `null` if it does not.  **Call {@link Subgraph.delete} (or use the
-     * `using` keyword) when finished** to free the WASM wrapper.
+     * Look up an existing subgraph by id without creating a new one.
+     * Returns a {@link Subgraph} wrapper if found, or `null` if it does not
+     * exist.  **Call {@link Subgraph.delete} (or use the `using` keyword)
+     * when finished** to free the WASM wrapper.
      *
      * ```ts
-     * using sg = graph.getSubgraph("cluster_0");
+     * using sg = graph.getSubgraph("0");
      * if (sg) {
      *     console.log(sg.nodeNames());
      * }
      * ```
      */
-    getSubgraph(name: string): Subgraph | null {
-        const sg = this._graph.getSubgraph(name);
+    getSubgraph(id: string): Subgraph | null {
+        const sg = this._graph.getSubgraph(subgraphCppName(id));
         return sg ? new Subgraph(sg) : null;
     }
 
@@ -1379,14 +1568,15 @@ export class Graphviz {
      * Programmatically create a graph using the cgraph library.
      *
      * Returns a {@link Graph} builder that lets you add nodes, edges, and
-     * attributes without writing DOT source by hand.  Call
-     * {@link Graph.toDot} to get the DOT string and pass it to
-     * {@link layout} (or any convenience wrapper).
+     * attributes without writing DOT source by hand.  The graph's `id`
+     * Graphviz attribute is automatically set to match `id`.  Call
+     * {@link Graph.layout} to render directly, or {@link Graph.toDot} to
+     * serialise to DOT.
      *
      * **You must call {@link Graph.delete} when finished** to free the
      * underlying WASM memory, or use the `using` keyword (TypeScript ≥ 5.2).
      *
-     * @param name  The graph name (default `"G"`).
+     * @param id    The graph id (default `"G"`).
      * @param type  The graph type (default `"directed"`).
      *
      * ```ts
@@ -1398,20 +1588,20 @@ export class Graphviz {
      *   .setNodeAttr("a", "color", "red")
      *   .setGraphAttr("rankdir", "LR");
      *
-     * const svg = graphviz.dot(graph.toDot());
+     * const svg = graph.layout(); // render without a DOT round-trip
      * ```
      */
-    createGraph(name?: string, type?: GraphType): Graph;
+    createGraph(id?: string, type?: GraphType): Graph;
     createGraph(init: GraphInit): Graph;
-    createGraph(nameOrInit: string | GraphInit = "G", type: GraphType = "directed"): Graph {
-        const init = typeof nameOrInit === "string"
-            ? { name: nameOrInit, type }
-            : nameOrInit;
-        const resolvedName = init.name ?? "G";
+    createGraph(idOrInit: string | GraphInit = "G", type: GraphType = "directed"): Graph {
+        const init = typeof idOrInit === "string"
+            ? { id: idOrInit, type }
+            : idOrInit;
+        const resolvedId = init.id ?? "G";
         const resolvedType = init.type ?? "directed";
         const directed = !resolvedType.includes("undirected") ? 1 : 0;
         const strict = resolvedType.startsWith("strict") ? 1 : 0;
-        return new Graph(new this._module.CGraph(resolvedName, directed, strict), this._module).applyInit(init);
+        return new Graph(new this._module.CGraph(resolvedId, directed, strict), this._module).applyInit(init);
     }
 
     /**
