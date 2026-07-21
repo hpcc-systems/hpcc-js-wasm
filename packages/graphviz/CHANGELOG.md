@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.27.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.27.1...wasm-graphviz-v1.27.2) (2026-07-21)
+
+
+### Bug Fixes
+
+* add /docs/nam-core to .gitignore ([2de35d2](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2de35d2783a86b8294ab7e37c2413879a51b95a3))
+
 ## [1.27.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.27.0...wasm-graphviz-v1.27.1) (2026-07-21)
 
 

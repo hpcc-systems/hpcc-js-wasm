@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.18.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.18.1...wasm-root-v4.18.2) (2026-07-21)
+
+
+### Bug Fixes
+
+* add /docs/nam-core to .gitignore ([2de35d2](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2de35d2783a86b8294ab7e37c2413879a51b95a3))
+
 ## [4.18.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.18.0...wasm-root-v4.18.1) (2026-07-21)
 
 

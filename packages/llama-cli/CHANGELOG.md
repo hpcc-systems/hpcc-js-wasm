@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-cli-v1.3.1...wasm-llama-cli-v1.3.2) (2026-07-21)
+
+
+### Bug Fixes
+
+* add /docs/nam-core to .gitignore ([2de35d2](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2de35d2783a86b8294ab7e37c2413879a51b95a3))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @hpcc-js/wasm-llama bumped from 1.4.1 to 1.4.2
+
 ## [1.3.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-cli-v1.3.0...wasm-llama-cli-v1.3.1) (2026-07-21)
 
 
