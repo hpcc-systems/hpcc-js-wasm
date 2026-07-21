@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.34.11](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.10...wasm-v2.34.11) (2026-07-21)
+
+
+### Bug Fixes
+
+* add /docs/nam-core to .gitignore ([2de35d2](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2de35d2783a86b8294ab7e37c2413879a51b95a3))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.14.6 to ^1.14.7
+    * @hpcc-js/wasm-duckdb bumped from ^1.18.6 to ^1.18.7
+    * @hpcc-js/wasm-expat bumped from ^1.14.6 to ^1.14.7
+    * @hpcc-js/wasm-graphviz bumped from ^1.27.1 to ^1.27.2
+    * @hpcc-js/wasm-graphviz-cli bumped from ^1.10.6 to ^1.10.7
+    * @hpcc-js/wasm-zstd bumped from ^1.14.1 to ^1.14.2
+
 ## [2.34.10](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.9...wasm-v2.34.10) (2026-07-21)
 
 

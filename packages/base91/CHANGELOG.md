@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.7](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-base91-v1.14.6...wasm-base91-v1.14.7) (2026-07-21)
+
+
+### Bug Fixes
+
+* add /docs/nam-core to .gitignore ([2de35d2](https://github.com/hpcc-systems/hpcc-js-wasm/commit/2de35d2783a86b8294ab7e37c2413879a51b95a3))
+
 ## [1.14.6](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-base91-v1.14.5...wasm-base91-v1.14.6) (2026-07-21)
 
 
