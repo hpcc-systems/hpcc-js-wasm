@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm-graphviz-cli",
-  "version": "1.10.5",
+  "version": "1.10.6",
   "description": "hpcc-js - WASM Graphviz Cli",
   "type": "module",
   "bin": {
@@ -39,7 +39,7 @@
     "update-major": "npx -y npm-check-updates -u"
   },
   "dependencies": {
-    "@hpcc-js/wasm-graphviz": "1.27.0",
+    "@hpcc-js/wasm-graphviz": "1.27.1",
     "yargs": "18.0.0"
   },
   "devDependencies": {},

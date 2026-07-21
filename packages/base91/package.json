@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm-base91",
-  "version": "1.14.5",
+  "version": "1.14.6",
   "description": "hpcc-js - WASM Base91",
   "type": "module",
   "exports": {
