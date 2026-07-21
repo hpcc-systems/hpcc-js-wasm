@@ -19,6 +19,7 @@ target/
 /docs/graphviz
 /docs/llama
 /docs/zstd
+/docs/nam-core
 /docs/packages
 /docs/README.md
 /emsdk*
