@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.14.0...wasm-zstd-v1.14.1) (2026-07-21)
+
+
+### Bug Fixes
+
+* **graphviz:** update graph creation identifiers from 'name' to 'id' for consistency ([bbcff19](https://github.com/hpcc-systems/hpcc-js-wasm/commit/bbcff19c21b711bd7690dcd4badcaa075eb8508a))
+
 ## [1.14.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.13.5...wasm-zstd-v1.14.0) (2026-07-19)
 
 

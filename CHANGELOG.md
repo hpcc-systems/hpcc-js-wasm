@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.18.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.18.0...wasm-root-v4.18.1) (2026-07-21)
+
+
+### Bug Fixes
+
+* **graphviz:** update graph creation identifiers from 'name' to 'id' for consistency ([bbcff19](https://github.com/hpcc-systems/hpcc-js-wasm/commit/bbcff19c21b711bd7690dcd4badcaa075eb8508a))
+
 ## [4.18.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.17.0...wasm-root-v4.18.0) (2026-07-19)
 
 

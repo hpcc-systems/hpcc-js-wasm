@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.34.10](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.9...wasm-v2.34.10) (2026-07-21)
+
+
+### Bug Fixes
+
+* **graphviz:** update graph creation identifiers from 'name' to 'id' for consistency ([bbcff19](https://github.com/hpcc-systems/hpcc-js-wasm/commit/bbcff19c21b711bd7690dcd4badcaa075eb8508a))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.14.5 to ^1.14.6
+    * @hpcc-js/wasm-duckdb bumped from ^1.18.5 to ^1.18.6
+    * @hpcc-js/wasm-expat bumped from ^1.14.5 to ^1.14.6
+    * @hpcc-js/wasm-graphviz bumped from ^1.27.0 to ^1.27.1
+    * @hpcc-js/wasm-graphviz-cli bumped from ^1.10.5 to ^1.10.6
+    * @hpcc-js/wasm-zstd bumped from ^1.14.0 to ^1.14.1
+
 ## [2.34.9](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.8...wasm-v2.34.9) (2026-07-19)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.6](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-base91-v1.14.5...wasm-base91-v1.14.6) (2026-07-21)
+
+
+### Bug Fixes
+
+* **graphviz:** update graph creation identifiers from 'name' to 'id' for consistency ([bbcff19](https://github.com/hpcc-systems/hpcc-js-wasm/commit/bbcff19c21b711bd7690dcd4badcaa075eb8508a))
+
 ## [1.14.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-base91-v1.14.4...wasm-base91-v1.14.5) (2026-07-14)
 
 
