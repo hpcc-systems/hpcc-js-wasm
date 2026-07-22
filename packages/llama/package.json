@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm-llama",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "hpcc-js - WASM llama",
   "type": "module",
   "exports": {

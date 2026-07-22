@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-v1.4.2...wasm-llama-v1.4.3) (2026-07-22)
+
+
+### Bug Fixes
+
+* update load and unload methods for consistency and error handling ([874c9f3](https://github.com/hpcc-systems/hpcc-js-wasm/commit/874c9f386f37202de8593a18a0d4579aeb7a1b31))
+
 ## [1.4.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-v1.4.1...wasm-llama-v1.4.2) (2026-07-21)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.8](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.14.7...wasm-expat-v1.14.8) (2026-07-22)
+
+
+### Bug Fixes
+
+* update load and unload methods for consistency and error handling ([874c9f3](https://github.com/hpcc-systems/hpcc-js-wasm/commit/874c9f386f37202de8593a18a0d4579aeb7a1b31))
+
 ## [1.14.7](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.14.6...wasm-expat-v1.14.7) (2026-07-21)
 
 

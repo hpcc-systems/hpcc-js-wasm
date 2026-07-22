@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm-duckdb",
-  "version": "1.18.7",
+  "version": "1.18.8",
   "description": "hpcc-js - WASM DuckDB",
   "type": "module",
   "exports": {
