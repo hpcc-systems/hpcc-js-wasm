@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.14.2...wasm-zstd-v1.14.3) (2026-07-22)
+
+
+### Bug Fixes
+
+* update load and unload methods for consistency and error handling ([874c9f3](https://github.com/hpcc-systems/hpcc-js-wasm/commit/874c9f386f37202de8593a18a0d4579aeb7a1b31))
+
 ## [1.14.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.14.1...wasm-zstd-v1.14.2) (2026-07-21)
 
 
