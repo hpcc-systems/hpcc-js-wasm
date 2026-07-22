@@ -89,22 +89,20 @@ export class Zstd {
      */
     static load(): Promise<Zstd> {
         if (!g_zstd) {
-            g_zstd = (load() as Promise<MainModule>).then((module) => new Zstd(module));
+            g_zstd = load().then((module: MainModule) => new Zstd(module));
         }
-        return g_zstd;
+        return g_zstd!;
     }
 
     /**
      * Unloades the compiled wasm instance.
      */
-    static async unload() {
-        try {
-            const zstd = await g_zstd;
+    static unload() {
+        reset();
+        g_zstd?.then(zstd => {
             zstd?._zstd?.delete();
-        } finally {
-            reset();
-            g_zstd = undefined;
-        }
+        });
+        g_zstd = undefined;
     }
 
     private copyHeap(data: HeapU8): Uint8Array {

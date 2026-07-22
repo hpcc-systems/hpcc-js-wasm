@@ -1298,9 +1298,9 @@ export class Graphviz {
      */
     static load(): Promise<Graphviz> {
         if (!g_graphviz) {
-            g_graphviz = (load() as Promise<MainModule>).then((module) => new Graphviz(module));
+            g_graphviz = load().then((module: MainModule) => new Graphviz(module));
         }
-        return g_graphviz;
+        return g_graphviz!;
     }
 
     /**

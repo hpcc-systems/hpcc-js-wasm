@@ -28,7 +28,7 @@ parentPort?.on("message", async function (data) {
             error: e instanceof Error ? e.message : String(e)
         });
     } finally {
-        await Zstd.unload();
+        Zstd.unload();
         process.exit(0);
     }
 });

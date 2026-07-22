@@ -7,6 +7,8 @@ import llamaMeta from "../../../vcpkg-overlays/llama-cpp/vcpkg.json" with { type
 //  Ref:  http://facebook.github.io/llama/llama_manual.html
 //  Ref:  https://github.com/facebook/llama
 
+let g_llama: Promise<Llama> | undefined;
+
 export interface LlamaMainResult {
     exitCode: number;
     stdout: string;
@@ -215,9 +217,10 @@ export class Llama {
      * @returns A promise to an instance of the Llama class.
      */
     static load(): Promise<Llama> {
-        return load().then((module: any) => {
-            return new Llama(module);
-        });
+        if (!g_llama) {
+            g_llama = load().then((module: MainModule) => new Llama(module));
+        }
+        return g_llama!;
     }
 
     /**
@@ -225,6 +228,7 @@ export class Llama {
      */
     static unload() {
         reset();
+        g_llama = undefined;
     }
 
     /**

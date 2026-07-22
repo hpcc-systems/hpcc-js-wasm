@@ -32,7 +32,7 @@ describe("worker-node", function () {
     it("loads zstd and roundtrips data in a Node.js worker", async function () {
         const zstd = await Zstd.load();
         const version = zstd.version();
-        await Zstd.unload();
+        Zstd.unload();
         const data = new Uint8Array(Array.from({ length: 4096 }, (_, i) => i % 251));
 
         const result = await runWorker(data);

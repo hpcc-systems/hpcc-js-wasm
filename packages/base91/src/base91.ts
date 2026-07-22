@@ -42,22 +42,20 @@ export class Base91 {
      */
     static load(): Promise<Base91> {
         if (!g_base91) {
-            g_base91 = (load() as Promise<MainModule>).then((module) => new Base91(module));
+            g_base91 = load().then((module: MainModule) => new Base91(module));
         }
-        return g_base91;
+        return g_base91!;
     }
 
     /**
      * Unloades the compiled wasm instance.
      */
-    static async unload() {
-        try {
-            const base91 = await g_base91;
+    static unload() {
+        reset();
+        g_base91?.then(base91 => {
             base91?._base91?.delete();
-        } finally {
-            reset();
-            g_base91 = undefined;
-        }
+        });
+        g_base91 = undefined;
     }
 
     /**

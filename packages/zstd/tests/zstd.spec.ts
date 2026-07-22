@@ -56,19 +56,19 @@ function deterministicSplits(length: number, seed: number): number[] {
 describe("zstd", function () {
 
     it("unload resets singleton and is idempotent", async function () {
-        await Zstd.unload();
+        Zstd.unload();
 
         const zstda = await Zstd.load();
         expect(await Zstd.load()).to.equal(zstda);
 
-        await Zstd.unload();
+        Zstd.unload();
 
         const zstdb = await Zstd.load();
         expect(zstdb).to.not.equal(zstda);
         expect(await Zstd.load()).to.equal(zstdb);
 
-        await Zstd.unload();
-        await Zstd.unload();
+        Zstd.unload();
+        Zstd.unload();
     });
 
     it("version", async function () {
@@ -82,13 +82,13 @@ describe("zstd", function () {
         v = zstd.version();
         expect(v).to.be.a.string;
         expect(v).to.not.be.empty;
-        await Zstd.unload();
+        Zstd.unload();
 
         zstd = await Zstd.load();
         v = zstd.version();
         expect(v).to.be.a.string;
         expect(v).to.not.be.empty;
-        await Zstd.unload();
+        Zstd.unload();
     });
 
     it("compress", async function () {

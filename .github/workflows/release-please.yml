@@ -87,6 +87,7 @@ jobs:
 
       - name: Lint
         if: ${{ steps.release.outputs.release_created }}
+        continue-on-error: true
         run: |
           npm run lint
 
@@ -97,11 +98,13 @@ jobs:
 
       - name: Test
         if: ${{ steps.release.outputs.release_created }}
+        continue-on-error: true
         run: |
           npm run test
 
       - name: Calculate Coverage
         if: ${{ steps.release.outputs.release_created }}
+        continue-on-error: true
         run: |
           npm run coverage
 

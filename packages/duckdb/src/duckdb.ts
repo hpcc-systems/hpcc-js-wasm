@@ -122,9 +122,7 @@ export class DuckDB {
      */
     static load(): Promise<DuckDB> {
         if (!g_duckdb) {
-            g_duckdb = load().then((module: any) => {
-                return new DuckDB(module)
-            });
+            g_duckdb = load().then((module: MainModule) => new DuckDB(module));
         }
         return g_duckdb!;
     }
@@ -141,9 +139,9 @@ export class DuckDB {
      * // The next call to DuckDB.load() will create a fresh instance
      * ```
      */
-    static async unload() {
-        try {
-            const duckdb = await g_duckdb;
+    static unload() {
+        reset();
+        g_duckdb?.then(duckdb => {
             if (duckdb?.db) {
                 try {
                     duckdb.db.terminate();
@@ -151,10 +149,8 @@ export class DuckDB {
                     duckdb.db.delete();
                 }
             }
-        } finally {
-            reset();
-            g_duckdb = undefined;
-        }
+        });
+        g_duckdb = undefined;
     }
 
     /**

@@ -28,6 +28,6 @@ self.onmessage = async function (e: MessageEvent<Uint8Array>) {
             error: e instanceof Error ? e.message : String(e)
         });
     } finally {
-        await Zstd.unload();
+        Zstd.unload();
     }
 };

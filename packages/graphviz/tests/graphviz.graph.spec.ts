@@ -6,19 +6,17 @@ describe("Graph (programmatic graph creation)", function () {
 
     it("createGraph returns a Graph instance", async function () {
         const graphviz = await Graphviz.load();
-        const graph = graphviz.createGraph("G");
+        using graph = graphviz.createGraph("G");
         expect(graph).toBeInstanceOf(Graph);
-        graph.delete();
     });
 
     it("toDot produces valid DOT for a simple directed graph", async function () {
         const graphviz = await Graphviz.load();
-        const graph = graphviz.createGraph("G");
+        using graph = graphviz.createGraph("G");
         graph.addNode("a");
         graph.addNode("b");
         graph.addEdge("a", "b");
         const dot = graph.toDot();
-        graph.delete();
 
         expect(dot).toContain("digraph");
         expect(dot).toContain("a");
@@ -27,10 +25,9 @@ describe("Graph (programmatic graph creation)", function () {
 
     it("toDot produces valid DOT for an undirected graph", async function () {
         const graphviz = await Graphviz.load();
-        const graph = graphviz.createGraph("UG", "undirected");
+        using graph = graphviz.createGraph("UG", "undirected");
         graph.addEdge("x", "y");
         const dot = graph.toDot();
-        graph.delete();
 
         // undirected graphs use "graph" keyword, not "digraph"
         expect(dot).toMatch(/^graph\s/m);
@@ -55,10 +52,9 @@ describe("Graph (programmatic graph creation)", function () {
 
     it("setGraphAttr appears in DOT output", async function () {
         const graphviz = await Graphviz.load();
-        const graph = graphviz.createGraph("G");
+        using graph = graphviz.createGraph("G");
         graph.setGraphAttr("rankdir", "LR");
         const dot = graph.toDot();
-        graph.delete();
 
         expect(dot).toContain("rankdir");
         expect(dot).toContain("LR");
@@ -110,11 +106,10 @@ describe("Graph (programmatic graph creation)", function () {
 
     it("setNodeAttr appears in DOT output", async function () {
         const graphviz = await Graphviz.load();
-        const graph = graphviz.createGraph("G");
+        using graph = graphviz.createGraph("G");
         graph.addNode("n1");
         graph.setNodeAttr("n1", "color", "red");
         const dot = graph.toDot();
-        graph.delete();
 
         expect(dot).toContain("color");
         expect(dot).toContain("red");
@@ -135,13 +130,12 @@ describe("Graph (programmatic graph creation)", function () {
 
     it("setEdgeAttr appears in DOT output", async function () {
         const graphviz = await Graphviz.load();
-        const graph = graphviz.createGraph("G");
+        using graph = graphviz.createGraph("G");
         graph
             .addEdge("a", "b")
             .setEdgeAttr("a", "b", "", "label", "hello")
             ;
         const dot = graph.toDot();
-        graph.delete();
 
 
         expect(dot).toContain("label");
@@ -252,7 +246,7 @@ describe("Graph (programmatic graph creation)", function () {
 
     it("fluent API (method chaining) works", async function () {
         const graphviz = await Graphviz.load();
-        const graph = graphviz.createGraph("G");
+        using graph = graphviz.createGraph("G");
         graph
             .addNode("a")
             .addNode("b")
@@ -260,7 +254,6 @@ describe("Graph (programmatic graph creation)", function () {
             .setNodeAttr("a", "shape", "box")
             .setGraphAttr("rankdir", "LR");
         const dot = graph.toDot();
-        graph.delete();
 
         expect(dot).toContain("shape");
         expect(dot).toContain("box");
@@ -268,10 +261,9 @@ describe("Graph (programmatic graph creation)", function () {
 
     it("createGraph output can be laid out by graphviz.layout", async function () {
         const graphviz = await Graphviz.load();
-        const graph = graphviz.createGraph("G");
+        using graph = graphviz.createGraph("G");
         graph.addEdge("Hello", "World");
         const dot = graph.toDot();
-        graph.delete();
 
         const svg = graphviz.layout(dot, "svg", "dot");
         expect(svg).toContain("<svg");
@@ -281,11 +273,10 @@ describe("Graph (programmatic graph creation)", function () {
 
     it("strict directed graph disallows parallel edges in DOT", async function () {
         const graphviz = await Graphviz.load();
-        const graph = graphviz.createGraph("G", "strict directed");
+        using graph = graphviz.createGraph("G", "strict directed");
         graph.addEdge("a", "b");
         graph.addEdge("a", "b"); // duplicate – should be silently ignored
         const dot = graph.toDot();
-        graph.delete();
 
         expect(dot).toMatch(/^strict digraph/m);
     });
@@ -294,10 +285,9 @@ describe("Graph (programmatic graph creation)", function () {
         const graphviz = await Graphviz.load();
         const types: GraphType[] = ["directed", "undirected", "strict directed", "strict undirected"];
         for (const type of types) {
-            const graph = graphviz.createGraph("G", type);
+            using graph = graphviz.createGraph("G", type);
             graph.addEdge("a", "b");
             const dot = graph.toDot();
-            graph.delete();
             expect(dot).not.toBe("");
         }
     });
@@ -822,12 +812,11 @@ describe("Memory cleanup", function () {
         // by the parent CGraph.  Deleting the wrapper early should not affect the
         // parent graph or its data.
         const graphviz = await Graphviz.load();
-        const graph = graphviz.createGraph("G");
+        using graph = graphviz.createGraph("G");
         const sg = graph.addSubgraph("0");
         sg.addEdge("a", "b");
         sg.delete();                    // free the thin CSubgraph wrapper
         const dot = graph.toDot();      // parent graph still intact
-        graph.delete();
         expect(dot).toContain("cluster_0");
         expect(dot).toContain("a");
     });
@@ -837,24 +826,22 @@ describe("Memory cleanup", function () {
     it("stress: 100 create-layout-delete cycles complete without error", async function () {
         const graphviz = await Graphviz.load();
         for (let i = 0; i < 100; i++) {
-            const graph = graphviz.createGraph(`G${i}`);
+            using graph = graphviz.createGraph(`G${i}`);
             for (let j = 0; j < 5; j++) graph.addEdge(`n${j}`, `n${j + 1}`);
             graph.layout();
-            graph.delete();
         }
     });
 
     it("stress: 50 create-layout-delete cycles with subgraphs complete without error", async function () {
         const graphviz = await Graphviz.load();
         for (let i = 0; i < 50; i++) {
-            const graph = graphviz.createGraph(`G${i}`);
+            using graph = graphviz.createGraph(`G${i}`);
             for (let c = 0; c < 3; c++) {
                 const sg = graph.addSubgraph(`${c}`);
                 sg.addEdge(`a${c}`, `b${c}`);
                 sg.delete();
             }
             graph.layout();
-            graph.delete();
         }
     });
 
@@ -874,10 +861,9 @@ describe("Memory cleanup", function () {
 
         const run = () => {
             for (let i = 0; i < 20; i++) {
-                const graph = graphviz.createGraph("G");
+                using graph = graphviz.createGraph("G");
                 for (let j = 0; j < 10; j++) graph.addEdge(`n${j}`, `n${j + 1}`);
                 graph.layout();
-                graph.delete();
             }
         };
 

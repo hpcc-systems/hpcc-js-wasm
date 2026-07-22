@@ -68,9 +68,9 @@ export class Expat {
      */
     static load(): Promise<Expat> {
         if (!g_expat) {
-            g_expat = (load() as Promise<MainModule>).then((module) => new Expat(module));
+            g_expat = load().then((module: MainModule) => new Expat(module));
         }
-        return g_expat;
+        return g_expat!;
     }
 
     /**

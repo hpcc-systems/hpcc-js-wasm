@@ -9,7 +9,7 @@ describe.sequential("duckdb", () => {
     });
 
     afterAll(async () => {
-        await DuckDB.unload();
+        DuckDB.unload();
     });
 
     describe("DuckDB static methods", () => {
@@ -850,19 +850,19 @@ FROM duckdb_extensions();
 
     describe("unload", () => {
         it("resets singleton and is idempotent", async () => {
-            await DuckDB.unload();
+            DuckDB.unload();
 
             const dba = await DuckDB.load();
             expect(await DuckDB.load()).toBe(dba);
 
-            await DuckDB.unload();
+            DuckDB.unload();
 
             const dbb = await DuckDB.load();
             expect(dbb).not.toBe(dba);
             expect(await DuckDB.load()).toBe(dbb);
 
-            await DuckDB.unload();
-            await DuckDB.unload();
+            DuckDB.unload();
+            DuckDB.unload();
         });
     });
 });
