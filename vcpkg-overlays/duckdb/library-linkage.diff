@@ -182,9 +182,10 @@ diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
  link_threads(duckdb_static PUBLIC)
  
  #
-@@ -143,8 +144,15 @@
-               "${PROJECT_SOURCE_DIR}/src/include/duckdb.h"
-         DESTINATION "${INSTALL_INCLUDE_DIR}")
+@@ -146,9 +147,16 @@
+         "${PROJECT_SOURCE_DIR}/src/include/duckdb.h"
+         "${PROJECT_SOURCE_DIR}/src/include/duckdb_extension.h"
+  DESTINATION "${INSTALL_INCLUDE_DIR}")
  
 +if(BUILD_SHARED_LIBS)
 +  set(INSTALL_TARGET duckdb)

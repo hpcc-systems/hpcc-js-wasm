@@ -21,7 +21,7 @@ describe.sequential("duckdb", () => {
             expect(typeof v).toBe("string");
             expect(v.length).toBeGreaterThan(0);
             expect(v).toMatch(/^v?\d/);
-            expect(v).toEqual("v1.5.4");    // Update README.md
+            expect(v).toEqual("v1.5.5");    // Update README.md
         });
 
         it("reports numberOfThreads", () => {
