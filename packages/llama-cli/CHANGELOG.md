@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-cli-v1.3.3...wasm-llama-cli-v1.4.0) (2026-07-24)
+
+
+### Features
+
+* **nam-core:** Add WebAssembly wrapper for Neural Amp Modeler DSP models ([ca2c8ac](https://github.com/hpcc-systems/hpcc-js-wasm/commit/ca2c8ac30eca5ae943c73af6420ad814cd4097e9))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @hpcc-js/wasm-llama bumped from 1.4.3 to 1.5.0
+
 ## [1.3.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-cli-v1.3.2...wasm-llama-cli-v1.3.3) (2026-07-22)
 
 

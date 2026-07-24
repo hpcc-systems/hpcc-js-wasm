@@ -1,6 +1,6 @@
 {
   "name": "@hpcc-js/wasm",
-  "version": "2.34.12",
+  "version": "2.35.0",
   "description": "hpcc-js - WASM Libraries",
   "type": "module",
   "exports": {
@@ -83,12 +83,12 @@
   },
   "devDependencies": {
     "@hpcc-js/esbuild-plugins": "1.9.6",
-    "@hpcc-js/wasm-base91": "^1.14.8",
-    "@hpcc-js/wasm-duckdb": "^1.18.8",
-    "@hpcc-js/wasm-expat": "^1.14.8",
-    "@hpcc-js/wasm-graphviz": "^1.27.3",
-    "@hpcc-js/wasm-graphviz-cli": "^1.10.8",
-    "@hpcc-js/wasm-zstd": "^1.14.3"
+    "@hpcc-js/wasm-base91": "^1.15.0",
+    "@hpcc-js/wasm-duckdb": "^1.19.0",
+    "@hpcc-js/wasm-expat": "^1.15.0",
+    "@hpcc-js/wasm-graphviz": "^1.28.0",
+    "@hpcc-js/wasm-graphviz-cli": "^1.11.0",
+    "@hpcc-js/wasm-zstd": "^1.15.0"
   },
   "keywords": [
     "graphviz",
