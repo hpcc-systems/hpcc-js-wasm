@@ -212,7 +212,9 @@ export class Subgraph {
         const { id, attrs, htmlAttrs } = init;
 
         this._sg.addNode(id);
-        this.setNodeAttr(id, "id", id);
+        if (attrs?.id === undefined) {
+            this.setNodeAttr(id, "id", id);
+        }
         applyAttrs<NodeAttrs>(attrs, (attr, value) => this.setNodeAttr(id, attr, value));
         applyAttrs<NodeAttrs>(htmlAttrs, (attr, value) => this.setNodeHtmlAttr(id, attr, value));
         return this;
@@ -227,8 +229,7 @@ export class Subgraph {
 
     /**
      * Create an edge inside this subgraph.  Both endpoints are created
-     * automatically if they do not already exist, and their `id` Graphviz
-     * attribute is set to their node id.
+        * automatically if they do not already exist.
      */
     addEdge(tail: string, head: string, attrs?: AttrValues<EdgeAttrs>, htmlAttrs?: AttrValues<EdgeAttrs>): this;
     addEdge(tail: string, head: string, key: string, attrs?: AttrValues<EdgeAttrs>, htmlAttrs?: AttrValues<EdgeAttrs>): this;
@@ -242,8 +243,6 @@ export class Subgraph {
         const { tail, head: resolvedHead, key: resolvedKey = "", attrs, htmlAttrs } = init;
 
         this._sg.addEdge(tail, resolvedHead, resolvedKey);
-        this.setNodeAttr(tail, "id", tail);
-        this.setNodeAttr(resolvedHead, "id", resolvedHead);
         applyAttrs<EdgeAttrs>(attrs, (attr, value) => this.setEdgeAttr(tail, resolvedHead, resolvedKey, attr, value));
         applyAttrs<EdgeAttrs>(htmlAttrs, (attr, value) => this.setEdgeHtmlAttr(tail, resolvedHead, resolvedKey, attr, value));
         return this;
@@ -686,7 +685,9 @@ export class Graph {
         const { id, attrs, htmlAttrs } = init;
 
         this._graph.addNode(id);
-        this.setNodeAttr(id, "id", id);
+        if (attrs?.id === undefined) {
+            this.setNodeAttr(id, "id", id);
+        }
         applyAttrs<NodeAttrs>(attrs, (attr, value) => this.setNodeAttr(id, attr, value));
         applyAttrs<NodeAttrs>(htmlAttrs, (attr, value) => this.setNodeHtmlAttr(id, attr, value));
         return this;
@@ -701,9 +702,9 @@ export class Graph {
 
     /**
      * Create an edge from `tail` to `head`.  Both nodes are created
-     * automatically if they do not already exist, and their `id` Graphviz
-     * attribute is set to their node id.  `key` distinguishes parallel edges
-     * between the same pair of nodes; omit (or pass `""`) for an anonymous edge.
+        * automatically if they do not already exist.  `key` distinguishes
+        * parallel edges between the same pair of nodes; omit (or pass `""`) for
+        * an anonymous edge.
      */
     addEdge(tail: string, head: string, attrs?: AttrValues<EdgeAttrs>, htmlAttrs?: AttrValues<EdgeAttrs>): this;
     addEdge(tail: string, head: string, key: string, attrs?: AttrValues<EdgeAttrs>, htmlAttrs?: AttrValues<EdgeAttrs>): this;
@@ -717,8 +718,6 @@ export class Graph {
         const { tail, head: resolvedHead, key: resolvedKey = "", attrs, htmlAttrs } = init;
 
         this._graph.addEdge(tail, resolvedHead, resolvedKey);
-        this.setNodeAttr(tail, "id", tail);
-        this.setNodeAttr(resolvedHead, "id", resolvedHead);
         applyAttrs<EdgeAttrs>(attrs, (attr, value) => this.setEdgeAttr(tail, resolvedHead, resolvedKey, attr, value));
         applyAttrs<EdgeAttrs>(htmlAttrs, (attr, value) => this.setEdgeHtmlAttr(tail, resolvedHead, resolvedKey, attr, value));
         return this;

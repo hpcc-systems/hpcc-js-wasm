@@ -281,6 +281,16 @@ describe("Graph (programmatic graph creation)", function () {
         expect(dot).toMatch(/^strict digraph/m);
     });
 
+    it("addEdge does not sync id attr for implicitly created nodes", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+
+        graph.addEdge("implicit_a", "implicit_b");
+
+        expect(graph.getNodeAttr("implicit_a", "id")).toBe("");
+        expect(graph.getNodeAttr("implicit_b", "id")).toBe("");
+    });
+
     it("all GraphType values produce non-empty DOT", async function () {
         const graphviz = await Graphviz.load();
         const types: GraphType[] = ["directed", "undirected", "strict directed", "strict undirected"];
@@ -620,6 +630,17 @@ describe("Subgraph / cluster (programmatic graph creation)", function () {
             sg.setEdgeAttr("p", "q", "", "label", "edge-label");
         }
         expect(graph.toDot()).toContain("edge-label");
+    });
+
+    it("subgraph addEdge does not sync id attr for implicitly created nodes", async function () {
+        const graphviz = await Graphviz.load();
+        using graph = graphviz.createGraph("G");
+        using sg = graph.addSubgraph("x");
+
+        sg.addEdge("implicit_p", "implicit_q");
+
+        expect(sg.getNodeAttr("implicit_p", "id")).toBe("");
+        expect(sg.getNodeAttr("implicit_q", "id")).toBe("");
     });
 
     it("subgraph attribute setters reset to default when value is omitted", async function () {
