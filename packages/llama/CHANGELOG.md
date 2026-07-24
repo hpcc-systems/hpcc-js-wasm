@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-v1.4.3...wasm-llama-v1.5.0) (2026-07-24)
+
+
+### Features
+
+* **nam-core:** Add WebAssembly wrapper for Neural Amp Modeler DSP models ([ca2c8ac](https://github.com/hpcc-systems/hpcc-js-wasm/commit/ca2c8ac30eca5ae943c73af6420ad814cd4097e9))
+* update DuckDB version to 1.5.5 in README, tests, and vcpkg configuration ([ab79021](https://github.com/hpcc-systems/hpcc-js-wasm/commit/ab79021d534c30f685945d7f42eb4630f5424c0e))
+
 ## [1.4.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-v1.4.2...wasm-llama-v1.4.3) (2026-07-22)
 
 

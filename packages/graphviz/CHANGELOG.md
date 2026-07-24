@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.28.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.27.3...wasm-graphviz-v1.28.0) (2026-07-24)
+
+
+### Features
+
+* **nam-core:** Add WebAssembly wrapper for Neural Amp Modeler DSP models ([ca2c8ac](https://github.com/hpcc-systems/hpcc-js-wasm/commit/ca2c8ac30eca5ae943c73af6420ad814cd4097e9))
+* update DuckDB version to 1.5.5 in README, tests, and vcpkg configuration ([ab79021](https://github.com/hpcc-systems/hpcc-js-wasm/commit/ab79021d534c30f685945d7f42eb4630f5424c0e))
+
+
+### Bug Fixes
+
+* prevent automatic id attribute synchronization for implicitly created nodes in addEdge ([522e4d5](https://github.com/hpcc-systems/hpcc-js-wasm/commit/522e4d574934383761867b5a2caa45a98ae9570a))
+
 ## [1.27.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.27.2...wasm-graphviz-v1.27.3) (2026-07-22)
 
 

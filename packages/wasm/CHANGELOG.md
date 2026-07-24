@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.35.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.12...wasm-v2.35.0) (2026-07-24)
+
+
+### Features
+
+* **nam-core:** Add WebAssembly wrapper for Neural Amp Modeler DSP models ([ca2c8ac](https://github.com/hpcc-systems/hpcc-js-wasm/commit/ca2c8ac30eca5ae943c73af6420ad814cd4097e9))
+* update DuckDB version to 1.5.5 in README, tests, and vcpkg configuration ([ab79021](https://github.com/hpcc-systems/hpcc-js-wasm/commit/ab79021d534c30f685945d7f42eb4630f5424c0e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.14.8 to ^1.15.0
+    * @hpcc-js/wasm-duckdb bumped from ^1.18.8 to ^1.19.0
+    * @hpcc-js/wasm-expat bumped from ^1.14.8 to ^1.15.0
+    * @hpcc-js/wasm-graphviz bumped from ^1.27.3 to ^1.28.0
+    * @hpcc-js/wasm-graphviz-cli bumped from ^1.10.8 to ^1.11.0
+    * @hpcc-js/wasm-zstd bumped from ^1.14.3 to ^1.15.0
+
 ## [2.34.12](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.11...wasm-v2.34.12) (2026-07-22)
 
 

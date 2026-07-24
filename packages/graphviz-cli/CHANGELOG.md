@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.11.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-cli-v1.10.8...wasm-graphviz-cli-v1.11.0) (2026-07-24)
+
+
+### Features
+
+* **nam-core:** Add WebAssembly wrapper for Neural Amp Modeler DSP models ([ca2c8ac](https://github.com/hpcc-systems/hpcc-js-wasm/commit/ca2c8ac30eca5ae943c73af6420ad814cd4097e9))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @hpcc-js/wasm-graphviz bumped from 1.27.3 to 1.28.0
+
 ## [1.10.8](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-cli-v1.10.7...wasm-graphviz-cli-v1.10.8) (2026-07-22)
 
 
