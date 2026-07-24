@@ -47,6 +47,9 @@
   "unpkg": "./dist/index.umd.js",
   "jsdelivr": "./dist/index.umd.js",
   "types": "./types/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "dot-wasm": "./deprecated/dot-wasm.js"
   },

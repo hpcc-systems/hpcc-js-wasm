@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAM Core Live Amp</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #17130f;
+            --panel: #251f19;
+            --panel-2: #31281f;
+            --line: #594a3b;
+            --text: #f8efe4;
+            --muted: #b8a895;
+            --accent: #f0b35f;
+            --accent-2: #64c6a4;
+            --danger: #ef7b6d;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 20% 10%, rgba(240, 179, 95, 0.18), transparent 28rem),
+                linear-gradient(135deg, #17130f 0%, #211a14 48%, #101718 100%);
+            color: var(--text);
+            font: 16px/1.45 Georgia, "Times New Roman", serif;
+        }
+
+        main {
+            width: min(980px, calc(100vw - 32px));
+            margin: 0 auto;
+            padding: 42px 0;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: clamp(2rem, 5vw, 4.6rem);
+            line-height: 0.94;
+            letter-spacing: 0;
+        }
+
+        p {
+            margin: 0;
+            color: var(--muted);
+            max-width: 64ch;
+        }
+
+        .surface {
+            margin-top: 28px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: color-mix(in srgb, var(--panel) 88%, transparent);
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.32);
+            overflow: hidden;
+        }
+
+        .meter-strip {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 4px;
+            padding: 12px;
+            background: #100d0a;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .meter-strip span {
+            display: block;
+            height: 14px;
+            border-radius: 2px;
+            background: #342b22;
+            transition: background 80ms linear;
+        }
+
+        .meter-strip span.is-lit {
+            background: var(--accent-2);
+            box-shadow: 0 0 16px rgba(100, 198, 164, 0.45);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            padding: 22px;
+        }
+
+        .field {
+            display: grid;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        label,
+        .label {
+            color: var(--muted);
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            color: var(--text);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            background: var(--panel-2);
+            padding: 11px;
+        }
+
+        input[type="range"] {
+            accent-color: var(--accent);
+            width: 100%;
+        }
+
+        select {
+            width: 100%;
+            color: var(--text);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            background: var(--panel-2);
+            padding: 11px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: end;
+        }
+
+        button {
+            border: 1px solid color-mix(in srgb, var(--accent) 58%, #000);
+            border-radius: 6px;
+            background: var(--accent);
+            color: #1c1308;
+            cursor: pointer;
+            font: 700 0.95rem/1 Georgia, "Times New Roman", serif;
+            min-height: 42px;
+            padding: 0 16px;
+        }
+
+        button.secondary {
+            background: var(--panel-2);
+            color: var(--text);
+            border-color: var(--line);
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.48;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            border-top: 1px solid var(--line);
+            background: rgba(16, 13, 10, 0.5);
+        }
+
+        .stat {
+            min-width: 0;
+            padding: 16px 18px;
+            border-right: 1px solid var(--line);
+        }
+
+        .stat:last-child {
+            border-right: 0;
+        }
+
+        .stat strong {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 1.12rem;
+        }
+
+        .status {
+            margin-top: 16px;
+            color: var(--muted);
+        }
+
+        .status[data-tone="ready"] {
+            color: var(--accent-2);
+        }
+
+        .status[data-tone="error"] {
+            color: var(--danger);
+        }
+
+        @media (max-width: 720px) {
+            main {
+                width: min(100vw - 24px, 980px);
+                padding: 24px 0;
+            }
+
+            .controls,
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .stat {
+                border-right: 0;
+                border-bottom: 1px solid var(--line);
+            }
+
+            .stat:last-child {
+                border-bottom: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>NAM Core Live Amp</h1>
+        <p>Load a Neural Amp Model, open an audio input, and monitor the processed signal from your speakers.</p>
+
+        <section class="surface" aria-label="Live amp controls">
+            <div class="meter-strip" id="meter" aria-label="Output level meter"></div>
+
+            <div class="controls">
+                <div class="field">
+                    <label for="modelFile">NAM model</label>
+                    <input id="modelFile" type="file" accept=".nam,application/json">
+                </div>
+
+                <div class="buttons">
+                    <button id="loadSample" type="button" class="secondary">Load sample model</button>
+                    <button id="start" type="button" disabled>Start live amp</button>
+                    <button id="stop" type="button" class="secondary" disabled>Stop</button>
+                </div>
+
+                <div class="field">
+                    <label for="inputGain">Input trim <span id="inputGainValue">0.0 dB</span></label>
+                    <input id="inputGain" type="range" min="-24" max="24" step="0.5" value="0">
+                </div>
+
+                <div class="field">
+                    <label for="outputGain">Output trim <span id="outputGainValue">-9.0 dB</span></label>
+                    <input id="outputGain" type="range" min="-36" max="12" step="0.5" value="-9">
+                </div>
+
+                <div class="field">
+                    <label for="bufferSize">Buffer size</label>
+                    <select id="bufferSize">
+                        <option value="256">256 frames</option>
+                        <option value="512" selected>512 frames</option>
+                        <option value="1024">1024 frames</option>
+                        <option value="2048">2048 frames</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="sampleFrequency">Sample frequency</label>
+                    <select id="sampleFrequency">
+                        <option value="">Device default</option>
+                        <option value="44100">44.1 kHz</option>
+                        <option value="48000" selected>48 kHz</option>
+                        <option value="88200">88.2 kHz</option>
+                        <option value="96000">96 kHz</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <span class="label">Model</span>
+                    <strong id="modelName">None</strong>
+                </div>
+                <div class="stat">
+                    <span class="label">Channels</span>
+                    <strong id="channels">-</strong>
+                </div>
+                <div class="stat">
+                    <span class="label">Sample Rate</span>
+                    <strong id="sampleRate">-</strong>
+                </div>
+                <div class="stat">
+                    <span class="label">NAM Core</span>
+                    <strong id="version">Loading...</strong>
+                </div>
+            </div>
+        </section>
+
+        <p id="status" class="status">Initializing NAM Core...</p>
+    </main>
+
+    <script type="module">
+        const SAMPLE_MODEL_URL = "https://raw.githubusercontent.com/tone-3000/neural-amp-modeler-wasm/refs/heads/main/ui/public/models/deluxe.nam";
+        const LATENCY_HINT_SECONDS = 0.01;
+        const MAX_METER_DB = 0;
+        const MIN_METER_DB = -60;
+
+        const elements = {
+            bufferSize: document.getElementById("bufferSize"),
+            channels: document.getElementById("channels"),
+            inputGain: document.getElementById("inputGain"),
+            inputGainValue: document.getElementById("inputGainValue"),
+            loadSample: document.getElementById("loadSample"),
+            meter: document.getElementById("meter"),
+            modelFile: document.getElementById("modelFile"),
+            modelName: document.getElementById("modelName"),
+            outputGain: document.getElementById("outputGain"),
+            outputGainValue: document.getElementById("outputGainValue"),
+            sampleFrequency: document.getElementById("sampleFrequency"),
+            sampleRate: document.getElementById("sampleRate"),
+            start: document.getElementById("start"),
+            status: document.getElementById("status"),
+            stop: document.getElementById("stop"),
+            version: document.getElementById("version")
+        };
+
+        for (let i = 0; i < 12; ++i) {
+            elements.meter.append(document.createElement("span"));
+        }
+
+        let nam;
+        let model;
+        let audioContext;
+        let micStream;
+        let sourceNode;
+        let processorNode;
+        let animationFrame = 0;
+        let latestPeak = 0;
+
+        const setStatus = (message, tone = "") => {
+            elements.status.textContent = message;
+            elements.status.dataset.tone = tone;
+        };
+
+        const formatDb = value => `${Number(value).toFixed(1)} dB`;
+        const formatMs = value => `${Math.round(value * 10) / 10} ms`;
+        const dbToGain = value => 10 ** (Number(value) / 20);
+        const clampSample = value => Math.max(-1, Math.min(1, value));
+        const getBufferSize = () => {
+            const bufferSize = Number(elements.bufferSize.value);
+            return [256, 512, 1024, 2048].includes(bufferSize) ? bufferSize : 256;
+        };
+        const getRequestedSampleRate = () => elements.sampleFrequency.value ? Number(elements.sampleFrequency.value) : undefined;
+
+        const updateGainLabels = () => {
+            elements.inputGainValue.textContent = formatDb(elements.inputGain.value);
+            elements.outputGainValue.textContent = formatDb(elements.outputGain.value);
+        };
+
+        const updateModelStats = name => {
+            const expectedSampleRate = model.expectedSampleRate();
+            elements.modelName.textContent = name;
+            elements.channels.textContent = `${model.inputChannels()} in / ${model.outputChannels()} out`;
+            elements.sampleRate.textContent = expectedSampleRate > 0 ? `${expectedSampleRate} Hz` : "AudioContext";
+            elements.start.disabled = false;
+        };
+
+        const stopLiveAmp = async () => {
+            cancelAnimationFrame(animationFrame);
+            animationFrame = 0;
+
+            if (processorNode) {
+                processorNode.disconnect();
+                processorNode.onaudioprocess = null;
+                processorNode = undefined;
+            }
+            if (sourceNode) {
+                sourceNode.disconnect();
+                sourceNode = undefined;
+            }
+            if (micStream) {
+                for (const track of micStream.getTracks()) {
+                    track.stop();
+                }
+                micStream = undefined;
+            }
+            if (audioContext) {
+                await audioContext.close();
+                audioContext = undefined;
+            }
+
+            elements.start.disabled = !model;
+            elements.stop.disabled = true;
+            setStatus(model ? "Model ready." : "Load a model to begin.", model ? "ready" : "");
+        };
+
+        const disposeModel = () => {
+            if (model) {
+                model.delete();
+                model = undefined;
+            }
+        };
+
+        const loadModel = async (bytes, name) => {
+            await stopLiveAmp();
+            disposeModel();
+            setStatus(`Loading ${name}...`);
+            model = nam.loadModel(new Uint8Array(bytes), { prewarm: false });
+            updateModelStats(name);
+            setStatus("Model ready.", "ready");
+        };
+
+        const interleaveInput = (inputBuffer, frames, inputChannels, gain) => {
+            const input = new Float32Array(frames * inputChannels);
+            const sourceChannels = inputBuffer.numberOfChannels;
+
+            for (let frame = 0; frame < frames; ++frame) {
+                for (let channel = 0; channel < inputChannels; ++channel) {
+                    let sample = 0;
+                    if (inputChannels === 1) {
+                        for (let sourceChannel = 0; sourceChannel < sourceChannels; ++sourceChannel) {
+                            sample += inputBuffer.getChannelData(sourceChannel)[frame];
+                        }
+                        sample /= sourceChannels;
+                    } else {
+                        const sourceChannel = Math.min(channel, sourceChannels - 1);
+                        sample = inputBuffer.getChannelData(sourceChannel)[frame];
+                    }
+                    input[frame * inputChannels + channel] = clampSample(sample * gain);
+                }
+            }
+
+            return input;
+        };
+
+        const writeOutput = (output, outputBuffer, outputChannels, gain) => {
+            const speakerChannels = outputBuffer.numberOfChannels;
+            const frames = outputBuffer.length;
+            let peak = 0;
+
+            for (let channel = 0; channel < speakerChannels; ++channel) {
+                const channelData = outputBuffer.getChannelData(channel);
+                for (let frame = 0; frame < frames; ++frame) {
+                    const sourceChannel = outputChannels === 1 ? 0 : Math.min(channel, outputChannels - 1);
+                    const sample = clampSample(output[frame * outputChannels + sourceChannel] * gain);
+                    channelData[frame] = sample;
+                    peak = Math.max(peak, Math.abs(sample));
+                }
+            }
+
+            latestPeak = peak;
+        };
+
+        const updateMeter = () => {
+            const segments = Array.from(elements.meter.children);
+            const db = latestPeak > 0 ? 20 * Math.log10(latestPeak) : MIN_METER_DB;
+            const amount = Math.max(0, Math.min(1, (db - MIN_METER_DB) / (MAX_METER_DB - MIN_METER_DB)));
+            const active = Math.round(amount * segments.length);
+            segments.forEach((segment, index) => segment.classList.toggle("is-lit", index < active));
+            animationFrame = requestAnimationFrame(updateMeter);
+        };
+
+        const startLiveAmp = async () => {
+            if (!model) {
+                setStatus("Load a NAM model first.", "error");
+                return;
+            }
+
+            await stopLiveAmp();
+            setStatus("Opening audio input...");
+
+            const processBufferSize = getBufferSize();
+            const requestedSampleRate = getRequestedSampleRate();
+            audioContext = new AudioContext({
+                latencyHint: LATENCY_HINT_SECONDS,
+                ...(requestedSampleRate ? { sampleRate: requestedSampleRate } : {})
+            });
+            micStream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    echoCancellation: false,
+                    noiseSuppression: false,
+                    autoGainControl: false,
+                    latency: { ideal: LATENCY_HINT_SECONDS },
+                    ...(requestedSampleRate ? { sampleRate: { ideal: requestedSampleRate } } : {})
+                }
+            });
+
+            sourceNode = audioContext.createMediaStreamSource(micStream);
+            const speakerChannels = Math.min(2, Math.max(1, audioContext.destination.maxChannelCount || 2));
+            processorNode = audioContext.createScriptProcessor(processBufferSize, Math.max(1, sourceNode.channelCount), speakerChannels);
+            model.reset(audioContext.sampleRate, processBufferSize);
+            model.prewarm();
+
+            processorNode.onaudioprocess = event => {
+                const frames = event.inputBuffer.length;
+                const inputGain = dbToGain(elements.inputGain.value);
+                const outputGain = dbToGain(elements.outputGain.value);
+                const input = interleaveInput(event.inputBuffer, frames, model.inputChannels(), inputGain);
+                const output = model.process(input, frames);
+                writeOutput(output, event.outputBuffer, model.outputChannels(), outputGain);
+            };
+
+            sourceNode.connect(processorNode);
+            processorNode.connect(audioContext.destination);
+            if (audioContext.state === "suspended") {
+                await audioContext.resume();
+            }
+
+            elements.start.disabled = true;
+            elements.stop.disabled = false;
+            elements.sampleRate.textContent = `${audioContext.sampleRate} Hz`;
+            const processingLatency = processBufferSize / audioContext.sampleRate;
+            const deviceLatency = (audioContext.baseLatency || 0) + (audioContext.outputLatency || 0);
+            const latency = processingLatency + deviceLatency;
+            setStatus(`Live amp running. ${processBufferSize} frames at ${audioContext.sampleRate} Hz. Estimated latency: ${formatMs(latency)}.`, "ready");
+            updateMeter();
+        };
+
+        elements.inputGain.addEventListener("input", updateGainLabels);
+        elements.outputGain.addEventListener("input", updateGainLabels);
+
+        elements.modelFile.addEventListener("change", async () => {
+            const [file] = elements.modelFile.files;
+            if (!file) {
+                return;
+            }
+            try {
+                await loadModel(await file.arrayBuffer(), file.name);
+            } catch (error) {
+                disposeModel();
+                elements.start.disabled = true;
+                setStatus(error instanceof Error ? error.message : String(error), "error");
+            }
+        });
+
+        elements.loadSample.addEventListener("click", async () => {
+            try {
+                setStatus("Fetching sample model...");
+                const response = await fetch(SAMPLE_MODEL_URL);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch sample model: ${response.status}`);
+                }
+                await loadModel(await response.arrayBuffer(), "deluxe.nam");
+            } catch (error) {
+                setStatus(error instanceof Error ? error.message : String(error), "error");
+            }
+        });
+
+        elements.start.addEventListener("click", () => {
+            startLiveAmp().catch(error => {
+                stopLiveAmp();
+                setStatus(error instanceof Error ? error.message : String(error), "error");
+            });
+        });
+
+        elements.stop.addEventListener("click", () => {
+            stopLiveAmp();
+        });
+
+        window.addEventListener("beforeunload", () => {
+            disposeModel();
+            NeuralAmpModelerCore.unload();
+        });
+
+        updateGainLabels();
+
+        const NeuralAmpModelerCore = await import("./dist/index.js")
+            .then(module => module.NeuralAmpModelerCore)
+            .catch(() => import("https://cdn.jsdelivr.net/npm/@hpcc-js/wasm-nam-core/dist/index.js").then(module => module.NeuralAmpModelerCore));
+
+        nam = await NeuralAmpModelerCore.load();
+        elements.version.textContent = nam.version();
+        setStatus("Load a NAM model to begin.");
+    </script>
+</body>
+
+</html>

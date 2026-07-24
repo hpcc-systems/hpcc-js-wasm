@@ -27,7 +27,7 @@ features:
     details: Similar to Base 64 but uses more characters resulting in smaller strings.
     link: /packages/base91/README
   - title: DuckDB
-    details: DuckDB - a fast in-process analytical database.
+    details: A fast in-process analytical database.
     link: /packages/duckdb/README
   - title: Expat
     details: A popular stream-oriented XML parser library.
@@ -38,6 +38,9 @@ features:
   - title: Llama
     details: Inference of Meta's LLaMA model (and others) in pure C/C++.
     link: /packages/llama/README
+  - title: Neural Amp Modeler Core
+    details: Load Neural Amp Modeler models and process batch and live inputs.
+    link: /packages/nam-core/README
   - title: Zstd
     details:  Zstandard is a fast compression algorithm, providing high compression ratios and is backed by an extremely fast decoder.
     link: /packages/zstd/README

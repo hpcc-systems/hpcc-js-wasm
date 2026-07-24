@@ -23,6 +23,9 @@
       "features": []
     },
     {
+      "name": "nam-core"
+    },
+    {
       "name": "nlohmann-json"
     },
     {

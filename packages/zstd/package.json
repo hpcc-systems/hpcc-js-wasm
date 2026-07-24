@@ -11,6 +11,9 @@
   },
   "main": "./dist/index.js",
   "types": "./types/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist/**/*",
     "src/**/*",

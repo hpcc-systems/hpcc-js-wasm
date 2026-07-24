@@ -6,6 +6,7 @@
         "./packages/expat/src/expat.ts",
         "./packages/graphviz/src/graphviz.ts",
         "./packages/llama/src/llama.ts",
+        "./packages/nam-core/src/neuralAmpModelerCore.ts",
         "./packages/zstd/src/zstd.ts",
     ],
     "out": "./docs",

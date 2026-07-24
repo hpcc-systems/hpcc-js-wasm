@@ -1,59 +1,57 @@
 {
-    "name": "@hpcc-js/wasm-llama-cli",
-    "version": "1.3.3",
-    "description": "hpcc-js - WASM llama Cli",
+    "name": "@hpcc-js/wasm-nam-core",
+    "version": "1.0.0",
+    "description": "hpcc-js - WASM NeuralAmpModelerCore",
     "type": "module",
-    "bin": {
-        "wasm-llama-cli": "bin/index.js"
-    },
     "exports": {
         ".": {
             "types": "./types/index.d.ts",
-            "default": "./bin/index.js"
+            "default": "./dist/index.js"
         }
     },
-    "main": "./bin/index.js",
+    "main": "./dist/index.js",
     "types": "./types/index.d.ts",
     "publishConfig": {
         "access": "public"
     },
     "files": [
-        "bin/**/*",
+        "dist/**/*",
         "src/**/*",
         "types/**/*"
     ],
     "scripts": {
-        "clean": "rimraf bin types .nyc_output",
+        "clean": "rimraf coverage dist dist-test types .nyc_output",
+        "build-cpp": "cmake --build ../../build --target namcorelib",
+        "build-cpp-watch": "chokidar 'src-cpp/**.*' -c 'npm run build-cpp'",
         "gen-types": "tsc --project tsconfig.json --emitDeclarationOnly",
         "gen-types-watch": "npm run gen-types -- --watch",
-        "bundle": "npm run bundle-dev --minify",
-        "bundle-dev": "esbuild ./src/index.ts --platform=node --format=esm --bundle --packages=external --sourcemap --outfile=./bin/index.js --banner:js='#!/usr/bin/env node'",
-        "postbundle": "chmod +x ./bin/index.js",
-        "postbundle-dev": "chmod +x ./bin/index.js",
+        "bundle": "node esbuild.js",
+        "bundle-dev": "npm run bundle -- --development",
         "bundle-watch": "npm run bundle-dev -- --watch",
         "build-dev": "run-p gen-types bundle-dev",
         "build": "run-p gen-types bundle",
         "lint-skypack": "npx -y @skypack/package-check",
-        "lint-eslint": "eslint src/**/*.ts tests/**/*.ts",
+        "lint-eslint": "eslint \"src/**/*.ts\" \"tests/**/*.ts\"",
         "lint": "run-p lint-eslint",
-        "test:unit": "vitest run",
-        "test": "npm run build-dev && npm run test:unit && node bin/index.js --help",
+        "test-browser": "vitest run --project browser",
+        "test-node": "vitest run --project node",
+        "test": "vitest run",
+        "coverage": "vitest run --coverage",
         "update": "npx -y npm-check-updates -u -t minor",
         "update-major": "npx -y npm-check-updates -u"
     },
-    "dependencies": {
-        "@hpcc-js/wasm-llama": "1.4.3"
+    "dependencies": {},
+    "devDependencies": {
+        "@hpcc-js/esbuild-plugins": "1.9.4",
+        "@hpcc-js/wasm-util": "1.0.0"
     },
-    "devDependencies": {},
     "keywords": [
-        "llama",
-        "llama.cpp",
-        "typescript",
+        "neural-amp-modeler",
+        "nam",
+        "audio",
+        "dsp",
         "webassembly",
-        "wasm",
-        "cli",
-        "gguf",
-        "huggingface"
+        "wasm"
     ],
     "author": "hpcc-systems",
     "repository": {

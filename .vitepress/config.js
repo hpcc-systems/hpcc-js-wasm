@@ -43,6 +43,7 @@ export default defineConfig({
                     { text: 'Expat', link: '/packages/expat/README' },
                     { text: 'Graphviz', link: '/packages/graphviz/README' },
                     { text: 'Llama', link: '/packages/llama/README' },
+                    { text: 'NAM-Core', link: '/packages/nam-core/README' },
                     { text: 'Zstd', link: '/packages/zstd/README' },
                 ]
             },

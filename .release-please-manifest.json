@@ -7,6 +7,7 @@
     "packages/graphviz-cli": "1.10.8",
     "packages/llama": "1.4.3",
     "packages/llama-cli": "1.3.3",
+    "packages/nam-core": "1.0.0",
     "packages/zstd": "1.14.3",
     "packages/wasm": "2.34.12"
 }

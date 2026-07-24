@@ -1,0 +1,19 @@
+{
+    "name": "nam-core",
+    "version": "0.5.4",
+    "description": "Core DSP library for Neural Amp Modeler plugins",
+    "homepage": "https://github.com/sdatkinson/NeuralAmpModelerCore",
+    "license": "MIT",
+    "dependencies": [
+        "eigen3",
+        "nlohmann-json",
+        {
+            "name": "vcpkg-cmake",
+            "host": true
+        },
+        {
+            "name": "vcpkg-cmake-config",
+            "host": true
+        }
+    ]
+}

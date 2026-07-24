@@ -10,6 +10,7 @@
         "packages/graphviz-cli": {},
         "packages/llama": {},
         "packages/llama-cli": {},
+        "packages/nam-core": {},
         "packages/zstd": {},
         "packages/wasm": {}
     },

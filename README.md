@@ -11,6 +11,7 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 - [expat](https://libexpat.github.io/) - v2.8.1
 - [graphviz](https://www.graphviz.org/) - 15.1.0
 - [llama.cpp](https://github.com/ggml-org/llama.cpp) - b10058
+- [NeuralAmpModelerCore](https://github.com/sdatkinson/NeuralAmpModelerCore) - v0.5.4
 - [zstd](https://github.com/facebook/zstd) - v1.5.7
 - ...more to follow...
 
@@ -29,6 +30,7 @@ Built with:
   - [Graphviz CLI](https://hpcc-systems.github.io/hpcc-js-wasm/docs/graphviz-cli.html)
   - [Llama](https://hpcc-systems.github.io/hpcc-js-wasm/docs/llama/src/llama/classes/Llama.html)
   - [Llama CLI](https://hpcc-systems.github.io/hpcc-js-wasm/docs/llama-cli.html)
+  - [NeuralAmpModelerCore](https://hpcc-systems.github.io/hpcc-js-wasm/docs/nam-core/src/neuralAmpModelerCore/classes/NeuralAmpModelerCore.html)
   - [Zstd](https://hpcc-systems.github.io/hpcc-js-wasm/docs/zstd/src/zstd/classes/Zstd.html)
 
 ## AI Assistant / Copilot Instructions
@@ -52,6 +54,7 @@ This repository is a monorepo with the following packages:
 - @hpcc-js/wasm-graphviz-cli
 - @hpcc-js/wasm-llama
 - @hpcc-js/wasm-llama-cli
+- @hpcc-js/wasm-nam-core
 - @hpcc-js/wasm-zstd
 - @hpcc-js/wasm (meta package for backward compatibility)
 
