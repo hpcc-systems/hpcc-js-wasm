@@ -616,7 +616,7 @@ public:
     // ---- Count queries --------------------------------------------------
 
     /** Returns the number of nodes in this graph. */
-    int nodeCount() { return _graph ? agnnodes(_graph) : 0; }
+    int nodeCount() { return _graph ? agnnodes_z(_graph) : 0; }
 
     /** Returns the number of edges in this graph. */
     int edgeCount() { return _graph ? agnedges(_graph) : 0; }
@@ -1161,7 +1161,7 @@ public:
     // ---- Count queries --------------------------------------------------
 
     /** Returns the number of nodes in this subgraph. */
-    int nodeCount() { return _subgraph ? agnnodes(_subgraph) : 0; }
+    int nodeCount() { return _subgraph ? agnnodes_z(_subgraph) : 0; }
 
     /** Returns the number of edges in this subgraph. */
     int edgeCount() { return _subgraph ? agnedges(_subgraph) : 0; }

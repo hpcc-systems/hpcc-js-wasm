@@ -63,6 +63,50 @@ For fast iteration:
 npm run build-cpp-watch
 ```
 
+### Rebuilding Changed C++ Dependencies
+
+`npm run build` can reuse an already-installed vcpkg package even after its
+portfile, overlay patch, or C++ source has changed. Before validating any such
+change, force the affected port to be rebuilt. For a single port, set `PORT`
+to the vcpkg package name used in `vcpkg.json` (for example, `llama-cpp`):
+
+```bash
+PORT=llama-cpp
+INSTALL_ROOT=./build/vcpkg_installed/wasm32-emscripten
+PORT_LIST=$(find "${INSTALL_ROOT}/vcpkg/info" -maxdepth 1 -type f \
+  -name "${PORT}_*_wasm32-emscripten.list" -print -quit)
+test -n "${PORT_LIST}"
+while IFS= read -r FILE; do
+  rm -f "${FILE}"
+done < "${PORT_LIST}"
+rm -f "${PORT_LIST}" "${PORT_LIST%.list}.json"
+rm -rf "${INSTALL_ROOT}/share/${PORT}" \
+  ./build/vcpkg_buildtrees/${PORT} \
+  ./build/vcpkg_packages/"${PORT}_"*
+rm -f ./build/build.ninja
+npm run build-cpp
+```
+
+This keeps the manifest unchanged and removes only the selected port's files,
+using vcpkg's installed-file list, plus its build caches. Do not use
+`vcpkg remove --classic` here: that switches out of manifest mode, and
+manifest-mode `remove` cannot permanently remove a port that remains in
+`vcpkg.json`. Removing `build/build.ninja` is required because
+`scripts/cpp-build.sh` only runs CMake configure when that file is absent. The
+configure step then reinstalls the missing port using this repository's
+manifest, overlays, and `wasm32-emscripten` triplet.
+
+Use the full cleanup only when several ports or the vcpkg installation itself
+are suspect:
+
+```bash
+npm run clean-all
+npm run build
+```
+
+`clean-all` removes generated build and vcpkg install artifacts. It does not
+remove source checkouts or `node_modules`.
+
 ### Quick Development (TypeScript Only)
 ```bash
 # For TypeScript-only changes when WASM files exist

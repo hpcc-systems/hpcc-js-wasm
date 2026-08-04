@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@hpcc-js/wasm-graphviz": "1.28.0",
-    "yargs": "18.0.0"
+    "yargs": "18.1.0"
   },
   "devDependencies": {},
   "keywords": [
