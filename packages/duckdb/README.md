@@ -1,5 +1,9 @@
 # @hpcc-js/wasm-duckdb
 
+<script setup>
+import DuckDBDemo from "../../.vitepress/components/DuckDBDemo.vue";
+</script>
+
 A WebAssembly wrapper for [DuckDB](https://github.com/duckdb/duckdb), an in-process SQL OLAP database management system. This package provides a consistent loading experience with the rest of the @hpcc-js/wasm library.
 
 ## Features
@@ -38,6 +42,10 @@ console.log(result.getValue(0, 0)); // "Hello, DuckDB!"
 result.delete();
 connection.delete();
 ```
+
+## Try it
+
+<DuckDBDemo />
 
 ## API Reference
 

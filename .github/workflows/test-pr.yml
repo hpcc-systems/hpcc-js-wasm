@@ -87,7 +87,7 @@ jobs:
             -source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
             -storepasswordincleartext \
             -name "GitHub" \
-            -username "${{ github.repository_owner }}" \
+            -username "${{ github.actor }}" \
             -password "${{ secrets.GITHUB_TOKEN }}"
           mono `./vcpkg/vcpkg fetch nuget | tail -n 1` \
             setapikey "${{ secrets.GITHUB_TOKEN }}" \

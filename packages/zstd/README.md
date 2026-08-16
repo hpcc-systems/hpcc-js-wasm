@@ -6,6 +6,10 @@ outline: deep
 
 # @hpcc-js/wasm-zstd
 
+<script setup>
+import ZstdDemo from "../../.vitepress/components/ZstdDemo.vue";
+</script>
+
 This package provides a WebAssembly wrapper around the [Zstandard](https://facebook.github.io/zstd/) library. This provides efficient compression and decompression of data.
 
 ## Installation
@@ -39,6 +43,10 @@ const data = new Uint8Array(Array.from({ length: 100000 }, (_, i) => i % 256));
 const compressed_data = zstd.compress(data);
 const decompressed_data = zstd.decompress(compressed_data);
 ```
+
+## Try it
+
+<ZstdDemo />
 
 `decompress()` uses a fast path when the frame records its content size. Frames with unknown content size (streaming compressors, stdin, many network streams) automatically fall back to the safe streaming decoder—no output-size guessing is required.
 

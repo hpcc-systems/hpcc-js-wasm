@@ -6,6 +6,10 @@ outline: deep
 
 # @hpcc-js/wasm-base91
 
+<script setup>
+import Base91Demo from "../../.vitepress/components/Base91Demo.vue";
+</script>
+
 This package provides a WebAssembly wrapper around the [Base91](https://base91.sourceforge.net/) library.  This allows for the encoding and decoding of binary data to a more compact form than Base64.
 
 ## Installation
@@ -34,6 +38,10 @@ const base91 = await Base91.load();
 const encoded_data = await base91.encode(data);
 const decoded_data = await base91.decode(encoded_data);
 ```
+
+## Try it
+
+<Base91Demo />
 
 <!--@include: ../../docs/base91/src/base91/README.md-->
 

@@ -6,6 +6,10 @@ outline: deep
 
 # @hpcc-js/wasm-graphviz
 
+<script setup>
+import GraphvizDemo from "../../.vitepress/components/GraphvizDemo.vue";
+</script>
+
 This package provides a WebAssembly wrapper around the [Graphviz](https://www.graphviz.org/) library. This allows for the rendering of DOT language graphs directly within a browser or NodeJS type environment.
 
 ## Installation
@@ -35,6 +39,10 @@ const graphviz = await Graphviz.load();
 const svg = graphviz.dot(`digraph { a -> b; }`);
 document.body.innerHTML = svg;
 ```
+
+## Try it
+
+<GraphvizDemo />
 
 ## Programmatic Graph Construction
 

@@ -6,6 +6,10 @@ outline: deep
 
 # @hpcc-js/wasm-nam-core
 
+<script setup>
+import NamCoreDemo from "../../.vitepress/components/NamCoreDemo.vue";
+</script>
+
 This package provides a WebAssembly wrapper around [NeuralAmpModelerCore](https://github.com/sdatkinson/NeuralAmpModelerCore), the core DSP library used by Neural Amp Modeler plugins. It loads `.nam` model JSON and processes interleaved audio buffers in Node.js or the browser.
 
 ## Installation
@@ -49,6 +53,10 @@ try {
   NeuralAmpModelerCore.unload();
 }
 ```
+
+## Try it
+
+<NamCoreDemo />
 
 ## Processing Audio
 

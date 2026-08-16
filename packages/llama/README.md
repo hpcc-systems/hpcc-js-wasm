@@ -6,6 +6,10 @@ outline: deep
 
 # @hpcc-js/wasm-llama
 
+<script setup>
+import LlamaDemo from "../../.vitepress/components/LlamaDemo.vue";
+</script>
+
 ## Installation
 
 ::: code-group
@@ -51,6 +55,10 @@ const followUp = session.send("Now restate that as three bullet points.");
 const result = llama.main(["--help"]);
 console.log(result.stdout);
 ```
+
+## Try it
+
+<LlamaDemo />
 
 <!--@include: ../../docs/llama/src/llama/README.md-->
 

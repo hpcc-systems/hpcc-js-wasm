@@ -8,6 +8,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - "**"
 
 permissions:
   contents: write
@@ -16,10 +18,11 @@ permissions:
   pages: write
 
 jobs:
-  release-please:
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: Initialize Release Please
+        if: github.ref == 'refs/heads/main'
         id: release
         uses: googleapis/release-please-action@v5.0.0
         with:
@@ -29,11 +32,9 @@ jobs:
           manifest-file: .release-please-manifest.json
 
       - name: Checkout Sources
-        if: ${{ steps.release.outputs.release_created }}
         uses: actions/checkout@v7.0.0
 
       - name: Install NodeJS
-        if: ${{ steps.release.outputs.release_created }}
         uses: actions/setup-node@v7.0.0
         with:
           node-version: 22
@@ -41,7 +42,6 @@ jobs:
           scope: "@hpcc-js"
 
       - name: Install OS Dependencies
-        if: ${{ steps.release.outputs.release_created }}
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential
@@ -51,7 +51,6 @@ jobs:
           sudo apt-get install -y mono-complete
 
       - name: Export GitHub Actions cache environment variables
-        if: ${{ steps.release.outputs.release_created }}
         uses: actions/github-script@v9.0.0
         with:
           script: |
@@ -59,84 +58,50 @@ jobs:
             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
       - name: Install Dependencies
-        if: ${{ steps.release.outputs.release_created }}
         run: |
           npm ci
-          sudo npx playwright install chromium --with-deps
           npm run install-build-deps
 
       - name: Make nuget.exe executable
-        if: ${{ steps.release.outputs.release_created }}
         run: |
           NUGET_PATH=$(./vcpkg/vcpkg fetch nuget | tail -n 1)
           chmod +x "$NUGET_PATH"
 
       - name: Setup vcpkg NuGet authentication
-        if: ${{ steps.release.outputs.release_created }}
         run: |
           mono `./vcpkg/vcpkg fetch nuget | tail -n 1` \
             sources add \
             -source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
             -storepasswordincleartext \
             -name "GitHub" \
-            -username "${{ github.repository_owner }}" \
+            -username "${{ github.actor }}" \
             -password "${{ secrets.GITHUB_TOKEN }}"
           mono `./vcpkg/vcpkg fetch nuget | tail -n 1` \
             setapikey "${{ secrets.GITHUB_TOKEN }}" \
             -source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
 
       - name: Lint
-        if: ${{ steps.release.outputs.release_created }}
-        continue-on-error: true
+        if: github.ref == 'refs/heads/main'
         run: |
           npm run lint
 
       - name: Build
-        if: ${{ steps.release.outputs.release_created }}
         run: |
           npm run build
 
       - name: Test
-        if: ${{ steps.release.outputs.release_created }}
-        continue-on-error: true
+        if: github.ref == 'refs/heads/main'
         run: |
           npm run test
 
-      - name: Calculate Coverage
-        if: ${{ steps.release.outputs.release_created }}
-        continue-on-error: true
-        run: |
-          npm run coverage
-
-      # - name: Update Coveralls
-      #   if: ${{ steps.release.outputs.release_created }}
-      #   uses: coverallsapp/github-action@v2.3.7
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: push stamped release
-      #   if: ${{ steps.release.outputs.release_created }}
-      #   run: |
-      #     git config user.name github-actions[bot]
-      #     git config user.email 4104672+github-actions[bot]@users.noreply.github.com
-      #     git remote add gh-token "https://${{ secrets.GITHUB_TOKEN}}@github.com/${{ github.repository }}.git"
-      #     git commit -a -m 'chore: stamp files for release'
-      #     git push origin
-          
-      - name: Publish
-        if: ${{ steps.release.outputs.release_created }}
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        run: |
-          npm run publish
-
       - name: Build Docs
-        if: ${{ steps.release.outputs.release_created }}
+        if: github.ref == 'refs/heads/main'
         run: |
+          test -f packages/graphviz/dist/index.js
           npm run build-docs
 
       - name: Deploy Docs
-        if: ${{ steps.release.outputs.release_created }}
+        if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -145,7 +110,20 @@ jobs:
         env:
           CI: true
 
+      - name: Calculate Coverage
+        if: github.ref == 'refs/heads/main'
+        continue-on-error: true
+        run: |
+          npm run coverage
+
+      - name: Publish
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+        run: |
+          npm run publish
+
       - name: Purge jsdelivr
-        if: ${{ steps.release.outputs.release_created }}
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
           npm run purge-jsdelivr

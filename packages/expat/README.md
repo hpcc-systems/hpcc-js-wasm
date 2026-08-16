@@ -6,6 +6,10 @@ outline: deep
 
 # @hpcc-js/wasm-expat
 
+<script setup>
+import ExpatDemo from "../../.vitepress/components/ExpatDemo.vue";
+</script>
+
 This package provides a WebAssembly wrapper around the [libexpat](https://libexpat.github.io/) library.  This provides efficent SAX XML parsing.
 
 ## Installation
@@ -45,6 +49,10 @@ const callback = {
 
 expat.parse(xml, callback);
 ```
+
+## Try it
+
+<ExpatDemo />
 
 <!--@include: ../../docs/expat/src/expat/README.md-->
 
