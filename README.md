@@ -9,7 +9,7 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 - [base91](https://base91.sourceforge.net/) - v0.6.0
 - [duckdb](https://github.com/duckdb/duckdb) - v1.5.5
 - [expat](https://libexpat.github.io/) - v2.8.2
-- [graphviz](https://www.graphviz.org/) - 16.0.0
+- [graphviz](https://www.graphviz.org/) - 16.1.0
 - [llama.cpp](https://github.com/ggml-org/llama.cpp) - b10437
 - [NeuralAmpModelerCore](https://github.com/sdatkinson/NeuralAmpModelerCore) - v0.5.4
 - [zstd](https://github.com/facebook/zstd) - v1.5.7
@@ -17,7 +17,7 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 
 Built with:
 
-- [emsdk](https://github.com/emscripten-core/emsdk) - v6.0.6
+- [emsdk](https://github.com/emscripten-core/emsdk) - v6.0.9
 - [vcpkg](https://github.com/microsoft/vcpkg) - 2026.07.29
 
 ## Homepage and Documents

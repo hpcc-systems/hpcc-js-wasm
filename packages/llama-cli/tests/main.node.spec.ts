@@ -11,6 +11,7 @@ import { normalizeMainArgs } from "../src/main.ts";
 const execFileAsync = promisify(execFile);
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(__dirname, "..");
+const cliBin = resolve(packageRoot, "bin/index.js");
 const storiesModel = resolve(__dirname, "../../llama/.vitest-attachments/stories260K.gguf");
 const storiesModelArg = "../llama/.vitest-attachments/stories260K.gguf";
 const storiesModelUrl = "https://huggingface.co/ggml-org/models/resolve/main/tinyllamas/stories260K.gguf";
@@ -100,7 +101,7 @@ describe("normalizeMainArgs", () => {
 
 describe("llama-cli", () => {
     it("uses -- to pass protected arguments to llama.cpp", async () => {
-        const { stdout } = await execFileAsync("npx", [".", "--", "--help"], {
+        const { stdout } = await execFileAsync(process.execPath, [cliBin, "--", "--help"], {
             cwd: packageRoot,
             maxBuffer: 1024 * 1024 * 10,
             timeout: 180000
@@ -112,8 +113,8 @@ describe("llama-cli", () => {
     it("runs llama.cpp main with a local model", async () => {
         await ensureStoriesModel();
 
-        const { stdout } = await execFileAsync("npx", [
-            ".",
+        const { stdout } = await execFileAsync(process.execPath, [
+            cliBin,
             "-m",
             storiesModelArg,
             "-p",
@@ -135,8 +136,8 @@ describe("llama-cli", () => {
     }, 180000);
 
     it("runs llama.cpp main with a Hugging Face model URL", async () => {
-        const { stdout } = await execFileAsync("npx", [
-            ".",
+        const { stdout } = await execFileAsync(process.execPath, [
+            cliBin,
             "--model",
             storiesModelUrl,
             "-p",

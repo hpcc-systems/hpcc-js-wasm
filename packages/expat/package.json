@@ -40,7 +40,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@hpcc-js/esbuild-plugins": "1.11.0",
+    "@hpcc-js/esbuild-plugins": "1.12.0",
     "@hpcc-js/wasm-util": "1.0.0"
   },
   "keywords": [

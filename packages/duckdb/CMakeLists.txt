@@ -18,7 +18,6 @@ set(EM_LINK_FLAGS
     "-sFILESYSTEM=1"
     "-sFORCE_FILESYSTEM=1"
     "-sWASMFS=1"
-    "-sWASM_BIGINT=1"
 
     # "-lwebsocket.js" 
     # "-sPROXY_POSIX_SOCKETS" 

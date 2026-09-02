@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { DuckDB } from "@hpcc-js/wasm-duckdb";
 
-describe.sequential("duckdb", () => {
+describe("duckdb", { concurrent: false }, () => {
     let duckdb: DuckDB;
 
     beforeAll(async () => {

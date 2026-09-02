@@ -16,7 +16,6 @@ set(EM_LINK_FLAGS
     # "-sFILESYSTEM=1"
     # "-sFORCE_FILESYSTEM=1"
     # "-sWASMFS=1"
-    # "-sWASM_BIGINT=1"
 
     "-fwasm-exceptions"
     "-sEXCEPTION_STACK_TRACES=1"

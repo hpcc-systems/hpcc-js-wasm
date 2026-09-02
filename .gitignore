@@ -38,10 +38,14 @@ types/
 /vcpkg
 /emsdk
 
+/packages/*/.vitest/
+
 __screenshots__/
 packages/*/.vitest-attachments
 .coveralls.yml
 *.tsbuildinfo
+
+
 
 .nx/cache
 .nx/workspace-data
