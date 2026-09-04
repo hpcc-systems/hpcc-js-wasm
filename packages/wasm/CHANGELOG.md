@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.35.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.35.0...wasm-v2.35.1) (2026-09-04)
+
+
+### Bug Fixes
+
+* bump versions (security) ([177a6e6](https://github.com/hpcc-systems/hpcc-js-wasm/commit/177a6e6826294a17b99004e3bee3f9e980c11b08))
+* bump versions (security) ([baece69](https://github.com/hpcc-systems/hpcc-js-wasm/commit/baece69d1bca9bba5cfd49e835362d3b560fe127))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.15.0 to ^1.16.0
+    * @hpcc-js/wasm-duckdb bumped from ^1.19.0 to ^1.20.0
+    * @hpcc-js/wasm-expat bumped from ^1.15.0 to ^1.16.0
+    * @hpcc-js/wasm-graphviz bumped from ^1.28.0 to ^1.29.0
+    * @hpcc-js/wasm-graphviz-cli bumped from ^1.11.0 to ^1.11.1
+    * @hpcc-js/wasm-zstd bumped from ^1.15.0 to ^1.16.0
+
 ## [2.35.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.34.12...wasm-v2.35.0) (2026-07-24)
 
 
