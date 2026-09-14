@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.16.0...wasm-zstd-v1.16.1) (2026-09-14)
+
+
+### Bug Fixes
+
+* bump versions (security) ([98aaa35](https://github.com/hpcc-systems/hpcc-js-wasm/commit/98aaa35548396eca3dd956798f6a9299f878db73))
+
 ## [1.16.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.15.0...wasm-zstd-v1.16.0) (2026-09-04)
 
 
