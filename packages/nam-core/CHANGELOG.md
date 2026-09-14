@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-nam-core-v1.2.0...wasm-nam-core-v1.2.1) (2026-09-14)
+
+
+### Bug Fixes
+
+* bump versions (security) ([98aaa35](https://github.com/hpcc-systems/hpcc-js-wasm/commit/98aaa35548396eca3dd956798f6a9299f878db73))
+
 ## [1.2.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-nam-core-v1.1.0...wasm-nam-core-v1.2.0) (2026-09-04)
 
 
