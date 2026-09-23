@@ -2,7 +2,7 @@ vcpkg_from_github(
         OUT_SOURCE_PATH SOURCE_PATH
         REPO duckdb/duckdb
         REF v${VERSION}
-        SHA512 cf94976a80135234e37de3e3998009397ba6edcded8bd5e9762f0f48666888cc814a5b5e2b5e155f02a4678aa54b9dabf53fc1bd48fd60178bbe4c8aa7ec3e7e
+        SHA512 ca6866600430b977a970fc3dd83911d719ffae7aae68f39106f3b6667f0b2d481290141f93e0bb35a595357c8d316859b133c08839fd6b1e1cdce7c9fb8b78ac
         HEAD_REF main
     PATCHES
         library-linkage.diff

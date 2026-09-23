@@ -18,9 +18,18 @@ interface WebBlobCreateOptions {
     fetch?: typeof fetch;
 }
 
-export class WebBlob extends Blob {
+const BlobBase = (globalThis.Blob ?? class {
+    constructor() {
+        throw new Error("WebBlob requires globalThis.Blob");
+    }
+}) as typeof Blob;
+
+export class WebBlob extends BlobBase {
     static async create(url: URL, opts?: WebBlobCreateOptions): Promise<Blob> {
-        const customFetch = opts?.fetch ?? fetch;
+        const customFetch = opts?.fetch ?? globalThis.fetch;
+        if (!customFetch) {
+            throw new Error("WebBlob requires globalThis.fetch or a custom fetch implementation");
+        }
         const response = await customFetch(url, { method: "HEAD" });
 
         const size = Number(response.headers.get("content-length"));
