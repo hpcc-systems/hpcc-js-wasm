@@ -1,13 +1,13 @@
 {
-    ".": "4.20.1",
-    "packages/base91": "1.16.1",
-    "packages/duckdb": "1.20.1",
-    "packages/expat": "1.16.1",
-    "packages/graphviz": "1.29.1",
-    "packages/graphviz-cli": "1.11.2",
-    "packages/llama": "1.6.1",
-    "packages/llama-cli": "1.4.2",
-    "packages/nam-core": "1.2.1",
-    "packages/zstd": "1.16.1",
-    "packages/wasm": "2.35.2"
+    ".": "4.20.2",
+    "packages/base91": "1.16.2",
+    "packages/duckdb": "1.20.2",
+    "packages/expat": "1.16.2",
+    "packages/graphviz": "1.29.2",
+    "packages/graphviz-cli": "1.11.3",
+    "packages/llama": "1.6.2",
+    "packages/llama-cli": "1.4.3",
+    "packages/nam-core": "1.2.2",
+    "packages/zstd": "1.16.2",
+    "packages/wasm": "2.35.3"
 }

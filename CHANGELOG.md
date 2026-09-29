@@ -8,6 +8,14 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.20.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.20.1...wasm-root-v4.20.2) (2026-09-29)
+
+
+### Bug Fixes
+
+* bump versions (security) ([20ff385](https://github.com/hpcc-systems/hpcc-js-wasm/commit/20ff3859a7c398c5ffc2ce09adb1e3040e31810c))
+* update Emscripten toolchain file paths and flags ([ce22f8c](https://github.com/hpcc-systems/hpcc-js-wasm/commit/ce22f8c57981114e43a9f71c3804cf043fb4dafe))
+
 ## [4.20.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.20.0...wasm-root-v4.20.1) (2026-09-14)
 
 
