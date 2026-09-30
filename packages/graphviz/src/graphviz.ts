@@ -124,6 +124,7 @@ function createFiles(graphviz: any, _options?: Options) {
 }
 
 let g_graphviz: Promise<Graphviz> | undefined;
+let g_graphvizInstance: Graphviz | undefined;
 
 /**
  * The type of graph to create.
@@ -1297,7 +1298,12 @@ export class Graphviz {
      */
     static load(): Promise<Graphviz> {
         if (!g_graphviz) {
-            g_graphviz = load().then((module: MainModule) => new Graphviz(module));
+            const loading: Promise<Graphviz> = load().then((module: MainModule) => {
+                const instance = new Graphviz(module);
+                if (g_graphviz === loading) g_graphvizInstance = instance;
+                return instance;
+            });
+            g_graphviz = loading;
         }
         return g_graphviz!;
     }
@@ -1308,6 +1314,21 @@ export class Graphviz {
     static unload() {
         reset();
         g_graphviz = undefined;
+        g_graphvizInstance = undefined;
+    }
+
+    /**
+     * Unloads the compiled wasm instance, equivalent to {@link Graphviz.unload}.
+     * Disposing an instance that has already been unloaded is a no-op.
+     */
+    dispose(): void {
+        if (g_graphvizInstance === this) {
+            Graphviz.unload();
+        }
+    }
+
+    [Symbol.dispose](): void {
+        this.dispose();
     }
 
     /**

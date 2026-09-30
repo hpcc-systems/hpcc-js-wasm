@@ -1,4 +1,5 @@
 #include "log.h"
+#include "json.h"
 
 #include <cstdarg>
 #include <cstdio>
@@ -6,11 +7,13 @@
 #include <mutex>
 
 int common_log_verbosity_thold = LOG_DEFAULT_LLAMA;
+static bool common_log_jsonl = false;
 
 struct common_log
 {
     std::mutex mtx;
     FILE *file = nullptr;
+    bool stdo = true;
     log_colors colors = LOG_COLORS_DISABLED;
     bool prefix = false;
     bool timestamps = false;
@@ -33,9 +36,44 @@ static FILE *stream_for_level(enum ggml_log_level level)
     }
 }
 
+int common_log_get_verbosity_thold(void)
+{
+    return common_log_verbosity_thold;
+}
+
 void common_log_set_verbosity_thold(int verbosity)
 {
     common_log_verbosity_thold = verbosity;
+}
+
+int common_log_get_verbosity(enum ggml_log_level level)
+{
+    switch (level)
+    {
+    case GGML_LOG_LEVEL_DEBUG:
+        return LOG_LEVEL_DEBUG;
+    case GGML_LOG_LEVEL_INFO:
+        return LOG_LEVEL_TRACE;
+    case GGML_LOG_LEVEL_WARN:
+        return LOG_LEVEL_WARN;
+    case GGML_LOG_LEVEL_ERROR:
+        return LOG_LEVEL_ERROR;
+    case GGML_LOG_LEVEL_CONT:
+        return LOG_LEVEL_TRACE;
+    case GGML_LOG_LEVEL_NONE:
+    default:
+        return LOG_LEVEL_OUTPUT;
+    }
+}
+
+bool common_log_get_jsonl(void)
+{
+    return common_log_jsonl;
+}
+
+void common_log_set_jsonl(bool jsonl)
+{
+    common_log_jsonl = jsonl;
 }
 
 struct common_log *common_log_init()
@@ -90,9 +128,12 @@ static void log_vprintf(common_log *log, enum ggml_log_level level, const char *
         return;
     }
 
-    FILE *out = stream_for_level(level);
-    fputs(buf, out);
-    fflush(out);
+    if (!log || log->stdo)
+    {
+        FILE *out = stream_for_level(level);
+        fputs(buf, out);
+        fflush(out);
+    }
 
     if (log && log->file)
     {
@@ -104,24 +145,25 @@ static void log_vprintf(common_log *log, enum ggml_log_level level, const char *
 void common_log_default_callback(enum ggml_log_level level, const char *text, void *user_data)
 {
     (void)user_data;
-    if (!text)
+    if (!text || common_log_get_verbosity(level) > common_log_verbosity_thold)
     {
         return;
     }
 
     common_log *log = common_log_main();
+    std::lock_guard<std::mutex> lock(log->mtx);
+    if (!log->running)
     {
-        std::lock_guard<std::mutex> lock(log->mtx);
-        if (!log->running)
-        {
-            return;
-        }
+        return;
     }
 
-    FILE *out = stream_for_level(level);
-    fputs(text, out);
-    fflush(out);
-    if (log && log->file)
+    if (log->stdo)
+    {
+        FILE *out = stream_for_level(level);
+        fputs(text, out);
+        fflush(out);
+    }
+    if (log->file)
     {
         fputs(text, log->file);
         fflush(log->file);
@@ -148,6 +190,21 @@ void common_log_add(struct common_log *log, enum ggml_log_level level, const cha
     va_end(args);
 }
 
+void common_log_add_json(struct common_log *log, const char *type, const common_json &data)
+{
+    if (!common_log_jsonl)
+    {
+        return;
+    }
+
+    const common_json full = {
+        {"type", type},
+        {"data", data},
+    };
+    const std::string text = full.dump_safe();
+    common_log_add(log, GGML_LOG_LEVEL_NONE, "%s\n", text.c_str());
+}
+
 void common_log_set_file(struct common_log *log, const char *path)
 {
     if (!log)
@@ -169,6 +226,16 @@ void common_log_set_file(struct common_log *log, const char *path)
     }
 }
 
+void common_log_set_stdo(struct common_log *log, bool enabled)
+{
+    if (!log)
+    {
+        return;
+    }
+    std::lock_guard<std::mutex> lock(log->mtx);
+    log->stdo = enabled;
+}
+
 void common_log_set_colors(struct common_log *log, log_colors colors)
 {
     if (!log)
@@ -177,6 +244,16 @@ void common_log_set_colors(struct common_log *log, log_colors colors)
     }
     std::lock_guard<std::mutex> lock(log->mtx);
     log->colors = colors;
+}
+
+bool common_log_get_colors(struct common_log *log)
+{
+    if (!log)
+    {
+        return false;
+    }
+    std::lock_guard<std::mutex> lock(log->mtx);
+    return log->colors == LOG_COLORS_ENABLED;
 }
 
 void common_log_set_prefix(struct common_log *log, bool prefix)

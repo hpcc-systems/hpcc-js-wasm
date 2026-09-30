@@ -49,6 +49,20 @@ compressDecompress();
 
 ```
 
+Each loader also supports `dispose()` and TypeScript `using` declarations (TypeScript 5.2+ with `"ESNext.Disposable"` in `lib`). Leaving the scope is equivalent to calling `X.unload()`, and resources are disposed in reverse declaration order:
+
+```ts
+import { Base91, Zstd } from "@hpcc-js/wasm";
+
+async function compressEncode(data: Uint8Array): Promise<string> {
+    using zstd = await Zstd.load();
+    using base91 = await Base91.load();
+    return base91.encode(zstd.compress(data));
+} // Base91.unload(), then Zstd.unload()
+```
+
+Because each instance is a shared singleton, disposing it unloads the module for every caller in the current JavaScript context.
+
 ### Vanilla HTML
 
 Alternatively the @hpcc-js/wasm package can be imported directly within the html page, using a NPM CDN server like [unpkg](https://www.unpkg.com/) or [jsdelivr](https://www.jsdelivr.com/).  

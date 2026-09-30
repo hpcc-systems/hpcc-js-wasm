@@ -9,6 +9,7 @@ type ZstdExports = MainModule["zstd"];
 //  Ref:  https://github.com/facebook/zstd
 
 let g_zstd: Promise<Zstd> | undefined;
+let g_zstdInstance: Zstd | undefined;
 
 const WASM32_MAX = 0xffffffff;
 
@@ -89,7 +90,12 @@ export class Zstd {
      */
     static load(): Promise<Zstd> {
         if (!g_zstd) {
-            g_zstd = load().then((module: MainModule) => new Zstd(module));
+            const loading: Promise<Zstd> = load().then((module: MainModule) => {
+                const instance = new Zstd(module);
+                if (g_zstd === loading) g_zstdInstance = instance;
+                return instance;
+            });
+            g_zstd = loading;
         }
         return g_zstd!;
     }
@@ -103,6 +109,21 @@ export class Zstd {
             zstd?._zstd?.delete();
         });
         g_zstd = undefined;
+        g_zstdInstance = undefined;
+    }
+
+    /**
+     * Unloads the compiled wasm instance, equivalent to {@link Zstd.unload}.
+     * Disposing an instance that has already been unloaded is a no-op.
+     */
+    dispose(): void {
+        if (g_zstdInstance === this) {
+            Zstd.unload();
+        }
+    }
+
+    [Symbol.dispose](): void {
+        this.dispose();
     }
 
     private copyHeap(data: HeapU8): Uint8Array {

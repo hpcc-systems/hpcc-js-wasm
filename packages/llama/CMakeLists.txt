@@ -1,6 +1,7 @@
 project(llamalib)
 
 find_package(Llama CONFIG REQUIRED)
+find_package(httplib CONFIG REQUIRED)
 
 # See:  https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
 
@@ -32,18 +33,13 @@ include_directories(
     ${VCPKG_INCLUDE_DIR}/llama-cpp/common
 )
 
-# Find the llama-common library (renamed to avoid conflict with graphviz libcommon)
+# Find llama-common (renamed to avoid conflict with graphviz libcommon)
 find_library(LLAMA_COMMON_LIBRARY llama-common
     REQUIRED
     HINTS ${VCPKG_INCLUDE_DIR}/../lib
     NO_CMAKE_FIND_ROOT_PATH
 )
 find_library(LLAMA_COMMON_BASE_LIBRARY llama-common-base
-    REQUIRED
-    HINTS ${VCPKG_INCLUDE_DIR}/../lib
-    NO_CMAKE_FIND_ROOT_PATH
-)
-find_library(CPP_HTTPLIB_LIBRARY cpp-httplib
     REQUIRED
     HINTS ${VCPKG_INCLUDE_DIR}/../lib
     NO_CMAKE_FIND_ROOT_PATH
@@ -63,7 +59,7 @@ target_link_libraries(llamalib
     PRIVATE llama
     PRIVATE ${LLAMA_COMMON_LIBRARY}
     PRIVATE ${LLAMA_COMMON_BASE_LIBRARY}
-    PRIVATE ${CPP_HTTPLIB_LIBRARY}
+    PRIVATE httplib::httplib
 )
 
 # Copy generated files to source directories

@@ -63,7 +63,7 @@ function findMatchingBrace(contents, openBraceIndex) {
     return braceCount === 0 ? currentIndex - 1 : -1;
 }
 
-function replaceFunctionByName(contents, functionName, replacement, patterns) {
+export function replaceFunctionByName(contents, functionName, replacement, patterns) {
     let result = contents;
 
     for (const pattern of patterns) {

@@ -19,6 +19,26 @@ describe("base91", function () {
         Base91.unload();
     });
 
+    it("dispose unloads the current instance and supports using", async function () {
+        Base91.unload();
+
+        let disposed: Base91;
+        {
+            using base91 = await Base91.load();
+            disposed = base91;
+            expect(base91.version()).to.equal("0.6.0");
+        }
+        const reloaded = await Base91.load();
+        expect(reloaded).to.not.equal(disposed);
+
+        disposed.dispose();
+        expect(await Base91.load()).to.equal(reloaded);
+
+        reloaded[Symbol.dispose]();
+        expect(await Base91.load()).to.not.equal(reloaded);
+        Base91.unload();
+    });
+
     it("version", async function () {
         let base91 = await Base91.load();
         expect(await Base91.load()).to.equal(base91);

@@ -160,6 +160,12 @@ function downloadOutput(blob: Blob): HTMLAnchorElement {
 
 describe("nam-core browser", function () {
 
+    it("version", async function () {
+        const nam = await NeuralAmpModelerCore.load();
+        expect(await NeuralAmpModelerCore.load()).to.equal(nam);
+        expect(nam.version()).to.equal("0.6.0");
+    });
+
     it("downloads a processed guitar wav", async function () {
         const [inputBuffer, modelBuffer] = await Promise.all([
             fetchArrayBuffer(inputWavUrl),

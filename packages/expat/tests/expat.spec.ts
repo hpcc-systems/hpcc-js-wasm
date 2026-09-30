@@ -48,11 +48,31 @@ describe("expat", function () {
         Expat.unload();
     });
 
+    it("dispose unloads the current instance and supports using", async function () {
+        Expat.unload();
+
+        let disposed: Expat;
+        {
+            using expat = await Expat.load();
+            disposed = expat;
+            expect(expat.version()).to.equal("expat_2.9.0");
+        }
+        const reloaded = await Expat.load();
+        expect(reloaded).to.not.equal(disposed);
+
+        disposed.dispose();
+        expect(await Expat.load()).to.equal(reloaded);
+
+        reloaded[Symbol.dispose]();
+        expect(await Expat.load()).to.not.equal(reloaded);
+        Expat.unload();
+    });
+
     it("version", async function () {
         let expat = await Expat.load();
         let v = await expat.version();
         expect(v).to.be.a.string;
-        expect(v).to.equal("expat_2.8.2");  //  Update README if this changes
+        expect(v).to.equal("expat_2.9.0");  //  Update README if this changes
         console.log("expat version: " + v);
         Expat.unload();
 

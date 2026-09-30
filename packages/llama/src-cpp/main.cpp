@@ -12,6 +12,7 @@
 #include <cstdio>
 #include <cstring>
 #include <ctime>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -163,7 +164,7 @@ namespace main
 
     static int parse_args(int argc, char **argv, common_params &params)
     {
-        if (!common_params_parse(argc, argv, params, LLAMA_EXAMPLE_CLI))
+        if (!common_params_parse(argc, argv, params, LLAMA_EXAMPLE_COMPLETION))
         {
             return -1;
         }
@@ -197,8 +198,9 @@ namespace main
 
         const std::string timestamp = string_get_sortable_timestamp();
 
-        const bool success = fs_create_directory_with_parents(params.path_prompts_log_dir);
-        if (!success)
+        std::error_code error;
+        std::filesystem::create_directories(params.path_prompts_log_dir, error);
+        if (error)
         {
             fprintf(stderr, "%s: warning: failed to create logdir %s, cannot write logfile\n",
                     __func__, params.path_prompts_log_dir.c_str());

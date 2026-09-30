@@ -1,6 +1,6 @@
 {
     "name": "nam-core",
-    "version": "0.5.4",
+    "version": "0.6.0",
     "description": "Core DSP library for Neural Amp Modeler plugins",
     "homepage": "https://github.com/sdatkinson/NeuralAmpModelerCore",
     "license": "MIT",

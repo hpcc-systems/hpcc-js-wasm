@@ -60,6 +60,21 @@ console.log(result.stdout);
 
 <LlamaDemo />
 
+## Resource management
+
+`Llama` supports `dispose()` and TypeScript's `using` declarations (TypeScript 5.2+ with `"ESNext.Disposable"` in `lib`). Leaving the scope is equivalent to calling `Llama.unload()`:
+
+```typescript
+import { Llama } from "@hpcc-js/wasm-llama";
+
+{
+    using llama = await Llama.load();
+    const embeddings = llama.embedding("Hello and Welcome!", new Uint8Array(data));
+} // Llama.unload() runs here
+```
+
+`Llama.load()` returns a singleton, so disposing it unloads the module for every caller in the current JavaScript context, including any chat sessions created from it. Disposing an instance that has already been unloaded does nothing.
+
 <!--@include: ../../docs/llama/src/llama/README.md-->
 
 ## Reference

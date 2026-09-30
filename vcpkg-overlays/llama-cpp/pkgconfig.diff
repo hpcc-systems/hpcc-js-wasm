@@ -1,0 +1,11 @@
+diff --git a/cmake/llama.pc.in b/cmake/llama.pc.in
+index 31b043c..c2ab4e1 100644
+--- a/cmake/llama.pc.in
++++ b/cmake/llama.pc.in
+@@ -6,5 +6,5 @@ includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ Name: llama
+ Description: Port of Facebook's LLaMA model in C/C++
+ Version: @LLAMA_VERSION@
+-Libs: -L${libdir} -lggml -lggml-base -lllama
++Libs: -L${libdir} -lggml -lggml-base -lggml-cpu -lllama
+ Cflags: -I${includedir}

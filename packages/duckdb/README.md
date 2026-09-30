@@ -43,6 +43,21 @@ result.delete();
 connection.delete();
 ```
 
+With TypeScript `using` declarations (TypeScript 5.2+ with `"ESNext.Disposable"` in `lib`), cleanup happens automatically in reverse declaration order:
+
+```typescript
+import { DuckDB } from "@hpcc-js/wasm-duckdb";
+
+{
+    using duckdb = await DuckDB.load();
+    using connection = duckdb.connect();
+    using result = connection.query("SELECT 'Hello, DuckDB!' AS message");
+    console.log(result.getValue(0, 0)); // "Hello, DuckDB!"
+} // result, connection, then DuckDB.unload()
+```
+
+`DuckDB.load()` returns a singleton, so disposing it unloads the module for every caller in the current JavaScript context. Disposing an instance that has already been unloaded does nothing.
+
 ## Try it
 
 <DuckDBDemo />
@@ -64,6 +79,17 @@ const duckdb = await DuckDB.load();
 Unloads the WASM instance (useful for cleanup in tests).
 
 #### Instance Methods
+
+##### `dispose(): void` / `[Symbol.dispose](): void`
+Unloads the WASM instance, equivalent to `DuckDB.unload()`. Disposing an instance that has already been unloaded is a no-op. Connections, prepared statements and results are also disposable, so the whole lifecycle can use `using`:
+
+```typescript
+{
+    using duckdb = await DuckDB.load();
+    using connection = duckdb.connect();
+    using result = connection.query("SELECT 42 AS answer");
+} // result, connection and the WASM instance are released here
+```
 
 ##### `version(): string`
 Returns the DuckDB version string.

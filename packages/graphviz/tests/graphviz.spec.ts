@@ -46,6 +46,26 @@ describe("graphviz", function () {
         Graphviz.unload();
     });
 
+    it("dispose unloads the current instance and supports using", async function () {
+        Graphviz.unload();
+
+        let disposed: Graphviz;
+        {
+            using graphviz = await Graphviz.load();
+            disposed = graphviz;
+            expect(graphviz.layout("digraph G { a -> b }", "svg")).to.contain("<svg");
+        }
+        const reloaded = await Graphviz.load();
+        expect(reloaded).to.not.equal(disposed);
+
+        disposed.dispose();
+        expect(await Graphviz.load()).to.equal(reloaded);
+
+        reloaded[Symbol.dispose]();
+        expect(await Graphviz.load()).to.not.equal(reloaded);
+        Graphviz.unload();
+    });
+
     it("version", async function () {
         let graphviz = await Graphviz.load();
         let v = graphviz.version();

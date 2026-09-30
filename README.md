@@ -8,17 +8,17 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 
 - [base91](https://base91.sourceforge.net/) - v0.6.0
 - [duckdb](https://github.com/duckdb/duckdb) - v1.5.6
-- [expat](https://libexpat.github.io/) - v2.8.2
-- [graphviz](https://www.graphviz.org/) - 16.1.0
-- [llama.cpp](https://github.com/ggml-org/llama.cpp) - b10437
-- [NeuralAmpModelerCore](https://github.com/sdatkinson/NeuralAmpModelerCore) - v0.5.4
+- [expat](https://libexpat.github.io/) - v2.9.0
+- [graphviz](https://www.graphviz.org/) - v16.1.0
+- [llama.cpp](https://github.com/ggml-org/llama.cpp) - v0.7.0
+- [NeuralAmpModelerCore](https://github.com/sdatkinson/NeuralAmpModelerCore) - v0.6.0
 - [zstd](https://github.com/facebook/zstd) - v1.5.7
 - ...more to follow...
 
 Built with:
 
-- [emsdk](https://github.com/emscripten-core/emsdk) - v6.0.10
-- [vcpkg](https://github.com/microsoft/vcpkg) - 2026.07.29
+- [emsdk](https://github.com/emscripten-core/emsdk) - v6.0.13
+- [vcpkg](https://github.com/microsoft/vcpkg) - 2026.10.16
 
 ## Homepage and Documents
 
@@ -96,6 +96,23 @@ async function compressDecompress() {
 
 compressDecompress();
 ```
+
+### Resource management with `using`
+
+Every loader (`Base91`, `DuckDB`, `Expat`, `Graphviz`, `Llama`, `NeuralAmpModelerCore` and `Zstd`) returns a disposable singleton. With TypeScript 5.2+ (and `"ESNext.Disposable"` in `lib`) you can use `using` declarations; leaving the scope is equivalent to calling `X.unload()`, and resources are disposed in reverse declaration order:
+
+```ts
+import { Base91 } from "@hpcc-js/wasm-base91";
+import { Zstd } from "@hpcc-js/wasm-zstd";
+
+async function compressEncode(data: Uint8Array): Promise<string> {
+  using zstd = await Zstd.load();
+  using base91 = await Base91.load();
+  return base91.encode(zstd.compress(data));
+} // Base91.unload(), then Zstd.unload()
+```
+
+Because each instance is a shared singleton, disposing it unloads the module for every caller in the current JavaScript context. Only use `using` at the scope that owns the module's lifetime. Disposing an instance that has already been unloaded does nothing.
 
 ## Quick Migration from v1
 

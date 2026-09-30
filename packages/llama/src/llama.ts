@@ -8,6 +8,7 @@ import llamaMeta from "../../../vcpkg-overlays/llama-cpp/vcpkg.json" with { type
 //  Ref:  https://github.com/facebook/llama
 
 let g_llama: Promise<Llama> | undefined;
+let g_llamaInstance: Llama | undefined;
 
 export interface LlamaMainResult {
     exitCode: number;
@@ -218,7 +219,12 @@ export class Llama {
      */
     static load(): Promise<Llama> {
         if (!g_llama) {
-            g_llama = load().then((module: MainModule) => new Llama(module));
+            const loading: Promise<Llama> = load().then((module: MainModule) => {
+                const instance = new Llama(module);
+                if (g_llama === loading) g_llamaInstance = instance;
+                return instance;
+            });
+            g_llama = loading;
         }
         return g_llama!;
     }
@@ -229,13 +235,28 @@ export class Llama {
     static unload() {
         reset();
         g_llama = undefined;
+        g_llamaInstance = undefined;
+    }
+
+    /**
+     * Unloads the compiled wasm instance, equivalent to {@link Llama.unload}.
+     * Disposing an instance that has already been unloaded is a no-op.
+     */
+    dispose(): void {
+        if (g_llamaInstance === this) {
+            Llama.unload();
+        }
+    }
+
+    [Symbol.dispose](): void {
+        this.dispose();
     }
 
     /**
      * @returns The Llama c++ version
      */
     version(): string {
-        return llamaMeta.version;
+        return llamaMeta["version-semver"];
     }
 
     createChatSession(model: Uint8Array, options: LlamaChatSessionOptions = {}): LlamaChatSession {

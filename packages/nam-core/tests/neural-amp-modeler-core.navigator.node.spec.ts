@@ -27,6 +27,6 @@ describe("nam core without optional browser globals", () => {
         });
 
         expect(result.globalsAbsent).toBe(true);
-        expect(result.version.length).toBeGreaterThan(0);
+        expect(result.version).toBe("0.6.0");
     }, 60_000);
 });

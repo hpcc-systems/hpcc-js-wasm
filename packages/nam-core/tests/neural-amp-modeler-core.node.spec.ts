@@ -129,7 +129,27 @@ describe("nam-core", function () {
     it("version", async function () {
         const nam = await NeuralAmpModelerCore.load();
         expect(await NeuralAmpModelerCore.load()).to.equal(nam);
-        expect(nam.version()).to.match(/^\d+\.\d+\.\d+$/);
+        expect(nam.version()).to.equal("0.6.0");
+        NeuralAmpModelerCore.unload();
+    });
+
+    it("dispose unloads the current instance and supports using", async function () {
+        NeuralAmpModelerCore.unload();
+
+        let disposed: NeuralAmpModelerCore;
+        {
+            using nam = await NeuralAmpModelerCore.load();
+            disposed = nam;
+            expect(nam.version()).to.equal("0.6.0");
+        }
+        const reloaded = await NeuralAmpModelerCore.load();
+        expect(reloaded).to.not.equal(disposed);
+
+        disposed.dispose();
+        expect(await NeuralAmpModelerCore.load()).to.equal(reloaded);
+
+        reloaded[Symbol.dispose]();
+        expect(await NeuralAmpModelerCore.load()).to.not.equal(reloaded);
         NeuralAmpModelerCore.unload();
     });
 

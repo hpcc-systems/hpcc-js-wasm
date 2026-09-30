@@ -866,3 +866,27 @@ FROM duckdb_extensions();
         });
     });
 });
+
+describe("duckdb dispose", { concurrent: false }, () => {
+    it("dispose unloads the current instance and supports using", async () => {
+        DuckDB.unload();
+
+        let disposed: DuckDB;
+        {
+            using duckdb = await DuckDB.load();
+            disposed = duckdb;
+            using connection = duckdb.connect();
+            using result = connection.query("SELECT 42 AS answer")!;
+            expect(result.getValue(0, 0)).toBe(42);
+        }
+        const reloaded = await DuckDB.load();
+        expect(reloaded).not.toBe(disposed);
+
+        disposed.dispose();
+        expect(await DuckDB.load()).toBe(reloaded);
+
+        reloaded[Symbol.dispose]();
+        expect(await DuckDB.load()).not.toBe(reloaded);
+        DuckDB.unload();
+    });
+});

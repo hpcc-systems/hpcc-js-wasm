@@ -47,13 +47,33 @@ function buildSmolLmPrompt(messages: { role: "system" | "user" | "assistant"; co
 }
 
 describe("llama", () => {
+    it("dispose unloads the current instance and supports using", async () => {
+        Llama.unload();
+
+        let disposed: Llama;
+        {
+            using llama = await Llama.load();
+            disposed = llama;
+            expect(llama.version()).to.equal("0.7.0");
+        }
+        const reloaded = await Llama.load();
+        expect(reloaded).to.not.equal(disposed);
+
+        disposed.dispose();
+        expect(await Llama.load()).to.equal(reloaded);
+
+        reloaded[Symbol.dispose]();
+        expect(await Llama.load()).to.not.equal(reloaded);
+        Llama.unload();
+    });
+
     it("version", async () => {
         let llama = await Llama.load();
         let v = llama.version();
         const v1 = v;
         expect(v).to.be.a.string;
         expect(v).to.be.not.empty;
-        expect(v).to.equal("10058");    //  Update README.md with the new version!!!
+        expect(v).to.equal("0.7.0");
 
         llama = await Llama.load();
         v = llama.version();

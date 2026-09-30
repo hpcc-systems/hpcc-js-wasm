@@ -1,48 +1,73 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO ggml-org/llama.cpp
-    REF b${VERSION}
-    SHA512 d58a69aeb927e45e976a35f0118b38c5484d8d0f2efcc8f20e746b2ab96ea264d946602f7d1ca1f124f316a356f032c885ac39486682b542202f65f100982fc2
+    REF v${VERSION}
+    SHA512 88cd464c20370ecca12b174e36fa4f21b271f42851f474dd83b03191dd444dcc96543849a56aaa16a35368d09e5be9c3481bebe66c2d614a0965d882f530ca91
     HEAD_REF master
     PATCHES
-        wasm-fixes.diff
+        cmake-config.diff
+        pkgconfig.diff
+        unvendor.diff
 )
+file(REMOVE_RECURSE
+    "${SOURCE_PATH}/vendor/cpp-httplib"
+    "${SOURCE_PATH}/vendor/miniaudio"
+    "${SOURCE_PATH}/vendor/nlohmann"
+    "${SOURCE_PATH}/vendor/stb")
 
-vcpkg_check_features(OUT_FEATURE_OPTIONS options
-    FEATURES
-        download    LLAMA_CURL
-        tools       LLAMA_BUILD_TOOLS
-)
-
+# Upstream common_log spawns a worker thread; use the synchronous WASM logger.
 configure_file(
     "${CMAKE_CURRENT_LIST_DIR}/../../packages/llama/src-cpp/log_wasm.cpp"
     "${SOURCE_PATH}/common/log.cpp"
     COPYONLY
 )
-vcpkg_replace_string("${SOURCE_PATH}/common/log.cpp"
-"void common_log_set_verbosity_thold(int verbosity)
-{
-    common_log_verbosity_thold = verbosity;
-}
-"
-"int common_log_get_verbosity_thold(void)
-{
-    return common_log_verbosity_thold;
-}
 
-void common_log_set_verbosity_thold(int verbosity)
-{
-    common_log_verbosity_thold = verbosity;
-}
-"
+# Return to the caller after --help/--completion-bash instead of exiting the WASM runtime.
+vcpkg_replace_string("${SOURCE_PATH}/common/arg.cpp"
+"bool common_params_parse(int argc, char ** argv, common_params & params, llama_example ex, void(*print_usage)(int, char **)) {"
+"extern bool g_help_was_printed;
+
+bool common_params_parse(int argc, char ** argv, common_params & params, llama_example ex, void(*print_usage)(int, char **)) {"
+)
+vcpkg_replace_string("${SOURCE_PATH}/common/arg.cpp"
+"        if (ctx_arg.params.usage) {
+            common_params_print_usage(ctx_arg);
+            if (ctx_arg.print_usage) {
+                ctx_arg.print_usage(argc, argv);
+            }
+            common_log_flush(common_log_main());
+            exit(0);
+        }
+        if (ctx_arg.params.completion) {
+            common_params_print_completion(ctx_arg);
+            exit(0);
+        }"
+"        if (ctx_arg.params.usage) {
+            g_help_was_printed = true;
+            common_params_print_usage(ctx_arg);
+            if (ctx_arg.print_usage) {
+                ctx_arg.print_usage(argc, argv);
+            }
+            common_log_flush(common_log_main());
+            return false;
+        }
+        if (ctx_arg.params.completion) {
+            g_help_was_printed = true;
+            common_params_print_completion(ctx_arg);
+            return false;
+        }"
 )
 
-configure_file(
-    "${CMAKE_CURRENT_LIST_DIR}/arg.cpp"
-    "${SOURCE_PATH}/common/arg.cpp"
-    COPYONLY
-)
+vcpkg_replace_string("${SOURCE_PATH}/src/llama-graph.cpp"
+"    params = {};
 
+    inputs.clear();"
+"#if !defined(__EMSCRIPTEN__)
+    params = {};
+#endif
+
+    inputs.clear();"
+)
 vcpkg_replace_string("${SOURCE_PATH}/ggml/src/ggml-backend-dl.h"
 "#else
 #    include <dlfcn.h>
@@ -143,17 +168,24 @@ const char * dl_error() {
 #endif"
 )
 
+vcpkg_check_features(OUT_FEATURE_OPTIONS options
+    FEATURES
+        server      LLAMA_BUILD_SERVER
+        tools       LLAMA_BUILD_TOOLS
+)
+
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
         ${options}
         -DGGML_CCACHE=OFF
-        -DGGML_OPENMP=ON
-        -DLLAMA_ALL_WARNINGS=OFF
+        -DLLAMA_BUILD_IS_DEV=OFF
         -DLLAMA_BUILD_APP=OFF
+        -DLLAMA_BUILD_UI=OFF
+        -DLLAMA_USE_PREBUILT_UI=OFF
+        -DLLAMA_ALL_WARNINGS=OFF
         -DLLAMA_BUILD_TESTS=OFF
         -DLLAMA_BUILD_EXAMPLES=OFF
-        -DLLAMA_BUILD_SERVER=OFF
         -DLLAMA_USE_SYSTEM_GGML=OFF
         -DLLAMA_WASM_MEM64=OFF
         -DVCPKG_LOCK_FIND_PACKAGE_Git=OFF
@@ -161,26 +193,15 @@ vcpkg_cmake_configure(
 
 vcpkg_cmake_install()
 
-# llama-common has static dependencies not installed by upstream CMake install.
-# Install them so downstream consumers can link parser symbols from arg.cpp.
 file(INSTALL
     "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel/common/libllama-common-base.a"
-    DESTINATION "${CURRENT_PACKAGES_DIR}/lib"
-)
-file(INSTALL
-    "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel/vendor/cpp-httplib/libcpp-httplib.a"
     DESTINATION "${CURRENT_PACKAGES_DIR}/lib"
 )
 file(INSTALL
     "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-dbg/common/libllama-common-base.a"
     DESTINATION "${CURRENT_PACKAGES_DIR}/debug/lib"
 )
-file(INSTALL
-    "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-dbg/vendor/cpp-httplib/libcpp-httplib.a"
-    DESTINATION "${CURRENT_PACKAGES_DIR}/debug/lib"
-)
 
-# Install common header files
 file(GLOB COMMON_HEADERS "${SOURCE_PATH}/common/*.h")
 file(INSTALL ${COMMON_HEADERS} DESTINATION "${CURRENT_PACKAGES_DIR}/include/llama-cpp/common")
 
@@ -188,73 +209,34 @@ vcpkg_cmake_config_fixup(CONFIG_PATH "lib/cmake/llama")
 vcpkg_copy_pdbs()
 vcpkg_fixup_pkgconfig()
 
-set(llama_config "${CURRENT_PACKAGES_DIR}/share/${PORT}/llama-config.cmake")
-vcpkg_replace_string("${llama_config}"
-"set(LLAMA_BIN_DIR \"\${PACKAGE_PREFIX_DIR}/bin\")
-
-find_package(ggml REQUIRED HINTS \${LLAMA_LIB_DIR}/cmake)
-"
-"set(LLAMA_BIN_DIR \"\${PACKAGE_PREFIX_DIR}/bin\")
-
-find_library(ggml_LIBRARY
-    NAMES ggml
-    REQUIRED
-    HINTS \${LLAMA_LIB_DIR}
-    NO_CMAKE_FIND_ROOT_PATH
-)
-find_library(ggml_base_LIBRARY
-    NAMES ggml-base
-    REQUIRED
-    HINTS \${LLAMA_LIB_DIR}
-    NO_CMAKE_FIND_ROOT_PATH
-)
-find_library(ggml_cpu_LIBRARY
-    NAMES ggml-cpu
-    REQUIRED
-    HINTS \${LLAMA_LIB_DIR}
-    NO_CMAKE_FIND_ROOT_PATH
-)
-"
-)
-vcpkg_replace_string("${llama_config}"
-"INTERFACE_LINK_LIBRARIES \"ggml::ggml;ggml::ggml-base;\""
-"INTERFACE_LINK_LIBRARIES \"\${ggml_LIBRARY};\${ggml_base_LIBRARY};\${ggml_cpu_LIBRARY}\""
-)
-
-foreach(pkgconfig_path IN ITEMS
-    "${CURRENT_PACKAGES_DIR}/lib/pkgconfig/llama.pc"
-    "${CURRENT_PACKAGES_DIR}/debug/lib/pkgconfig/llama.pc")
-    vcpkg_replace_string("${pkgconfig_path}" "Requires: ggml\n" "")
-    vcpkg_replace_string("${pkgconfig_path}" "Libs: \"-L\${libdir}\" -lggml -lggml-base -lllama" "Libs: \"-L\${libdir}\" -lllama -lggml-cpu -lggml -lggml-base")
-endforeach()
-
 file(INSTALL "${SOURCE_PATH}/gguf-py/gguf" DESTINATION "${CURRENT_PACKAGES_DIR}/tools/${PORT}/gguf-py")
-set(convert_hf_to_gguf_installed "${CURRENT_PACKAGES_DIR}/bin/convert_hf_to_gguf.py")
-set(convert_hf_to_gguf_tool "${CURRENT_PACKAGES_DIR}/tools/${PORT}/convert-hf-to-gguf.py")
-if(EXISTS "${convert_hf_to_gguf_installed}")
-    file(RENAME "${convert_hf_to_gguf_installed}" "${convert_hf_to_gguf_tool}")
-else()
-    file(INSTALL "${SOURCE_PATH}/convert_hf_to_gguf.py" DESTINATION "${CURRENT_PACKAGES_DIR}/tools/${PORT}")
-    file(RENAME "${CURRENT_PACKAGES_DIR}/tools/${PORT}/convert_hf_to_gguf.py" "${convert_hf_to_gguf_tool}")
-endif()
-file(REMOVE "${CURRENT_PACKAGES_DIR}/debug/bin/convert_hf_to_gguf.py")
+file(INSTALL "${SOURCE_PATH}/conversion" DESTINATION "${CURRENT_PACKAGES_DIR}/tools/${PORT}")
+file(INSTALL "${SOURCE_PATH}/convert_hf_to_gguf.py" DESTINATION "${CURRENT_PACKAGES_DIR}/tools/${PORT}" RENAME convert-hf-to-gguf.py)
 
 if("tools" IN_LIST FEATURES)
+    set(tool_names
+        llama-batched-bench
+        llama-bench
+        llama-completion
+        llama-fit-params
+        llama-gguf-split
+        llama-imatrix
+        llama-mtmd-cli
+        llama-perplexity
+        llama-quantize
+        llama-results
+        llama-tokenize
+        llama-tts
+    )
+    # These tools require the CPU backend, which ggml disables for MSVC arm64.
+    if(NOT (VCPKG_TARGET_IS_WINDOWS AND NOT VCPKG_TARGET_IS_MINGW AND VCPKG_TARGET_ARCHITECTURE STREQUAL "arm64"))
+        list(APPEND tool_names llama-cvector-generator llama-export-lora)
+    endif()
+    if("server" IN_LIST FEATURES)
+        list(APPEND tool_names llama-cli llama-server)
+    endif()
     vcpkg_copy_tools(
-        TOOL_NAMES
-            llama-batched-bench
-            llama-bench
-            llama-cli
-            llama-cvector-generator
-            llama-export-lora
-            llama-gguf-split
-            llama-imatrix
-            llama-mtmd-cli
-            llama-perplexity
-            llama-quantize
-            llama-run
-            llama-tokenize
-            llama-tts
+        TOOL_NAMES ${tool_names}
         AUTO_CLEAN
     )
 endif()
@@ -265,4 +247,17 @@ vcpkg_clean_executables_in_bin(FILE_NAMES none)
 
 set(gguf-py-license "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel/gguf-py LICENSE")
 file(COPY_FILE "${SOURCE_PATH}/gguf-py/LICENSE" "${gguf-py-license}")
-vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE" "${gguf-py-license}")
+set(copyright_files
+    "${SOURCE_PATH}/LICENSE"
+    "${gguf-py-license}"
+    "${SOURCE_PATH}/vendor/sheredom/subprocess.h"
+)
+if("tools" IN_LIST FEATURES)
+    list(APPEND copyright_files
+        "${SOURCE_PATH}/vendor/hash/xxhash/LICENSE"
+        "${SOURCE_PATH}/vendor/hash/sha1/sha1.h"
+        "${SOURCE_PATH}/vendor/hash/sha256/sha256.h"
+        "${SOURCE_PATH}/vendor/hash/rotate-bits/LICENSE.md"
+    )
+endif()
+vcpkg_install_copyright(FILE_LIST ${copyright_files})

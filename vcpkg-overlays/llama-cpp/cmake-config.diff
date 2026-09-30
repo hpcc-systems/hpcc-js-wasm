@@ -1,0 +1,45 @@
+diff --git a/cmake/llama-config.cmake.in b/cmake/llama-config.cmake.in
+index 6500203..84a876d 100644
+--- a/cmake/llama-config.cmake.in
++++ b/cmake/llama-config.cmake.in
+@@ -6,10 +6,29 @@ set(LLAMA_SHARED_LIB   @BUILD_SHARED_LIBS@)
+ @PACKAGE_INIT@
+ 
+ set_and_check(LLAMA_INCLUDE_DIR "@PACKAGE_LLAMA_INCLUDE_INSTALL_DIR@")
+ set_and_check(LLAMA_LIB_DIR     "@PACKAGE_LLAMA_LIB_INSTALL_DIR@")
+ set(LLAMA_BIN_DIR "@PACKAGE_LLAMA_BIN_INSTALL_DIR@")
+ 
+-find_package(ggml REQUIRED HINTS ${LLAMA_LIB_DIR}/cmake)
++find_library(ggml_LIBRARY
++    NAMES ggml
++    REQUIRED
++    HINTS ${LLAMA_LIB_DIR}
++    NO_CMAKE_FIND_ROOT_PATH
++)
++
++find_library(ggml_base_LIBRARY
++    NAMES ggml-base
++    REQUIRED
++    HINTS ${LLAMA_LIB_DIR}
++    NO_CMAKE_FIND_ROOT_PATH
++)
++
++find_library(ggml_cpu_LIBRARY
++    NAMES ggml-cpu
++    REQUIRED
++    HINTS ${LLAMA_LIB_DIR}
++    NO_CMAKE_FIND_ROOT_PATH
++)
+ 
+ find_library(llama_LIBRARY llama
+     REQUIRED
+@@ -22,5 +41,5 @@
+-    set_target_properties(llama
+-        PROPERTIES
+-            INTERFACE_INCLUDE_DIRECTORIES "${LLAMA_INCLUDE_DIR}"
+-            INTERFACE_LINK_LIBRARIES "ggml::ggml;ggml::ggml-base;"
++    set_target_properties(llama
++        PROPERTIES
++            INTERFACE_INCLUDE_DIRECTORIES "${LLAMA_INCLUDE_DIR}"
++            INTERFACE_LINK_LIBRARIES "${ggml_LIBRARY};${ggml_base_LIBRARY};${ggml_cpu_LIBRARY}"
+             IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"

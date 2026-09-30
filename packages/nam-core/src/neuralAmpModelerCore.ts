@@ -4,6 +4,7 @@ import type { MainModule, CNamModel } from "../types/namcorelib.js";
 import { MainModuleEx } from "@hpcc-js/wasm-util";
 
 let g_neuralAmpModelerCore: Promise<NeuralAmpModelerCore> | undefined;
+let g_neuralAmpModelerCoreInstance: NeuralAmpModelerCore | undefined;
 
 export type NamAudioBuffer = ArrayLike<number>;
 
@@ -155,7 +156,12 @@ export class NeuralAmpModelerCore {
 
     static load(): Promise<NeuralAmpModelerCore> {
         if (!g_neuralAmpModelerCore) {
-            g_neuralAmpModelerCore = (load() as Promise<MainModule>).then((module) => new NeuralAmpModelerCore(module));
+            const loading: Promise<NeuralAmpModelerCore> = (load() as Promise<MainModule>).then((module) => {
+                const instance = new NeuralAmpModelerCore(module);
+                if (g_neuralAmpModelerCore === loading) g_neuralAmpModelerCoreInstance = instance;
+                return instance;
+            });
+            g_neuralAmpModelerCore = loading;
         }
         return g_neuralAmpModelerCore;
     }
@@ -163,6 +169,21 @@ export class NeuralAmpModelerCore {
     static unload(): void {
         reset();
         g_neuralAmpModelerCore = undefined;
+        g_neuralAmpModelerCoreInstance = undefined;
+    }
+
+    /**
+     * Unloads the compiled wasm instance, equivalent to {@link NeuralAmpModelerCore.unload}.
+     * Disposing an instance that has already been unloaded is a no-op.
+     */
+    dispose(): void {
+        if (g_neuralAmpModelerCoreInstance === this) {
+            NeuralAmpModelerCore.unload();
+        }
+    }
+
+    [Symbol.dispose](): void {
+        this.dispose();
     }
 
     version(): string {

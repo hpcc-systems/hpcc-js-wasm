@@ -281,6 +281,23 @@ Subgraph wrappers follow the same rule. The underlying subgraph _data_ is
 owned by the parent `Graph` and freed automatically when the parent is deleted;
 only the thin JS wrapper needs an explicit `delete()` / `using` block.
 
+The `Graphviz` instance itself is also disposable. Leaving its scope is
+equivalent to calling `Graphviz.unload()`, so declare it before the graphs that
+depend on it; `using` disposes in reverse order:
+
+```typescript
+{
+  using graphviz = await Graphviz.load();
+  using graph = graphviz.createGraph("G");
+  graph.addEdge("a", "b");
+  const svg = graph.layout();
+} // graph is deleted first, then Graphviz.unload() runs
+```
+
+`Graphviz.load()` returns a singleton, so disposing it unloads the module for
+every caller in the current JavaScript context. Disposing an instance that has
+already been unloaded does nothing.
+
 <!--@include: ../../docs/graphviz/src/graphviz/README.md-->
 
 ## Reference

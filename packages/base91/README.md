@@ -43,6 +43,22 @@ const decoded_data = await base91.decode(encoded_data);
 
 <Base91Demo />
 
+## Resource management
+
+`Base91` supports `dispose()` and TypeScript's `using` declarations (TypeScript 5.2+ with `"ESNext.Disposable"` in `lib`). Leaving the scope is equivalent to calling `Base91.unload()`:
+
+```typescript
+import { Base91 } from "@hpcc-js/wasm-base91";
+
+{
+    using base91 = await Base91.load();
+    const encoded_data = base91.encode(data);
+    const decoded_data = base91.decode(encoded_data);
+} // Base91.unload() runs here
+```
+
+`Base91.load()` returns a singleton, so disposing it unloads the module for every caller in the current JavaScript context. Disposing an instance that has already been unloaded does nothing.
+
 <!--@include: ../../docs/base91/src/base91/README.md-->
 
 ## Reference

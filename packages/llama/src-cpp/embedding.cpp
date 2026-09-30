@@ -145,7 +145,12 @@ namespace embedding
         size_t n_tokens = tokens.size();
         for (size_t i = 0; i < n_tokens; i++)
         {
-            common_batch_add(batch, tokens[i], i, {seq_id}, true);
+            const int32_t idx = batch.n_tokens++;
+            batch.token[idx] = tokens[i];
+            batch.pos[idx] = static_cast<llama_pos>(i);
+            batch.n_seq_id[idx] = 1;
+            batch.seq_id[idx][0] = seq_id;
+            batch.logits[idx] = 1;
         }
     }
 
@@ -400,7 +405,7 @@ namespace embedding
                 batch_decode(ctx, batch, out, s, n_embd, params.embd_normalize);
                 e += pooling_type == LLAMA_POOLING_TYPE_NONE ? batch.n_tokens : s;
                 s = 0;
-                common_batch_clear(batch);
+                batch.n_tokens = 0;
             }
 
             // add to batch

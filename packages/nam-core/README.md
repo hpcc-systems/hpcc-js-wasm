@@ -175,7 +175,23 @@ NeuralAmpModelerCore.unload();
 
 ## Memory Management
 
-`NeuralAmpModelerCore.load()` returns a singleton for the current JavaScript context. Each loaded model owns a WASM-side DSP instance; call `model.delete()` when finished, or use TypeScript explicit resource management where available.
+`NeuralAmpModelerCore.load()` returns a singleton for the current JavaScript context. Each loaded model owns a WASM-side DSP instance; call `model.delete()` when finished, or use TypeScript explicit resource management where available. The `NeuralAmpModelerCore` instance is also disposable: `dispose()` (or leaving a `using` scope) is equivalent to `NeuralAmpModelerCore.unload()`.
+
+With `using` declarations (TypeScript 5.2+ with `"ESNext.Disposable"` in `lib`), the Quick Start cleanup becomes automatic. Resources are disposed in reverse order, so the model is deleted before the module is unloaded:
+
+```typescript
+import { NeuralAmpModelerCore } from "@hpcc-js/wasm-nam-core";
+
+{
+  using nam = await NeuralAmpModelerCore.load();
+  using model = nam.loadModel(modelBytes, { prewarm: false });
+
+  model.reset(48000, 2048);
+  const output = model.process(new Float32Array(2048 * model.inputChannels()), 2048);
+} // model.delete(), then NeuralAmpModelerCore.unload()
+```
+
+Because the instance is a singleton, disposing it unloads the module for every caller in the current JavaScript context. Disposing an instance that has already been unloaded does nothing.
 
 ## Reference
 

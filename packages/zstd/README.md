@@ -141,6 +141,22 @@ worker.postMessage(data);
 
 `Zstd.load()` returns a singleton within the current JavaScript context. Compression and decompression contexts are stateful. Callers must serialize streaming operations on the shared instance—do not interleave concurrent streams on the same `Zstd` object. Prefer `resetCompression()` / `resetDecompression()` over the legacy `reset()` so one context is not cleared accidentally with the other.
 
+## Resource management
+
+`Zstd` supports `dispose()` and TypeScript's `using` declarations (TypeScript 5.2+ with `"ESNext.Disposable"` in `lib`). Leaving the scope is equivalent to calling `Zstd.unload()`:
+
+```typescript
+import { Zstd } from "@hpcc-js/wasm-zstd";
+
+{
+    using zstd = await Zstd.load();
+    const compressed_data = zstd.compress(data);
+    const decompressed_data = zstd.decompress(compressed_data);
+} // Zstd.unload() runs here
+```
+
+Because the instance is a singleton, disposing it unloads the module for every caller in the current JavaScript context. Disposing an instance that has already been unloaded does nothing.
+
 <!--@include: ../../docs/zstd/src/zstd/README.md-->
 
 ## Reference

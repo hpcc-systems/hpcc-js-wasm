@@ -54,6 +54,22 @@ expat.parse(xml, callback);
 
 <ExpatDemo />
 
+## Resource management
+
+`Expat` supports `dispose()` and TypeScript's `using` declarations (TypeScript 5.2+ with `"ESNext.Disposable"` in `lib`). Leaving the scope is equivalent to calling `Expat.unload()`:
+
+```typescript
+import { Expat, StackParser } from "@hpcc-js/wasm-expat";
+
+{
+    using expat = await Expat.load();
+    const parser = new StackParser();
+    expat.parse(xml, parser);
+} // Expat.unload() runs here
+```
+
+`Expat.load()` returns a singleton, so disposing it unloads the module for every caller in the current JavaScript context. Disposing an instance that has already been unloaded does nothing.
+
 <!--@include: ../../docs/expat/src/expat/README.md-->
 
 ## Reference

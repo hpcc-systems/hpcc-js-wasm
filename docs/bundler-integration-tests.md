@@ -143,6 +143,7 @@ The tests are integrated into the GitHub Actions workflow (`test-pr.yml`) and ru
 **Module Resolution Errors**  
 - Verify workspace dependencies are properly linked
 - Check that packages are built before running tests
+- If Webpack cannot resolve `llamalib.wasm` from `packages/llama/dist/llamalib.js`, rebuild the Llama package. Its copied Emscripten worker glue must not reference an external WASM file; the package embeds the WASM in its bundled entry point.
 
 **Timeout Errors**
 - Bundling operations can be slow; tests have extended timeouts

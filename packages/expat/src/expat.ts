@@ -22,6 +22,7 @@ function parseAttrs(attrs: map_string_string): Attributes {
 }
 
 let g_expat: Promise<Expat> | undefined;
+let g_expatInstance: Expat | undefined;
 
 /**
  * Expat XML parser WASM library, provides a simplified wrapper around the Expat XML Parser library.  
@@ -68,7 +69,12 @@ export class Expat {
      */
     static load(): Promise<Expat> {
         if (!g_expat) {
-            g_expat = load().then((module: MainModule) => new Expat(module));
+            const loading: Promise<Expat> = load().then((module: MainModule) => {
+                const instance = new Expat(module);
+                if (g_expat === loading) g_expatInstance = instance;
+                return instance;
+            });
+            g_expat = loading;
         }
         return g_expat!;
     }
@@ -79,6 +85,21 @@ export class Expat {
     static unload() {
         reset();
         g_expat = undefined;
+        g_expatInstance = undefined;
+    }
+
+    /**
+     * Unloads the compiled wasm instance, equivalent to {@link Expat.unload}.
+     * Disposing an instance that has already been unloaded is a no-op.
+     */
+    dispose(): void {
+        if (g_expatInstance === this) {
+            Expat.unload();
+        }
+    }
+
+    [Symbol.dispose](): void {
+        this.dispose();
     }
 
     /**

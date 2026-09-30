@@ -6,6 +6,7 @@ import { MainModuleEx } from "@hpcc-js/wasm-util";
 //  Ref:  http://base91.sourceforge.net/#a5
 
 let g_base91: Promise<Base91> | undefined;
+let g_base91Instance: Base91 | undefined;
 
 /**
  * Base 91 WASM library, similar to Base 64 but uses more characters resulting in smaller strings.
@@ -19,6 +20,12 @@ let g_base91: Promise<Base91> | undefined;
  * 
  * const encoded_data = await base91.encode(data);
  * const decoded_data = await base91.decode(encoded_data);
+ * ```
+ *
+ * The instance is disposable; disposing it unloads the shared wasm module:
+ *
+ * ```ts
+ * using base91 = await Base91.load();
  * ```
  */
 export class Base91 {
@@ -42,7 +49,12 @@ export class Base91 {
      */
     static load(): Promise<Base91> {
         if (!g_base91) {
-            g_base91 = load().then((module: MainModule) => new Base91(module));
+            const loading: Promise<Base91> = load().then((module: MainModule) => {
+                const instance = new Base91(module);
+                if (g_base91 === loading) g_base91Instance = instance;
+                return instance;
+            });
+            g_base91 = loading;
         }
         return g_base91!;
     }
@@ -56,6 +68,21 @@ export class Base91 {
             base91?._base91?.delete();
         });
         g_base91 = undefined;
+        g_base91Instance = undefined;
+    }
+
+    /**
+     * Unloads the compiled wasm instance, equivalent to {@link Base91.unload}.
+     * Disposing an instance that has already been unloaded is a no-op.
+     */
+    dispose(): void {
+        if (g_base91Instance === this) {
+            Base91.unload();
+        }
+    }
+
+    [Symbol.dispose](): void {
+        this.dispose();
     }
 
     /**

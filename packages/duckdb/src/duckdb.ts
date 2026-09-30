@@ -3,6 +3,7 @@ import load, { reset } from "../../../build/packages/duckdb/duckdblib.wasm";
 import type { MainModule, DuckDB as CPPDuckDB } from "../types/duckdblib.js";
 
 let g_duckdb: Promise<DuckDB> | undefined;
+let g_duckdbInstance: DuckDB | undefined;
 const textEncoder = new TextEncoder();
 
 /**
@@ -122,7 +123,12 @@ export class DuckDB {
      */
     static load(): Promise<DuckDB> {
         if (!g_duckdb) {
-            g_duckdb = load().then((module: MainModule) => new DuckDB(module));
+            const loading: Promise<DuckDB> = load().then((module: MainModule) => {
+                const instance = new DuckDB(module);
+                if (g_duckdb === loading) g_duckdbInstance = instance;
+                return instance;
+            });
+            g_duckdb = loading;
         }
         return g_duckdb!;
     }
@@ -151,6 +157,30 @@ export class DuckDB {
             }
         });
         g_duckdb = undefined;
+        g_duckdbInstance = undefined;
+    }
+
+    /**
+     * Unloads the compiled WASM instance, equivalent to {@link DuckDB.unload}.
+     * Disposing an instance that has already been unloaded is a no-op.
+     *
+     * @example
+     * ```ts
+     * {
+     *     using duckdb = await DuckDB.load();
+     *     using connection = duckdb.connect();
+     *     using result = connection.query("SELECT 42 AS answer");
+     * } // result, connection and the WASM instance are released here
+     * ```
+     */
+    dispose(): void {
+        if (g_duckdbInstance === this) {
+            DuckDB.unload();
+        }
+    }
+
+    [Symbol.dispose](): void {
+        this.dispose();
     }
 
     /**

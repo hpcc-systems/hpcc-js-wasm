@@ -71,6 +71,26 @@ describe("zstd", function () {
         Zstd.unload();
     });
 
+    it("dispose unloads the current instance and supports using", async function () {
+        Zstd.unload();
+
+        let disposed: Zstd;
+        {
+            using zstd = await Zstd.load();
+            disposed = zstd;
+            expect(zstd.version()).to.equal("1.5.7");
+        }
+        const reloaded = await Zstd.load();
+        expect(reloaded).to.not.equal(disposed);
+
+        disposed.dispose();
+        expect(await Zstd.load()).to.equal(reloaded);
+
+        reloaded[Symbol.dispose]();
+        expect(await Zstd.load()).to.not.equal(reloaded);
+        Zstd.unload();
+    });
+
     it("version", async function () {
         let zstd = await Zstd.load();
         let v = zstd.version();
