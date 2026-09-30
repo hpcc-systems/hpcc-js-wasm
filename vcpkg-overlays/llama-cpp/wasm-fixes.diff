@@ -28,15 +28,13 @@ diff --git a/common/common.cpp b/common/common.cpp
 index 1234567..abcdefg 100644
 --- a/common/common.cpp
 +++ b/common/common.cpp
-@@ -984,7 +984,7 @@ std::string fs_get_cache_directory() {
-         cache_directory = std::getenv("HOME") + std::string("/Library/Caches/");
- #elif defined(_WIN32)
-         cache_directory = std::getenv("LOCALAPPDATA");
--#elif defined(__EMSCRIPTEN__)
--        GGML_ABORT("not implemented on this platform");
+@@ -994,6 +994,8 @@ std::filesystem::path fs_get_cache_directory() {
+     }
+ #elif defined(__APPLE__)
+     cache_directory = get_home_directory() / "Library/Caches";
 +#elif defined(__EMSCRIPTEN__)
-+        cache_directory = "/tmp/llama-cache/";
++    cache_directory = "/tmp/llama-cache";
  #else
- #  error Unknown architecture
- #endif
+     cache_directory = common_get_path_from_env("XDG_CACHE_HOME");
+     if (cache_directory.empty()) {
 

@@ -1,4 +1,5 @@
 #include "log.h"
+#include "json.h"
 
 #include <cstdarg>
 #include <cstdio>
@@ -6,6 +7,7 @@
 #include <mutex>
 
 int common_log_verbosity_thold = LOG_DEFAULT_LLAMA;
+static bool common_log_jsonl = false;
 
 struct common_log
 {
@@ -36,6 +38,16 @@ static FILE *stream_for_level(enum ggml_log_level level)
 void common_log_set_verbosity_thold(int verbosity)
 {
     common_log_verbosity_thold = verbosity;
+}
+
+bool common_log_get_jsonl(void)
+{
+    return common_log_jsonl;
+}
+
+void common_log_set_jsonl(bool jsonl)
+{
+    common_log_jsonl = jsonl;
 }
 
 struct common_log *common_log_init()
@@ -146,6 +158,21 @@ void common_log_add(struct common_log *log, enum ggml_log_level level, const cha
     va_start(args, fmt);
     log_vprintf(log, level, fmt, args);
     va_end(args);
+}
+
+void common_log_add_json(struct common_log *log, const char *type, const common_json &data)
+{
+    if (!common_log_jsonl)
+    {
+        return;
+    }
+
+    const common_json full = {
+        {"type", type},
+        {"data", data},
+    };
+    const std::string text = full.dump_safe();
+    common_log_add(log, GGML_LOG_LEVEL_NONE, "%s\n", text.c_str());
 }
 
 void common_log_set_file(struct common_log *log, const char *path)

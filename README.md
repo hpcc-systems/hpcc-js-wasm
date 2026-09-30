@@ -10,7 +10,7 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 - [duckdb](https://github.com/duckdb/duckdb) - v1.5.6
 - [expat](https://libexpat.github.io/) - v2.8.2
 - [graphviz](https://www.graphviz.org/) - 16.1.0
-- [llama.cpp](https://github.com/ggml-org/llama.cpp) - b10437
+- [llama.cpp](https://github.com/ggml-org/llama.cpp) - b11282
 - [NeuralAmpModelerCore](https://github.com/sdatkinson/NeuralAmpModelerCore) - v0.5.4
 - [zstd](https://github.com/facebook/zstd) - v1.5.7
 - ...more to follow...

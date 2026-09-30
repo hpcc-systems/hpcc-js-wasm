@@ -2,10 +2,11 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO ggml-org/llama.cpp
     REF b${VERSION}
-    SHA512 d58a69aeb927e45e976a35f0118b38c5484d8d0f2efcc8f20e746b2ab96ea264d946602f7d1ca1f124f316a356f032c885ac39486682b542202f65f100982fc2
+    SHA512 abf39f7d28ec238fdab16938774e03e57d29096893f810480bce294a639cf86dc9095c5073255cdd315c4beb5c3f48e34ab9ace541560313341c120dbf4a16fa
     HEAD_REF master
     PATCHES
         wasm-fixes.diff
+        wasm-graph-reset.diff
 )
 
 vcpkg_check_features(OUT_FEATURE_OPTIONS options
@@ -225,7 +226,6 @@ foreach(pkgconfig_path IN ITEMS
     "${CURRENT_PACKAGES_DIR}/lib/pkgconfig/llama.pc"
     "${CURRENT_PACKAGES_DIR}/debug/lib/pkgconfig/llama.pc")
     vcpkg_replace_string("${pkgconfig_path}" "Requires: ggml\n" "")
-    vcpkg_replace_string("${pkgconfig_path}" "Libs: \"-L\${libdir}\" -lggml -lggml-base -lllama" "Libs: \"-L\${libdir}\" -lllama -lggml-cpu -lggml -lggml-base")
 endforeach()
 
 file(INSTALL "${SOURCE_PATH}/gguf-py/gguf" DESTINATION "${CURRENT_PACKAGES_DIR}/tools/${PORT}/gguf-py")

@@ -1,0 +1,12 @@
+--- a/src/llama-graph.cpp
++++ b/src/llama-graph.cpp
+@@ -1335,7 +1335,9 @@
+     t_sampled_logits.clear();
+     t_candidates.clear();
+ 
++#if !defined(__EMSCRIPTEN__)
+     params = {};
++#endif
+ 
+     inputs.clear();
+     fused_nodes.clear();
