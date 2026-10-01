@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-v1.6.2...wasm-llama-v1.6.3) (2026-10-01)
+
+
+### Bug Fixes
+
+* bump llama to latest version ([a7032c7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/a7032c7eb15632c9c01a93fdc47017ee3b8cb23c))
+
 ## [1.6.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-v1.6.1...wasm-llama-v1.6.2) (2026-09-29)
 
 
