@@ -318,6 +318,10 @@ lerna version --conventional-commits
 ```
 
 ### Publishing
+The `Release Please` workflow runs on `main`. When release-please creates one or more
+releases, that same run builds and publishes all newly versioned packages once
+with `lerna publish from-package`; package tag pushes do not start separate builds.
+
 ```bash
 # Build everything
 npm run build
