@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.21.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.20.2...wasm-duckdb-v1.21.0) (2026-10-21)
+
+
+### Features
+
+* add support for `using` and `dispose` ([b5d5255](https://github.com/hpcc-systems/hpcc-js-wasm/commit/b5d52556562e441c6466b9a2599ebd5c350b7e18))
+
 ## [1.20.2](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.20.1...wasm-duckdb-v1.20.2) (2026-09-29)
 
 

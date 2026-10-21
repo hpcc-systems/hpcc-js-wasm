@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.36.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.35.3...wasm-v2.36.0) (2026-10-21)
+
+
+### Features
+
+* add support for `using` and `dispose` ([b5d5255](https://github.com/hpcc-systems/hpcc-js-wasm/commit/b5d52556562e441c6466b9a2599ebd5c350b7e18))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.16.2 to ^1.17.0
+    * @hpcc-js/wasm-duckdb bumped from ^1.20.2 to ^1.21.0
+    * @hpcc-js/wasm-expat bumped from ^1.16.2 to ^1.17.0
+    * @hpcc-js/wasm-graphviz bumped from ^1.29.2 to ^1.30.0
+    * @hpcc-js/wasm-graphviz-cli bumped from ^1.11.3 to ^1.11.4
+    * @hpcc-js/wasm-zstd bumped from ^1.16.2 to ^1.17.0
+
 ## [2.35.3](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.35.2...wasm-v2.35.3) (2026-09-29)
 
 
