@@ -95,7 +95,7 @@ Unloads the WASM instance, equivalent to `DuckDB.unload()`. Disposing an instanc
 Returns the DuckDB version string.
 
 ```typescript
-console.log(duckdb.version()); // e.g., "v1.4.3"
+console.log(duckdb.version()); // e.g., "v2.0.0"
 ```
 
 ##### `numberOfThreads(): number`
@@ -133,7 +133,7 @@ duckdb.registerFileString("data.json", JSON.stringify(data));
 
 #### Query Execution
 
-##### `query(sql: string): MaterializedQueryResult`
+##### `query(sql: string): QueryResult`
 Executes a SQL query and returns the result.
 
 ```typescript
@@ -298,7 +298,7 @@ stmt.delete();
 ##### `getError(): string`
 Returns the error message if `hasError()` is true.
 
-### MaterializedQueryResult Class
+### QueryResult Class
 
 Represents the result of a query execution.
 

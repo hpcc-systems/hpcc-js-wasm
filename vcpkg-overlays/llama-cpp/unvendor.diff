@@ -2,8 +2,10 @@ diff --git a/common/http.h b/common/http.h
 index 878ad1c..87d5456 100644
 --- a/common/http.h
 +++ b/common/http.h
-@@ -1,6 +1,6 @@
+@@ -1,8 +1,8 @@
  #pragma once
+ 
+ #include "log.h"
  
 -#include <cpp-httplib/httplib.h>
 +#include <httplib.h>
@@ -96,3 +98,26 @@ index 4479daf..7ca6aa5 100644
 +    find_package(httplib CONFIG REQUIRED GLOBAL)
 +    add_library(cpp-httplib ALIAS httplib::httplib)
  endif()
+diff --git a/common/file-lock.cpp b/common/file-lock.cpp
+index 5d3d18a..215912e 100644
+--- a/common/file-lock.cpp
++++ b/common/file-lock.cpp
+@@ -99,6 +99,9 @@ common_file_lock::status common_file_lock::try_lock() {
+     }
+     LOG_ERR("%s: file locking failed (%d)\n", __func__, (int) GetLastError());
+     return status::error;
++#elif defined(__EMSCRIPTEN__)
++    // Emscripten does not provide a process-level file locking primitive.
++    return status::acquired;
+ #else
+     if (fd < 0) {
+         int open_flags = O_RDWR | O_CREAT | O_CLOEXEC;
+@@ -153,6 +156,6 @@ void common_file_lock::close() {
+         }
+         _close(fd);
+     }
+-#else
++#elif !defined(__EMSCRIPTEN__)
+     if (fd >= 0) {
+         if (locked) {
+             flock(fd, LOCK_UN);

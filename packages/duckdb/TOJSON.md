@@ -2,7 +2,7 @@
 
 This package provides two methods for converting query results to JSON:
 
-1. `MaterializedQueryResult.toJSON()` - Convert an existing result to JSON
+1. `QueryResult.toJSON()` - Convert an existing result to JSON
 2. `Connection.queryToJSON(sql)` - Execute a query and get JSON in one call (recommended)
 
 ## Usage Examples
@@ -36,7 +36,7 @@ console.log(data);
 // No need to call result.delete() - it's handled automatically!
 ```
 
-### Using toJSON on MaterializedQueryResult
+### Using toJSON on QueryResult
 
 ```javascript
 import { DuckDB } from '@hpcc-js/wasm-duckdb';
