@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-v1.7.0...wasm-llama-v1.8.0) (2026-11-01)
+
+
+### Features
+
+* bump versions to latest (security) ([0fba86f](https://github.com/hpcc-systems/hpcc-js-wasm/commit/0fba86f91ae4bb3dea3ac9e24154a270659c74be))
+
 ## [1.7.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-v1.6.2...wasm-llama-v1.7.0) (2026-10-21)
 
 

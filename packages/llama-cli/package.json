@@ -1,6 +1,6 @@
 {
     "name": "@hpcc-js/wasm-llama-cli",
-    "version": "1.4.4",
+    "version": "1.4.5",
     "description": "hpcc-js - WASM llama Cli",
     "type": "module",
     "bin": {
@@ -42,7 +42,7 @@
         "update-major": "npx -y npm-check-updates -u"
     },
     "dependencies": {
-        "@hpcc-js/wasm-llama": "1.7.0"
+        "@hpcc-js/wasm-llama": "1.8.0"
     },
     "devDependencies": {},
     "keywords": [

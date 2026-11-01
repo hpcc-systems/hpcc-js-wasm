@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-cli-v1.4.4...wasm-llama-cli-v1.4.5) (2026-11-01)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @hpcc-js/wasm-llama bumped from 1.7.0 to 1.8.0
+
 ## [1.4.4](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-cli-v1.4.3...wasm-llama-cli-v1.4.4) (2026-10-21)
 
 

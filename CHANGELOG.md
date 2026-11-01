@@ -8,6 +8,18 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.22.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.21.0...wasm-root-v4.22.0) (2026-11-01)
+
+
+### Features
+
+* bump versions to latest (security) ([0fba86f](https://github.com/hpcc-systems/hpcc-js-wasm/commit/0fba86f91ae4bb3dea3ac9e24154a270659c74be))
+
+
+### Bug Fixes
+
+* tagging caused an abundance of CI jobs ([d7ad6e3](https://github.com/hpcc-systems/hpcc-js-wasm/commit/d7ad6e326bca8a564d9cfb62298da8e47b874694))
+
 ## [4.21.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.20.2...wasm-root-v4.21.0) (2026-10-21)
 
 
