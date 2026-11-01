@@ -9,8 +9,6 @@
 
 #include <nlohmann/json.hpp>
 
-#include "duckdb/main/stream_query_result.hpp"
-
 // Statically initialize extensions without requiring SQL LOAD.
 #include "duckdb/main/extension/extension_loader.hpp"
 
@@ -20,6 +18,8 @@ extern "C"
 {
     // Defined by DUCKDB_CPP_EXTENSION_ENTRY(core_functions, loader) inside DuckDB's core_functions extension.
     void core_functions_duckdb_cpp_init(duckdb::ExtensionLoader &loader);
+    // Defined by DUCKDB_CPP_EXTENSION_ENTRY(json, loader) inside DuckDB's json extension.
+    void json_duckdb_cpp_init(duckdb::ExtensionLoader &loader);
 }
 
 class CoreFunctionsStaticExtension
@@ -33,6 +33,25 @@ public:
     std::string Name()
     {
         return "core_functions";
+    }
+
+    std::string Version() const
+    {
+        return "";
+    }
+};
+
+class JsonStaticExtension
+{
+public:
+    void Load(duckdb::ExtensionLoader &loader)
+    {
+        json_duckdb_cpp_init(loader);
+    }
+
+    std::string Name()
+    {
+        return "json";
     }
 
     std::string Version() const
@@ -119,7 +138,7 @@ namespace LogicalTypeHelper
 
     void setAlias(LogicalType &obj, const std::string &alias)
     {
-        obj.SetAlias(alias);
+        obj = obj.WithAlias(alias);
     }
 
     bool hasAlias(const LogicalType &obj)
@@ -161,22 +180,17 @@ namespace ErrorDataHelper
 
 namespace BaseQueryResultHelper
 {
-    uint32_t resultType(const BaseQueryResult &obj)
-    {
-        return (uint32_t)obj.type;
-    }
-
     uint32_t statementType(const BaseQueryResult &obj)
     {
-        return (uint32_t)obj.statement_type;
+        return (uint32_t)obj.GetStatementType();
     }
 
     emscripten::val columnNames(const BaseQueryResult &obj)
     {
         emscripten::val arr = emscripten::val::array();
-        for (auto &n : obj.names)
+        for (auto &n : obj.GetNames())
         {
-            arr.call<void>("push", emscripten::val(n));
+            arr.call<void>("push", emscripten::val(n.GetIdentifierName()));
         }
         return arr;
     }
@@ -184,7 +198,7 @@ namespace BaseQueryResultHelper
     emscripten::val columnTypes(const BaseQueryResult &obj)
     {
         emscripten::val arr = emscripten::val::array();
-        for (auto &t : obj.types)
+        for (auto &t : obj.GetTypes())
         {
             arr.call<void>("push", emscripten::val(t.ToString()));
         }
@@ -192,11 +206,11 @@ namespace BaseQueryResultHelper
     }
 }
 
-namespace MaterializedQueryResultHelper
+namespace QueryResultHelper
 {
-    emscripten::val GetValue(MaterializedQueryResult &obj, uint32_t column, uint32_t index)
+    emscripten::val GetValue(QueryResult &obj, uint32_t column, uint32_t index)
     {
-        Value val = obj.GetValue(column, index);
+        Value val = obj.Collection<ChunkFormat>().GetValue(column, index);
         if (val.IsNull())
         {
             return emscripten::val::null();
@@ -254,8 +268,25 @@ namespace MaterializedQueryResultHelper
         }
     }
 
-    std::string toJSON(MaterializedQueryResult &obj)
+    ColumnDataCollection &collection(QueryResult &obj)
     {
+        return obj.Collection<ChunkFormat>();
+    }
+
+    std::string columnName(QueryResult &obj, idx_t column)
+    {
+        return obj.ColumnName(column).GetIdentifierName();
+    }
+
+    uint32_t resultType(const QueryResult &)
+    {
+        // Preserve the legacy materialized-result value for DuckDB 2.x retained results.
+        return 0;
+    }
+
+    std::string toJSON(QueryResult &obj)
+    {
+        auto &collection = obj.Collection<ChunkFormat>();
         nlohmann::json result = nlohmann::json::array();
         const size_t rowCount = obj.RowCount();
         const size_t colCount = obj.ColumnCount();
@@ -265,8 +296,8 @@ namespace MaterializedQueryResultHelper
             nlohmann::json rowObj = nlohmann::json::object();
             for (size_t col = 0; col < colCount; ++col)
             {
-                Value val = obj.GetValue(col, row);
-                rowObj[obj.ColumnName(col)] = valueToJSON(val);
+                Value val = collection.GetValue(col, row);
+                rowObj[obj.ColumnName(col).GetIdentifierName()] = valueToJSON(val);
             }
             result.push_back(rowObj);
         }
@@ -277,7 +308,7 @@ namespace PreparedStatementHelper
 {
     QueryResult *executeValues(PreparedStatement &obj, vector<Value> &values)
     {
-        return obj.Execute(values, false).release();
+        return obj.Execute(values).release();
     }
 
     QueryResult *execute(PreparedStatement &obj, const emscripten::val &args)
@@ -291,7 +322,7 @@ namespace PreparedStatementHelper
             std::string error;
             if (!try_emval_to_duckdb_value(args[i], v, error))
             {
-                return new MaterializedQueryResult(ErrorData(error));
+                return new QueryResult(ErrorData(error));
             }
             values.push_back(std::move(v));
         }
@@ -303,7 +334,7 @@ namespace PreparedStatementHelper
         emscripten::val arr = emscripten::val::array();
         for (auto &n : obj.GetNames())
         {
-            arr.call<void>("push", emscripten::val(n));
+            arr.call<void>("push", emscripten::val(n.GetIdentifierName()));
         }
         return arr;
     }
@@ -330,7 +361,7 @@ namespace ConnectionHelper
     {
         return obj.Prepare(query).release();
     }
-    MaterializedQueryResult *query(Connection &obj, const string &query)
+    QueryResult *query(Connection &obj, const string &query)
     {
         return obj.Query(query).release();
     }
@@ -342,7 +373,7 @@ namespace ConnectionHelper
             auto err = result->GetError();
             throw std::runtime_error(err.c_str());
         }
-        return MaterializedQueryResultHelper::toJSON(*result);
+        return QueryResultHelper::toJSON(*result);
     }
 }
 namespace DuckDBHelper
@@ -351,6 +382,7 @@ namespace DuckDBHelper
     {
         auto retVal = new DuckDB(nullptr);
         retVal->LoadStaticExtension<CoreFunctionsStaticExtension>();
+        retVal->LoadStaticExtension<JsonStaticExtension>();
         return retVal;
     }
 
@@ -442,7 +474,6 @@ EMSCRIPTEN_BINDINGS(duckdblib_bindings)
         .function("hasError", &BaseQueryResult::HasError)
         .function("getError", &BaseQueryResult::GetError)
         .function("columnCount", &BaseQueryResult::ColumnCount)
-        .function("resultType", &BaseQueryResultHelper::resultType)
         .function("statementType", &BaseQueryResultHelper::statementType)
         .function("columnNames", &BaseQueryResultHelper::columnNames)
         .function("columnTypes", &BaseQueryResultHelper::columnTypes)
@@ -453,21 +484,18 @@ EMSCRIPTEN_BINDINGS(duckdblib_bindings)
         .function("stringify", &QueryResult::ToString)
         .function("print", &QueryResult::Print)
         .function("columnCount", &QueryResult::ColumnCount)
-        .function("columnName", &QueryResult::ColumnName)
+        .function("columnName", &QueryResultHelper::columnName)
+        .function("resultType", &QueryResultHelper::resultType)
+        .function("rowCount", &QueryResult::RowCount)
+        .function("collection", &QueryResultHelper::collection, return_value_policy::reference())
+        .function("getValue", &QueryResultHelper::GetValue)
+        .function("toJSON", &QueryResultHelper::toJSON)
 
         ;
 
     class_<ColumnDataCollection>("ColumnDataCollection")
         .function("count", &ColumnDataCollection::Count)
         .function("columnCount", &ColumnDataCollection::ColumnCount)
-
-        ;
-
-    class_<MaterializedQueryResult, base<QueryResult>>("MaterializedQueryResult")
-        .function("rowCount", &MaterializedQueryResult::RowCount)
-        .function("collection", &MaterializedQueryResult::Collection)
-        .function("getValue", &MaterializedQueryResultHelper::GetValue)
-        .function("toJSON", &MaterializedQueryResultHelper::toJSON)
 
         ;
 

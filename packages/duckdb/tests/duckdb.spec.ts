@@ -21,7 +21,7 @@ describe("duckdb", { concurrent: false }, () => {
             expect(typeof v).toBe("string");
             expect(v.length).toBeGreaterThan(0);
             expect(v).toMatch(/^v?\d/);
-            expect(v).toEqual("v1.5.6");    // Update README.md
+            expect(v).toEqual("v2.0.0");    // Update README.md
         });
 
         it("reports numberOfThreads", () => {
@@ -117,7 +117,7 @@ describe("duckdb", { concurrent: false }, () => {
         });
     });
 
-    describe("MaterializedQueryResult", () => {
+    describe("QueryResult", () => {
         it("provides row and column counts", () => {
             const con = duckdb.connect();
             const result = con.query("SELECT 1 AS a, 2 AS b UNION ALL SELECT 3, 4")!;
@@ -152,7 +152,7 @@ describe("duckdb", { concurrent: false }, () => {
             const result = con.query("SELECT 42")!;
 
             const resultType = result.resultType();
-            expect(typeof resultType).toBe("number");
+            expect(resultType).toBe(0);
 
             const stmtType = result.statementType();
             expect(typeof stmtType).toBe("number");

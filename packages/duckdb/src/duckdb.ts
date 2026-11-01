@@ -118,7 +118,7 @@ export class DuckDB {
      * @example
      * ```ts
      * const duckdb = await DuckDB.load();
-     * console.log(duckdb.version()); // e.g., "v1.4.3"
+     * console.log(duckdb.version()); // e.g., "v2.0.0"
      * ```
      */
     static load(): Promise<DuckDB> {
@@ -186,12 +186,12 @@ export class DuckDB {
     /**
      * Returns the DuckDB version string.
      * 
-     * @returns The version string (e.g., "v1.4.3")
+     * @returns The version string (e.g., "v2.0.0")
      * 
      * @example
      * ```ts
      * const duckdb = await DuckDB.load();
-     * console.log(duckdb.version()); // "v1.4.3"
+     * console.log(duckdb.version()); // "v2.0.0"
      * ```
      */
     version(): string {

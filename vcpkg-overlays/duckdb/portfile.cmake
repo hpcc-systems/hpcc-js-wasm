@@ -2,7 +2,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO duckdb/duckdb
     REF v${VERSION}
-    SHA512 ca6866600430b977a970fc3dd83911d719ffae7aae68f39106f3b6667f0b2d481290141f93e0bb35a595357c8d316859b133c08839fd6b1e1cdce7c9fb8b78ac
+    SHA512 1d726bb45b5d1c98ab4d31720534979cbe7d0c72dc777979fb42fa241b6b408959f6a6ed5db76e3cd3840df187f15f309364e931db257c45379101b24191d775
     HEAD_REF main
     PATCHES
         library-linkage.diff
@@ -23,8 +23,8 @@ if("excel" IN_LIST FEATURES)
     vcpkg_from_github(
         OUT_SOURCE_PATH DUCKDB_EXCEL_SOURCE_PATH
         REPO duckdb/duckdb-excel
-        REF f4c72b5ef04a03b3a78a95b5a2ee94ba93e3178d
-        SHA512 b21cbc339b5f02a00f8dc0bf992a2da25823981d3740dbc39fc8e6328dc9e4cc0084ca061dceb905fb21e640ed8d46b85c74b557620d88e0d34f806b456b41cf
+        REF 81bb84b115b97cc4edec4827714cac80da0127e1
+        SHA512 7c6ecd90d3c744bdf23605b14b961164cac894c831380889875d0eb175ecfb8521741d2628ed82ba8353a6e59de0208acd6d5df1fb63411205dad327008c62ce
         HEAD_REF main
         PATCHES
             library-linkage-excel.diff
@@ -45,8 +45,8 @@ if("httpfs" IN_LIST FEATURES)
     vcpkg_from_github(
         OUT_SOURCE_PATH DUCKDB_HTTPFS_SOURCE_PATH
         REPO duckdb/duckdb_httpfs
-        REF 4bc690dba4496c765777a0269d48fdbaff7cdc11
-        SHA512 25263a97034cd28a4f6de9333e6c704c8c998851b7fe7b1558346faf9c958e69b9d8fbb41a007803d7230fc0a57fa714098d887a3e62b5726b6106d23b413263
+        REF 77392a72077a85897db2519fae11e2c0da972b8a
+        SHA512 44362620cf28ef384b36cb51fdf6b1d4a497bd70434ba4ada5765225073c7300c9fae9fcad55ecda26457ee7d847a2d3bc7396d4b01c2ec1a3cb42ed289ed87
         HEAD_REF main
         PATCHES
             library-linkage-httpfs.diff
@@ -64,6 +64,11 @@ set(BUILD_EXTENSIONS "${FEATURES}")
 list(FILTER BUILD_EXTENSIONS INCLUDE REGEX "^(autocomplete|excel|httpfs|icu|json|tpcds|tpch)\$")
 
 string(COMPARE EQUAL "${VCPKG_LIBRARY_LINKAGE}" "static" EXTENSION_STATIC_BUILD)
+if(EXTENSION_STATIC_BUILD)
+    set(DUCKDB_BUILD_SHARED_LIBS OFF)
+else()
+    set(DUCKDB_BUILD_SHARED_LIBS ON)
+endif()
 
 if(VCPKG_CROSSCOMPILING AND NOT DEFINED DUCKDB_EXPLICIT_PLATFORM)
     set(DUCKDB_EXPLICIT_PLATFORM "")
@@ -101,19 +106,19 @@ vcpkg_cmake_configure(
             -DDUCKDB_EXPLICIT_PLATFORM=${DUCKDB_EXPLICIT_PLATFORM}
             -DDUCKDB_EXPLICIT_VERSION=v${VERSION}
             "-DBUILD_EXTENSIONS=${BUILD_EXTENSIONS}"
+            -DBUILD_SHARED_LIBS=${DUCKDB_BUILD_SHARED_LIBS}
             -DBUILD_SHELL=FALSE
             -DBUILD_UNITTESTS=OFF
             -DCMAKE_CXX_STANDARD=17
             -DCMAKE_JOB_POOL_LINK=console # Serialize linking to avoid OOM
-            -DENABLE_EXTENSION_AUTOINSTALL=1
-            -DENABLE_EXTENSION_AUTOLOADING=1
+            "-DDUCKDB_CAPABILITIES=httplib;loadable_extensions"
+            -DLINK_CORE_EXTENSIONS=ON
             -DENABLE_SANITIZER=OFF
             -DENABLE_THREAD_SANITIZER=OFF
             -DENABLE_UBSAN=OFF
-            "-DEXTENSION_CONFIG_BASE_DIR=${SOURCE_PATH}/OUT_OF_TREE"
+            "-DEXTENSION_CONFIG_BASE_DIR=${SOURCE_PATH}/.github/config/extensions"
             "-DEXTENSION_STATIC_BUILD=${EXTENSION_STATIC_BUILD}"
             "-DINSTALL_CMAKE_DIR:STRING=share/${PORT}"
-            -DWITH_INTERNAL_ICU=OFF
 )
 vcpkg_cmake_install()
 vcpkg_cmake_config_fixup()
