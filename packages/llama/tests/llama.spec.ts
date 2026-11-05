@@ -54,7 +54,7 @@ describe("llama", () => {
         {
             using llama = await Llama.load();
             disposed = llama;
-            expect(llama.version()).to.equal("0.8.0");
+            expect(llama.version()).to.equal("0.9.0");      // Update README.md to reflect the new version
         }
         const reloaded = await Llama.load();
         expect(reloaded).to.not.equal(disposed);
@@ -73,7 +73,7 @@ describe("llama", () => {
         const v1 = v;
         expect(v).to.be.a.string;
         expect(v).to.be.not.empty;
-        expect(v).to.equal("0.8.0");
+        expect(v).to.equal("0.9.0");    // Update README.md to reflect the new version
 
         llama = await Llama.load();
         v = llama.version();

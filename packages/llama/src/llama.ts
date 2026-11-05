@@ -10,6 +10,20 @@ import llamaMeta from "../../../vcpkg-overlays/llama-cpp/vcpkg.json" with { type
 let g_llama: Promise<Llama> | undefined;
 let g_llamaInstance: Llama | undefined;
 
+type FSCreateDataFile = (
+    parent: string,
+    name: string | undefined,
+    fileData: Uint8Array,
+    canRead: boolean,
+    canWrite: boolean,
+    canOwn: boolean
+) => void;
+
+function createDataFile(module: MainModule, ...args: Parameters<FSCreateDataFile>): void {
+    // Emscripten 7 emits undefined parameter types for this API's defaulted arguments.
+    (module.FS_createDataFile as unknown as FSCreateDataFile)(...args);
+}
+
 export interface LlamaMainResult {
     exitCode: number;
     stdout: string;
@@ -280,7 +294,7 @@ export class Llama {
         let mountedModel = false;
         if (model && !args.includes("-m") && !args.includes("--model")) {
             try {
-                this._module.FS_createDataFile("/", "mainModel.gguf", model, true, false, false);
+                createDataFile(this._module, "/", "mainModel.gguf", model, true, false, false);
                 mountedModel = true;
             } catch (e) {
                 console.error(e);
@@ -355,7 +369,7 @@ export class Llama {
      */
     embedding(text: string, model: Uint8Array, format: string = "array"): number[][] {
         try {
-            this._module.FS_createDataFile("/", "embeddingModel.gguf", model, true, false, false);
+            createDataFile(this._module, "/", "embeddingModel.gguf", model, true, false, false);
         } catch (e) {
             console.error(e);
         }

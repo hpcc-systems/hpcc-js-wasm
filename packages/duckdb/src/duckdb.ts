@@ -6,6 +6,20 @@ let g_duckdb: Promise<DuckDB> | undefined;
 let g_duckdbInstance: DuckDB | undefined;
 const textEncoder = new TextEncoder();
 
+type FSCreateDataFile = (
+    parent: string,
+    name: string | undefined,
+    fileData: Uint8Array,
+    canRead: boolean,
+    canWrite: boolean,
+    canOwn: boolean
+) => void;
+
+function createDataFile(module: MainModule, ...args: Parameters<FSCreateDataFile>): void {
+    // Emscripten 7 emits undefined parameter types for this API's defaulted arguments.
+    (module.FS_createDataFile as unknown as FSCreateDataFile)(...args);
+}
+
 /**
  * DuckDB WASM library - an in-process SQL OLAP Database Management System.
  * 
@@ -305,7 +319,7 @@ export class DuckDB {
                 }
             }
         }
-        this._module.FS_createDataFile(normalizedPath, undefined, content, true, true, true);
+        createDataFile(this._module, normalizedPath, undefined, content, true, true, true);
     }
 
     /**

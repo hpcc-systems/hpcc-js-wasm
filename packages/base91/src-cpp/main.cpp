@@ -1,5 +1,6 @@
 #include <base91.hpp>
 
+#include <cstdlib>
 #include <string>
 
 const char *const version = "0.6.0";
@@ -17,12 +18,12 @@ public:
 
     uintptr_t malloc(size_t __size)
     {
-        return reinterpret_cast<uintptr_t>(::malloc(__size));
+        return reinterpret_cast<uintptr_t>(std::malloc(__size));
     }
 
     void free(uintptr_t __ptr)
     {
-        ::free(reinterpret_cast<void *>(__ptr));
+        std::free(reinterpret_cast<void *>(__ptr));
     }
 
     std::string version() const

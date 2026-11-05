@@ -116,6 +116,37 @@ describe("Llama unit", () => {
         expect(fakeModule.FS_unlink).toHaveBeenCalledWith("/mainModel.gguf");
     });
 
+    it("continues running main when mounting a model fails", () => {
+        const createFileError = new Error("create failed");
+        const consoleError = vi.spyOn(console, "error").mockImplementation(() => { });
+        const fakeModule = {
+            FS_createDataFile: vi.fn(() => {
+                throw createFileError;
+            }),
+            FS_unlink: vi.fn(),
+            VectorString: FakeVectorString,
+            embedding: vi.fn(),
+            main: vi.fn((args: FakeVectorString, result: FakeVectorString) => {
+                result.values = ["main stdout", ""];
+                expect(args.values).toEqual(["-m", "/mainModel.gguf", "--help"]);
+                return 0;
+            }),
+        };
+
+        const llama = new (Llama as any)(fakeModule) as Llama;
+        const result = llama.main(["--help"], Uint8Array.from([1, 2, 3]));
+
+        expect(result).toEqual({
+            exitCode: 0,
+            stdout: "main stdout",
+            stderr: "",
+        });
+        expect(consoleError).toHaveBeenCalledWith(createFileError);
+        expect(fakeModule.FS_unlink).not.toHaveBeenCalled();
+
+        consoleError.mockRestore();
+    });
+
     it("builds a one-shot conversation command for chat", () => {
         const fakeModule = {
             FS_createDataFile: vi.fn(),
@@ -153,6 +184,33 @@ describe("Llama unit", () => {
         });
 
         expect(reply).toBe("assistant reply");
+    });
+
+    it("returns an empty reply and logs redirected output when chat fails", () => {
+        const consoleError = vi.spyOn(console, "error").mockImplementation(() => { });
+        const readFile = vi.fn(() => "redirected output");
+        const fakeModule = {
+            FS_createDataFile: vi.fn(),
+            FS_unlink: vi.fn(),
+            FS: { readFile },
+            VectorString: FakeVectorString,
+            embedding: vi.fn(),
+            main: vi.fn((_args: FakeVectorString, result: FakeVectorString) => {
+                result.values = ["", ""];
+                return 1;
+            }),
+        };
+
+        const llama = new (Llama as any)(fakeModule) as Llama;
+        const reply = llama.chat("hello", Uint8Array.from([1, 2, 3]), { conversation: false });
+
+        expect(reply).toBe("");
+        expect(consoleError).toHaveBeenCalledWith(expect.objectContaining({ message: "llama.chat failed" }));
+        expect(consoleError).toHaveBeenCalledWith("redirected output");
+        expect(readFile).toHaveBeenCalledTimes(2);
+        expect(fakeModule.FS_unlink).toHaveBeenCalledWith("/mainModel.gguf");
+
+        consoleError.mockRestore();
     });
 
     it("keeps multi-turn chat history in a session", () => {

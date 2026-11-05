@@ -72,9 +72,45 @@ describe("MainModuleEx", () => {
         mainModuleEx.free(heapU8);
     });
 
-    it("creates, reads, and unlinks files", () => {
+    it("checks filesystem support and wraps filesystem helpers", async () => {
         expect(mainModuleEx.hasFilesystem()).toBe(false);
+
+        const createPath = vi.fn();
+        const createDataFile = vi.fn();
+        const preloadFile = vi.fn(async () => { });
+        const unlink = vi.fn();
+        Object.assign(mainModule, {
+            FS_createPath: createPath,
+            FS_createDataFile: createDataFile,
+            FS_preloadFile: preloadFile,
+        });
+
+        try {
+            expect(mainModuleEx.hasFilesystem()).toBe(false);
+            Object.assign(mainModule, { FS_unlink: unlink });
+            expect(mainModuleEx.hasFilesystem()).toBe(true);
+
+            mainModuleEx.createPath("folder", false, true);
+            expect(createPath).toHaveBeenCalledWith("/", "folder", false, true);
+
+            const content = Uint8Array.from([1, 2, 3]);
+            mainModuleEx.createDataFile("file.bin", content);
+            expect(createDataFile).toHaveBeenCalledWith("/", "file.bin", content, true, true, true);
+
+            await mainModuleEx.preloadFile("remote.bin", content, false, false, true, false, true);
+            expect(preloadFile).toHaveBeenCalledWith("/", "remote.bin", content, false, false, true, false, true);
+
+            mainModuleEx.unlink("/file.bin");
+            expect(unlink).toHaveBeenCalledWith("/file.bin");
+
+            const heap = mainModuleEx.dataToHeap(content);
+            expect(mainModuleEx.heapToUint8Array(heap)).toEqual(content);
+            mainModuleEx.free(heap);
+        } finally {
+            for (const key of ["FS_createPath", "FS_createDataFile", "FS_preloadFile", "FS_unlink"]) {
+                Reflect.deleteProperty(mainModule, key);
+            }
+        }
     });
 
 });
-
