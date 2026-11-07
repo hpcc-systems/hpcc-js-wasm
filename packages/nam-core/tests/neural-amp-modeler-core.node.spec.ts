@@ -156,6 +156,7 @@ describe("nam-core", function () {
     it("reports invalid model JSON", async function () {
         const nam = await NeuralAmpModelerCore.load();
         expect(() => nam.loadModel("{}", { prewarm: false })).to.throw();
+        expect(() => nam.loadModel("{}")).to.throw();
         NeuralAmpModelerCore.unload();
     });
 
@@ -164,6 +165,28 @@ describe("nam-core", function () {
         const nam = await NeuralAmpModelerCore.load();
         const model = nam.loadModel(await downloadAsset(modelUrl, modelPath), { prewarm: false });
         try {
+            expect(typeof model.expectedSampleRate()).toBe("number");
+            expect(model.inputChannels()).toBeGreaterThan(0);
+            expect(model.outputChannels()).toBeGreaterThan(0);
+            expect(typeof model.maxBufferSize()).toBe("number");
+            expect(typeof model.prewarmSamples()).toBe("number");
+            expect(typeof model.hasInputLevel()).toBe("boolean");
+            expect(typeof model.hasOutputLevel()).toBe("boolean");
+            expect(typeof model.hasLoudness()).toBe("boolean");
+            expect(typeof model.inputLevel()).toBe("number");
+            expect(typeof model.outputLevel()).toBe("number");
+            expect(typeof model.loudness()).toBe("number");
+            model.prewarm();
+
+            const oneFrame = new Float32Array(model.inputChannels());
+            expect(model.process(oneFrame)).toBeInstanceOf(Float32Array);
+            expect(model.processFloat64(oneFrame)).toBeInstanceOf(Float64Array);
+            expect(() => model.processFloat64(oneFrame, -1)).to.throw("frames must be a non-negative integer");
+            expect(() => model.processFloat64(oneFrame, 1.5)).to.throw("frames must be a non-negative integer");
+            expect(() => model.processFloat64([], 1)).to.throw(
+                `input length must equal frames * inputChannels (${model.inputChannels()})`
+            );
+
             const outputSamples = processWavSamples(model, inputWav);
             await writeFile(outputWavPath, writeWav({
                 sampleRate: inputWav.sampleRate,
@@ -177,7 +200,7 @@ describe("nam-core", function () {
             expect(outputWav.samples.length).to.equal(inputWav.samples.length * model.outputChannels());
             expect(outputWav.samples.some(sample => Math.abs(sample) > 0.0001)).to.equal(true);
         } finally {
-            model.delete();
+            model[Symbol.dispose]();
             NeuralAmpModelerCore.unload();
         }
     });

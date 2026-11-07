@@ -119,6 +119,25 @@ describe("zstd", function () {
         expect(data).to.deep.equal(data2);
     });
 
+    it("validates runtime input lengths before accessing buffers", async function () {
+        const zstd = await Zstd.load();
+        const negativeLength = new Uint8Array(0);
+        const oversizedLength = new Uint8Array(0);
+        Object.defineProperty(negativeLength, "length", { value: -1 });
+        Object.defineProperty(oversizedLength, "length", { value: 0x1_0000_0000 });
+
+        expect(() => zstd.compress(negativeLength)).to.throw(/compress input length -1/);
+        expect(() => zstd.decompress(oversizedLength)).to.throw(/decompress input length/);
+        expect(() => zstd.compressChunk(negativeLength)).to.throw(/compressChunk input length -1/);
+        expect(() => zstd.decompressChunk(oversizedLength)).to.throw(/decompressChunk input length/);
+    });
+
+    it("returns empty output for empty streaming chunks", async function () {
+        const zstd = await Zstd.load();
+        expect(zstd.compressChunk(new Uint8Array(0))).to.deep.equal(new Uint8Array(0));
+        expect(zstd.decompressChunk(new Uint8Array(0))).to.deep.equal(new Uint8Array(0));
+    });
+
     it("c-level", async function () {
         const zstd = await Zstd.load();
         const min = zstd.minCLevel();
@@ -357,5 +376,183 @@ describe("zstd", function () {
             threw = true;
         }
         expect(threw).to.equal(true);
+    });
+
+    it("legacy reset clears both streaming contexts", async function () {
+        const zstd = await Zstd.load();
+        const data = new Uint8Array(Array.from({ length: 4096 }, (_, i) => i % 97));
+        const compressed = streamCompress(zstd, data, 512, 5);
+
+        zstd.resetDecompression();
+        zstd.decompressChunk(compressed.subarray(0, 10));
+        zstd.resetCompression(5);
+        zstd.compressChunk(data.subarray(0, 100));
+
+        zstd.reset();
+        expect(() => zstd.decompressEnd()).to.throw(/empty compressed input/i);
+        expect(streamDecompress(zstd, compressed, 33)).to.deep.equal(data);
+        expect(zstd.decompress(streamCompress(zstd, data, 1000))).to.deep.equal(data);
+    });
+
+    it("streaming decompress flushes pending output with tiny input chunks", async function () {
+        const zstd = await Zstd.load();
+        // Feeding a high-ratio frame in tiny chunks leaves the decoder with pending output once a
+        // chunk is fully consumed, exercising the empty-input flush and "need more input" paths.
+        const data = new Uint8Array(1_000_000);
+        const compressed = zstd.compress(data);
+        expect(streamDecompress(zstd, compressed, 7)).to.deep.equal(data);
+        expect(streamDecompress(zstd, compressed, 1)).to.deep.equal(data);
+    });
+
+    it("one-shot decompress rejects input without a Zstandard frame header", async function () {
+        const zstd = await Zstd.load();
+        expect(() => zstd.decompress(new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))).to.throw("Failed to get frame content size: ZSTD_CONTENTSIZE_ERROR");
+    });
+
+    it("one-shot decompress rejects frame content sizes beyond the WASM32 range", async function () {
+        const zstd = await Zstd.load();
+        // Magic, single-segment header with an 8-byte content size of 2^33, then an empty last raw block.
+        const frame = new Uint8Array([0x28, 0xB5, 0x2F, 0xFD, 0xE0, 0, 0, 0, 0, 2, 0, 0, 0, 0x01, 0x00, 0x00]);
+        expect(() => zstd.decompress(frame)).to.throw(/frame content size exceeds WASM addressable range/);
+    });
+
+    it("one-shot decompress rejects a truncated known-size frame", async function () {
+        const zstd = await Zstd.load();
+        const data = new Uint8Array(Array.from({ length: 5000 }, (_, i) => (i * 31) % 256));
+        const compressed = zstd.compress(data);
+        expect(() => zstd.decompress(compressed.subarray(0, compressed.length - 1))).to.throw(/Failed to find frame compressed size/);
+    });
+
+    it("one-shot decompress rejects a frame whose content does not match its declared size", async function () {
+        const zstd = await Zstd.load();
+        // Single-segment frame declaring 10 bytes of content but carrying a single 5-byte raw block.
+        const frame = new Uint8Array([0x28, 0xB5, 0x2F, 0xFD, 0x20, 10, 0x29, 0x00, 0x00, 1, 2, 3, 4, 5]);
+        expect(() => zstd.decompress(frame)).to.throw(/^decompress failed: /);
+    });
+});
+
+describe("zstd native failure handling", function () {
+
+    type Restore = () => void;
+
+    function stub<T extends object, K extends keyof T>(target: T, key: K, value: T[K]): Restore {
+        const had = Object.prototype.hasOwnProperty.call(target, key);
+        const original = target[key];
+        target[key] = value;
+        return () => {
+            if (had) {
+                target[key] = original;
+            } else {
+                delete target[key];
+            }
+        };
+    }
+
+    async function withStubs(setup: (zstd: any) => Restore[], body: (zstd: Zstd) => void): Promise<void> {
+        const zstd = await Zstd.load();
+        const restores = setup(zstd as any);
+        try {
+            body(zstd);
+        } finally {
+            restores.reverse().forEach(restore => restore());
+        }
+        // The singleton must remain usable once the stubs are removed.
+        const data = new Uint8Array(Array.from({ length: 2048 }, (_, i) => i % 13));
+        expect(zstd.decompress(zstd.compress(data))).to.deep.equal(data);
+        expect(streamDecompress(zstd, streamCompress(zstd, data, 100), 50)).to.deep.equal(data);
+    }
+
+    const streamError = (errorName: string) => () => ({ consumed: 0, produced: 0, remaining: 0, error: true, errorName });
+
+    it("falls back to a generic message when a stream error has no name", async function () {
+        await withStubs(zstd => [
+            stub(zstd._zstd, "reset", streamError("")),
+            stub(zstd._zstd, "resetCompression", streamError("stubbed compression reset failure")),
+            stub(zstd._zstd, "resetDecompression", streamError("stubbed decompression reset failure"))
+        ], zstd => {
+            expect(() => zstd.reset()).to.throw("reset failed: unknown error");
+            expect(() => zstd.resetCompression()).to.throw("resetCompression failed: stubbed compression reset failure");
+            expect(() => zstd.resetDecompression()).to.throw("resetDecompression failed: stubbed decompression reset failure");
+        });
+    });
+
+    it("reports input buffer allocation failures", async function () {
+        await withStubs(zstd => [
+            stub(zstd._mainModule, "dataToHeap", (data: Uint8Array) => ({ ptr: 0, size: data.length, dispose: () => { } }))
+        ], zstd => {
+            const data = new Uint8Array([1, 2, 3]);
+            expect(() => zstd.compress(data)).to.throw("Failed to allocate compress input buffer");
+            expect(() => zstd.compressChunk(data)).to.throw("Failed to allocate compressChunk input buffer");
+            expect(() => zstd.decompress(data)).to.throw("Failed to allocate decompress input buffer");
+            expect(() => zstd.decompressChunk(data)).to.throw("Failed to allocate decompressChunk input buffer");
+            // A null pointer is acceptable for empty one-shot compression input.
+            expect(zstd.compress(new Uint8Array(0)).length).to.be.greaterThan(0);
+        });
+    });
+
+    it("reports output buffer allocation failures", async function () {
+        const zstd = await Zstd.load();
+        const data = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]);
+        const zstdClass = (zstd as any)._zstdClass;
+        const failSizes = new Set<number>([zstdClass.compressBound(data.length), zstdClass.CStreamOutSize(), zstdClass.DStreamOutSize()]);
+        const compressed = zstd.compress(data);
+        expect(failSizes.has(data.length)).to.equal(false);
+        expect(failSizes.has(compressed.length)).to.equal(false);
+
+        await withStubs(zstd => {
+            const mainModule = zstd._mainModule;
+            const malloc = mainModule.malloc.bind(mainModule);
+            return [stub(mainModule, "malloc", (size: number) => failSizes.has(size) ? { ptr: 0, size, dispose: () => { } } : malloc(size))];
+        }, zstd => {
+            expect(() => zstd.compress(data)).to.throw(/^Failed to allocate \d+ bytes for compress output$/);
+            zstd.resetCompression();
+            expect(() => zstd.compressChunk(data)).to.throw(/^Failed to allocate \d+ bytes for compressChunk output$/);
+            expect(() => zstd.compressEnd()).to.throw(/^Failed to allocate \d+ bytes for compressEnd output$/);
+            zstd.resetDecompression();
+            expect(() => zstd.decompressChunk(compressed)).to.throw(/^Failed to allocate \d+ bytes for decompressChunk output$/);
+        });
+    });
+
+    it("reports one-shot compression errors from the codec", async function () {
+        await withStubs(zstd => {
+            const zstdClass = zstd._zstdClass;
+            const failing = Object.create(zstdClass, {
+                compress: { value: () => 0xFFFFFFFF }
+            });
+            return [stub(zstd, "_zstdClass", failing)];
+        }, zstd => {
+            expect(() => zstd.compress(new Uint8Array([1, 2, 3]))).to.throw(/^compress failed: /);
+        });
+    });
+
+    it("guards against streaming calls that make no progress", async function () {
+        await withStubs(zstd => [
+            stub(zstd._zstd, "compressChunk", () => ({ consumed: 0, produced: 0, remaining: 1, error: false, errorName: "" })),
+            stub(zstd._zstd, "compressEnd", () => ({ consumed: 0, produced: 0, remaining: 1, error: false, errorName: "" })),
+            stub(zstd._zstd, "decompressChunk", () => ({ consumed: 0, produced: 0, remaining: 1, error: false, errorName: "" }))
+        ], zstd => {
+            expect(() => zstd.compressChunk(new Uint8Array([1, 2, 3]))).to.throw("compressChunk failed: no progress while consuming input");
+            expect(() => zstd.compressEnd()).to.throw("compressEnd failed: no progress while finishing stream");
+            expect(() => zstd.decompressChunk(new Uint8Array([1, 2, 3]))).to.throw("decompressChunk failed: no progress while consuming input");
+        });
+    });
+
+    it("stops flushing when the decoder reports no pending output", async function () {
+        const zstd = await Zstd.load();
+        const outCapacity = (zstd as any)._zstdClass.DStreamOutSize();
+        const calls: number[] = [];
+        await withStubs(zstd => [
+            stub(zstd._zstd, "decompressChunk", (_dst: number, _cap: number, _src: number, srcSize: number) => {
+                calls.push(srcSize);
+                return srcSize > 0
+                    ? { consumed: srcSize, produced: outCapacity, remaining: 1, error: false, errorName: "" }
+                    : { consumed: 0, produced: 0, remaining: 0, error: false, errorName: "" };
+            })
+        ], zstd => {
+            zstd.resetDecompression();
+            expect(zstd.decompressChunk(new Uint8Array([1, 2, 3])).length).to.equal(outCapacity);
+            expect(calls).to.deep.equal([3, 0]);
+            expect(() => zstd.decompressEnd()).to.throw(/truncated/i);
+        });
     });
 });

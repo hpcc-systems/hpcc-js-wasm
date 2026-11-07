@@ -6,6 +6,40 @@ function response(body: BodyInit | null, init?: ResponseInit): Response {
 }
 
 describe("WebBlob", () => {
+    it("uses the global fetch implementation and default cache threshold", async () => {
+        const url = new URL("https://example.com/small-model.gguf");
+        const fetchMock = vi.fn<typeof fetch>()
+            .mockResolvedValueOnce(response(null, {
+                headers: {
+                    "content-length": "8",
+                    "content-type": "application/octet-stream",
+                    "accept-ranges": "bytes",
+                },
+            }))
+            .mockResolvedValueOnce(response("small"));
+        vi.stubGlobal("fetch", fetchMock);
+        try {
+            const blob = await WebBlob.create(url);
+
+            expect(blob).not.toBeInstanceOf(WebBlob);
+            await expect(blob.text()).resolves.toBe("small");
+            expect(fetchMock).toHaveBeenCalledTimes(2);
+        } finally {
+            vi.unstubAllGlobals();
+        }
+    });
+
+    it("requires a fetch implementation", async () => {
+        vi.stubGlobal("fetch", undefined);
+        try {
+            await expect(WebBlob.create(new URL("https://example.com/model.gguf"))).rejects.toThrow(
+                "WebBlob requires globalThis.fetch or a custom fetch implementation"
+            );
+        } finally {
+            vi.unstubAllGlobals();
+        }
+    });
+
     it("falls back to downloading the whole blob when range requests are unsupported", async () => {
         const url = new URL("https://example.com/model.gguf");
         const fullBlob = new Blob(["full-content"], { type: "application/octet-stream" });
@@ -32,6 +66,25 @@ describe("WebBlob", () => {
         expect(fetchMock).toHaveBeenNthCalledWith(2, url);
     });
 
+    it("downloads small resources even when the server supports ranges", async () => {
+        const url = new URL("https://example.com/small-model.gguf");
+        const fetchMock = vi.fn<typeof fetch>()
+            .mockResolvedValueOnce(response(null, {
+                headers: {
+                    "content-length": "8",
+                    "content-type": "application/gguf",
+                    "accept-ranges": "bytes",
+                },
+            }))
+            .mockResolvedValueOnce(response("small"));
+
+        const blob = await WebBlob.create(url, { fetch: fetchMock, cacheBelow: 16 });
+
+        expect(blob).not.toBeInstanceOf(WebBlob);
+        await expect(blob.text()).resolves.toBe("small");
+        expect(fetchMock).toHaveBeenCalledTimes(2);
+    });
+
     it("returns a ranged WebBlob when range requests are supported", async () => {
         const url = new URL("https://example.com/model.gguf");
         const fetchMock = vi.fn<typeof fetch>()
@@ -49,6 +102,22 @@ describe("WebBlob", () => {
         expect(blob.size).toBe(4096);
         expect(blob.type).toBe("application/gguf");
         expect(fetchMock).toHaveBeenCalledTimes(1);
+    });
+
+    it("uses an empty MIME type when the response omits content-type", async () => {
+        const url = new URL("https://example.com/model.gguf");
+        const fetchMock = vi.fn<typeof fetch>()
+            .mockResolvedValueOnce(response(null, {
+                headers: {
+                    "content-length": "4096",
+                    "accept-ranges": "bytes",
+                },
+            }));
+
+        const blob = await WebBlob.create(url, { fetch: fetchMock, cacheBelow: 16 });
+
+        expect(blob).toBeInstanceOf(WebBlob);
+        expect(blob.type).toBe("");
     });
 
     it("fetches slices using range headers and clamps the end offset", async () => {
@@ -93,9 +162,35 @@ describe("WebBlob", () => {
         const blob = new WebBlob(url, 4, 10, "text/plain", false, fetchMock);
 
         const slice = blob.slice(-2, 3);
+        const negativeEnd = blob.slice(1, -2);
 
         expect(slice).toBeInstanceOf(WebBlob);
         expect(slice.size).toBe(5);
+        expect(negativeEnd).toBeInstanceOf(WebBlob);
+    });
+
+    it("preserves full-resource fetches for a full slice", async () => {
+        const url = new URL("https://example.com/model.gguf");
+        const fetchMock = vi.fn<typeof fetch>()
+            .mockResolvedValueOnce(response("full"));
+        const blob = new WebBlob(url, 0, 4, "text/plain", true, fetchMock);
+
+        await expect(blob.slice().text()).resolves.toBe("full");
+        expect(fetchMock).toHaveBeenCalledWith(url);
+    });
+
+    it("keeps a full slice range-based when the original blob was partial", async () => {
+        const url = new URL("https://example.com/model.gguf");
+        const fetchMock = vi.fn<typeof fetch>()
+            .mockResolvedValueOnce(response("data"));
+        const blob = new WebBlob(url, 0, 4, "text/plain", false, fetchMock);
+
+        await expect(blob.slice().text()).resolves.toBe("data");
+        expect(fetchMock).toHaveBeenCalledWith(url, {
+            headers: {
+                Range: "bytes=0-3",
+            },
+        });
     });
 
     it("streams the fetched content", async () => {
@@ -133,5 +228,15 @@ describe("WebBlob", () => {
         const blob = new WebBlob(url, 0, 4, "text/plain", true, fetchMock);
 
         await expect(blob.stream().getReader().read()).rejects.toThrow("boom");
+    });
+
+    it("does not pipe a stream when the response has no body", async () => {
+        const url = new URL("https://example.com/model.gguf");
+        const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce(response(null));
+        const blob = new WebBlob(url, 0, 4, "text/plain", true, fetchMock);
+
+        blob.stream();
+        await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledWith(url));
+        await new Promise(resolve => setTimeout(resolve, 0));
     });
 });

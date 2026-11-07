@@ -91,6 +91,25 @@ describe("Llama unit", () => {
         consoleError.mockRestore();
     });
 
+    it("parses successful embedding output", () => {
+        const fakeModule = {
+            FS_createDataFile: vi.fn(),
+            FS_unlink: vi.fn(),
+            VectorString: FakeVectorString,
+            embedding: vi.fn((args: FakeVectorString, result: FakeVectorString) => {
+                expect(args.values).toContain("array");
+                result.values = ["[[0.25, 0.5]]"];
+                return 0;
+            }),
+            main: vi.fn(),
+        };
+        const llama = new (Llama as any)(fakeModule) as Llama;
+
+        expect(llama.embedding("hello", Uint8Array.from([1, 2, 3]))).toEqual([[0.25, 0.5]]);
+        expect(fakeModule.FS_createDataFile).toHaveBeenCalledOnce();
+        expect(fakeModule.FS_unlink).toHaveBeenCalledWith("/embeddingModel.gguf");
+    });
+
     it("mounts a model and returns stdout and stderr from main", () => {
         const fakeModule = {
             FS_createDataFile: vi.fn(),
@@ -145,6 +164,27 @@ describe("Llama unit", () => {
         expect(fakeModule.FS_unlink).not.toHaveBeenCalled();
 
         consoleError.mockRestore();
+    });
+
+    it("does not remount a model already named in the llama arguments", () => {
+        for (const flag of ["-m", "--model"]) {
+            const fakeModule = {
+                FS_createDataFile: vi.fn(),
+                FS_unlink: vi.fn(),
+                VectorString: FakeVectorString,
+                embedding: vi.fn(),
+                main: vi.fn((_args: FakeVectorString, result: FakeVectorString) => {
+                    result.values = ["", ""];
+                    return 0;
+                }),
+            };
+            const llama = new (Llama as any)(fakeModule) as Llama;
+
+            llama.main([flag, "existing.gguf"], Uint8Array.from([1, 2, 3]));
+
+            expect(fakeModule.FS_createDataFile).not.toHaveBeenCalled();
+            expect(fakeModule.FS_unlink).not.toHaveBeenCalled();
+        }
     });
 
     it("builds a one-shot conversation command for chat", () => {
@@ -209,6 +249,27 @@ describe("Llama unit", () => {
         expect(consoleError).toHaveBeenCalledWith("redirected output");
         expect(readFile).toHaveBeenCalledTimes(2);
         expect(fakeModule.FS_unlink).toHaveBeenCalledWith("/mainModel.gguf");
+
+        consoleError.mockRestore();
+    });
+
+    it("logs the native error when a chat session fails", () => {
+        const consoleError = vi.spyOn(console, "error").mockImplementation(() => { });
+        const fakeModule = {
+            FS_createDataFile: vi.fn(),
+            FS_unlink: vi.fn(),
+            VectorString: FakeVectorString,
+            embedding: vi.fn(),
+            main: vi.fn((_args: FakeVectorString, result: FakeVectorString) => {
+                result.values = ["", "native chat failure"];
+                return 1;
+            }),
+        };
+        const llama = new (Llama as any)(fakeModule) as Llama;
+        const session = llama.createChatSession(Uint8Array.from([1]));
+
+        expect(session.send("hello")).toBe("");
+        expect(consoleError).toHaveBeenCalledWith(expect.objectContaining({ message: "native chat failure" }));
 
         consoleError.mockRestore();
     });
@@ -341,6 +402,27 @@ describe("Llama unit", () => {
         ]);
     });
 
+    it("starts a chat session from provided messages without a system prompt", () => {
+        const fakeModule = {
+            FS_createDataFile: vi.fn(),
+            FS_unlink: vi.fn(),
+            VectorString: FakeVectorString,
+            embedding: vi.fn(),
+            main: vi.fn((args: FakeVectorString, result: FakeVectorString) => {
+                result.values = ["reply", ""];
+                expect(args.values).toContain("User: saved message\n\nUser: new message\n\nAssistant:");
+                return 0;
+            }),
+        };
+        const llama = new (Llama as any)(fakeModule) as Llama;
+        const session = llama.createChatSession(Uint8Array.from([1]), {
+            messages: [{ role: "user", content: "saved message" }],
+        });
+
+        expect(session.history()).toEqual([{ role: "user", content: "saved message" }]);
+        expect(session.send("new message")).toBe("reply");
+    });
+
     it("extracts the latest assistant reply from echoed chat output", () => {
         const fakeModule = {
             FS_createDataFile: vi.fn(),
@@ -402,5 +484,27 @@ describe("Llama unit", () => {
         const result = llama.main(["--threads", "4", "--threads-batch", "8", "--help"], Uint8Array.from([1, 2, 3]));
 
         expect(result.exitCode).toBe(0);
+    });
+
+    it("preserves invalid or single-thread values when worker primitives are unavailable", () => {
+        const fakeModule = {
+            FS_createDataFile: vi.fn(),
+            FS_unlink: vi.fn(),
+            VectorString: FakeVectorString,
+            embedding: vi.fn(),
+            main: vi.fn((args: FakeVectorString, result: FakeVectorString) => {
+                result.values = ["", ""];
+                expect(args.values).toEqual([
+                    "--threads",
+                    "invalid",
+                    "--threads-batch",
+                    "1",
+                ]);
+                return 0;
+            }),
+        };
+        const llama = new (Llama as any)(fakeModule) as Llama;
+
+        expect(llama.main(["--threads", "invalid", "--threads-batch", "1"]).exitCode).toBe(0);
     });
 });

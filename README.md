@@ -2,7 +2,7 @@
 
 [![Test PR](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/test-pr.yml/badge.svg?branch=release-please--branches--main)](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/test-pr.yml)
 [![release-please](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/release-please.yml/badge.svg)](https://github.com/hpcc-systems/hpcc-js-wasm/actions/workflows/release-please.yml)
-[![Coverage Status](https://coveralls.io/repos/github/hpcc-systems/hpcc-js-wasm/badge.svg?branch=BUMP_VERSIONS)](https://coveralls.io/github/GordonSmith/hpcc-js-wasm?branch=BUMP_VERSIONS)
+[![Coverage Status](https://coveralls.io/repos/github/hpcc-systems/hpcc-js-wasm/badge.svg?branch=release-please--branches--main)](https://coveralls.io/github/hpcc-systems/hpcc-js-wasm?branch=release-please--branches--main)
 
 This repository contains a collection of useful c++ libraries compiled to WASM for (re)use in Node JS, Web Browsers and JavaScript Libraries:
 
@@ -206,3 +206,15 @@ npm ci
 npm run install-build-deps
 npm run build
 ```
+
+## Documentation build
+
+After building the packages, run `npm run build-docs` to generate TypeDoc
+Markdown and the VitePress site. PR CI checks this command on Ubuntu / Node.js 22
+before release CI deploys the documentation.
+
+TypeDoc currently requires minimatch 10's `matchOne` method. Its scoped
+dependency override must remain separate from the minimatch 11 override used
+by the other tools; forcing version 11 into TypeDoc crashes documentation
+generation. This compatibility pin retains a moderate minimatch advisory in
+the documentation tooling until TypeDoc supports the patched major version.

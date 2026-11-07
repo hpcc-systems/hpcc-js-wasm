@@ -4,6 +4,8 @@ permissions:
   packages: write
   contents: write
   pages: write
+  checks: write
+  pull-requests: write
 
 env:
   VCPKG_BINARY_SOURCES: "clear;nuget,GitHub,readwrite"
@@ -101,6 +103,12 @@ jobs:
         run: |
           npm run build
 
+      - name: Build Docs
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}
+        run: |
+          test -f packages/graphviz/dist/index.js
+          npm run build-docs
+
       - name: Test
         run: |
           npm run test
@@ -110,9 +118,16 @@ jobs:
           npm run test-bundlers
 
       - name: Calculate Coverage
-        if: ${{ matrix.os == 'ubuntu-24.04' && matrix.node == 20 }}
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}
         run: |
           npm run coverage
+
+      - name: Publish Coverage to Coveralls
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./coverage/lcov.info
 
       - name: Upload error logs
         if: ${{ failure() || cancelled() }}

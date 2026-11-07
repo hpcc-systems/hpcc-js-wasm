@@ -108,12 +108,6 @@ jobs:
         env:
           CI: true
 
-      - name: Calculate Coverage
-        if: github.ref == 'refs/heads/main'
-        continue-on-error: true
-        run: |
-          npm run coverage
-
       - name: Publish
         if: steps.release.outputs.releases_created == 'true'
         env:

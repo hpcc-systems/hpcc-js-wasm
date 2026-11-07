@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { DuckDB } from "@hpcc-js/wasm-duckdb";
 
 describe("duckdb", { concurrent: false }, () => {
@@ -863,6 +863,93 @@ FROM duckdb_extensions();
 
             DuckDB.unload();
             DuckDB.unload();
+        });
+    });
+
+    describe("wrapper edge cases", () => {
+        it("handles nested and root files with or without filesystem directory helpers", () => {
+            const descriptor = Object.getOwnPropertyDescriptor(duckdb, "_module")!;
+            const createPath = vi.fn();
+            const createDataFile = vi.fn();
+            const unlink = vi.fn();
+            const module = { FS_createPath: createPath, FS_createDataFile: createDataFile, FS_unlink: unlink };
+            const content = new Uint8Array([1, 2]);
+            Object.defineProperty(duckdb, "_module", { ...descriptor, value: module });
+
+            try {
+                duckdb.registerFile("/a//b/file.csv", content);
+                expect(createPath.mock.calls).toEqual([
+                    ["/", "a", true, true],
+                    ["/a", "b", true, true],
+                ]);
+                expect(createDataFile).toHaveBeenCalledWith(
+                    "a//b/file.csv",
+                    undefined,
+                    content,
+                    true,
+                    true,
+                    true
+                );
+
+                duckdb.registerFile("/file.csv", content);
+                duckdb.unregisterFile("/file.csv");
+                expect(unlink).toHaveBeenCalledWith("file.csv");
+
+                const noDirectoryHelpers = { FS_createDataFile: createDataFile, FS_unlink: unlink };
+                Object.defineProperty(duckdb, "_module", { ...descriptor, value: noDirectoryHelpers });
+                duckdb.registerFile("nested/file.csv", content);
+                expect(createDataFile).toHaveBeenLastCalledWith(
+                    "nested/file.csv",
+                    undefined,
+                    content,
+                    true,
+                    true,
+                    true
+                );
+            } finally {
+                Object.defineProperty(duckdb, "_module", descriptor);
+            }
+        });
+
+        it("normalizes WebAssembly and JavaScript exception formats", () => {
+            const descriptor = Object.getOwnPropertyDescriptor(duckdb, "_module")!;
+            const getExceptionMessage = vi.fn();
+            Object.defineProperty(duckdb, "_module", {
+                ...descriptor,
+                value: { getExceptionMessage },
+            });
+
+            try {
+                getExceptionMessage.mockReturnValueOnce(["DuckDBError", "query failed"]);
+                expect(duckdb.getExceptionMessage(new Error("ignored"))).toEqual({
+                    type: "DuckDBError",
+                    message: "query failed",
+                });
+
+                getExceptionMessage.mockReturnValueOnce([null, null]);
+                expect(duckdb.getExceptionMessage(new Error("ignored"))).toEqual({
+                    type: "",
+                    message: "",
+                });
+
+                getExceptionMessage.mockImplementationOnce(() => {
+                    throw new Error("decoder failure");
+                });
+                expect(duckdb.getExceptionMessage({ message: [42, null] })).toEqual({
+                    type: "Error",
+                    message: "[object Object]",
+                });
+                expect(duckdb.getExceptionMessage({ name: 7, message: 9 })).toEqual({
+                    type: "Error",
+                    message: "[object Object]",
+                });
+                expect(duckdb.getExceptionMessage({ name: "TypeError", message: "bad input" })).toEqual({
+                    type: "TypeError",
+                    message: "bad input",
+                });
+            } finally {
+                Object.defineProperty(duckdb, "_module", descriptor);
+            }
         });
     });
 });

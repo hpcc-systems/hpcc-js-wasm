@@ -17,6 +17,9 @@ if(NOT EXISTS "${EMSCRIPTEN_ROOT}/cmake/Modules/Platform/Emscripten.cmake")
    message(FATAL_ERROR "Emscripten.cmake toolchain file not found")
 endif()
 
+# Invalidate binary-cache packages when the Emscripten SDK version changes.
+set(VCPKG_HASH_ADDITIONAL_FILES "${EMSCRIPTEN_ROOT}/emscripten-version.txt")
+
 set(VCPKG_TARGET_ARCHITECTURE wasm32)
 set(VCPKG_CRT_LINKAGE dynamic)
 set(VCPKG_LIBRARY_LINKAGE static)
