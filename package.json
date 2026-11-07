@@ -82,7 +82,7 @@
     "test-bundlers-esbuild": "npm run test:esbuild --workspace=tests/bundlers",
     "test-bundlers-rollup": "npm run test:rollup --workspace=tests/bundlers",
     "test-all": "npm run test && npm run test-bundlers",
-    "coverage": "lerna run coverage",
+    "coverage": "lerna run coverage -- --coverage.reporter=text --coverage.reporter=lcov && node scripts/merge-coverage-lcov.mjs",
     "publish": "lerna publish from-package -y",
     "purge-jsdelivr": "node ./utils/purge-jsdelivr.js",
     "update-root": "npx -y npm-check-updates -u -t minor",

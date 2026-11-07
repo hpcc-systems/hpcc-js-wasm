@@ -36,6 +36,7 @@
         "lint-skypack": "npx -y @skypack/package-check",
         "lint-eslint": "eslint src/**/*.ts tests/**/*.ts",
         "lint": "run-p lint-eslint",
+        "coverage": "vitest run --coverage",
         "test:unit": "vitest run",
         "test": "npm run build-dev && npm run test:unit && node bin/index.js --help",
         "update": "npx -y npm-check-updates -u -t minor",
