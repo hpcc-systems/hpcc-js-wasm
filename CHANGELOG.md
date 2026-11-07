@@ -8,6 +8,13 @@ _This changelog is now a summary of all changes across all packages in the mono 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.23.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.22.0...wasm-root-v4.23.0) (2026-11-07)
+
+
+### Features
+
+* enhance coverage reporting and CI workflows ([57eb5b7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/57eb5b7a4b1ede3f5dac11f228b92c4e55cbe9e3))
+
 ## [4.22.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-root-v4.21.0...wasm-root-v4.22.0) (2026-11-01)
 
 
