@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-cli-v1.11.5...wasm-graphviz-cli-v1.12.0) (2026-11-07)
+
+
+### Features
+
+* enhance coverage reporting and CI workflows ([57eb5b7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/57eb5b7a4b1ede3f5dac11f228b92c4e55cbe9e3))
+
 ## [1.11.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-cli-v1.11.4...wasm-graphviz-cli-v1.11.5) (2026-11-01)
 
 
