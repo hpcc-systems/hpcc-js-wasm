@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-nam-core-v1.4.0...wasm-nam-core-v1.5.0) (2026-11-09)
+
+
+### Features
+
+* enhance coverage reporting and CI workflows ([7718aa7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7718aa721ddeddf9f780616c84d0e773d116c965))
+
 ## [1.4.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-nam-core-v1.3.0...wasm-nam-core-v1.4.0) (2026-11-01)
 
 

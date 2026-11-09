@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.22.0...wasm-duckdb-v1.23.0) (2026-11-09)
+
+
+### Features
+
+* enhance coverage reporting and CI workflows ([7718aa7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7718aa721ddeddf9f780616c84d0e773d116c965))
+
 ## [1.22.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-duckdb-v1.21.0...wasm-duckdb-v1.22.0) (2026-11-01)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.18.0...wasm-zstd-v1.19.0) (2026-11-09)
+
+
+### Features
+
+* enhance coverage reporting and CI workflows ([7718aa7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7718aa721ddeddf9f780616c84d0e773d116c965))
+
 ## [1.18.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-zstd-v1.17.0...wasm-zstd-v1.18.0) (2026-11-01)
 
 
