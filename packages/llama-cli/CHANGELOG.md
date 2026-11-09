@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-cli-v1.4.5...wasm-llama-cli-v1.5.0) (2026-11-09)
+
+
+### Features
+
+* enhance coverage reporting and CI workflows ([7718aa7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7718aa721ddeddf9f780616c84d0e773d116c965))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @hpcc-js/wasm-llama bumped from 1.8.0 to 1.9.0
+
 ## [1.4.5](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-cli-v1.4.4...wasm-llama-cli-v1.4.5) (2026-11-01)
 
 

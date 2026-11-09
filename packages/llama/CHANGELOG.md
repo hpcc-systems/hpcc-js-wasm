@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-v1.8.0...wasm-llama-v1.9.0) (2026-11-09)
+
+
+### Features
+
+* enhance coverage reporting and CI workflows ([7718aa7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7718aa721ddeddf9f780616c84d0e773d116c965))
+
 ## [1.8.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-llama-v1.7.0...wasm-llama-v1.8.0) (2026-11-01)
 
 

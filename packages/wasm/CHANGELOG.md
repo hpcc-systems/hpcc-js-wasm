@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.37.1](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.37.0...wasm-v2.37.1) (2026-11-09)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-duckdb bumped from ^1.22.0 to ^1.23.0
+    * @hpcc-js/wasm-graphviz bumped from ^1.31.0 to ^1.32.0
+    * @hpcc-js/wasm-graphviz-cli bumped from ^1.11.5 to ^1.12.0
+    * @hpcc-js/wasm-zstd bumped from ^1.18.0 to ^1.19.0
+
 ## [2.37.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.36.0...wasm-v2.37.0) (2026-11-01)
 
 
