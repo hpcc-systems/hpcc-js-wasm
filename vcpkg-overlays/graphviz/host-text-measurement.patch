@@ -1,0 +1,111 @@
+diff --git a/lib/common/labels.c b/lib/common/labels.c
+--- a/lib/common/labels.c
++++ b/lib/common/labels.c
+@@ -29,7 +29,9 @@ static void storeline(GVC_t *gvc, textlabel_t *lp, char *line,
+     textspan_t *span;
+     size_t oldsz = lp->u.txt.nspans + 1;
+ 
+-    lp->u.txt.span = gv_recalloc(lp->u.txt.span, oldsz, oldsz + 1,
++    /* Zero the first span too: empty lines never reach textspan_size. */
++    lp->u.txt.span = gv_recalloc(lp->u.txt.span,
++                                 lp->u.txt.span ? oldsz : 0, oldsz + 1,
+                                  sizeof(textspan_t));
+     span = &lp->u.txt.span[lp->u.txt.nspans];
+     span->str = line;
+diff --git a/lib/common/textspan.c b/lib/common/textspan.c
+--- a/lib/common/textspan.c
++++ b/lib/common/textspan.c
+@@ -25,11 +25,13 @@
+ #include <util/alloc.h>
+ #include <util/strcasecmp.h>
+ 
++extern double hpcc_js_text_width(const textspan_t *span, int fontnames);
++
+ /* estimate_textspan_size:
+  * Estimate size of textspan, for given face and size, in points.
+  */
+ static void
+-estimate_textspan_size(textspan_t * span, char **fontpath)
++estimate_textspan_size(textspan_t * span, char **fontpath, int fontnames)
+ {
+     double fontsize;
+ 
+@@ -46,10 +48,13 @@ estimate_textspan_size(textspan_t * span, char **fontpath)
+     span->yoffset_centerline = 0.1 * fontsize;
+     span->layout = NULL;
+     span->free_layout = NULL;
+-    span->size.x = fontsize * estimate_text_width_1pt(span->font->name, span->str, bold, italic);
++    double width = hpcc_js_text_width(span, fontnames);
++    span->size.x = width >= 0.0
++        ? width
++        : fontsize * estimate_text_width_1pt(span->font->name, span->str, bold, italic);
+ 
+     if (fontpath)
+-        *fontpath = "[internal hard-coded]";
++        *fontpath = width >= 0.0 ? "[host canvas]" : "[internal hard-coded]";
+ }
+ 
+ /*
+@@ -92,7 +97,7 @@ pointf textspan_size(GVC_t *gvc, textspan_t * span)
+ 	fpp = &fontpath;
+ 
+     if (! gvtextlayout(gvc, span, fpp))
+-	estimate_textspan_size(span, fpp);
++	estimate_textspan_size(span, fpp, GD_fontnames(gvc->g));
+ 
+     if (fpp) {
+ 	if (fontpath)
+diff --git a/plugin/core/gvrender_core_svg.c b/plugin/core/gvrender_core_svg.c
+--- a/plugin/core/gvrender_core_svg.c
++++ b/plugin/core/gvrender_core_svg.c
+@@ -41,6 +41,9 @@
+ #include <util/unused.h>
+ #include <util/xml.h>
+ 
++extern double hpcc_js_text_width(const textspan_t *span, int fontnames);
++extern const char *hpcc_js_font_family(const char *family);
++
+ #define LOCALNAMEPREFIX		'%'
+ 
+ #ifndef EDGEALIGN
+@@ -448,3 +451,10 @@ static void svg_textspan(GVJ_t * job, pointf p, textspan_t * span)
+     gvputs(job, "<text xml:space=\"preserve\"");
++    /* Match layout advances even when viewport scaling changes font hinting. */
++    const double width = hpcc_js_text_width(span, GD_fontnames(job->gvc->g));
++    if (width > 0.0) {
++        gvputs(job, " textLength=\"");
++        gvprintdouble(job, width);
++        gvputs(job, "\" lengthAdjust=\"spacingAndGlyphs\"");
++    }
+     switch (span->just) {
+     case 'l':
+@@ -487,9 +497,12 @@ static void svg_textspan(GVJ_t * job, pointf p, textspan_t * span)
+  	}
+  	stretch = pA->stretch;
+ 
+-	gvprintf(job, " font-family=\"%s", family);
+-	if (pA->svg_font_family && pA->svg_font_family != family)
+-	    gvprintf(job, ",%s", pA->svg_font_family);
++	gvputs(job, " font-family=\"");
++	gvputs_xml(job, hpcc_js_font_family(family));
++	if (pA->svg_font_family && pA->svg_font_family != family) {
++	    gvputc(job, ',');
++	    gvputs_xml(job, hpcc_js_font_family(pA->svg_font_family));
++	}
+  	gvputc(job, '"');
+  	if (weight)
+  	    gvprintf(job, " font-weight=\"%s\"", weight);
+@@ -497,8 +510,11 @@ static void svg_textspan(GVJ_t * job, pointf p, textspan_t * span)
+  	    gvprintf(job, " font-stretch=\"%s\"", stretch);
+  	if (style)
+  	    gvprintf(job, " font-style=\"%s\"", style);
+-    } else
+-	gvprintf(job, " font-family=\"%s\"", span->font->name);
++    } else {
++	gvputs(job, " font-family=\"");
++	gvputs_xml(job, hpcc_js_font_family(span->font->name));
++	gvputc(job, '"');
++    }
+      if ((flags = span->font->flags)) {
+  	if ((flags & HTML_BF) && !weight)
+  	    gvputs(job, " font-weight=\"bold\"");

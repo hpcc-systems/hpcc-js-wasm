@@ -33,7 +33,8 @@
     "lint": "run-p lint-eslint",
     "test-browser": "vitest run --project browser",
     "test-node": "vitest run --project node",
-    "test": "vitest run",
+    "test": "npm run test-cache && vitest run",
+    "test-cache": "ctest --test-dir ../../build/packages/graphviz --output-on-failure --no-tests=error",
     "coverage": "vitest run --coverage",
     "update": "npx -y npm-check-updates -u -t minor",
     "update-major": "npx -y npm-check-updates -u"
