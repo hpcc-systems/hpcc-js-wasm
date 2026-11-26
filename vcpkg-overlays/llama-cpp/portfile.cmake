@@ -2,7 +2,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO ggml-org/llama.cpp
     REF v${VERSION}
-    SHA512 b7a537f57a9fd3b65b657217340db80bfcc9f3284b1fc124cc4a89ae45a1fd6977d34874276f36117d4e41d525bcecd02f3c8ba0a01067bdbd3331de0fe9065c
+    SHA512 d5e204e7983280001e4fba1c4cba2d6b82eca3a628867dcf9c3ff3333fff93d2d416535edeb4baad546979967d0b04c9b35d9728e0ab200d49d832b137cc4a56
     HEAD_REF master
     PATCHES
         cmake-config.diff
@@ -20,6 +20,16 @@ configure_file(
     "${CMAKE_CURRENT_LIST_DIR}/../../packages/llama/src-cpp/log_wasm.cpp"
     "${SOURCE_PATH}/common/log.cpp"
     COPYONLY
+)
+
+vcpkg_replace_string("${SOURCE_PATH}/tools/server/server-http.cpp"
+"#include <cpp-httplib/httplib.h>"
+"#include <httplib.h>"
+)
+
+vcpkg_replace_string("${SOURCE_PATH}/common/download.cpp"
+"cli.set_direct_hostname_addr_map("
+"cli.set_hostname_addr_map("
 )
 
 # Return to the caller after --help/--completion-bash instead of exiting the WASM runtime.

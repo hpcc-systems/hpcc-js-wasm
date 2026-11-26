@@ -2,7 +2,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO duckdb/duckdb
     REF v${VERSION}
-    SHA512 1d726bb45b5d1c98ab4d31720534979cbe7d0c72dc777979fb42fa241b6b408959f6a6ed5db76e3cd3840df187f15f309364e931db257c45379101b24191d775
+    SHA512 e62717f229383c85b37ea4846ba97a4398d3786819b45577da33717ce1a149e899e8b9578f2f8e277dd750e36058db1d252bae94a8444d4f19c751954331a073
     HEAD_REF main
     PATCHES
         library-linkage.diff
@@ -44,9 +44,9 @@ endif()
 if("httpfs" IN_LIST FEATURES)
     vcpkg_from_github(
         OUT_SOURCE_PATH DUCKDB_HTTPFS_SOURCE_PATH
-        REPO duckdb/duckdb_httpfs
-        REF 77392a72077a85897db2519fae11e2c0da972b8a
-        SHA512 44362620cf28ef384b36cb51fdf6b1d4a497bd70434ba4ada5765225073c7300c9fae9fcad55ecda26457ee7d847a2d3bc7396d4b01c2ec1a3cb42ed289ed87
+        REPO duckdb/duckdb-httpfs
+        REF f71cfdb4bff85b9e15b1f3b842d9aa395aff0167
+        SHA512 3ce34643dcbc470cb8525e9bccfc427676f7852e516701d606110ef62ea9eaf6f7f22c4b79d8b81b6097bfd2e6c198da3b112c06b47fe35d6165c94cacd79128
         HEAD_REF main
         PATCHES
             library-linkage-httpfs.diff

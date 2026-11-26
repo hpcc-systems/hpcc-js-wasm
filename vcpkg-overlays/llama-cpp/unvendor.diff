@@ -42,19 +42,6 @@ index bdf8bf6..aca400d 100644
  
  #ifdef MTMD_INTERNAL_HEADER
  #error "mtmd-helper is a public library outside of mtmd. it must not include internal headers"
-diff --git a/tools/server/server-http.cpp b/tools/server/server-http.cpp
-index 2ec137a..5af43e4 100644
---- a/tools/server/server-http.cpp
-+++ b/tools/server/server-http.cpp
-@@ -4,7 +4,7 @@
- #include "server-common.h"
- #include "ui.h"
- 
--#include <cpp-httplib/httplib.h>
-+#include <httplib.h>
- 
- #include <functional>
- #include <future>
 diff --git a/tools/server/server-models.cpp b/tools/server/server-models.cpp
 index 3d134ac..eb99203 100644
 --- a/tools/server/server-models.cpp
