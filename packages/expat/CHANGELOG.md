@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.18.0...wasm-expat-v1.19.0) (2026-11-27)
+
+
+### Features
+
+* implement README version checks in tests ([44a272e](https://github.com/hpcc-systems/hpcc-js-wasm/commit/44a272e91a7c9fd9a64a4ae4c519dc3ee0ef26b5))
+
 ## [1.18.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-expat-v1.17.0...wasm-expat-v1.18.0) (2026-11-01)
 
 
