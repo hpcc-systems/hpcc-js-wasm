@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { Base91 } from "@hpcc-js/wasm-base91";
+import { expectReadmeVersion } from "../../util/tests/readme-version.ts";
 
 describe("base91", function () {
 
@@ -44,7 +45,7 @@ describe("base91", function () {
         expect(await Base91.load()).to.equal(base91);
         let v = base91.version();
         expect(v).to.be.a.string;
-        expect(v).to.equal("0.6.0");
+        expectReadmeVersion("base91", v);
         console.log("base91 version: " + v);
         Base91.unload();
 

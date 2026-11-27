@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { Llama, WebBlob } from "@hpcc-js/wasm-llama";
+import { expectReadmeVersion } from "../../util/tests/readme-version.ts";
 
 const EMBEDDING_MODEL_URL = "https://huggingface.co/CompendiumLabs/bge-base-en-v1.5-gguf/resolve/main/bge-base-en-v1.5-q4_k_m.gguf";
 const CHAT_MODEL_URL = "https://huggingface.co/ggml-org/models/resolve/main/tinyllamas/stories260K.gguf";
@@ -73,7 +74,7 @@ describe("llama", () => {
         const v1 = v;
         expect(v).to.be.a.string;
         expect(v).to.be.not.empty;
-        expect(v).to.equal("1.0.0");    // Update README.md to reflect the new version
+        expectReadmeVersion("llama.cpp", v);
 
         llama = await Llama.load();
         v = llama.version();

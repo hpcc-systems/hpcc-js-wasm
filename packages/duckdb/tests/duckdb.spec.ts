@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { DuckDB } from "@hpcc-js/wasm-duckdb";
+import { expectReadmeVersion } from "../../util/tests/readme-version.ts";
 
 describe("duckdb", { concurrent: false }, () => {
     let duckdb: DuckDB;
@@ -21,7 +22,7 @@ describe("duckdb", { concurrent: false }, () => {
             expect(typeof v).toBe("string");
             expect(v.length).toBeGreaterThan(0);
             expect(v).toMatch(/^v?\d/);
-            expect(v).toEqual("v2.0.1");    // Update README.md
+            expectReadmeVersion("duckdb", v);
         });
 
         it("reports numberOfThreads", () => {

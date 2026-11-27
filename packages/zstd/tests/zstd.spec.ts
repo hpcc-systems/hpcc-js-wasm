@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { Zstd } from "@hpcc-js/wasm-zstd";
+import { expectReadmeVersion } from "../../util/tests/readme-version.ts";
 
 function concat(chunks: Uint8Array[]): Uint8Array {
     const total = chunks.reduce((sum, c) => sum + c.length, 0);
@@ -95,7 +96,7 @@ describe("zstd", function () {
         let zstd = await Zstd.load();
         let v = zstd.version();
         expect(v).to.be.a.string;
-        expect(v).to.equal("1.5.7");
+        expectReadmeVersion("zstd", v);
         console.log("zstd version: " + v);
 
         zstd = await Zstd.load();

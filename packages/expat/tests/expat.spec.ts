@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { Attributes, Expat, StackParser } from "@hpcc-js/wasm-expat";
+import { expectReadmeVersion } from "../../util/tests/readme-version.ts";
 
 class KeywordParser extends StackParser {
 
@@ -72,7 +73,7 @@ describe("expat", function () {
         let expat = await Expat.load();
         let v = await expat.version();
         expect(v).to.be.a.string;
-        expect(v).to.equal("expat_2.9.0");  //  Update README if this changes
+        expectReadmeVersion("expat", v);
         console.log("expat version: " + v);
         Expat.unload();
 

@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { Engine, Format, Graphviz } from "@hpcc-js/wasm-graphviz";
+import { expectReadmeVersion } from "../../util/tests/readme-version.ts";
 import { badDot, dot } from "./dot001.js";
 import { ortho } from "./dot002.js";
 import { dotMemory } from "./dot003.js";
@@ -70,7 +71,7 @@ describe("graphviz", function () {
         let graphviz = await Graphviz.load();
         let v = graphviz.version();
         expect(v).to.be.a.string;
-        expect(v).to.equal("16.1.0");       //  Update README.md with the new version!!!
+        expectReadmeVersion("graphviz", v);
         console.log("graphviz version: " + v);
         Graphviz.unload();
 

@@ -4,6 +4,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { NeuralAmpModelerCore } from "@hpcc-js/wasm-nam-core";
+import { expectReadmeVersion } from "../../util/tests/readme-version.ts";
 
 interface WavData {
     sampleRate: number;
@@ -129,7 +130,7 @@ describe("nam-core", function () {
     it("version", async function () {
         const nam = await NeuralAmpModelerCore.load();
         expect(await NeuralAmpModelerCore.load()).to.equal(nam);
-        expect(nam.version()).to.equal("0.6.0");
+        expectReadmeVersion("NeuralAmpModelerCore", nam.version());
         NeuralAmpModelerCore.unload();
     });
 
