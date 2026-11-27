@@ -10,6 +10,8 @@ set(VCPKG_OVERLAY_TRIPLETS ${CMAKE_SOURCE_DIR}/vcpkg-overlays)
 
 project(cpp)
 
+enable_testing()
+
 option(ENABLE_SANITIZERS "Enable Clang's sanitizer options" OFF)
 
 set(CMAKE_INSTALL_PREFIX "..")

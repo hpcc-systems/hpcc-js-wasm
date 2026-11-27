@@ -5,6 +5,7 @@ vcpkg_from_gitlab(
   REF "${VERSION}"
   SHA512 8b3fceae4d563ae4a69bb6677313d39f3a95451b0ca60da8b6b4c0cc68872fba4191eb508f594cf1c19c81341c020a67a1aa081ef0e21314e7e2acedd9e7c22b
   HEAD_REF main
+  PATCHES host-text-measurement.patch
 )
 
 # Fix GVPLUGIN_CURRENT and GVPLUGIN_REVISION undefined variables in 14.0.1

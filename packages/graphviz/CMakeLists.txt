@@ -29,6 +29,7 @@ string(REPLACE ";" " " LINK_FLAGS "${EM_LINK_FLAGS}")
 
 set(SRCS
     src-cpp/main.cpp
+    src-cpp/textMeasurementCache.hpp
     src-cpp/util.hpp
     src-cpp/util.cpp 
     # src-cpp/stubs.c
@@ -44,6 +45,14 @@ add_executable(graphvizlib
 
 set_target_properties(graphvizlib PROPERTIES COMPILE_FLAGS "${CPP_FLAGS}")
 set_target_properties(graphvizlib PROPERTIES LINK_FLAGS "${LINK_FLAGS}")
+
+add_executable(graphviz-cache-tests tests/textMeasurementCache.cpp)
+set_target_properties(graphviz-cache-tests PROPERTIES
+    SUFFIX ".cjs"
+    COMPILE_FLAGS "-UNDEBUG"
+    LINK_FLAGS "-sENVIRONMENT=node -sEXIT_RUNTIME=1"
+)
+add_test(NAME graphviz-cache-tests COMMAND node "$<TARGET_FILE:graphviz-cache-tests>")
 
 # link libraries
 function(add_graphviz_library library)

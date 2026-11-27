@@ -1,6 +1,7 @@
 // @ts-expect-error importing from a wasm file is resolved via a custom esbuild plugin
 import load, { reset } from "../../../build/packages/graphviz/graphvizlib.wasm";
 import type { MainModule, CGraph as CGraphWasm, CSubgraph as CSubgraphWasm } from "../types/graphvizlib.js";
+import { TextMeasurer } from "./textMeasurement.ts";
 import type {
     NodeDotAttr, NodeAttrs,
     EdgeDotAttr, EdgeAttrs,
@@ -1282,9 +1283,14 @@ export class Graph {
 export class Graphviz {
 
     private _module: MainModule;
+    private _textMeasurer?: TextMeasurer;
 
     private constructor(_module: MainModule) {
         this._module = _module;
+        if (TextMeasurer.available()) {
+            this._textMeasurer = new TextMeasurer(() => this._module.CGraphviz.clearTextMeasurementCache());
+            this._module.CGraphviz.setTextMeasurer(this._textMeasurer.measure);
+        }
     }
 
     /**
@@ -1312,6 +1318,7 @@ export class Graphviz {
      * Unloades the compiled wasm instance.
      */
     static unload() {
+        g_graphvizInstance?._textMeasurer?.dispose();
         reset();
         g_graphviz = undefined;
         g_graphvizInstance = undefined;

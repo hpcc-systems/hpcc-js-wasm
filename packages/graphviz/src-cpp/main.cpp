@@ -1,12 +1,15 @@
 #include "util.hpp"
+#include "textMeasurementCache.hpp"
 
 #include <string>
+#include <string_view>
 
 #include <gvc.h>
 #include <gvplugin.h>
 #include <graphviz_version.h>
 
 #include <emscripten.h>
+#include <emscripten/val.h>
 
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
 extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
@@ -39,6 +42,124 @@ lt_symlist_t lt_preloaded_symbols[] = {
 namespace
 {
     std::string lastErrorStr;
+    emscripten::val textMeasurer = emscripten::val::undefined();
+    TextMeasurementCache textMeasurementCache;
+
+    size_t quotedFontFamilyEnd(std::string_view family, size_t start)
+    {
+        const char quote = family[start];
+        for (size_t i = start + 1; i < family.size(); ++i)
+        {
+            if (family[i] == '\\')
+                ++i;
+            else if (family[i] == quote)
+                return i;
+        }
+        return std::string_view::npos;
+    }
+
+    std::string cssFontFamily(std::string_view family)
+    {
+        constexpr std::string_view whitespace = " \t\n\r\f";
+        constexpr std::string_view hexDigits = "0123456789abcdefABCDEF";
+        constexpr std::string_view generics[] = {
+            "serif", "sans-serif", "monospace", "cursive", "fantasy",
+            "system-ui", "ui-serif", "ui-sans-serif", "ui-monospace",
+            "ui-rounded", "math", "fangsong", "emoji"};
+        std::string result;
+        size_t start = 0;
+        for (size_t i = 0; i <= family.size(); ++i)
+        {
+            if (i < family.size() && (family[i] == '"' || family[i] == '\''))
+            {
+                const size_t end = quotedFontFamilyEnd(family, i);
+                if (end != std::string_view::npos)
+                {
+                    i = end;
+                    continue;
+                }
+            }
+            if (i < family.size() && family[i] != ',')
+                continue;
+
+            if (start > 0)
+                result += ',';
+            auto name = family.substr(start, i - start);
+            start = i + 1;
+            const auto first = name.find_first_not_of(whitespace);
+            if (first == std::string_view::npos)
+                continue;
+            name = name.substr(first, name.find_last_not_of(whitespace) - first + 1);
+            std::string lower(name);
+            for (char &c : lower)
+                if (c >= 'A' && c <= 'Z')
+                    c = static_cast<char>(c + ('a' - 'A'));
+            bool generic = false;
+            for (const auto keyword : generics)
+                if (lower == keyword)
+                {
+                    generic = true;
+                    break;
+                }
+            const bool quoted = (name.front() == '"' || name.front() == '\'') &&
+                                quotedFontFamilyEnd(name, 0) == name.size() - 1;
+            if (generic)
+            {
+                result += name;
+                continue;
+            }
+            const char quote = quoted ? name.front() : '"';
+            if (quoted)
+                name = name.substr(1, name.size() - 2);
+            result += quote;
+            for (size_t j = 0; j < name.size();)
+            {
+                char c = name[j++];
+                if (quoted && c == '\\' && j < name.size())
+                {
+                    if (hexDigits.find(name[j]) != std::string_view::npos)
+                    {
+                        result += '\\';
+                        for (size_t digits = 0; j < name.size() && digits < 6 &&
+                                               hexDigits.find(name[j]) != std::string_view::npos; ++digits)
+                            result += name[j++];
+                        if (j < name.size() && whitespace.find(name[j]) != std::string_view::npos)
+                        {
+                            const char terminator = name[j++];
+                            if (terminator == '\r' && j < name.size() && name[j] == '\n')
+                                ++j;
+                            result += ' ';
+                        }
+                        continue;
+                    }
+                    c = name[j++];
+                    // CSS line continuations contribute no character to the family name.
+                    if (c == '\n' || c == '\r' || c == '\f')
+                    {
+                        if (c == '\r' && j < name.size() && name[j] == '\n')
+                            ++j;
+                        continue;
+                    }
+                }
+                if (c == quote || c == '\\')
+                {
+                    result += '\\';
+                    result += c;
+                }
+                else if (static_cast<unsigned char>(c) < 0x20 || c == 0x7f)
+                {
+                    result += '\\';
+                    result += hexDigits[static_cast<unsigned char>(c) >> 4];
+                    result += hexDigits[c & 0x0f];
+                    result += ' ';
+                }
+                else
+                    result += c;
+            }
+            result += quote;
+        }
+        return result;
+    }
 
     const char *implicitAttrDefault(int kind, const std::string &attr)
     {
@@ -179,6 +300,69 @@ namespace
     }
 }
 
+extern "C" double hpcc_js_text_width(const textspan_t *span, int fontnames)
+{
+    if (textMeasurer.isUndefined())
+        return -1.0;
+
+    const textfont_t *font = span->font;
+    const TextMeasurementCache::Key key{span->str, font->name, font->size, font->flags, fontnames};
+    if (const auto width = textMeasurementCache.find(key))
+        return *width;
+
+    const PostscriptAlias *alias = font->postscript_alias;
+    std::string family = font->name;
+    const char *weight = nullptr;
+    const char *style = nullptr;
+    const char *stretch = nullptr;
+    if (alias)
+    {
+        switch (fontnames)
+        {
+        case PSFONTS:
+            family = alias->name;
+            weight = alias->weight;
+            style = alias->style;
+            break;
+        case SVGFONTS:
+            family = alias->svg_font_family;
+            weight = alias->svg_font_weight;
+            style = alias->svg_font_style;
+            break;
+        default:
+            family = alias->family;
+            weight = alias->weight;
+            style = alias->style;
+            break;
+        }
+        if (alias->svg_font_family && family != alias->svg_font_family)
+            family += std::string(",") + alias->svg_font_family;
+        stretch = alias->stretch;
+    }
+    if (!weight && (font->flags & HTML_BF))
+        weight = "bold";
+    if (!style && (font->flags & HTML_IF))
+        style = "italic";
+
+    const double width = textMeasurer(std::string(span->str), cssFontFamily(family), font->size,
+                                     std::string(weight ? weight : "normal"),
+                                     std::string(style ? style : "normal"),
+                                     std::string(stretch ? stretch : "normal")).as<double>();
+    textMeasurementCache.insert(key, width);
+    return width;
+}
+
+extern "C" const char *hpcc_js_font_family(const char *family)
+{
+    if (textMeasurer.isUndefined())
+        return family;
+
+    // The SVG renderer consumes this string before calling the hook again.
+    static std::string serialized;
+    serialized = cssFontFamily(family);
+    return serialized.c_str();
+}
+
 extern int Y_invert;
 int origYInvert = Y_invert;
 extern int Nop;
@@ -190,6 +374,17 @@ class CSubgraph;
 class CGraphviz
 {
 public:
+    static void setTextMeasurer(emscripten::val measurer)
+    {
+        textMeasurementCache.clear();
+        textMeasurer = measurer;
+    }
+
+    static void clearTextMeasurementCache()
+    {
+        textMeasurementCache.clear();
+    }
+
     static std::string version()
     {
         return PACKAGE_VERSION;
@@ -1385,6 +1580,8 @@ EMSCRIPTEN_BINDINGS(graphvizlib_bindings)
         .constructor<int, int>()
         .class_function("version", &CGraphviz::version)
         .class_function("lastError", &CGraphviz::lastError)
+        .class_function("setTextMeasurer", &CGraphviz::setTextMeasurer)
+        .class_function("clearTextMeasurementCache", &CGraphviz::clearTextMeasurementCache)
         .function("createFile", &CGraphviz::createFile)
         .property("layout_result", &CGraphviz::layout_result)
         .function("layout", &CGraphviz::layout)

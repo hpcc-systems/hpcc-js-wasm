@@ -44,6 +44,45 @@ document.body.innerHTML = svg;
 
 <GraphvizDemo />
 
+## Text measurement
+
+In browsers and workers, text widths are calculated on the JavaScript host using
+Canvas 2D's `measureText`, with an `OffscreenCanvas` or a detached canvas element.
+Measurements are cached by text, font family, size, weight, style and stretch.
+The cache lives in C++, so cache hits avoid calling JavaScript. It uses LRU
+eviction with limits of 32,768 entries and a 4 MiB accounting budget, shared by
+layouts within a WASM instance. No full cache allocation is made up front.
+The byte budget includes owned keys, values and allowances for container
+overhead; actual heap usage also depends on the allocator and bucket storage.
+PostScript font aliases and HTML label bold/italic styles are resolved to match
+Graphviz's SVG output. Graphviz's line spacing and baseline offsets are preserved.
+Browser measurement and SVG output share the same CSS font-family serialization,
+quoting unusual font names while preserving Unicode names and fallback lists.
+Canvas-measured SVG text sets `textLength` and `lengthAdjust="spacingAndGlyphs"`
+to preserve the measured layout widths at the default point-sized viewport and
+when resizing SVGs. This can slightly adjust glyph widths to compensate for
+browser font hinting and fallback differences.
+
+This can change graph geometry compared with the built-in width estimates.
+Node.js and other hosts without a canvas API continue to use Graphviz's estimator.
+No canvas package is required for Node.js.
+
+Load custom web fonts before laying out a graph, for example:
+
+```typescript
+await document.fonts.load('14px "My Graph Font"', "Hello World");
+const graphviz = await Graphviz.load();
+const svg = graphviz.dot('digraph { node [fontname="My Graph Font"]; Hello -> World }');
+```
+
+Cached measurements are cleared when fonts finish loading and when Graphviz is
+unloaded. Re-run layout after loading a font to update an existing graph.
+Worker fonts must be loaded into the worker's own font set.
+
+The root `npm run build-cpp` also builds the native cache tests. From this
+package, `npm run test-cache` runs them through CTest without rebuilding.
+They are also included in this package's `npm test`.
+
 ## Programmatic Graph Construction
 
 Instead of writing DOT source by hand you can build graphs programmatically using

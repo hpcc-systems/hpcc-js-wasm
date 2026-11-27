@@ -54,6 +54,37 @@
 </head>
 
 <body>
+    <h2>Browser text measurement (local build)</h2>
+    <p>
+        Reproduction for
+        <a href="https://github.com/hpcc-systems/hpcc-js-wasm/issues/434">issue 434</a>:
+        the Chinese label should fit inside its table cell. This example uses the
+        locally built Graphviz package with cached canvas text measurements.
+    </p>
+    <pre id="text-measurement-dot"></pre>
+    <div id="text-measurement"></div>
+    <script type="module">
+        import { Graphviz } from "./packages/graphviz/dist/index.js";
+
+        const source = `digraph G {
+    node [shape=plaintext]
+    n [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+        <TR><TD>终端用户(组装)</TD></TR>
+    </TABLE>>]
+}`;
+        document.getElementById("text-measurement-dot").textContent = source;
+        const output = document.getElementById("text-measurement");
+        try {
+            await document.fonts.load("14px Times", "终端用户(组装)");
+            const graphviz = await Graphviz.load();
+            output.innerHTML = graphviz.dot(source);
+        } catch (error) {
+            output.setAttribute("role", "alert");
+            output.textContent = error instanceof Error ? error.message : String(error);
+            console.error(error);
+        }
+    </script>
+    <hr>
     <h3>ESM</h3>
     <div id="ESM"></div>
     <script type="module">
