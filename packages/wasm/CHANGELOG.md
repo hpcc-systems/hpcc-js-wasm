@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.38.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.37.0...wasm-v2.38.0) (2026-11-27)
+
+
+### Features
+
+* implement README version checks in tests ([44a272e](https://github.com/hpcc-systems/hpcc-js-wasm/commit/44a272e91a7c9fd9a64a4ae4c519dc3ee0ef26b5))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @hpcc-js/wasm-base91 bumped from ^1.18.0 to ^1.19.0
+    * @hpcc-js/wasm-duckdb bumped from ^1.22.0 to ^1.23.0
+    * @hpcc-js/wasm-expat bumped from ^1.18.0 to ^1.19.0
+    * @hpcc-js/wasm-graphviz bumped from ^1.31.0 to ^1.32.0
+    * @hpcc-js/wasm-graphviz-cli bumped from ^1.11.5 to ^1.12.0
+    * @hpcc-js/wasm-zstd bumped from ^1.18.0 to ^1.19.0
+
 ## [2.37.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-v2.36.0...wasm-v2.37.0) (2026-11-01)
 
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.32.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.31.0...wasm-graphviz-v1.32.0) (2026-11-27)
+
+
+### Features
+
+* enhance coverage reporting and CI workflows ([7718aa7](https://github.com/hpcc-systems/hpcc-js-wasm/commit/7718aa721ddeddf9f780616c84d0e773d116c965))
+* implement README version checks in tests ([44a272e](https://github.com/hpcc-systems/hpcc-js-wasm/commit/44a272e91a7c9fd9a64a4ae4c519dc3ee0ef26b5))
+
 ## [1.31.0](https://github.com/hpcc-systems/hpcc-js-wasm/compare/wasm-graphviz-v1.30.0...wasm-graphviz-v1.31.0) (2026-11-01)
 
 
