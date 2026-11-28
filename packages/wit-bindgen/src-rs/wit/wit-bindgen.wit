@@ -1,0 +1,75 @@
+// WIT interface definition for wit-bindgen-wasm
+// This defines the exports available from the WebAssembly component
+//
+// BINARY SAFETY CONTRACT:
+// All file content returned by this module is encoded using Latin1 (ISO-8859-1)
+// encoding to ensure binary data integrity. This allows both text and binary files
+// to be safely transmitted through the WebAssembly string interface without corruption.
+// Consumers must decode file content using Latin1 when writing to disk.
+
+package wit-bindgen:wasm@0.1.0;
+
+/// Core interface for WIT validation and processing
+interface wit-validator {
+    /// Validate WIT syntax in the given content
+    /// Returns true if the content appears to be valid WIT syntax
+    validate-wit-syntax: func(
+        content: string,
+        source-path: option<string>,
+        source-files-json: option<string>
+    ) -> bool;
+
+    /// Validate WIT syntax and return detailed error information
+    /// Returns JSON string with validation results and error details
+    validate-wit-syntax-detailed: func(
+        content: string,
+        source-path: option<string>,
+        source-files-json: option<string>
+    ) -> string;
+
+    /// Extract interface names from WIT content
+    /// Returns a comma-separated list of interface names
+    extract-interfaces: func(content: string) -> string;
+
+    /// Check if content contains world definitions
+    has-world-definition: func(content: string) -> bool;
+
+    /// Get version information
+    version: func() -> string;
+
+    /// Generate language bindings from WIT content
+    /// Supports: rust, c, cpp, csharp, go, moonbit, markdown
+    /// Returns JSON string containing file map where file contents are Latin1-encoded
+    ///
+    /// IMPORTANT: All file content strings are encoded using Latin1 (ISO-8859-1)
+    /// to preserve binary data integrity. This ensures that binary files (like .wasm, .o)
+    /// and text files can be round-tripped without corruption. Consumers must decode
+    /// file content using Latin1 encoding when writing to disk.
+    generate-bindings: func(
+        content: string,
+        language: string,
+        world-name: option<string>,
+        source-path: option<string>,
+        source-files-json: option<string>
+    ) -> string;
+
+    /// Extract WIT text from a WebAssembly component (bytes).
+    /// Returns the WIT text as a plain string on success, or an empty string on failure.
+    extract-wit-from-component: func(bytes: list<u8>) -> string;
+
+    /// Extract core WebAssembly modules from a component.
+    /// Returns a JSON object mapping filename -> latin1 content.
+    /// If no core modules are found, returns an empty JSON object.
+    extract-core-wasm-from-component: func(bytes: list<u8>) -> string;
+
+    /// Check if filename has .wit extension
+    is-wit-file-extension: func(filename: string) -> bool;
+
+    /// Get wit-bindgen version
+    get-wit-bindgen-version: func() -> string;
+}
+
+/// Main world that exports the wit-validator interface
+world wit-bindgen-wasm {
+    export wit-validator;
+}

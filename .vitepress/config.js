@@ -44,6 +44,7 @@ export default defineConfig({
                     { text: 'Graphviz', link: '/packages/graphviz/README' },
                     { text: 'Llama', link: '/packages/llama/README' },
                     { text: 'NAM-Core', link: '/packages/nam-core/README' },
+                    { text: 'WIT Bindgen', link: '/packages/wit-bindgen/README' },
                     { text: 'Zstd', link: '/packages/zstd/README' },
                 ]
             },

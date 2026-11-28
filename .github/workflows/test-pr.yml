@@ -42,6 +42,21 @@ jobs:
           registry-url: "https://registry.npmjs.org"
           scope: "@hpcc-js"
 
+      - name: Install Rust (wit-bindgen package)
+        run: |
+          rustup toolchain install stable --profile minimal --target wasm32-unknown-unknown
+          rustup default stable
+
+      - name: Cache Rust
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/registry
+            ~/.cargo/git
+            packages/wit-bindgen/src-rs/target
+          key: ${{ runner.os }}-rust-${{ hashFiles('packages/wit-bindgen/src-rs/Cargo.lock', 'scripts/rs-install.sh') }}
+
       - name: Install Ubuntu Dependencies
         if: ${{ contains(matrix.os, 'ubuntu') }}
         run: |
