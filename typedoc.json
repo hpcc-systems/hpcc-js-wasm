@@ -7,6 +7,7 @@
         "./packages/graphviz/src/graphviz.ts",
         "./packages/llama/src/llama.ts",
         "./packages/nam-core/src/neuralAmpModelerCore.ts",
+        "./packages/wit-bindgen/src/wit-bindgen.ts",
         "./packages/zstd/src/zstd.ts",
     ],
     "out": "./docs",

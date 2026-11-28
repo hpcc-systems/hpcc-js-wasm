@@ -26,6 +26,10 @@ WORKDIR /usr/src-ts/app
 COPY ./scripts ./scripts
 RUN ./scripts/cpp-install-emsdk.sh
 
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
+ENV PATH="/root/.cargo/bin:${PATH}"
+RUN ./scripts/rs-install.sh
+
 COPY ./vcpkg-overlays ./vcpkg-overlays
 COPY ./vcpkg-configuration.json ./vcpkg-configuration.json
 COPY ./vcpkg.json ./vcpkg.json

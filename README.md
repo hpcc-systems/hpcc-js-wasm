@@ -12,6 +12,7 @@ This repository contains a collection of useful c++ libraries compiled to WASM f
 - [graphviz](https://www.graphviz.org/) - v16.1.0
 - [llama.cpp](https://github.com/ggml-org/llama.cpp) - v1.0.0
 - [NeuralAmpModelerCore](https://github.com/sdatkinson/NeuralAmpModelerCore) - v0.6.0
+- [wit-bindgen](https://github.com/bytecodealliance/wit-bindgen) - v0.63
 - [zstd](https://github.com/facebook/zstd) - v1.5.7
 - ...more to follow...
 
@@ -19,6 +20,8 @@ Built with:
 
 - [emsdk](https://github.com/emscripten-core/emsdk) - v7.0.1
 - [vcpkg](https://github.com/microsoft/vcpkg) - 2026.10.16
+- [wasm-tools](https://github.com/bytecodealliance/wasm-tools) - v1.262.0 (wit-bindgen package)
+- [jco](https://github.com/bytecodealliance/jco) - v1.42.0 (wit-bindgen package)
 
 ## Homepage and Documents
 
@@ -55,6 +58,7 @@ This repository is a monorepo with the following packages:
 - @hpcc-js/wasm-llama
 - @hpcc-js/wasm-llama-cli
 - @hpcc-js/wasm-nam-core
+- @hpcc-js/wasm-wit-bindgen
 - @hpcc-js/wasm-zstd
 - @hpcc-js/wasm (meta package for backward compatibility)
 

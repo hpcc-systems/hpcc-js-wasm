@@ -11,6 +11,7 @@
         "packages/llama": {},
         "packages/llama-cli": {},
         "packages/nam-core": {},
+        "packages/wit-bindgen": {},
         "packages/zstd": {},
         "packages/wasm": {}
     },

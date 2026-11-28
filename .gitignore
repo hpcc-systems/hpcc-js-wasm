@@ -20,6 +20,7 @@ target/
 /docs/llama
 /docs/nam-core
 /docs/zstd
+/docs/wit-bindgen
 /docs/nam-core
 /docs/packages
 /docs/README.md

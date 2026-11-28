@@ -1,0 +1,31 @@
+[package]
+name = "wit-bindgen-wasm"
+version = "0.1.0"
+edition = "2021"
+description = "WebAssembly component wrapper for wit-bindgen"
+license = "Apache-2.0 WITH LLVM-exception"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wit-bindgen = { version = "0.63", default-features = false, features = ["macros", "realloc"] }
+serde_json = "1.0"
+wasmparser = { version = "0.262", features = ["component-model"] }
+wit-parser = "0.262"
+wit-bindgen-core = "0.63"
+wit-bindgen-c = "0.63"
+wit-bindgen-cpp = "0.63"
+wit-bindgen-rust = "0.63"
+wit-bindgen-go = "0.63"
+wit-bindgen-csharp = "0.63"
+wit-bindgen-moonbit = "0.63"
+wit-bindgen-markdown = "0.63"
+wit-component = "0.262"
+anyhow = "1.0.104"
+
+[build-dependencies]
+toml = "1.1.8"
+
+[profile.release]
+opt-level = "s"

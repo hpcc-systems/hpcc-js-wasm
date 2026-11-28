@@ -1,0 +1,22 @@
+# Rust
+/target/
+**/*.rs.bk
+
+# WebAssembly
+/pkg/
+*.wasm
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local

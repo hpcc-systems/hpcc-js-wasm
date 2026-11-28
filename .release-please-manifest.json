@@ -8,6 +8,7 @@
     "packages/llama": "1.8.0",
     "packages/llama-cli": "1.4.5",
     "packages/nam-core": "1.4.0",
+    "packages/wit-bindgen": "1.0.0",
     "packages/zstd": "1.18.0",
     "packages/wasm": "2.37.0"
 }
